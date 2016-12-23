@@ -56,4 +56,8 @@
       <DependentUpon>docker-compose.yml</DependentUpon>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tauchbolde.Common\Tauchbolde.Common.csproj" />
+    <ProjectReference Include="..\Tauchbolde.DataAccess\Tauchbolde.DataAccess.csproj" />
+  </ItemGroup>
 </Project>
