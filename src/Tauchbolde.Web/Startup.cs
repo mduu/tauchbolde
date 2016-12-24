@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Tauchbolde.Web.Data;
+using Tauchbolde.DataAccess;
 using Tauchbolde.Web.Models;
 using Tauchbolde.Web.Services;
 

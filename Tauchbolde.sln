@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Common", "src\Ta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.DataAccess", "src\Tauchbolde.DataAccess\Tauchbolde.DataAccess.csproj", "{DE11C9FE-4603-42ED-84ED-64EADB8991D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.DataAccess.Migrator", "src\Tauchbolde.DataAccess.Migrator\Tauchbolde.DataAccess.Migrator.csproj", "{6479D2D5-873A-4CDE-8789-D12458A132FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,18 @@ Global
 		{DE11C9FE-4603-42ED-84ED-64EADB8991D0}.Release|x64.Build.0 = Release|x64
 		{DE11C9FE-4603-42ED-84ED-64EADB8991D0}.Release|x86.ActiveCfg = Release|x86
 		{DE11C9FE-4603-42ED-84ED-64EADB8991D0}.Release|x86.Build.0 = Release|x86
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Debug|x64.ActiveCfg = Debug|x64
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Debug|x64.Build.0 = Debug|x64
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Debug|x86.ActiveCfg = Debug|x86
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Debug|x86.Build.0 = Debug|x86
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Release|x64.ActiveCfg = Release|x64
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Release|x64.Build.0 = Release|x64
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Release|x86.ActiveCfg = Release|x86
+		{6479D2D5-873A-4CDE-8789-D12458A132FF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,5 +84,6 @@ Global
 		{686744BA-4AC7-4863-8023-B34A173572B1} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
 		{43B7956B-644C-49A3-AA44-E3498AD15A5E} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
 		{DE11C9FE-4603-42ED-84ED-64EADB8991D0} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
+		{6479D2D5-873A-4CDE-8789-D12458A132FF} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
 	EndGlobalSection
 EndGlobal
