@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26020.0
+VisualStudioVersion = 15.0.26127.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0F46429A-DFB4-421C-99F7-6DE0D845CFE0}"
 EndProject
@@ -13,8 +13,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Common", "src\Tauchbolde.Common\Tauchbolde.Common.csproj", "{43B7956B-644C-49A3-AA44-E3498AD15A5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Web", "src\Tauchbolde.Web\Tauchbolde.Web.csproj", "{A34F43AA-47D4-4A9D-8AD2-620458E5BC4A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.DataAccess", "src\Tauchbolde.DataAccess\Tauchbolde.DataAccess.csproj", "{1AE9E153-9B60-4E74-A6F2-05C41733AA57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,18 +48,6 @@ Global
 		{A34F43AA-47D4-4A9D-8AD2-620458E5BC4A}.Release|x64.Build.0 = Release|x64
 		{A34F43AA-47D4-4A9D-8AD2-620458E5BC4A}.Release|x86.ActiveCfg = Release|x86
 		{A34F43AA-47D4-4A9D-8AD2-620458E5BC4A}.Release|x86.Build.0 = Release|x86
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Debug|x64.ActiveCfg = Debug|x64
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Debug|x64.Build.0 = Debug|x64
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Debug|x86.ActiveCfg = Debug|x86
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Debug|x86.Build.0 = Debug|x86
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Release|x64.ActiveCfg = Release|x64
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Release|x64.Build.0 = Release|x64
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Release|x86.ActiveCfg = Release|x86
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +55,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{43B7956B-644C-49A3-AA44-E3498AD15A5E} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
 		{A34F43AA-47D4-4A9D-8AD2-620458E5BC4A} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
-		{1AE9E153-9B60-4E74-A6F2-05C41733AA57} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
 	EndGlobalSection
 EndGlobal
