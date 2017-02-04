@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Tauchbolde.Common.Entities
+namespace Tauchbolde.Common.Model
 {
     public class Event
     {
