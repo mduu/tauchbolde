@@ -10,6 +10,9 @@ namespace Tauchbolde.Common.Model
         {
         }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Participant> Participants { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<UserInfo> UserInfos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
