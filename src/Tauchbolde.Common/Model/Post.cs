@@ -26,7 +26,7 @@ namespace Tauchbolde.Common.Model
 
         [Display(Name = "Autor")]
         [Required]
-        public string Author { get; set; }
+        public ApplicationUser Author { get; set; }
 
         [Display(Name = "Titel")]
         [Required]

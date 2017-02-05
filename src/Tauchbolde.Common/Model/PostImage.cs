@@ -10,7 +10,7 @@ namespace Tauchbolde.Common.Model
         public Guid Id { get; set; }
 
         public Guid PostId { get; set; }
-        public Post ParentPost { get; set; }
+        public Post Post { get; set; }
 
         public string Caption { get; set; }
 

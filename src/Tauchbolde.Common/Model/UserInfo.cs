@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Tauchbolde.Common.Model
 {
@@ -32,6 +34,7 @@ namespace Tauchbolde.Common.Model
         [Required]
         public int NotificationIntervalInHours { get; set; }
 
+        public string UserId { get; set; }
         public ApplicationUser User { get; set; }
 
     }
