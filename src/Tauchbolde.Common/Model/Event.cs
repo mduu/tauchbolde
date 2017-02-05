@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tauchbolde.Common.Model
@@ -26,9 +27,21 @@ namespace Tauchbolde.Common.Model
         public string Description { get; set; }
 
         [Display(Name = "Startzeit")]
+        [Required]
         public DateTime StartTime { get; set; }
 
         [Display(Name = "Endzeit")]
         public DateTime EndTime { get; set; }
+
+        [Display(Name ="Abgesagt")]
+        [Required]
+        public bool Canceled { get; set; }
+
+        [Display(Name ="Gelöscht")]
+        [Required]
+        public bool Deleted { get; set; }
+
+        public virtual ICollection<Participant> Participants { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }
