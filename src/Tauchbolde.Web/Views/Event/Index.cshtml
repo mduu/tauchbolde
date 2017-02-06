@@ -1,0 +1,26 @@
+﻿@model Tauchbolde.Web.Models.EventViewModels.EventListViewModel
+
+@{
+    ViewBag.Title = "Anlässe";
+    Layout = "_Layout";
+}
+
+<h2>Anlässe</h2>
+
+<table class="table">
+    <tr>
+        <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().StartTime)</th>
+        <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Name)</th>
+        <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Location)</th>
+        <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().MeetingPoint)</th>
+    </tr>
+    @foreach (var upcommingEvent in Model.UpcommingEvents)
+    {
+        <tr>
+            <td>@upcommingEvent.StartEndTimeAsString</td>
+            <td>@upcommingEvent.Name</td>
+            <td>@upcommingEvent.Location</td>
+            <td>@upcommingEvent.MeetingPoint</td>
+        </tr>
+    }
+</table>

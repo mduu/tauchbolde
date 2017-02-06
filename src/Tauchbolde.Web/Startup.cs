@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Model;
+using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Services;
 
 namespace Tauchbolde.Web
@@ -51,6 +52,8 @@ namespace Tauchbolde.Web
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddScoped<ApplicationDbContext>();
+            services.AddTransient<IEventRepository, EventRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

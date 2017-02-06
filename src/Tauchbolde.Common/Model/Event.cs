@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Tauchbolde.Common.Model
 {
@@ -31,7 +32,7 @@ namespace Tauchbolde.Common.Model
         public DateTime StartTime { get; set; }
 
         [Display(Name = "Endzeit")]
-        public DateTime EndTime { get; set; }
+        public DateTime? EndTime { get; set; }
 
         [Display(Name ="Abgesagt")]
         [Required]
@@ -43,5 +44,18 @@ namespace Tauchbolde.Common.Model
 
         public virtual ICollection<Participant> Participants { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+
+        [NotMapped]
+        public string StartEndTimeAsString
+        {
+            get
+            {
+                return EndTime != null
+                    ? StartTime.Date == EndTime.Value.Date 
+                        ? $"{StartTime:g} - {EndTime.Value:t}"
+                        : $"{StartTime:g} - {EndTime.Value:g}"
+                    : $"{StartTime:g}";
+            }
+        }
     }
 }
