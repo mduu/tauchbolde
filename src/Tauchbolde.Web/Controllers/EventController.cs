@@ -33,9 +33,11 @@ namespace Tauchbolde.Web.Controllers
         }
 
         // GET: Event/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(Guid id)
         {
-            return View();
+            var model = _eventRepository.GetById(id);
+
+            return View(model);
         }
 
         // GET: Event/Create

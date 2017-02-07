@@ -1,7 +1,7 @@
 ﻿@model Tauchbolde.Web.Models.EventViewModels.EventListViewModel
 
 @{
-    ViewBag.Title = "Anlässe";
+    ViewBag.Title = "Aktivitäten";
     Layout = "_Layout";
 }
 
@@ -13,6 +13,7 @@
         <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Name)</th>
         <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Location)</th>
         <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().MeetingPoint)</th>
+        <th></th>
     </tr>
     @foreach (var upcommingEvent in Model.UpcommingEvents)
     {
@@ -21,6 +22,9 @@
             <td>@upcommingEvent.Name</td>
             <td>@upcommingEvent.Location</td>
             <td>@upcommingEvent.MeetingPoint</td>
+            <td>
+                <a class="btn" asp-action="Details" asp-route-id="@upcommingEvent.Id">Details</a>
+            </td>
         </tr>
     }
 </table>

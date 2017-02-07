@@ -1,0 +1,28 @@
+﻿@model Tauchbolde.Common.Model.Event
+
+@{
+    ViewBag.Title = $"Aktivität - {Model.Name}";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <div class="row">
+        <h2>Aktivität - @Model.Name</h2>
+    </div>
+
+    <div class="row">
+        
+        <div class="col-md-6">
+            <fieldset>
+                <legend>Allgemeines</legend>
+            </fieldset>
+        </div>
+
+        <div class="col-md-6">
+            <fieldset>
+                <legend>Zeiten</legend>
+            </fieldset>
+        </div>
+
+    </div>
+</div>

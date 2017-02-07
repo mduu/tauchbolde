@@ -30,5 +30,15 @@ namespace Tauchbolde.Common.Repositories
                     .ThenInclude(p => p.User)
                 .ToListAsync();
         }
+
+        public override async Task<Event> GetById(Guid id)
+        {
+            return await context.Events
+                .Include(e => e.Comments)
+                .ThenInclude(c => c.Author)
+                .Include(e => e.Participants)
+                .ThenInclude(p => p.User)
+                .FirstOrDefaultAsync(e => e.Id == id);
+        }
     }
 }
