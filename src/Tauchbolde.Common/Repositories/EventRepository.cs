@@ -31,7 +31,7 @@ namespace Tauchbolde.Common.Repositories
                 .ToListAsync();
         }
 
-        public override async Task<Event> GetById(Guid id)
+        public override async Task<Event> GetByIdAsync(Guid id)
         {
             return await context.Events
                 .Include(e => e.Comments)

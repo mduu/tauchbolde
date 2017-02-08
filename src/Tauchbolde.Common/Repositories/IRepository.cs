@@ -7,6 +7,6 @@ namespace Tauchbolde.Common.Repository
     public interface IRepository<TEntity>
         where TEntity: class, new()
     {
-        Task<TEntity> GetById(Guid id);
+        Task<TEntity> GetByIdAsync(Guid id);
     }
 }

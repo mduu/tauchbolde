@@ -33,9 +33,9 @@ namespace Tauchbolde.Web.Controllers
         }
 
         // GET: Event/Details/5
-        public ActionResult Details(Guid id)
+        public async Task<ActionResult> Details(Guid id)
         {
-            var model = _eventRepository.GetById(id);
+            var model = await _eventRepository.GetByIdAsync(id);
 
             return View(model);
         }

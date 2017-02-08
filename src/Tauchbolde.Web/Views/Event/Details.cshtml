@@ -1,5 +1,5 @@
-﻿@model Tauchbolde.Common.Model.Event
-
+﻿@using Tauchbolde.Common.Model
+@model Tauchbolde.Common.Model.Event
 @{
     ViewBag.Title = $"Aktivität - {Model.Name}";
     Layout = "_Layout";
@@ -11,17 +11,69 @@
     </div>
 
     <div class="row">
-        
-        <div class="col-md-6">
-            <fieldset>
-                <legend>Allgemeines</legend>
-            </fieldset>
+
+        <div class="col-md-6 container">
+            <div class="row">
+                <label class="col-md-6" asp-for="Name"></label>
+                <span lass>@Model.Name</span>
+            </div>
+            <div class="row">
+                <label class="col-md-6" asp-for="Location"></label>
+                <span lass>@Model.Location</span>
+            </div>
+            <div class="row">
+                <label class="col-md-6" asp-for="MeetingPoint"></label>
+                <span lass>@Model.MeetingPoint</span>
+            </div>
+            <div class="row">
+                <label class="col-md-6" asp-for="Organisator"></label>
+                <span lass>@Model.Organisator</span>
+            </div>
+            <div class="row">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Bearbeiten</a>
+            </div>
         </div>
 
         <div class="col-md-6">
-            <fieldset>
-                <legend>Zeiten</legend>
-            </fieldset>
+            <div class="container">
+                <h2>Teilnehmer</h2>
+                
+                <h3>Angemeldet:</h3>
+                @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
+                {
+                    <div class="row">
+                        <div class="col-sm-1"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></div>
+                        <div class="col-sm-1">(@participant.CountPeople)</div>
+                        <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
+                    </div>
+                }
+                
+                <h3>Unsicher:</h3>
+                @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Tentative || p.Status == ParticipantStatus.None))
+                {
+                    <div class="row">
+                        <div class="col-sm-1"><span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span></div>
+                        <div class="col-sm-1">(@participant.CountPeople)</div>
+                        <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
+                    </div>
+                }
+                
+                <h3>Abgmeldet:</h3>
+                @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Declined))
+                {
+                    <div class="row">
+                        <div class="col-sm-1"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></div>
+                        <div class="col-sm-1">(@participant.CountPeople)</div>
+                        <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
+                    </div>
+                }
+                
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-success">Anmelden</button>
+                    <button type="button" class="btn btn-primary">Unsicher</button>
+                    <button type="button" class="btn btn-danger">Abmelden</button>
+                </div>
+            </div>
         </div>
 
     </div>
