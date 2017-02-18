@@ -37,7 +37,7 @@
         <div class="col-md-6">
             <div class="container">
                 <h2>Teilnehmer</h2>
-                
+
                 <h3>Angemeldet:</h3>
                 @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
                 {
@@ -47,7 +47,7 @@
                         <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
                     </div>
                 }
-                
+
                 <h3>Unsicher:</h3>
                 @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Tentative || p.Status == ParticipantStatus.None))
                 {
@@ -57,7 +57,7 @@
                         <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
                     </div>
                 }
-                
+
                 <h3>Abgmeldet:</h3>
                 @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Declined))
                 {
@@ -67,11 +67,26 @@
                         <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
                     </div>
                 }
-                
-                <div class="btn-group" role="group" aria-label="...">
-                    <button type="button" class="btn btn-success">Anmelden</button>
-                    <button type="button" class="btn btn-primary">Unsicher</button>
-                    <button type="button" class="btn btn-danger">Abmelden</button>
+
+
+                <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Link with href
+                </a>
+
+                <div class="collapse" id="collapseExample">
+
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-success active">
+                            <input type="radio" name="options" id="option1" autocomplete="off" checked> Bin dabei
+                        </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="options" id="option2" autocomplete="off"> Weiss noch nicht
+                        </label>
+                        <label class="btn btn-danger">
+                            <input type="radio" name="options" id="option3" autocomplete="off"> Kann leider nicht
+                        </label>
+                    </div>
+
                 </div>
             </div>
         </div>
