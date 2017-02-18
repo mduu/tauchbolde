@@ -18,4 +18,9 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Model\BuddyTeamNames.d.ts">
+      <DependentUpon>BuddyTeamNames.cs</DependentUpon>
+    </None>
+  </ItemGroup>
 </Project>

@@ -1,93 +1,135 @@
 ﻿@using Tauchbolde.Common.Model
-@model Tauchbolde.Common.Model.Event
+@using Tauchbolde.Web.Models.EventViewModels
+@model EventViewModel
 @{
-    ViewBag.Title = $"Aktivität - {Model.Name}";
+    ViewBag.Title = $"Aktivität - {Model.Event.Name}";
     Layout = "_Layout";
 }
 
 <div class="container">
     <div class="row">
-        <h2>Aktivität - @Model.Name</h2>
+        <h2>Aktivität - @Model.Event.Name</h2>
     </div>
 
     <div class="row">
 
-        <div class="col-md-6 container">
+
+        <div class="col-md-6">
             <div class="row">
-                <label class="col-md-6" asp-for="Name"></label>
-                <span lass>@Model.Name</span>
+                <label class="col-md-6" asp-for="Event.StartEndTimeAsString"></label>
+                <span lass>@Model.Event.StartEndTimeAsString</span>
             </div>
             <div class="row">
-                <label class="col-md-6" asp-for="Location"></label>
-                <span lass>@Model.Location</span>
+                <label class="col-md-6" asp-for="Event.Name"></label>
+                <span lass>@Model.Event.Name</span>
             </div>
             <div class="row">
-                <label class="col-md-6" asp-for="MeetingPoint"></label>
-                <span lass>@Model.MeetingPoint</span>
+                <label class="col-md-6" asp-for="Event.Location"></label>
+                <span lass>@Model.Event.Location</span>
             </div>
             <div class="row">
-                <label class="col-md-6" asp-for="Organisator"></label>
-                <span lass>@Model.Organisator</span>
+                <label class="col-md-6" asp-for="Event.MeetingPoint"></label>
+                <span lass>@Model.Event.MeetingPoint</span>
             </div>
             <div class="row">
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Bearbeiten</a>
+                <label class="col-md-6" asp-for="Event.Organisator"></label>
+                <span lass>@Model.Event.Organisator</span>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <a asp-action="Edit" asp-route-id="@Model.Event.Id" class="btn btn-default">Bearbeiten</a>
+                </div>
             </div>
         </div>
 
         <div class="col-md-6">
-            <div class="container">
-                <h2>Teilnehmer</h2>
-
-                <h3>Angemeldet:</h3>
-                @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
-                {
-                    <div class="row">
-                        <div class="col-sm-1"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></div>
-                        <div class="col-sm-1">(@participant.CountPeople)</div>
-                        <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
-                    </div>
-                }
-
-                <h3>Unsicher:</h3>
-                @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Tentative || p.Status == ParticipantStatus.None))
-                {
-                    <div class="row">
-                        <div class="col-sm-1"><span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span></div>
-                        <div class="col-sm-1">(@participant.CountPeople)</div>
-                        <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
-                    </div>
-                }
-
-                <h3>Abgmeldet:</h3>
-                @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Declined))
-                {
-                    <div class="row">
-                        <div class="col-sm-1"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></div>
-                        <div class="col-sm-1">(@participant.CountPeople)</div>
-                        <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
-                    </div>
-                }
-
-
-                <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                    Link with href
-                </a>
-
-                <div class="collapse" id="collapseExample">
-
-                    <div class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-success active">
-                            <input type="radio" name="options" id="option1" autocomplete="off" checked> Bin dabei
-                        </label>
-                        <label class="btn btn-default">
-                            <input type="radio" name="options" id="option2" autocomplete="off"> Weiss noch nicht
-                        </label>
-                        <label class="btn btn-danger">
-                            <input type="radio" name="options" id="option3" autocomplete="off"> Kann leider nicht
-                        </label>
-                    </div>
-
+            <h3>Teilnehmer</h3>
+            
+            <h4>Angemeldet:</h4>
+            @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
+            {
+                <div class="row">
+                    <div class="col-sm-1"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span></div>
+                    <div class="col-sm-1">(@participant.CountPeople)</div>
+                    <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
                 </div>
+            }
+
+            <h4>Unsicher:</h4>
+            @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Tentative || p.Status == ParticipantStatus.None))
+            {
+                <div class="row">
+                    <div class="col-sm-1"><span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span></div>
+                    <div class="col-sm-1">(@participant.CountPeople)</div>
+                    <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
+                </div>
+            }
+
+            <h4>Abgmeldet:</h4>
+            @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Declined))
+            {
+                <div class="row">
+                    <div class="col-sm-1"><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span></div>
+                    <div class="col-sm-1">(@participant.CountPeople)</div>
+                    <div class="col-sm-10">@participant.User.UserName <em>@participant.</em></div>
+                </div>
+            }
+
+
+            <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                An-/Abmeldung
+            </a>
+
+            <div class="collapse" id="collapseExample" style="margin-top: 5px;">
+
+                <form>
+                    <div class="well">
+
+                        @* Status *@
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="participantstatus" id="participantstatus-1" value="1" checked>
+                                Bin dabei
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="participantstatus" id="participantstatus-2" value="2">
+                                Weiss noch nicht
+                            </label>
+                        </div>
+                        <div class="radio disabled">
+                            <label>
+                                <input type="radio" name="participantstatus" id="participantstatus-3" value="3">
+                                Kann leider nicht
+                            </label>
+                        </div>
+
+                        @* Buddyteam *@
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Buddy-Team</label>
+                            <select class="form-control" asp-items="@Model.BuddyTeamNames">
+                            </select>
+                        </div>
+
+                        @* Notiz *@
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Notiz</label>
+                            <input type="text" class="form-control" id="note" placeholder="Notiz" value="">
+                        </div>
+
+                        @* Anzahl *@
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Anzahl Personen</label>
+                            <input type="number" class="form-control" id="countpersons" value="1" step="1" min="1">
+                        </div>
+
+                        <input class="btn btn-success" type="submit" value="Speichern" />
+                        <a href="#" id="cnacel-participant-change">Abbrechen</a>
+
+                    </div>
+                </form>
+
             </div>
         </div>
 

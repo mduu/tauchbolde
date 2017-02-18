@@ -45,6 +45,7 @@ namespace Tauchbolde.Common.Model
         public virtual ICollection<Participant> Participants { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
 
+        [Display(Name = "Datum / Zeit")]
         [NotMapped]
         public string StartEndTimeAsString
         {
