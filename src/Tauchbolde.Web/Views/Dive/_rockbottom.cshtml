@@ -1,0 +1,138 @@
+﻿<form class="form-horizontal">
+    <div class="form-group">
+        <label for="BMdepth" class="col-sm-2 control-label">Max. Tiefe</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <div class="input-group-addon">Meter</div>
+                <input type="number" class="form-control" id="RBmaxdeep" value="45" min="20" step="1" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="RBtanksize" class="col-sm-2 control-label">Flaschengrösse</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <div class="input-group-addon">Liter</div>
+                <input type="number" class="form-control" id="RBtanksize" value="24" min="5" max="40" step="1">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="RBdecodeep" class="col-sm-2 control-label">Tiefe 1. Dekostop/Oberfl.</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <div class="input-group-addon">Meter</div>
+                <input type="number" class="form-control" id="RBdecodeep" value="21" min="0" step="1" >
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="RBsolvingtime" class="col-sm-2 control-label">Zeit für Problemlösung</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <div class="input-group-addon">Minuten</div>
+                <input type="number" class="form-control" id="RBsolvingtime" value="1" min="1" max="10" step="1" >
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="RBsolvingtimeRBgasusage" class="col-sm-2 control-label">Gasverbrauch pro Taucher (Stress)</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <div class="input-group-addon">L/Min.</div>
+                <input type="number" class="form-control" id="RBgasusage" value="40" min="20" max="200" step="10" >
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="RBspeedToDeepstop" class="col-sm-2 control-label">Aufstiegsgeschw. bis Deepstop</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <div class="input-group-addon">Meter/Min.</div>
+                <input type="number" class="form-control" id="RBspeedToDeepstop" value="9" min="3" max="20" step="1" >
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="RBspeedToDecostop" class="col-sm-2 control-label">Aufstiegsgeschw. Deepstop-Deco</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <div class="input-group-addon">Meter/Min.</div>
+                <input type="number" class="form-control" id="RBspeedToDecostop" value="3" min="1" max="20" step="1" >
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="RBdeepstop" class="col-sm-2 control-label">Tiefe Deepstop</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <div class="input-group-addon">% der max. Tiefe</div>
+                <input type="number" class="form-control" id="RBdeepstop" value="75" min="1" max="95" step="1" >
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <span class="col-sm-2"></span>
+        <div class="col-sm-10">
+            <button class="btn btn-primary" type="button" id="RBcalc">Berechnen</button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="MODresult" class="col-sm-2 control-label">Umkehrdruck</label>
+        <div class="col-sm-10">
+            <div class="input-group">
+                <div class="input-group-addon">Bar</div>
+                <input type="text" class="form-control" id="RBresult" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+
+    $(function () {
+        $("#RBcalc").click(function () {
+            const maxPressure = 300;
+
+            let tanksize = parseFloat($("#RBtanksize").val());
+            let maxdeep = parseFloat($("#RBmaxdeep").val());
+            let decodeep = parseFloat($("#RBdecodeep").val());
+            let solvetime = parseFloat($("#RBsolvingtime").val());
+            let gasusage = parseFloat($("#RBgasusage").val());
+            let speedToDeepstop = parseFloat($("#RBspeedToDeepstop").val());
+            let speedToDecostop = parseFloat($("#RBspeedToDecostop").val());
+            let decostopAt = parseFloat($("#RBdeepstop").val());
+
+            if (!isNaN(tanksize) && !isNaN(maxdeep) && !isNaN(decodeep) &&
+                !isNaN(solvetime) && !isNaN(gasusage) && !isNaN(speedToDeepstop &&
+                    !isNaN(speedToDecostop))) {
+                let middeep = maxdeep * decostopAt / 100;
+                let timeToDeco = 0;
+                if (decodeep < middeep) {
+                    let bottomAsc = (maxdeep - middeep) / speedToDeepstop;
+                    let decoAsc = (middeep - decodeep) / speedToDecostop;
+                    timeToDeco = bottomAsc + decoAsc;
+                } else {
+                    timeToDeco = (maxdeep - decodeep) / speedToDeepstop;
+                }
+
+                timeToDeco = timeToDeco + solvetime;
+                let avgDeep = (maxdeep + decodeep) / 2;
+                let avgDeepPressure = avgDeep / 10 + 1;
+                let totalLiterUsed = timeToDeco * avgDeepPressure * (gasusage * 2);
+                let totalBarUsed = totalLiterUsed / tanksize;
+
+                if (totalBarUsed > maxPressure) {
+                    $("#RBresult").val(">" + maxPressure.toFixed(0).toString());
+                } else if (totalBarUsed < 0) {
+                    $("#RBresult").val("0");
+                } else {
+                    $("#RBresult").val(totalBarUsed.toFixed(0).toString());
+                }
+            }
+        });
+    });
+
+</script>

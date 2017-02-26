@@ -1,0 +1,136 @@
+﻿<p>
+    Aus Erfahrung ca. 1 Bar mehr mit He und/oder O2 toppen da die Flaschen später noch abkühlen. Kann je nach Setup etwas variieren.
+</p>
+<table>
+    <tr>
+        <td colspan="2" class="heading">Restinhalt der Flasche:</td>
+    </tr>
+    <tr>
+        <td><label>Restdruck:</label></td>
+        <td><input type="number" id="GMsourcePressure" value="20" min="0" max="300" step="5" /> Bar</td>
+    </tr>
+    <tr>
+        <td><label>O2-Gehalt:</label></td>
+        <td><input type="number" id="GMsourceO2" value="50" min="10" max="100" step="1" /> %</td>
+    </tr>
+    <tr>
+        <td><label>He-Gehalt:</label></td>
+        <td><input type="number" id="GMsourceHe" value="0" min="0" max="100" step="1" /> %</td>
+    </tr>
+    <tr>
+        <td colspan="2" class="heading">Gewünschte Mischung:</td>
+    </tr>
+    <tr>
+        <td><label>Druck:</label></td>
+        <td><input type="number" id="GMtargetPressure" value="200" min="0" max="300" step="5" /> Bar</td>
+    </tr>
+    <tr>
+        <td><label>O2-Gehalt:</label></td>
+        <td><input type="number" id="GMtargetO2" value="50" min="10" max="100" step="1" /> %</td>
+    </tr>
+    <tr>
+        <td><label>He-Gehalt:</label></td>
+        <td><input type="number" id="GMtargetHe" value="0" min="0" max="100" step="1" /> %</td>
+    </tr>
+    <tr>
+        <td colspan="2" class="heading">Topen mit:</td>
+    </tr>
+    <tr>
+        <td><label>O2-Gehalt:</label></td>
+        <td><input type="number" id="GMtoppingO2" value="32" min="10" max="100" step="1" /> %</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><button id="GMcalc">Berechnen</button></td>
+    </tr>
+    <tr>
+        <td colspan="2" class="heading">Mischen:</td>
+    </tr>
+    <tr id="GMrowAblass" style="dispaly: hidden;">
+        <td><label>Ablassen auf:</label></td>
+        <td><label id="GMresultAblass" class="ablassValue">-</label></td>
+    </tr>
+    <tr>
+        <td><label>Helium:</label></td>
+        <td><label id="GMresultHe">-</label></td>
+    </tr>
+    <tr>
+        <td><label>O2:</label></td>
+        <td><label id="GMresultO2">-</label></td>
+    </tr>
+    <tr>
+        <td><label id="GMresultTopLabel">Toppen:</label></td>
+        <td><label id="GMresultTop">-</label></td>
+    </tr>
+</table>
+<div id="GMfailt" style="display: none;">Diese Mischung kann mit den gewählten Parameter nicht berechnet werden.</div>
+
+
+<script>
+    $(function () {
+        $("#GMcalc").click(calculateGasMix);
+    });
+
+    function calculateGasMix() {
+        var sourcePressure = $("#GMsourcePressure").val() * 1;
+        var sourceO2 = $("#GMsourceO2").val() / 100;
+        var sourceHe = $("#GMsourceHe").val() / 100;
+        var sourceN2 = 1 - sourceO2 - sourceHe;
+
+        var targetPressure = $("#GMtargetPressure").val() * 1;
+        var targetO2 = $("#GMtargetO2").val() / 100;
+        var targetHe = $("#GMtargetHe").val() / 100;
+        var targetN2 = 1 - targetO2 - targetHe;
+
+        var toppingO2 = $("#GMtoppingO2").val() / 100;
+        var toppingN2 = 1 - toppingO2;
+
+        var toppingMixBar;
+        var toppingHeBar;
+        var toppingO2Bar;
+
+        var pressureWork = sourcePressure;
+
+        do {
+            var sourceO2Bar = pressureWork * sourceO2;
+            var sourceHeBar = pressureWork * sourceHe;
+            var sourceN2Bar = pressureWork * sourceN2;
+            var targetO2Bar = targetPressure * targetO2;
+            var targetHeBar = targetPressure * targetHe;
+            var targetN2Bar = targetPressure * targetN2;
+
+            var deltaN2Bar = targetN2Bar - sourceN2Bar;
+
+            toppingMixBar = deltaN2Bar / toppingN2;
+            toppingHeBar = targetHeBar - sourceHeBar;
+            toppingO2Bar = targetO2Bar - sourceO2Bar - (toppingMixBar * toppingO2);
+
+            var pressureHe = pressureWork + toppingHeBar;
+            var pressureO2 = pressureWork + toppingHeBar + toppingO2Bar;
+            var pressureTop = pressureWork + toppingHeBar + toppingO2Bar + toppingMixBar;
+
+            $("#GMresultTopLabel").html("Topppen {0}%:".format((toppingO2 * 100).toFixed(0)));
+            $("#GMresultHe").html("{0} ({1}) bar".format(toppingHeBar.toFixed(0), pressureHe.toFixed(0)));
+            $("#GMresultO2").html("{0} ({1}) bar".format(toppingO2Bar.toFixed(0), pressureO2.toFixed(0)));
+            $("#GMresultTop").html("{0} ({1} bar)".format(toppingMixBar.toFixed(0), pressureTop.toFixed(0)));
+
+            if (toppingHeBar < 0 || toppingO2Bar < 0 || toppingMixBar < 0) {
+                pressureWork--;
+            }
+
+        } while (pressureWork > 0 && (toppingHeBar < 0 || toppingO2Bar < 0 || toppingMixBar < 0));
+
+        if (pressureWork != sourcePressure && pressureWork > 0) {
+            $("#GMrowAblass").show();
+            $("#GMresultAblass").html("{0} bar".format(pressureWork.toFixed(0)));
+        } else {
+            $("#GMrowAblass").hide();
+        }
+
+        if (toppingHeBar < 0 || toppingO2Bar < 0 || toppingMixBar < 0) {
+            $("#GMfailt").show();
+        } else {
+            $("#GMfailt").hide();
+        }
+    }    
+</script>
