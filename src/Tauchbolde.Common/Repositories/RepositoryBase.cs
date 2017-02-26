@@ -20,7 +20,7 @@ namespace Tauchbolde.Common.Repositories
             this.context = context;
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(Guid id)
+        public virtual async Task<TEntity> FindByIdAsync(Guid id)
         {
             return await context.Set<TEntity>().FindAsync(id);
         }

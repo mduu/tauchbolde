@@ -39,7 +39,7 @@ namespace Tauchbolde.Web.Controllers
         {
             var model = new EventViewModel
             {
-                Event = await _eventRepository.GetByIdAsync(id),
+                Event = await _eventRepository.FindByIdAsync(id),
                 BuddyTeamNames = BuddyTeamNames.Names.Select(n => new SelectListItem{ Text = n}),
             };
 
