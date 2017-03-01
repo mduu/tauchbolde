@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Tauchbolde.Common;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Services;
@@ -44,6 +45,12 @@ namespace Tauchbolde.Web
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+
+            // Policies
+            services.AddAuthorization(options =>
+            {
+                    options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole("Tauchbold"));
+            });
 
             // EF
             services.AddDbContext<ApplicationDbContext>(options =>

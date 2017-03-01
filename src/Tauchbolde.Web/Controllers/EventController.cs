@@ -1,15 +1,19 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Tauchbolde.Common;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Models.EventViewModels;
 
 namespace Tauchbolde.Web.Controllers
 {
+
+    [Authorize(Policy = PolicyNames.RequireTauchbold )]
     public class EventController : Controller
     {
         private readonly IEventRepository _eventRepository;
