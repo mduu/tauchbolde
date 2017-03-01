@@ -9,6 +9,12 @@ namespace Tauchbolde.Common.Model
     {
         public Guid Id { get; set; }
 
+        [Display(Name = "Tauchbold seit")]
+        public DateTime? MemberSince { get; set; }
+
+        [Display(Name = "Tauchbolde verlassen am")]
+        public DateTime? MemberUntil { get; set; }
+
         [Display(Name = "Webseite")]
         public string WebsiteUrl { get; set; }
 
