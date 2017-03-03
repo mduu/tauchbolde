@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common;
+using Tauchbolde.Common.DomainServices;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Services;
@@ -49,7 +50,7 @@ namespace Tauchbolde.Web
             // Policies
             services.AddAuthorization(options =>
             {
-                    options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole("Tauchbold"));
+                options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole("Tauchbold"));
             });
 
             // EF
@@ -60,7 +61,14 @@ namespace Tauchbolde.Web
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddScoped<ApplicationDbContext>();
+
+            // Repos
+            services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddTransient<IEventRepository, EventRepository>();
+            services.AddTransient<IParticipantRepository, ParticipantRepository>();
+
+            // DomainServices
+            services.AddTransient<IParticipationService, ParticipationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

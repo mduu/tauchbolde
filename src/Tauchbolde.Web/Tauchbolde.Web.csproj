@@ -36,4 +36,9 @@
   <ItemGroup>
     <Folder Include="Data\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Models\EventViewModels\ParticipantViewModel.d.ts">
+      <DependentUpon>ChangeParticipantViewModel.cs</DependentUpon>
+    </None>
+  </ItemGroup>
 </Project>

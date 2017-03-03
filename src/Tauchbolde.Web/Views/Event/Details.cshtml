@@ -44,7 +44,7 @@
 
         <div class="col-md-6">
             <h3>Teilnehmer</h3>
-            
+
             <h4>Angemeldet:</h4>
             @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
             {
@@ -82,7 +82,7 @@
 
             <div class="collapse" id="collapseExample" style="margin-top: 5px;">
 
-                <form>
+                <form asp-action="ChangeParticipation" asp-antiforgery="true">
                     <div class="well">
 
                         @* Status *@

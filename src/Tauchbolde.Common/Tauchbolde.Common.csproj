@@ -19,6 +19,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Update="DomainServices\IParticipationService.d.ts">
+      <DependentUpon>IParticipationService.cs</DependentUpon>
+    </None>
     <None Update="Model\BuddyTeamNames.d.ts">
       <DependentUpon>BuddyTeamNames.cs</DependentUpon>
     </None>
