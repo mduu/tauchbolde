@@ -3,7 +3,14 @@ var Tauchbolde;
     var Events;
     (function (Events) {
         var ParticipationManager = (function () {
-            function ParticipationManager() {
+            function ParticipationManager(formElement) {
+                if (!formElement)
+                    throw "'formElement' is required!";
+                this.formElement = formElement;
+                this.formElement.submit(function (e) {
+                    e.preventDefault();
+                    alert("Submit");
+                });
             }
             return ParticipationManager;
         }());

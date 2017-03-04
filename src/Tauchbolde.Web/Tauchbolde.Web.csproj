@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Scripts\Typings\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Models\EventViewModels\ParticipantViewModel.d.ts">

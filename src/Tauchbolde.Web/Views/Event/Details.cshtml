@@ -82,7 +82,7 @@
 
             <div class="collapse" id="collapseExample" style="margin-top: 5px;">
 
-                <form asp-action="ChangeParticipation" asp-antiforgery="true">
+                <form id="ChangeParticipantForm" asp-action="ChangeParticipation" asp-antiforgery="true">
                     <div class="well">
 
                         @* Status *@
@@ -143,4 +143,8 @@
     <environment names="Staging,Production">
         <script src="~/Scripts/ParticipationManager.js" asp-append-version="true"></script>
     </environment>
+
+    <script>
+        Window = new Tauchbolde.Events.ParticipationManager($("#ChangeParticipantForm"));
+    </script>
 }
