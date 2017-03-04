@@ -108,8 +108,7 @@
                         @* Buddyteam *@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Buddy-Team</label>
-                            <select class="form-control" asp-items="@Model.BuddyTeamNames">
-                            </select>
+                            <select class="form-control" asp-items="@Model.BuddyTeamNames"></select>
                         </div>
 
                         @* Notiz *@
@@ -135,3 +134,13 @@
 
     </div>
 </div>
+
+@section Scripts
+{
+    <environment names="Development">
+        <script src="~/Scripts/ParticipationManager.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/Scripts/ParticipationManager.js" asp-append-version="true"></script>
+    </environment>
+}
