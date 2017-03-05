@@ -136,7 +136,7 @@ namespace Tauchbolde.Web.Controllers
         /// <param name="model">The data to change.</param>
         /// <seealso cref="ChangeParticipantViewModel"/>
         /// <seealso cref="IParticipationService"/>
-        /// [HttpPost]
+        [HttpPost]
         [Authorize(Policy = PolicyNames.RequireTauchbold)]
         public async Task<ActionResult> ChangeParticipation(ChangeParticipantViewModel model)
         {

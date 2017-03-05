@@ -83,6 +83,8 @@
             <div class="collapse" id="collapseExample" style="margin-top: 5px;">
 
                 <form id="ChangeParticipantForm" asp-action="ChangeParticipation" asp-antiforgery="true">
+                    <input type="hidden" Id="eventid" Value="@Model.Event.Id"/>
+
                     <div class="well">
 
                         @* Status *@
@@ -108,7 +110,7 @@
                         @* Buddyteam *@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Buddy-Team</label>
-                            <select class="form-control" asp-items="@Model.BuddyTeamNames"></select>
+                            <select class="form-control" id="buddyTeam" asp-items="@Model.BuddyTeamNames"></select>
                         </div>
 
                         @* Notiz *@
@@ -120,10 +122,10 @@
                         @* Anzahl *@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Anzahl Personen</label>
-                            <input type="number" class="form-control" id="countpersons" value="1" step="1" min="1">
+                            <input type="number" class="form-control" id="CountPeople" value="1" step="1" min="1">
                         </div>
 
-                        <input class="btn btn-success" type="submit" value="Speichern" />
+                        <input class="btn btn-success" type="submit" value="Speichern"/>
                         <a href="#" id="cnacel-participant-change">Abbrechen</a>
 
                     </div>
@@ -138,13 +140,18 @@
 @section Scripts
 {
     <environment names="Development">
+        <script src="~/lib/knockout/dist/knockout.debug.js" asp-append-version="true"></script>
         <script src="~/Scripts/ParticipationManager.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
-        <script src="~/Scripts/ParticipationManager.js" asp-append-version="true"></script>
+        <script src="~/lib/knockout/dist/knockout.js" asp-append-version="true"></script>
+    <script src="~/Scripts/ParticipationManager.min.js" asp-append-version="true"></script>
     </environment>
 
     <script>
-        Window = new Tauchbolde.Events.ParticipationManager($("#ChangeParticipantForm"));
+        Window = new Tauchbolde.Events.ParticipationManager(
+            $("#ChangeParticipantForm"),
+            '@Url.Action("ChangeParticipation")'
+        );
     </script>
 }

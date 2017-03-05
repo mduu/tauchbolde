@@ -9,9 +9,9 @@
     ]
   },
   {
-    "outputFileName": "wwwroot/js/site.min.js",
+    "outputFileName": "wwwroot/scripts/ParticipationManager.min.js",
     "inputFiles": [
-      "wwwroot/js/site.js"
+      "wwwroot/scripts/ParticipationManager.js"
     ],
     // Optionally specify minification options
     "minify": {
