@@ -141,15 +141,15 @@
 {
     <environment names="Development">
         <script src="~/lib/knockout/dist/knockout.debug.js" asp-append-version="true"></script>
-        <script src="~/Scripts/ParticipationManager.js" asp-append-version="true"></script>
+        <script src="~/Scripts/ParticipationViewModel.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/knockout/dist/knockout.js" asp-append-version="true"></script>
-    <script src="~/Scripts/ParticipationManager.min.js" asp-append-version="true"></script>
+    <script src="~/Scripts/ParticipationViewModel.min.js" asp-append-version="true"></script>
     </environment>
 
     <script>
-        Window = new Tauchbolde.Events.ParticipationManager(
+        Window = new Tauchbolde.Events.ParticipationViewModel(
             $("#ChangeParticipantForm"),
             '@Url.Action("ChangeParticipation")'
         );

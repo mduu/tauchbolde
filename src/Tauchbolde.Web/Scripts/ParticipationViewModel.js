@@ -2,8 +2,8 @@ var Tauchbolde;
 (function (Tauchbolde) {
     var Events;
     (function (Events) {
-        var ParticipationManager = (function () {
-            function ParticipationManager(formElement, changeUrl) {
+        var ParticipationViewModel = (function () {
+            function ParticipationViewModel(formElement, changeUrl) {
                 var _this = this;
                 this.formElement = formElement;
                 this.changeUrl = changeUrl;
@@ -12,7 +12,7 @@ var Tauchbolde;
                 if (!formElement)
                     throw "'formElement' is required!";
                 if (!changeUrl)
-                    throw "'changeUrl' is requried!";
+                    throw "'changeUrl' is requried! ";
                 this.formElement = formElement;
                 this.changeUrl = changeUrl;
                 this.formElement.submit(function (e) {
@@ -32,9 +32,9 @@ var Tauchbolde;
                     alert("Submit");
                 });
             }
-            return ParticipationManager;
+            return ParticipationViewModel;
         }());
-        Events.ParticipationManager = ParticipationManager;
+        Events.ParticipationViewModel = ParticipationViewModel;
     })(Events = Tauchbolde.Events || (Tauchbolde.Events = {}));
 })(Tauchbolde || (Tauchbolde = {}));
-//# sourceMappingURL=ParticipationManager.js.map
+//# sourceMappingURL=ParticipationViewModel.js.map

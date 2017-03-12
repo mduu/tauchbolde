@@ -1,6 +1,6 @@
-namespace Tauchbolde.Events {
+﻿namespace Tauchbolde.Events {
 
-    export class ParticipationManager {
+    export class ParticipationViewModel {
         existingParticipantId: string;
         eventId: string;
         countPeople: number;
@@ -12,7 +12,7 @@ namespace Tauchbolde.Events {
             this.changeUrl = undefined;
             this.formElement = undefined;
             if (!formElement) throw "'formElement' is required!";
-            if (!changeUrl) throw "'changeUrl' is requried!";
+            if (!changeUrl) throw "'changeUrl' is requried! ";
 
             this.formElement = formElement;
             this.changeUrl = changeUrl;

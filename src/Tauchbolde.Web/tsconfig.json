@@ -7,7 +7,7 @@
     "target": "es5"
   },
   "files": [
-    "./ParticipationManager.ts"
+    "Scripts/ParticipationViewModel.ts"
   ],
   "compileOnSave": true
 }
