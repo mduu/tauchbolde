@@ -1,10 +1,9 @@
 declare module server {
-	interface participantViewModel {
-		existingParticipantId: string;
-		eventId: string;
+	interface changeParticipantViewModel {
+		eventId: any;
 		countPeople: number;
 		note: string;
-		status: number;
+		status: any;
 		buddyTeamName: string;
 	}
 }

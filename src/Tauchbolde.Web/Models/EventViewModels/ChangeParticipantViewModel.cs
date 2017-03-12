@@ -6,8 +6,6 @@ namespace Tauchbolde.Web.Models.EventViewModels
 {
     public class ChangeParticipantViewModel
     {
-        public Guid? ExistingParticipantId { get; set; }
-
         [Required]
         public Guid EventId { get; set; }
 

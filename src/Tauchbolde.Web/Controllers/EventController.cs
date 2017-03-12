@@ -50,12 +50,35 @@ namespace Tauchbolde.Web.Controllers
         }
 
         // GET: Event/Details/5
+        [Authorize(Policy = PolicyNames.RequireTauchbold)]
         public async Task<ActionResult> Details(Guid id)
         {
+            var detailsForEvent = await _eventRepository.FindByIdAsync(id);
+            if (detailsForEvent == null)
+            {
+                return BadRequest("Event does not exists!");
+            }
+
+            var currentUser = await _applicationUserRepository.FindByUserNameAsync(User.Identity.Name);
+            if (currentUser == null)
+            {
+                return StatusCode(400, "No curren user would be found!");
+            }
+
+            var existingParticipation = await _participationService.GetExistingParticipationAsync(currentUser, id);
+
             var model = new EventViewModel
             {
-                Event = await _eventRepository.FindByIdAsync(id),
+                Event = detailsForEvent,
                 BuddyTeamNames = BuddyTeamNames.Names.Select(n => new SelectListItem{ Text = n}),
+                ChangeParticipantViewModel = new ChangeParticipantViewModel
+                {
+                    EventId = detailsForEvent.Id,
+                    Note = existingParticipation?.Note,
+                    CountPeople = existingParticipation?.CountPeople ?? 1,
+                    Status = existingParticipation?.Status ?? ParticipantStatus.None,
+                    BuddyTeamName = existingParticipation?.BuddyTeamName,
+                }
             };
 
             return View(model);
@@ -148,7 +171,7 @@ namespace Tauchbolde.Web.Controllers
                     return StatusCode(400, "No curren user would be found!");
                 }
 
-                await _participationService.ChangeParticipationAsync(currentUser, model.ExistingParticipantId, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
+                await _participationService.ChangeParticipationAsync(currentUser, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
 
                 return Json(new { success = true });
             }

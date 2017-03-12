@@ -18,7 +18,7 @@ var Tauchbolde;
                 this.formElement.submit(function (e) {
                     e.preventDefault();
                     var participantData = {
-                        eventid: _this.formElement.find("#evnetid").val(),
+                        eventid: _this.formElement.find("#eventId").val(),
                         status: _this.formElement.find("#status").val(),
                         note: _this.formElement.find("#note").val(),
                         buddyteamname: _this.formElement.find("#buddyTeam"),

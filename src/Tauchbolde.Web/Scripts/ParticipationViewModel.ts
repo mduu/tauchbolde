@@ -21,7 +21,7 @@
                 e.preventDefault();
 
                 const participantData = {
-                    eventid: this.formElement.find("#evnetid").val(),
+                    eventid: this.formElement.find("#eventId").val(),
                     status: this.formElement.find("#status").val(),
                     note: this.formElement.find("#note").val(),
                     buddyteamname: this.formElement.find("#buddyTeam"),

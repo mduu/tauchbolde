@@ -9,6 +9,9 @@ namespace Tauchbolde.Common.DomainServices
         /// <summary>
         /// Changes the participation for the given <paramref name="user"/> in event with <paramref name="eventId"/>.
         /// </summary>
-        Task ChangeParticipationAsync( ApplicationUser user, Guid? existingParticipantId, Guid eventId, ParticipantStatus status, int numberOfPeople, string note, string buddyTeamName);
+        Task<Participant> ChangeParticipationAsync(ApplicationUser user, Guid eventId, ParticipantStatus status, int numberOfPeople, string note, string buddyTeamName);
+
+        /// <inheritdoc />
+        Task<Participant> GetExistingParticipationAsync(ApplicationUser user, Guid eventId);
     }
 }

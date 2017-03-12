@@ -83,46 +83,46 @@
             <div class="collapse" id="collapseExample" style="margin-top: 5px;">
 
                 <form id="ChangeParticipantForm" asp-action="ChangeParticipation" asp-antiforgery="true">
-                    <input type="hidden" Id="eventid" Value="@Model.Event.Id"/>
+                    <input type="hidden" asp-for="ChangeParticipantViewModel.EventId" Value="@Model.Event.Id"/>
 
                     <div class="well">
 
                         @* Status *@
                         <div class="radio bg-text-success">
                             <label>
-                                <input type="radio" name="participantstatus" id="participantstatus-1" value="1" checked>
+                                <input type="radio" name="participantstatus" asp-for="ChangeParticipantViewModel.Status" value="@(Model.ChangeParticipantViewModel.Status == ParticipantStatus.Accepted)">
                                 <i class="fa fa-check-circle" aria-hidden="true"></i>&nbsp;Bin dabei
                             </label>
                         </div>
                         <div class="radio text-primary">
                             <label>
-                                <input type="radio" name="participantstatus" id="participantstatus-2" value="2">
+                                <input type="radio" name="participantstatus" id="participantstatus-2" value="@(Model.ChangeParticipantViewModel.Status == ParticipantStatus.Tentative)">
                                 <i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;Weiss noch nicht
                             </label>
                         </div>
                         <div class="radio text-danger">
                             <label>
-                                <input type="radio" name="participantstatus" id="participantstatus-3" value="3">
+                                <input type="radio" name="participantstatus" id="participantstatus-3" value="@(Model.ChangeParticipantViewModel.Status == ParticipantStatus.Declined)">
                                 <i class="fa fa-minus-circle" aria-hidden="true"></i>&nbsp;Kann leider nicht
                             </label>
                         </div>
 
                         @* Buddyteam *@
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Buddy-Team</label>
-                            <select class="form-control" id="buddyTeam" asp-items="@Model.BuddyTeamNames"></select>
+                            <label asp-for="ChangeParticipantViewModel.BuddyTeamName">Buddy-Team</label>
+                            <select class="form-control" asp-for="ChangeParticipantViewModel.BuddyTeamName" asp-items="@Model.BuddyTeamNames"></select>
                         </div>
 
                         @* Notiz *@
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Notiz</label>
-                            <input type="text" class="form-control" id="note" placeholder="Notiz" value="">
+                            <label asp-for="ChangeParticipantViewModel.Note">Notiz</label>
+                            <input type="text" class="form-control" id="note" placeholder="Notiz" asp-for="ChangeParticipantViewModel.Note">
                         </div>
 
                         @* Anzahl *@
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Anzahl Personen</label>
-                            <input type="number" class="form-control" id="CountPeople" value="1" step="1" min="1">
+                            <label asp-for="ChangeParticipantViewModel.CountPeople">Anzahl Personen</label>
+                            <input type="number" class="form-control" step="1" min="1" asp-for="ChangeParticipantViewModel.CountPeople">
                         </div>
 
                         <input class="btn btn-success" type="submit" value="Speichern"/>
@@ -149,9 +149,11 @@
     </environment>
 
     <script>
-        Window = new Tauchbolde.Events.ParticipationViewModel(
+        // Participation form
+        @*Window.participationViewModel = new Tauchbolde.Events.ParticipationViewModel(
             $("#ChangeParticipantForm"),
             '@Url.Action("ChangeParticipation")'
         );
+        ko.applyBindings(Window.participationViewModel, $("#ChangeParticipantForm"));*@
     </script>
 }
