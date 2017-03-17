@@ -161,7 +161,7 @@ namespace Tauchbolde.Web.Controllers
         /// <seealso cref="IParticipationService"/>
         [HttpPost]
         [Authorize(Policy = PolicyNames.RequireTauchbold)]
-        public async Task<ActionResult> ChangeParticipation(ChangeParticipantViewModel model)
+        public async Task<ActionResult> ChangeParticipation([Bind(Prefix= "ChangeParticipantViewModel")]ChangeParticipantViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -173,10 +173,10 @@ namespace Tauchbolde.Web.Controllers
 
                 await _participationService.ChangeParticipationAsync(currentUser, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
 
-                return Json(new { success = true });
+                return RedirectToAction("Details", new {id = model.EventId});
             }
 
-            return Json(new {success = false, ModelState});
+            return await Details(model.EventId);
         }
     }
 }

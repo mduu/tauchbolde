@@ -48,3 +48,49 @@ textarea {
         display: none;
     }
 }
+
+/* Event Participation List */
+
+.event-participationlist {
+    border-left: 4px solid;
+    padding: 1px 5px 8px 10px;
+}
+
+    .event-participationlist.event-participationlist-accepted {
+        border-left-color: green;
+        background-color: rgba(0, 255, 0, 0.05);
+    }
+
+        .event-participationlist.event-participationlist-accepted h4 {
+            color: green;
+        }
+
+        .event-participationlist.event-participationlist-accepted .event-participationlist-name {
+            color: green;
+        }
+
+    .event-participationlist.event-participationlist-tentative {
+        border-left-color: grey;
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+        .event-participationlist.event-participationlist-tentative h4 {
+            color: grey;
+        }
+
+        .event-participationlist.event-participationlist-tentative .event-participationlist-name {
+            color: grey;
+        }
+
+    .event-participationlist.event-participationlist-declined {
+        border-left-color: rgb(200, 0, 0);
+        background-color: rgba(200, 0, 0, 0.05);
+    }
+
+        .event-participationlist.event-participationlist-declined h4 {
+            color: rgb(200, 0, 0);
+        }
+
+        .event-participationlist.event-participationlist-declined .event-participationlist-name {
+            color: rgb(200, 0, 0);
+        }
