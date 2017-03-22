@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Server.Kestrel;
+using Microsoft.Net.Http.Headers;
 using Tauchbolde.Common;
 using Tauchbolde.Common.DomainServices;
 using Tauchbolde.Common.Model;
@@ -22,20 +24,24 @@ namespace Tauchbolde.Web.Controllers
         private readonly IApplicationUserRepository _applicationUserRepository;
         private readonly IEventRepository _eventRepository;
         private readonly IParticipationService _participationService;
+        private readonly IEventService _eventService;
 
         public EventController(
             ApplicationDbContext context,
             IApplicationUserRepository applicationUserRepository,
             IEventRepository eventRepository,
-            IParticipationService participationService)
+            IParticipationService participationService,
+            IEventService eventService)
         {
             if (applicationUserRepository == null) { throw new ArgumentNullException(nameof(applicationUserRepository)); }
             if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
             if (participationService == null) { throw new ArgumentNullException(nameof(participationService)); }
+            if (eventService == null) throw new ArgumentNullException(nameof(eventService));
 
             _applicationUserRepository = applicationUserRepository;
             _eventRepository = eventRepository;
             _participationService = participationService;
+            _eventService = eventService;
         }
 
         // GET: Event
@@ -177,6 +183,18 @@ namespace Tauchbolde.Web.Controllers
             }
 
             return await Details(model.EventId);
+        }
+
+        public async Task<IActionResult> Ical(Guid id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Event!");
+            }
+
+            var stream = await _eventService.CreateIcalForEvent(id, _eventRepository);
+
+            return File(stream, "text/calendar");
         }
     }
 }

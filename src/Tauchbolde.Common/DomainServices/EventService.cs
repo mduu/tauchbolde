@@ -1,19 +1,32 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
+using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.DomainServices
 {
     public class EventService : IEventService
     {
-        public Stream CreateIcalForEvent(Event evt)
+        public async Task<Stream> CreateIcalForEvent(Guid eventId, IEventRepository eventRepository)
         {
-            if (evt == null) throw new ArgumentNullException(nameof(evt));
+            if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
 
+            var evt = await eventRepository.FindByIdAsync(eventId);
+            if (evt == null)
+            {
+                throw new InvalidOperationException($"Event with ID [{eventId}] not found!");
+            }
+
+            return CreateIcalStream(evt);
+        }
+
+        private static Stream CreateIcalStream(Event evt)
+        {
             var sb = new StringBuilder();
-            var DateFormat = "yyyyMMddTHHmmssZ";
-            var now = DateTime.Now.ToUniversalTime().ToString(DateFormat);
+            const string dateFormat = "yyyyMMddTHHmmssZ";
+            var now = DateTime.Now.ToUniversalTime().ToString(dateFormat);
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("PRODID:-//Tauchbolde//TauchboldeWebsite//EN");
@@ -26,8 +39,8 @@ namespace Tauchbolde.Common.DomainServices
             var dtEnd = Convert.ToDateTime(evtEndTime);
 
             sb.AppendLine("BEGIN:VEVENT");
-            sb.AppendLine("DTSTART:" + dtStart.ToUniversalTime().ToString(DateFormat));
-            sb.AppendLine("DTEND:" + dtEnd.ToUniversalTime().ToString(DateFormat));
+            sb.AppendLine("DTSTART:" + dtStart.ToUniversalTime().ToString(dateFormat));
+            sb.AppendLine("DTEND:" + dtEnd.ToUniversalTime().ToString(dateFormat));
             sb.AppendLine("DTSTAMP:" + now);
             sb.AppendLine("UID:" + evt.Id);
             sb.AppendLine("CREATED:" + now);
