@@ -1,0 +1,59 @@
+﻿@using Tauchbolde.Common.Model
+@using Tauchbolde.Web.Models.EventViewModels
+@model EventEditViewModel
+@{
+    ViewBag.Title = $"Aktivität bearbeiten - {Model.Event.Name}";
+    Layout = "_Layout";
+}
+
+<form asp-action="Edit" role="form">
+    <div class="container">
+
+        <div class="row">
+            <h2>@ViewBag.Title</h2>
+        </div>
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Event.StartTime"></label>
+            @Html.TextBoxFor(m => m.Event.StartTime, new {@class = "form-control"})
+            <span asp-validation-for="Event.StartTime"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Event.EndTime"></label>
+            @Html.TextBoxFor(m => m.Event.EndTime, new {@class = "form-control"})
+            <span asp-validation-for="Event.EndTime" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Event.Name"></label>
+            @Html.TextBoxFor(m => m.Event.Name, new {@class = "form-control"})
+            <span asp-validation-for="Event.Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Event.Location"></label>
+            @Html.TextBoxFor(m => m.Event.Location, new {@class = "form-control"})
+            <span asp-validation-for="Event.Location" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Event.MeetingPoint"></label>
+            @Html.TextBoxFor(m => m.Event.MeetingPoint, new {@class = "form-control"})
+            <span asp-validation-for="Event.MeetingPoint" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Event.Organisator"></label>
+            @Html.TextBoxFor(m => m.Event.Organisator, new {@class = "form-control"})
+            <span asp-validation-for="Event.Organisator" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Speichern"/>
+            <a asp-action="Details" asp-route-id="@Model.Event.Id" class="btn btn-default">Abbrechen</a>
+        </div>
+    </div>
+</form>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -18,7 +19,7 @@ using Tauchbolde.Web.Models.EventViewModels;
 namespace Tauchbolde.Web.Controllers
 {
 
-    [Authorize(Policy = PolicyNames.RequireTauchbold )]
+    [Authorize(Policy = PolicyNames.RequireTauchbold)]
     public class EventController : Controller
     {
         private readonly IApplicationUserRepository _applicationUserRepository;
@@ -76,7 +77,7 @@ namespace Tauchbolde.Web.Controllers
             var model = new EventViewModel
             {
                 Event = detailsForEvent,
-                BuddyTeamNames = BuddyTeamNames.Names.Select(n => new SelectListItem{ Text = n}),
+                BuddyTeamNames = GetBuddyTeamNames(),
                 ChangeParticipantViewModel = new ChangeParticipantViewModel
                 {
                     EventId = detailsForEvent.Id,
@@ -114,35 +115,67 @@ namespace Tauchbolde.Web.Controllers
         }
 
         // GET: Event/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(Guid id)
         {
-            return View();
+            var detailsForEvent = await _eventRepository.FindByIdAsync(id);
+            if (detailsForEvent == null)
+            {
+                return BadRequest("Event does not exists!");
+            }
+
+            var model = new EventEditViewModel()
+            {
+                Event = detailsForEvent,
+                BuddyTeamNames = GetBuddyTeamNames(),
+            };
+
+            return View(model);
         }
 
         // POST: Event/Edit/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(Guid id, [Bind(Prefix = "Event")]Event model)
         {
-            try
-            {
-                // TODO: Add update logic here
+            model.Organisator = HttpContext.Request
 
-                return RedirectToAction("Index");
-            }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                try
+                {
+                    // TODO: Add update logic here
+
+
+                    return RedirectToAction("Details", new { id });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists " +
+                        $"see your system administrator. Message: {ex.Message}");
+                }
             }
+
+            var viewModel = new EventEditViewModel()
+            {
+                Event = model,
+                BuddyTeamNames = GetBuddyTeamNames(),
+            };
+
+
+            return View(viewModel);
         }
 
         // GET: Event/Delete/5
+
         public ActionResult Delete(int id)
         {
             return View();
         }
 
         // POST: Event/Delete/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
@@ -167,7 +200,7 @@ namespace Tauchbolde.Web.Controllers
         /// <seealso cref="IParticipationService"/>
         [HttpPost]
         [Authorize(Policy = PolicyNames.RequireTauchbold)]
-        public async Task<ActionResult> ChangeParticipation([Bind(Prefix= "ChangeParticipantViewModel")]ChangeParticipantViewModel model)
+        public async Task<ActionResult> ChangeParticipation([Bind(Prefix = "ChangeParticipantViewModel")]ChangeParticipantViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -179,7 +212,7 @@ namespace Tauchbolde.Web.Controllers
 
                 await _participationService.ChangeParticipationAsync(currentUser, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
 
-                return RedirectToAction("Details", new {id = model.EventId});
+                return RedirectToAction("Details", new { id = model.EventId });
             }
 
             return await Details(model.EventId);
@@ -195,6 +228,11 @@ namespace Tauchbolde.Web.Controllers
             var stream = await _eventService.CreateIcalForEvent(id, _eventRepository);
 
             return File(stream, "text/calendar");
+        }
+
+        private static IEnumerable<SelectListItem> GetBuddyTeamNames()
+        {
+            return BuddyTeamNames.Names.Select(n => new SelectListItem { Text = n });
         }
     }
 }
