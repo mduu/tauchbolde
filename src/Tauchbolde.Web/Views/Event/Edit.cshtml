@@ -1,8 +1,7 @@
-﻿@using Tauchbolde.Common.Model
-@using Tauchbolde.Web.Models.EventViewModels
+﻿@using Tauchbolde.Web.Models.EventViewModels
 @model EventEditViewModel
 @{
-    ViewBag.Title = $"Aktivität bearbeiten - {Model.Event.Name}";
+    ViewBag.Title = $"Aktivität bearbeiten - {Model.OriginalEvent.Name}";
     Layout = "_Layout";
 }
 
@@ -15,45 +14,51 @@
 
         <div asp-validation-summary="All" class="text-danger"></div>
 
+        <input asp-for="Id" hidden="hidden"/>
+
         <div class="form-group">
-            <label asp-for="Event.StartTime"></label>
-            @Html.TextBoxFor(m => m.Event.StartTime, new {@class = "form-control"})
-            <span asp-validation-for="Event.StartTime"></span>
+            <label asp-for="StartTime"></label>
+            @Html.TextBoxFor(m => m.StartTime, new {@class = "form-control"})
+            <span asp-validation-for="StartTime"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Event.EndTime"></label>
-            @Html.TextBoxFor(m => m.Event.EndTime, new {@class = "form-control"})
-            <span asp-validation-for="Event.EndTime" class="text-danger"></span>
+            <label asp-for="EndTime"></label>
+            @Html.TextBoxFor(m => m.EndTime, new {@class = "form-control"})
+            <span asp-validation-for="EndTime" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Event.Name"></label>
-            @Html.TextBoxFor(m => m.Event.Name, new {@class = "form-control"})
-            <span asp-validation-for="Event.Name" class="text-danger"></span>
+            <label asp-for="Name"></label>
+            @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Event.Location"></label>
-            @Html.TextBoxFor(m => m.Event.Location, new {@class = "form-control"})
-            <span asp-validation-for="Event.Location" class="text-danger"></span>
+            <label asp-for="Location"></label>
+            @Html.TextBoxFor(m => m.Location, new {@class = "form-control"})
+            <span asp-validation-for="Location" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Event.MeetingPoint"></label>
-            @Html.TextBoxFor(m => m.Event.MeetingPoint, new {@class = "form-control"})
-            <span asp-validation-for="Event.MeetingPoint" class="text-danger"></span>
+            <label asp-for="MeetingPoint"></label>
+            @Html.TextBoxFor(m => m.MeetingPoint, new {@class = "form-control"})
+            <span asp-validation-for="MeetingPoint" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Event.Organisator"></label>
-            @Html.TextBoxFor(m => m.Event.Organisator, new {@class = "form-control"})
-            <span asp-validation-for="Event.Organisator" class="text-danger"></span>
+            <label asp-for="Organisator"></label>
+            @Html.TextBoxFor(m => m.Organisator, new {@class = "form-control", @readonly = "readonly"})
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            @Html.TextAreaFor(m => m.Description, new {@class = "form-control", @readonly = "readonly"})
         </div>
 
         <div class="form-group">
             <input type="submit" class="btn btn-primary" value="Speichern"/>
-            <a asp-action="Details" asp-route-id="@Model.Event.Id" class="btn btn-default">Abbrechen</a>
+            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-default">Abbrechen</a>
         </div>
     </div>
 </form>

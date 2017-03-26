@@ -1,26 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Web.Services
 {
-    public class CurrentUserHelper
+    /// <summary>
+    /// Little helpers for current user related functions.
+    /// </summary>
+    public static class CurrentUserHelper
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public CurrentUserHelper(UserManager<ApplicationUser> userManager)
+        /// <summary>
+        /// Get the user enttity instance for the currenctly logged in user.
+        /// </summary>
+        /// <param name="controller">The MVC controller used to access the identity.</param>
+        /// <param name="applicationUserRepository">The <see cref="IApplicationUserRepository"/> used to access the database.</param>
+        /// <returns>Return the <see cref="ApplicationUser"/> instance or <c>Null</c> if none was found.</returns>
+        public static async Task<ApplicationUser> GetCurrentUserAsync(this Controller controller, IApplicationUserRepository applicationUserRepository)
         {
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-        }
+            if (controller == null) throw new ArgumentNullException(nameof(controller));
+            if (applicationUserRepository == null) throw new ArgumentNullException(nameof(applicationUserRepository));
 
-        public ApplicationUser GetCurrentUser(HttpRequest request)
-        {
-            var username = _userManager.Find
+            return await applicationUserRepository.FindByUserNameAsync(controller.User.Identity.Name);
         }
     }
 }

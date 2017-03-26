@@ -15,6 +15,7 @@ using Tauchbolde.Common.DomainServices;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Models.EventViewModels;
+using Tauchbolde.Web.Services;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -57,7 +58,6 @@ namespace Tauchbolde.Web.Controllers
         }
 
         // GET: Event/Details/5
-        [Authorize(Policy = PolicyNames.RequireTauchbold)]
         public async Task<ActionResult> Details(Guid id)
         {
             var detailsForEvent = await _eventRepository.FindByIdAsync(id);
@@ -123,10 +123,18 @@ namespace Tauchbolde.Web.Controllers
                 return BadRequest("Event does not exists!");
             }
 
-            var model = new EventEditViewModel()
+            var model = new EventEditViewModel
             {
-                Event = detailsForEvent,
+                OriginalEvent = detailsForEvent,
                 BuddyTeamNames = GetBuddyTeamNames(),
+                Id = detailsForEvent.Id,
+                Name = detailsForEvent.Name,
+                Location = detailsForEvent.Location,
+                MeetingPoint = detailsForEvent.MeetingPoint,
+                Description = detailsForEvent.Description,
+                Organisator = (detailsForEvent.Organisator ?? await this.GetCurrentUserAsync(_applicationUserRepository)).UserName,
+                StartTime = detailsForEvent.StartTime,
+                EndTime = detailsForEvent.EndTime
             };
 
             return View(model);
@@ -136,10 +144,8 @@ namespace Tauchbolde.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Guid id, [Bind(Prefix = "Event")]Event model)
+        public async Task<ActionResult> Edit(Guid id, EventEditViewModel model)
         {
-            model.Organisator = HttpContext.Request
-
             if (ModelState.IsValid)
             {
                 try
@@ -157,9 +163,15 @@ namespace Tauchbolde.Web.Controllers
                 }
             }
 
+            var detailsForEvent = await _eventRepository.FindByIdAsync(id);
+            if (detailsForEvent == null)
+            {
+                return BadRequest("Event does not exists!");
+            }
+
             var viewModel = new EventEditViewModel()
             {
-                Event = model,
+                OriginalEvent = detailsForEvent,
                 BuddyTeamNames = GetBuddyTeamNames(),
             };
 
@@ -199,7 +211,6 @@ namespace Tauchbolde.Web.Controllers
         /// <seealso cref="ChangeParticipantViewModel"/>
         /// <seealso cref="IParticipationService"/>
         [HttpPost]
-        [Authorize(Policy = PolicyNames.RequireTauchbold)]
         public async Task<ActionResult> ChangeParticipation([Bind(Prefix = "ChangeParticipantViewModel")]ChangeParticipantViewModel model)
         {
             if (ModelState.IsValid)
