@@ -37,10 +37,12 @@ namespace Tauchbolde.Web
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+            // ASP.Net Core Identity
 			services.AddIdentity<ApplicationUser, IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultTokenProviders();
 
+            // ASP.Net Core MVC
 			services.AddMvc();
 
 			// Policies
@@ -87,8 +89,8 @@ namespace Tauchbolde.Web
 
 			app.UseStaticFiles();
 
+            // ASP.Net Core Identity
 			app.UseIdentity();
-
 			app.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
 			{
 				ClientId = Configuration["Authentication:Microsoft:ClientId"],
