@@ -9,6 +9,16 @@ namespace Tauchbolde.Common.DomainServices
 {
     public class EventService : IEventService
     {
+        private readonly ApplicationDbContext _applicationDbContext;
+
+        public EventService(ApplicationDbContext applicationDbContext)
+        {
+            if (applicationDbContext == null) throw new ArgumentNullException(nameof(applicationDbContext));
+
+            _applicationDbContext = applicationDbContext;
+        }
+
+        /// <inheritdoc />
         public async Task<Stream> CreateIcalForEvent(Guid eventId, IEventRepository eventRepository)
         {
             if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
@@ -20,6 +30,31 @@ namespace Tauchbolde.Common.DomainServices
             }
 
             return CreateIcalStream(evt);
+        }
+
+        /// <inheritdoc />
+        public async Task<Event> UpdateEventAsync(IEventRepository eventRepository, Guid eventId, string name, string description,
+            DateTime startTime, DateTime? endTime, string location, string meetingPoint, ApplicationUser currentUser)
+        {
+            if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
+            if (eventId == Guid.Empty) throw new ArgumentException("EventId can not be empty!", nameof(eventId));
+
+            var evt = await eventRepository.FindByIdAsync(eventId);
+            if (evt == null)
+            {
+                throw new InvalidOperationException("Zu bearbeitendes Event wurde nicht in der Datenbank gefunden!");
+            }
+
+            evt.Name = name;
+            evt.Description = description;
+            evt.Location = location;
+            evt.MeetingPoint = meetingPoint;
+            evt.StartTime = startTime;
+            evt.EndTime = endTime;
+
+
+
+            throw new NotImplementedException();
         }
 
         private static Stream CreateIcalStream(Event evt)
