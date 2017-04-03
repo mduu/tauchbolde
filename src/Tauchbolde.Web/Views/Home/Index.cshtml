@@ -45,8 +45,8 @@
 <div class="row">
     <div class="col-md-4">
         <h2>Willkommen</h2>
-        <p>Die Tauchbolde sind ein kleiner Haufen angefressener Taucher die auch noch bei Wind und Wetter in die einheimischen Seen und Flüsse steigen. 
-            Wir gehören keinem Tauchshop und keiner Tauchschule an und verstehen uns auch nicht als Tauchclub. Am besten würde es das Wort 
+        <p>Die Tauchbolde sind ein kleiner Haufen angefressener Taucher die auch noch bei Wind und Wetter in die einheimischen Seen und Flüsse steigen.
+            Wir gehören keinem Tauchshop und keiner Tauchschule an und verstehen uns auch nicht als Tauchclub. Am besten würde es das Wort
             "Interessensgemeinschaft" treffen.</p>
         <a class="btn btn-default" asp-action="About" asp-controller="Home">Mehr ...</a>
     </div>
@@ -57,9 +57,7 @@
         </ul>
     </div>
     <div class="col-md-4">
-        <h2>Nächste Aktititäten</h2>
-        <ul>
-            <li>...</li>
-        </ul>
+        <h2>Aktititäten</h2>
+        @await Component.InvokeAsync("RecentAndUpcomingEvents")
     </div>
 </div>

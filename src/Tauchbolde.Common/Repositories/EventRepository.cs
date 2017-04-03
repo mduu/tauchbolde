@@ -17,13 +17,18 @@ namespace Tauchbolde.Common.Repositories
         /// <inheritdoc />>
         public async Task<List<Event>> GetUpcommingEventsAsync()
         {
-            return await context.Events
-                .Where(e =>
-                    e.Deleted == false &&
-                    e.Canceled == false &&
-                    e.EndTime > DateTime.Now)
-                .OrderBy(e => e.StartTime)
-                .ThenBy(e => e.EndTime)
+            return await CreateQueryForStartingAt(DateTime.Now)
+                .Include(e => e.Comments)
+                    .ThenInclude(c => c.Author)
+                .Include(e => e.Participants)
+                    .ThenInclude(p => p.User)
+                .ToListAsync();
+        }
+
+
+        public async Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync()
+        {
+            return await CreateQueryForStartingAt(DateTime.Now.AddDays(-30))
                 .Include(e => e.Comments)
                     .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
@@ -39,6 +44,18 @@ namespace Tauchbolde.Common.Repositories
                 .Include(e => e.Participants)
                 .ThenInclude(p => p.User)
                 .FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public IQueryable<Event> CreateQueryForStartingAt(DateTime startDate, bool includeCanceled = false)
+        {
+            return context.Events
+                .Where(e =>
+                    e.Deleted == false &&
+                    (includeCanceled || e.Canceled == false) &&
+                    (e.EndTime.HasValue && e.EndTime > startDate ||
+                     !e.EndTime.HasValue && e.StartTime > startDate))
+                .OrderBy(e => e.StartTime)
+                .ThenBy(e => e.EndTime);
         }
     }
 }

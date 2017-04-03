@@ -13,5 +13,7 @@ namespace Tauchbolde.Common.Repositories
         /// </summary>
         /// <returns>All upcomming events</returns>
         Task<List<Event>> GetUpcommingEventsAsync();
+
+        Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync();
     }
 }
