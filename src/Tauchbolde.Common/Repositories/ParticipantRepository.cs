@@ -13,7 +13,7 @@ namespace Tauchbolde.Common.Repositories
 
         public async Task<Participant> GetParticipationForEventAndUserAsync(ApplicationUser user, Guid eventId)
         {
-            return await context.Participants.FirstOrDefaultAsync(p =>
+            return await Context.Participants.FirstOrDefaultAsync(p =>
                 p.EventId == eventId && p.User.Id == user.Id);
         }
     }

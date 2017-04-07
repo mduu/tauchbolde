@@ -57,6 +57,48 @@ namespace Tauchbolde.Common.DomainServices
             throw new NotImplementedException();
         }
 
+        /// <inheritdoc />
+        public async Task<Event> UpsertEventAsync(IEventRepository eventRepository, Event eventToUpsert)
+        {
+            if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
+            if (eventToUpsert == null) throw new ArgumentNullException(nameof(eventToUpsert));
+
+            Event eventToStore = null;
+            bool isNew = eventToUpsert.Id == Guid.Empty;
+            if (eventToUpsert.Id != Guid.Empty)
+            {
+                eventToStore = await eventRepository.FindByIdAsync(eventToUpsert.Id);
+
+                if (eventToStore == null)
+                {
+                    throw new InvalidOperationException("Aktivität zum bearbeiten nicht in der Datenbank gefunden!");
+                }
+            }
+            else
+            {
+                eventToStore = new Event { Id = Guid.NewGuid() };
+            }
+
+            eventToStore.Name = eventToUpsert.Name;
+            eventToStore.Description = eventToUpsert.Description;
+            eventToStore.Organisator = eventToUpsert.Organisator;
+            eventToStore.Location = eventToUpsert.Location;
+            eventToStore.MeetingPoint = eventToUpsert.MeetingPoint;
+            eventToStore.StartTime = eventToUpsert.StartTime;
+            eventToStore.EndTime = eventToUpsert.EndTime;
+
+            if (isNew)
+            {
+                await eventRepository.InsertAsync(eventToStore);
+            }
+            else
+            {
+                eventRepository.Update(eventToStore);
+            }
+
+            return eventToStore;
+        }
+
         private static Stream CreateIcalStream(Event evt)
         {
             var sb = new StringBuilder();

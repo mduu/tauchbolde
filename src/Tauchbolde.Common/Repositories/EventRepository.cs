@@ -38,7 +38,7 @@ namespace Tauchbolde.Common.Repositories
 
         public override async Task<Event> FindByIdAsync(Guid id)
         {
-            return await context.Events
+            return await Context.Events
                 .Include(e => e.Comments)
                 .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
@@ -48,7 +48,7 @@ namespace Tauchbolde.Common.Repositories
 
         public IQueryable<Event> CreateQueryForStartingAt(DateTime startDate, bool includeCanceled = false)
         {
-            return context.Events
+            return Context.Events
                 .Where(e =>
                     e.Deleted == false &&
                     (includeCanceled || e.Canceled == false) &&

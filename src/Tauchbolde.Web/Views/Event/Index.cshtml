@@ -7,6 +7,12 @@
 
 <h2>Aktivitäten</h2>
 
+<div class="navbar navbar-default">
+    <form class="navbar-form navbar-left" role="search">
+        <a href="@Url.Action("Edit")" id="create-event" class="btn btn-primary">Neue Aktivität</a>
+    </form>
+</div>
+
 <table class="table">
     <tr>
         <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().StartTime)</th>

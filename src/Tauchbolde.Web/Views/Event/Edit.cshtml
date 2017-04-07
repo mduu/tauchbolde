@@ -1,7 +1,7 @@
 ﻿@using Tauchbolde.Web.Models.EventViewModels
 @model EventEditViewModel
 @{
-    ViewBag.Title = $"Aktivität bearbeiten - {Model.OriginalEvent.Name}";
+    ViewBag.Title = $"Aktivität bearbeiten - {Model.OriginalEvent?.Name ?? "Neue Aktivität"}";
     Layout = "_Layout";
 }
 
@@ -67,7 +67,7 @@
         <div class="form-group">
             <label asp-for="Description" class="col-sm-2 control-label"></label>
             <div class="col-sm-10">
-                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @readonly = "readonly" })
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
         </div>

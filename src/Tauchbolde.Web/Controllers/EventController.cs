@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -23,6 +24,7 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireTauchbold)]
     public class EventController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly IApplicationUserRepository _applicationUserRepository;
         private readonly IEventRepository _eventRepository;
         private readonly IParticipationService _participationService;
@@ -35,11 +37,13 @@ namespace Tauchbolde.Web.Controllers
             IParticipationService participationService,
             IEventService eventService)
         {
+            if (context == null) throw new ArgumentNullException(nameof(context));
             if (applicationUserRepository == null) { throw new ArgumentNullException(nameof(applicationUserRepository)); }
             if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
             if (participationService == null) { throw new ArgumentNullException(nameof(participationService)); }
             if (eventService == null) throw new ArgumentNullException(nameof(eventService));
 
+            _context = context;
             _applicationUserRepository = applicationUserRepository;
             _eventRepository = eventRepository;
             _participationService = participationService;
@@ -91,50 +95,32 @@ namespace Tauchbolde.Web.Controllers
             return View(model);
         }
 
-        // GET: Event/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Event/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         // GET: Event/Edit/5
-        public async Task<ActionResult> Edit(Guid id)
+        public async Task<ActionResult> Edit(Guid? id)
         {
-            var detailsForEvent = await _eventRepository.FindByIdAsync(id);
-            if (detailsForEvent == null)
+            Event detailsForEvent = null;
+            if (id.HasValue)
             {
-                return BadRequest("Event does not exists!");
+                detailsForEvent = await _eventRepository.FindByIdAsync(id.Value);
+                if (detailsForEvent == null)
+                {
+                    return BadRequest("Event does not exists!");
+                }
             }
 
             var model = new EventEditViewModel
             {
                 OriginalEvent = detailsForEvent,
                 BuddyTeamNames = GetBuddyTeamNames(),
-                Id = detailsForEvent.Id,
-                Name = detailsForEvent.Name,
-                Location = detailsForEvent.Location,
-                MeetingPoint = detailsForEvent.MeetingPoint,
-                Description = detailsForEvent.Description,
-                Organisator = (detailsForEvent.Organisator ?? await this.GetCurrentUserAsync(_applicationUserRepository)).UserName,
-                StartTime = detailsForEvent.StartTime,
-                EndTime = detailsForEvent.EndTime
+                Id = detailsForEvent?.Id ?? Guid.Empty,
+                Name = detailsForEvent?.Name ?? "",
+                Location = detailsForEvent?.Location ?? "",
+                MeetingPoint = detailsForEvent?.MeetingPoint ?? "",
+                Description = detailsForEvent?.Description ?? "",
+                Organisator = (detailsForEvent?.Organisator ?? await this.GetCurrentUserAsync(_applicationUserRepository)).UserName,
+                StartTime = detailsForEvent?.StartTime ?? DateTime.Today.AddDays(1).AddHours(19),
+                EndTime = detailsForEvent?.EndTime
             };
 
             return View(model);
@@ -150,10 +136,23 @@ namespace Tauchbolde.Web.Controllers
             {
                 try
                 {
-                    // TODO: Add update logic here
+                    var organizer = await this.GetCurrentUserAsync(_applicationUserRepository);
+                    var evt = new Event
+                    {
+                        Id = model.Id,
+                        Name = model.Name,
+                        StartTime = model.StartTime,
+                        EndTime = model.EndTime,
+                        Description = model.Description,
+                        Location = model.Location,
+                        MeetingPoint = model.MeetingPoint,
+                        Organisator = organizer,
+                    };
 
+                    var persistantEvent = await _eventService.UpsertEventAsync(_eventRepository, evt);
+                    await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new { persistantEvent.Id });
                 }
                 catch (Exception ex)
                 {

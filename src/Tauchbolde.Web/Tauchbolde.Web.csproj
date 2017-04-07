@@ -37,6 +37,11 @@
     <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System">
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="Models\EventViewModels\ChangeParticipantViewModel.d.ts">
       <DependentUpon>ChangeParticipantViewModel.cs</DependentUpon>
     </None>

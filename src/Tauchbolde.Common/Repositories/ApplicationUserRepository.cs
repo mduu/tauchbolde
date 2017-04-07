@@ -16,7 +16,7 @@ namespace Tauchbolde.Common.Repositories
         {
             if (string.IsNullOrWhiteSpace(username)) { throw new ArgumentNullException(nameof(username)); }
 
-            return await context.Users.FirstOrDefaultAsync(u => u.UserName.Equals(username));
+            return await Context.Users.FirstOrDefaultAsync(u => u.UserName.Equals(username));
         }
     }
 }
