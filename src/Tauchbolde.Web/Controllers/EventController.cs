@@ -82,6 +82,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 Event = detailsForEvent,
                 BuddyTeamNames = GetBuddyTeamNames(),
+                AllowEdit = detailsForEvent == null || detailsForEvent?.Organisator?.Id == currentUser.Id,
                 ChangeParticipantViewModel = new ChangeParticipantViewModel
                 {
                     EventId = detailsForEvent.Id,
@@ -109,6 +110,8 @@ namespace Tauchbolde.Web.Controllers
                 }
             }
 
+            var currentUser = await this.GetCurrentUserAsync(_applicationUserRepository);
+
             var model = new EventEditViewModel
             {
                 OriginalEvent = detailsForEvent,
@@ -118,9 +121,9 @@ namespace Tauchbolde.Web.Controllers
                 Location = detailsForEvent?.Location ?? "",
                 MeetingPoint = detailsForEvent?.MeetingPoint ?? "",
                 Description = detailsForEvent?.Description ?? "",
-                Organisator = (detailsForEvent?.Organisator ?? await this.GetCurrentUserAsync(_applicationUserRepository)).UserName,
+                Organisator = (detailsForEvent?.Organisator ?? currentUser).UserName,
                 StartTime = detailsForEvent?.StartTime ?? DateTime.Today.AddDays(1).AddHours(19),
-                EndTime = detailsForEvent?.EndTime
+                EndTime = detailsForEvent?.EndTime,
             };
 
             return View(model);

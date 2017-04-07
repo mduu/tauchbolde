@@ -14,5 +14,6 @@ namespace Tauchbolde.Web.Models.EventViewModels
         public IEnumerable<SelectListItem> BuddyTeamNames { get; set; }
 
         public ChangeParticipantViewModel ChangeParticipantViewModel { get; set; }
+        public bool AllowEdit { get; set; }
     }
 }
