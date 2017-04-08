@@ -15,7 +15,7 @@ namespace Tauchbolde.Common.Model
         public DbSet<Participant> Participants { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<UserInfo> UserInfos { get; set; }
-        public DbSet<Notifications> Notifications { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostImage> PostImages { get; set; }
 
@@ -54,8 +54,8 @@ namespace Tauchbolde.Common.Model
             builder.Entity<Event>().Property(e => e.Canceled).HasDefaultValue(false);
 
             // Notification
-            builder.Entity<Notifications>().Property(e => e.AlreadySent).HasDefaultValue(false);
-            builder.Entity<Notifications>().Property(e => e.CountOfTries).HasDefaultValue(0);
+            builder.Entity<Notification>().Property(e => e.AlreadySent).HasDefaultValue(false);
+            builder.Entity<Notification>().Property(e => e.CountOfTries).HasDefaultValue(0);
 
             // Participants
             builder.Entity<Participant>().HasOne(e => e.Event).WithMany(e => e.Participants).OnDelete(DeleteBehavior.Restrict);

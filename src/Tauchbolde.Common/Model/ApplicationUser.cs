@@ -7,7 +7,7 @@ namespace Tauchbolde.Common.Model
     public class ApplicationUser : IdentityUser
     {
         public UserInfo AdditionalUserInfos { get; set; }
-        public virtual ICollection<Notifications> Notificationses { get; set; }
+        public virtual ICollection<Notification> Notificationses { get; set; }
         public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
