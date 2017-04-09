@@ -48,7 +48,7 @@ namespace Tauchbolde.Web
             // Policies
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole("Tauchbold"));
+                options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole(Rolenames.Tauchbold));
             });
 
             // EF

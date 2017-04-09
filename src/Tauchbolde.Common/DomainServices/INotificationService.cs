@@ -6,10 +6,11 @@ namespace Tauchbolde.Common.DomainServices
 {
     public interface INotificationService
     {
-        Task NotifyForNewEventAsync(INotificationRepository notificationRepository, Event newEvent);
-        Task NotifyForChangedEventAsync(INotificationRepository notificationRepository, Event changedEvent);
-        Task NotifyForChangedParticipation(INotificationRepository notificationRepository, Participant participant);
-        Task NotifyForEventComment(INotificationRepository notificationRepository, Comment comment);
-        Task NotifyForNewPost(INotificationRepository notificationRepository, Post newPost);
+        Task NotifyForNewEventAsync(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Event newEvent);
+        Task NotifyForChangedEventAsync(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Event changedEvent);
+        Task NotifyForCanceledEventAsync(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Event canceledEvent);
+        Task NotifyForChangedParticipation(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Participant participant);
+        Task NotifyForEventComment(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Comment comment);
+        Task NotifyForNewPost(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Post newPost);
     }
 }
