@@ -23,7 +23,7 @@ namespace Tauchbolde.Common.DomainServices
             if (newEvent == null) throw new ArgumentNullException(nameof(newEvent));
 
             var recipients = await userRepository.GetAllTauchboldeUsersAsync();
-            var message = $"Neue Aktivität '{newEvent.Name}' ({newEvent.StartEndTimeAsString}) erstellt";
+            var message = $"Neue Aktivität '{newEvent.Name}' ({newEvent.StartEndTimeAsString}) von {newEvent.Organisator.Realname} erstellt";
 
             await InsertNotification(notificationRepository, newEvent, recipients, NotificationType.NewEvent, message);
         }
@@ -39,7 +39,7 @@ namespace Tauchbolde.Common.DomainServices
             if (changedEvent == null) throw new ArgumentNullException(nameof(changedEvent));
 
             var recipients = await userRepository.GetAllTauchboldeUsersAsync();
-            var message = $"Aktivität geändert '{changedEvent.Name}' ({changedEvent.StartEndTimeAsString})";
+            var message = $"Aktivität geändert '{changedEvent.Name}' ({changedEvent.StartEndTimeAsString}) von {changedEvent.Organisator.Realname}";
 
             await InsertNotification(notificationRepository, changedEvent, recipients, NotificationType.EditEvent, message);
         }
@@ -57,7 +57,7 @@ namespace Tauchbolde.Common.DomainServices
                 .Where(u => declinedParticipants.All(p => p.User.Id != u.Id))
                 .ToList();
 
-            var message = $"Aktivität '{canceledEvent.Name}' ({canceledEvent.StartEndTimeAsString}) wurde abgesagt.";
+            var message = $"Aktivität '{canceledEvent.Name}' ({canceledEvent.StartEndTimeAsString}) wurde abgesagt von {canceledEvent.Organisator.Realname}.";
 
             await InsertNotification(notificationRepository, canceledEvent, recipients, NotificationType.CancelEvent, message);
         }
@@ -76,19 +76,19 @@ namespace Tauchbolde.Common.DomainServices
             switch (participant.Status)
             {
                 case ParticipantStatus.None:
-                    message = $"Teilnahme: {participant.User.UserName} weiss nicht ob Er/Sie an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil nimmt.";
+                    message = $"Teilnahme: {participant.User.Realname} weiss nicht ob Er/Sie an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil nimmt.";
                     notificationType = NotificationType.Neutral;
                     break;
                 case ParticipantStatus.Accepted:
-                    message = $"Teilnahme: {participant.User.UserName} nimmt an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
+                    message = $"Teilnahme: {participant.User.Realname} nimmt an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Accepted;
                     break;
                 case ParticipantStatus.Declined:
-                    message = $"Teilnahme: {participant.User.UserName} hat für die Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) abgesagt.";
+                    message = $"Teilnahme: {participant.User.Realname} hat für die Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) abgesagt.";
                     notificationType = NotificationType.Declined;
                     break;
                 case ParticipantStatus.Tentative:
-                    message = $"Teilnahme: {participant.User.UserName} nimmt eventuell an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
+                    message = $"Teilnahme: {participant.User.Realname} nimmt eventuell an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Tentative;
                     break;
                 default:
@@ -106,7 +106,7 @@ namespace Tauchbolde.Common.DomainServices
             if (comment == null) throw new ArgumentNullException(nameof(comment));
 
             var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(userRepository, participantRepository, comment.EventId);
-            var message = $"Neuer Kommentar von '{comment.Author.UserName}' für Event '{comment.Event.Name}' ({comment.Event.StartEndTimeAsString}): {comment.Text}";
+            var message = $"Neuer Kommentar von '{comment.Author.Realname}' für Event '{comment.Event.Name}' ({comment.Event.StartEndTimeAsString}): {comment.Text}";
 
             await InsertNotification(notificationRepository, comment.Event, recipients, NotificationType.Commented, message);
         }
@@ -119,7 +119,7 @@ namespace Tauchbolde.Common.DomainServices
             if (newPost == null) throw new ArgumentNullException(nameof(newPost));
 
             var recipients = await userRepository.GetAllTauchboldeUsersAsync();
-            var message = $"Neuer Beitrag von {newPost.Author.UserName} veröffentlicht: {newPost.Title}";
+            var message = $"Neuer Beitrag von {newPost.Author.Realname} veröffentlicht: {newPost.Title}";
 
             await InsertNotification(notificationRepository, null, recipients, NotificationType.NewPost, message);
         }
