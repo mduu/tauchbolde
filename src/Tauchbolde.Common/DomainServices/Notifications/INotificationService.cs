@@ -2,7 +2,7 @@
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 
-namespace Tauchbolde.Common.DomainServices
+namespace Tauchbolde.Common.DomainServices.Notifications
 {
     /// <summary>
     /// Allows the app to register notification to be send later on.

@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common;
 using Tauchbolde.Common.DomainServices;
+using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Services;
@@ -70,6 +71,8 @@ namespace Tauchbolde.Web
             services.AddTransient<IParticipationService, ParticipationService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<INotificationSender, NotificationSender>();
+            services.AddTransient<INotificationFormatter, HtmlNotificationFormatter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

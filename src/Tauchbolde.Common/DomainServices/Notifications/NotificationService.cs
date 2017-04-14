@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 
-namespace Tauchbolde.Common.DomainServices
+namespace Tauchbolde.Common.DomainServices.Notifications
 {
     /// <summary>
     /// The notification service allows the app to register notifications to be send somewhen later on.
