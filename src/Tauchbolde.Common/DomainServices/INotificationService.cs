@@ -4,6 +4,9 @@ using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.DomainServices
 {
+    /// <summary>
+    /// Allows the app to register notification to be send later on.
+    /// </summary>
     public interface INotificationService
     {
         Task NotifyForNewEventAsync(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Event newEvent);

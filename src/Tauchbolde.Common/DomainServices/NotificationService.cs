@@ -7,6 +7,9 @@ using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.DomainServices
 {
+    /// <summary>
+    /// The notification service allows the app to register notifications to be send somewhen later on.
+    /// </summary>
     public class NotificationService : INotificationService
     {
         /// <inheritdoc />
