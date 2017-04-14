@@ -10,7 +10,7 @@ namespace Tauchbolde.Common.DomainServices
         Task NotifyForChangedEventAsync(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Event changedEvent);
         Task NotifyForCanceledEventAsync(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Event canceledEvent);
         Task NotifyForChangedParticipation(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Participant participant);
-        Task NotifyForEventComment(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Comment comment);
+        Task NotifyForEventComment(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Comment comment);
         Task NotifyForNewPost(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Post newPost);
     }
 }

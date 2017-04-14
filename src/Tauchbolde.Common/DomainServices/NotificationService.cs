@@ -9,6 +9,7 @@ namespace Tauchbolde.Common.DomainServices
 {
     public class NotificationService : INotificationService
     {
+        /// <inheritdoc />
         public async Task NotifyForNewEventAsync(
             INotificationRepository notificationRepository,
             IApplicationUserRepository userRepository,
@@ -24,6 +25,7 @@ namespace Tauchbolde.Common.DomainServices
             await InsertNotification(notificationRepository, newEvent, recipients, NotificationType.NewEvent, message);
         }
 
+        /// <inheritdoc />
         public async Task NotifyForChangedEventAsync(
             INotificationRepository notificationRepository,
             IApplicationUserRepository userRepository,
@@ -39,6 +41,7 @@ namespace Tauchbolde.Common.DomainServices
             await InsertNotification(notificationRepository, changedEvent, recipients, NotificationType.EditEvent, message);
         }
 
+        /// <inheritdoc />
         public async Task NotifyForCanceledEventAsync(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Event canceledEvent)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
@@ -56,17 +59,14 @@ namespace Tauchbolde.Common.DomainServices
             await InsertNotification(notificationRepository, canceledEvent, recipients, NotificationType.CancelEvent, message);
         }
 
+        /// <inheritdoc />
         public async Task NotifyForChangedParticipation(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Participant participant)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
             if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
             if (participant == null) throw new ArgumentNullException(nameof(participant));
 
-            // Recipients alle Tauchbolde that did not yet "decline" the Event already
-            var declinedParticipants = await participantRepository.GetParticipantsForEventByStatusAsync(participant.EventId, ParticipantStatus.Declined);
-            var recipients = (await userRepository.GetAllTauchboldeUsersAsync())
-                .Where(u => declinedParticipants.All(p => p.User.Id != u.Id))
-                .ToList();
+            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(userRepository, participantRepository, participant.EventId);
 
             var message = "";
             NotificationType notificationType;
@@ -95,21 +95,51 @@ namespace Tauchbolde.Common.DomainServices
             await InsertNotification(notificationRepository, participant.Event, recipients, notificationType, message);
         }
 
-        public async Task NotifyForEventComment(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Comment comment)
+        /// <inheritdoc />
+        public async Task NotifyForEventComment(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Comment comment)
         {
-            throw new NotImplementedException();
+            if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
+            if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
+            if (comment == null) throw new ArgumentNullException(nameof(comment));
+
+            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(userRepository, participantRepository, comment.EventId);
+            var message = $"Neuer Kommentar von '{comment.Author.UserName}' für Event '{comment.Event.Name}' ({comment.Event.StartEndTimeAsString}): {comment.Text}";
+
+            await InsertNotification(notificationRepository, comment.Event, recipients, NotificationType.Commented, message);
         }
 
+        /// <inheritdoc />
         public async Task NotifyForNewPost(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Post newPost)
         {
-            throw new NotImplementedException();
+            if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
+            if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
+            if (newPost == null) throw new ArgumentNullException(nameof(newPost));
+
+            var recipients = await userRepository.GetAllTauchboldeUsersAsync();
+            var message = $"Neuer Beitrag von {newPost.Author.UserName} veröffentlicht: {newPost.Title}";
+
+            await InsertNotification(notificationRepository, null, recipients, NotificationType.NewPost, message);
+        }
+
+        private async Task<List<ApplicationUser>> GetAllTauchboldeButDeclinedParticipantsAsync(
+            IApplicationUserRepository userRepository,
+            IParticipantRepository participantRepository, Guid eventId)
+        {
+            var declinedParticipants = await participantRepository.GetParticipantsForEventByStatusAsync(eventId, ParticipantStatus.Declined);
+
+            var result = (await userRepository.GetAllTauchboldeUsersAsync())
+                .Where(u => declinedParticipants.All(p => p.User.Id != u.Id))
+                .ToList();
+
+            return result;
         }
 
         private static async Task InsertNotification(
             INotificationRepository notificationRepository,
             Event relatedEvent,
             ICollection<ApplicationUser> recipients,
-            NotificationType notificationType, string message)
+            NotificationType notificationType,
+            string message)
         {
             foreach (var recipient in recipients)
             {
