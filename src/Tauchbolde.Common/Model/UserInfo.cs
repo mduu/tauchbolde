@@ -50,6 +50,9 @@ namespace Tauchbolde.Common.Model
         [Required]
         public int NotificationIntervalInHours { get; set; }
 
+        [Display(Name = "Benachrichtigungen zuletzt geprüft um")]
+        public DateTime? LastNotificationCheckAt { get; set; }
+
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
 
