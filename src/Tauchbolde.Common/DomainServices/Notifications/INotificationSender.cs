@@ -5,6 +5,10 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 {
     public interface INotificationSender
     {
-        Task Send(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, INotificationFormatter notificationFormatter);
+        Task Send(
+            INotificationRepository notificationRepository,
+            IApplicationUserRepository userRepository,
+            INotificationFormatter notificationFormatter,
+            INotificationSubmitter notificationSubmitter);
     }
 }
