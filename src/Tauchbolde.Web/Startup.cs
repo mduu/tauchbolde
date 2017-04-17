@@ -73,6 +73,7 @@ namespace Tauchbolde.Web
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<INotificationSender, NotificationSender>();
             services.AddTransient<INotificationFormatter, HtmlNotificationFormatter>();
+            services.AddTransient<INotificationSubmitter, SmtpNotificationSubmitter>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
