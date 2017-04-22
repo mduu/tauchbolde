@@ -54,8 +54,6 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                     recipient.AdditionalUserInfos.LastNotificationCheckAt = DateTime.Now;
                 }
             }
-
-            throw new NotImplementedException();
         }
     }
 }
