@@ -38,10 +38,11 @@ namespace Tauchbolde.Tests.DomainServices
             var userHansMeier = CreateTestUser(DateTime.Now.AddMinutes(-1), 1);
             var notifications = CreateTestNotifications(userHansMeier);
             var notificationRepository = A.Fake<INotificationRepository>();
-            A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
             var formatter = A.Fake<INotificationFormatter>();
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
             var sender = new NotificationSender();
+
+            A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
 
             // Act
             await sender.Send(notificationRepository, formatter, submitter);
@@ -60,11 +61,12 @@ namespace Tauchbolde.Tests.DomainServices
             var userHansMeier = CreateTestUser(lastNotificationCheckAt, 1);
             var notifications = CreateTestNotifications(userHansMeier);
             var notificationRepository = A.Fake<INotificationRepository>();
-            A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
             var formatter = A.Fake<INotificationFormatter>();
-            A.CallTo(() => formatter.Format(A<ApplicationUser>._, A<IGrouping<ApplicationUser, Notification>>._)).Returns("Some content!");
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
             var sender = new NotificationSender();
+
+            A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
+            A.CallTo(() => formatter.Format(A<ApplicationUser>._, A<IGrouping<ApplicationUser, Notification>>._)).Returns("Some content!");
 
             // Act
             await sender.Send(notificationRepository, formatter, submitter);
@@ -87,11 +89,12 @@ namespace Tauchbolde.Tests.DomainServices
             var userHansMeier = CreateTestUser(lastNotificationCheckAt, 1);
             var notifications = CreateTestNotifications(userHansMeier, 3);
             var notificationRepository = A.Fake<INotificationRepository>();
-            A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
             var formatter = A.Fake<INotificationFormatter>();
-            A.CallTo(() => formatter.Format(A<ApplicationUser>._, A<IGrouping<ApplicationUser, Notification>>._)).Returns("Some content!");
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
             var sender = new NotificationSender();
+
+            A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
+            A.CallTo(() => formatter.Format(A<ApplicationUser>._, A<IGrouping<ApplicationUser, Notification>>._)).Returns("Some content!");
 
             // Act
             await sender.Send(notificationRepository, formatter, submitter);
@@ -133,7 +136,7 @@ namespace Tauchbolde.Tests.DomainServices
         {
             var result = new List<Notification>();
 
-            for (int numberOfNotification = 0; numberOfNotification < countNotifications; numberOfNotification++)
+            for (var numberOfNotification = 0; numberOfNotification < countNotifications; numberOfNotification++)
             {
                 result.Add(new Notification
                 {
