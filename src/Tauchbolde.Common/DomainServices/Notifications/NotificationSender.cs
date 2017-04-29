@@ -15,15 +15,15 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 
             // Check
             var pendingNotifications = await notificationRepository.GetPendingNotificationByUserAsync();
-            foreach (var pendingNotification in pendingNotifications)
+            foreach (var pendingNotificationsForRecipient in pendingNotifications)
             {
-                var recipient = pendingNotification.Key;
+                var recipient = pendingNotificationsForRecipient.Key;
                 if (!recipient.AdditionalUserInfos.LastNotificationCheckAt.HasValue ||
                     recipient.AdditionalUserInfos.LastNotificationCheckAt.Value.AddHours(
                         recipient.AdditionalUserInfos.NotificationIntervalInHours) < DateTime.Now)
                 {
                     // Format
-                    var content = notificationFormatter.Format(recipient, pendingNotification);
+                    var content = notificationFormatter.Format(recipient, pendingNotificationsForRecipient);
                     if (!string.IsNullOrWhiteSpace(content))
                     {
                         try
@@ -38,7 +38,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                         }
                         finally
                         {
-                            foreach (var notification in pendingNotification)
+                            foreach (var notification in pendingNotificationsForRecipient)
                             {
                                 notification.CountOfTries++;
                             }
