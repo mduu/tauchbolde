@@ -17,7 +17,7 @@ namespace Tauchbolde.Common.Model
 
         [Display(Name = "Nachname")]
         [Required]
-        public string Nachname { get; set; }
+        public string Lastname { get; set; }
 
         [Display(Name = "Tauchbold seit")]
         public DateTime? MemberSince { get; set; }

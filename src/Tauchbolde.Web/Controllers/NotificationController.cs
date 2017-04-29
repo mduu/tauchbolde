@@ -43,7 +43,6 @@ namespace Tauchbolde.Web.Controllers
         {
             await _notificationSender.Send(
                 _notificationRepository,
-                _userRepository,
                 _formatter,
                 _submitter);
 

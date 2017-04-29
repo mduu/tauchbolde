@@ -8,28 +8,20 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     {
         public async Task Send(
             INotificationRepository notificationRepository,
-            IApplicationUserRepository userRepository,
             INotificationFormatter notificationFormatter,
             INotificationSubmitter notificationSubmitter)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
-            if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
 
             // Check
-            var pendingNotifications = await notificationRepository.GetPendingNotificationByUser();
+            var pendingNotifications = await notificationRepository.GetPendingNotificationByUserAsync();
             foreach (var pendingNotification in pendingNotifications)
             {
                 var recipient = pendingNotification.Key;
                 if (!recipient.AdditionalUserInfos.LastNotificationCheckAt.HasValue ||
                     recipient.AdditionalUserInfos.LastNotificationCheckAt.Value.AddHours(
-                        recipient.AdditionalUserInfos.NotificationIntervalInHours) > DateTime.Now)
+                        recipient.AdditionalUserInfos.NotificationIntervalInHours) < DateTime.Now)
                 {
-
-                    foreach (var notification in pendingNotification)
-                    {
-                        notification.CountOfTries++;
-                    }
-
                     // Format
                     var content = notificationFormatter.Format(recipient, pendingNotification);
                     if (!string.IsNullOrWhiteSpace(content))
@@ -44,11 +36,13 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                             Console.WriteLine(e);
                             throw;
                         }
-                    }
-
-                    foreach (var notification in pendingNotification)
-                    {
-                        notification.CountOfTries++;
+                        finally
+                        {
+                            foreach (var notification in pendingNotification)
+                            {
+                                notification.CountOfTries++;
+                            }
+                        }
                     }
 
                     recipient.AdditionalUserInfos.LastNotificationCheckAt = DateTime.Now;
