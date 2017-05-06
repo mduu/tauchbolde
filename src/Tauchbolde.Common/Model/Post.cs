@@ -35,7 +35,7 @@ namespace Tauchbolde.Common.Model
         public string Text { get; set; }
 
         [Display(Name = "Titelbild")]
-        public string IntroImage { get; set; }
+        public Guid IntroImageId { get; set; }
 
         [Display(Name = "Bilder")]
         public ICollection<PostImage> PostImages { get; set; }
