@@ -65,6 +65,7 @@ namespace Tauchbolde.Web
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IParticipantRepository, ParticipantRepository>();
             services.AddTransient<INotificationRepository, NotificationRepository>();
+            services.AddTransient<IPostRepository, PostRepository>();
 
             // DomainServices
             services.AddTransient<IParticipationService, ParticipationService>();
