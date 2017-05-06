@@ -59,7 +59,6 @@ namespace Tauchbolde.Common.Model
 
             // Participants
             builder.Entity<Participant>().HasOne(e => e.Event).WithMany(e => e.Participants).OnDelete(DeleteBehavior.Restrict);
-            //builder.Entity<Participant>().HasIndex(p => new { p.EventId, p.User }).IsUnique();
             builder.Entity<Participant>().Property(e => e.CountPeople).HasDefaultValue(1);
 
             // Post
