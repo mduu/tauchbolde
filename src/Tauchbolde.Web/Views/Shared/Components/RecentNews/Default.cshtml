@@ -1,0 +1,17 @@
+@using Tauchbolde.Web.Models.ViewComponentModels
+@model RecentNewsViewModel
+<section class="recentnews">
+
+    @foreach(var news in Model.RecentNews)
+    {
+        <div class="thumbnail">
+            <img src="..." alt="...">
+            <div class="caption">
+                <h3>@news.Title <span class="small"></span></h3>
+                <p>@news.Text</p>
+                <p><a href="#" class="btn btn-primary" role="button">Mehr ...</a>
+                </p>
+            </div>>
+        </div>
+    }
+</section>

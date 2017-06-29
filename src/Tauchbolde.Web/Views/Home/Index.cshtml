@@ -49,15 +49,11 @@
             Wir gehören keinem Tauchshop und keiner Tauchschule an und verstehen uns auch nicht als Tauchclub. Am besten würde es das Wort
             "Interessensgemeinschaft" treffen.</p>
         <a class="btn btn-default" asp-action="About" asp-controller="Home">Mehr ...</a>
-    </div>
-    <div class="col-md-4">
-        <h2>Neuste Beiträge</h2>
-        <ul>
-            <li>...</li>
-        </ul>
-    </div>
-    <div class="col-md-4">
         <h2>Aktititäten</h2>
         @await Component.InvokeAsync("RecentAndUpcomingEvents")
+    </div>
+    <div class="col-md-8">
+        <h2>Neuste Beiträge</h2>
+        @await Component.InvokeAsync("RecentNews")
     </div>
 </div>
