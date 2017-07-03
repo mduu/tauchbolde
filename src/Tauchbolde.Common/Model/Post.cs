@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Tauchbolde.Common.Model
 {
@@ -11,7 +10,7 @@ namespace Tauchbolde.Common.Model
 
         [Display(Name = "Kategorie")]
         [Required]
-        public string Category { get; set; }
+        public PostCategory Category { get; set; }
 
         [Display(Name = "Erstellt am")]
         [Required]
@@ -36,7 +35,7 @@ namespace Tauchbolde.Common.Model
         public string Text { get; set; }
 
         [Display(Name = "Titelbild")]
-        public string IntroImage { get; set; }
+        public Guid IntroImageId { get; set; }
 
         [Display(Name = "Bilder")]
         public ICollection<PostImage> PostImages { get; set; }

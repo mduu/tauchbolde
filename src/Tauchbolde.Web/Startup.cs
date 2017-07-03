@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,13 +38,29 @@ namespace Tauchbolde.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Caching Middleware
+            services.AddResponseCaching();
+
             // ASP.Net Core Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             // ASP.Net Core MVC
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.CacheProfiles.Add("OneDay",
+                    new CacheProfile()
+                    {
+                        Duration = 86400 // 24h cache
+                    });
+                options.CacheProfiles.Add("Never",
+                    new CacheProfile()
+                    {
+                        Location = ResponseCacheLocation.None,
+                        NoStore = true
+                    });
+            });
 
             // Policies
             services.AddAuthorization(options =>
@@ -65,6 +82,8 @@ namespace Tauchbolde.Web
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IParticipantRepository, ParticipantRepository>();
             services.AddTransient<INotificationRepository, NotificationRepository>();
+            services.AddTransient<IPostRepository, PostRepository>();
+            services.AddTransient<IPostImageRepository, PostImageRepository>();
 
             // DomainServices
             services.AddTransient<IParticipationService, ParticipationService>();

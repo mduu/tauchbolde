@@ -8,9 +8,10 @@ using Tauchbolde.Common.Model;
 namespace Tauchbolde.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170506162809_Change_Post_IntroImage_To_Guid")]
+    partial class Change_Post_IntroImage_To_Guid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
