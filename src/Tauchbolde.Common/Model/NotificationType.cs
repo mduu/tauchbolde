@@ -5,9 +5,11 @@
         NewEvent,
         EditEvent,
         CancelEvent,
+        Neutral,
         Accepted,
         Declined,
         Tentative,
         Commented,
+        NewPost,
     }
 }

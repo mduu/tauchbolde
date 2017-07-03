@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Tauchbolde.Common.Model
@@ -11,5 +12,8 @@ namespace Tauchbolde.Common.Model
         public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+
+        [NotMapped]
+        public string Realname => string.IsNullOrWhiteSpace(AdditionalUserInfos?.Fullname) ? UserName : AdditionalUserInfos?.Fullname;
     }
 }

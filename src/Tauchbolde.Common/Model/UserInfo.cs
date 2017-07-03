@@ -1,13 +1,23 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Tauchbolde.Common.Model
 {
     public class UserInfo
     {
         public Guid Id { get; set; }
+
+        [Display(Name = "Name")]
+        [Required]
+        public string Fullname { get; set; }
+
+        [Display(Name = "Vorname")]
+        [Required]
+        public string Firstname { get; set; }
+
+        [Display(Name = "Nachname")]
+        [Required]
+        public string Lastname { get; set; }
 
         [Display(Name = "Tauchbold seit")]
         public DateTime? MemberSince { get; set; }
@@ -39,6 +49,9 @@ namespace Tauchbolde.Common.Model
         [Display(Name = "Benachrichtigungsintervall (in Stunden)")]
         [Required]
         public int NotificationIntervalInHours { get; set; }
+
+        [Display(Name = "Benachrichtigungen zuletzt geprüft um")]
+        public DateTime? LastNotificationCheckAt { get; set; }
 
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }

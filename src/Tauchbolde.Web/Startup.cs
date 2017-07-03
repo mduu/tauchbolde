@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common;
 using Tauchbolde.Common.DomainServices;
+using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Services;
@@ -16,8 +17,12 @@ namespace Tauchbolde.Web
 {
     public class Startup
     {
+        private IHostingEnvironment CurrentEnvironment { get; set; }
+
         public Startup(IHostingEnvironment env)
         {
+            CurrentEnvironment = env;
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -65,7 +70,7 @@ namespace Tauchbolde.Web
             // Policies
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole("Tauchbold"));
+                options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole(Rolenames.Tauchbold));
             });
 
             // EF
@@ -88,6 +93,18 @@ namespace Tauchbolde.Web
             // DomainServices
             services.AddTransient<IParticipationService, ParticipationService>();
             services.AddTransient<IEventService, EventService>();
+            services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<INotificationSender, NotificationSender>();
+            services.AddTransient<INotificationFormatter, HtmlNotificationFormatter>();
+
+            if (CurrentEnvironment.IsDevelopment())
+            {
+                services.AddTransient<INotificationSubmitter, ConsoleNotificationSubmitter>();
+            }
+            else
+            {
+                services.AddTransient<INotificationSubmitter, SmtpNotificationSubmitter>();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

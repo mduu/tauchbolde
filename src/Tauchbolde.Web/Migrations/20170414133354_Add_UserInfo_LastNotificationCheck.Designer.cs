@@ -8,9 +8,10 @@ using Tauchbolde.Common.Model;
 namespace Tauchbolde.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170414133354_Add_UserInfo_LastNotificationCheck")]
+    partial class Add_UserInfo_LastNotificationCheck
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -304,11 +305,12 @@ namespace Tauchbolde.Web.Migrations
                     b.Property<string>("AuthorId")
                         .IsRequired();
 
-                    b.Property<int>("Category");
+                    b.Property<string>("Category")
+                        .IsRequired();
 
                     b.Property<DateTime>("CreatedDate");
 
-                    b.Property<Guid>("IntroImageId");
+                    b.Property<string>("IntroImage");
 
                     b.Property<DateTime>("ModificationDate");
 
