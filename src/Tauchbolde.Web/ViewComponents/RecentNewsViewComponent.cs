@@ -13,9 +13,7 @@ namespace Tauchbolde.Web.ViewComponents
 
         public RecentNewsViewComponent(IPostRepository postRepository)
         {
-            if (postRepository == null) throw new ArgumentNullException(nameof(postRepository));
-
-            _postRepository = postRepository;
+            _postRepository = postRepository ?? throw new ArgumentNullException(nameof(postRepository));
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
