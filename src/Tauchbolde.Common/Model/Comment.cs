@@ -18,6 +18,13 @@ namespace Tauchbolde.Common.Model
         [Required]
         public ApplicationUser Author { get; set; }
 
+        [Display(Name = "Geschrieben um")]
+        [Required]
+        public DateTime CreateDate { get; set; }
+
+        [Display(Name = "Geändert um")]
+        public DateTime? ModifiedDate { get; set; }
+
         [Display(Name = "Kommentar")]
         [Required]
         public string Text { get; set; }

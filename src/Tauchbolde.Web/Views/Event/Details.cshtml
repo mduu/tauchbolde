@@ -149,6 +149,15 @@
         </div>
 
     </div>
+
+    @foreach (var comment in Model.Event.Comments.OrderBy(c => c.CreateDate))
+    {
+        <div class="row">
+            <div class="comment">
+
+            </div>
+        </div>
+    }
 </div>
 
 @section Scripts
