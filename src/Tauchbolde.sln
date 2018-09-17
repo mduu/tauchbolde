@@ -64,4 +64,20 @@ Global
 		{B26B5EA0-30CF-4259-996A-2EDA74CB4BB7} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
 		{ACA74A03-4AFB-412B-B516-9129DCD6FA1E} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+		$1.DirectoryNamespaceAssociation = PrefixedHierarchical
+		$0.TextStylePolicy = $2
+		$2.inheritsSet = null
+		$2.scope = text/x-csharp
+		$0.CSharpFormattingPolicy = $3
+		$3.scope = text/x-csharp
+		$0.TextStylePolicy = $4
+		$4.FileWidth = 80
+		$4.TabsToSpaces = True
+		$4.scope = text/plain
+		$0.VersionControlPolicy = $5
+		outputpath = ../build/bin
+	EndGlobalSection
 EndGlobal
