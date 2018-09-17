@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0F46429A-DFB4-421C-99F7-6DE0D845CFE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Common", "Tauchbolde.Common\Tauchbolde.Common.csproj", "{43B7956B-644C-49A3-AA44-E3498AD15A5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Common", "src\Tauchbolde.Common\Tauchbolde.Common.csproj", "{43B7956B-644C-49A3-AA44-E3498AD15A5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Web", "Tauchbolde.Web\Tauchbolde.Web.csproj", "{B26B5EA0-30CF-4259-996A-2EDA74CB4BB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Web", "src\Tauchbolde.Web\Tauchbolde.Web.csproj", "{B26B5EA0-30CF-4259-996A-2EDA74CB4BB7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Tests", "src\Tauchbolde.Tests\Tauchbolde.Tests.csproj", "{ACA74A03-4AFB-412B-B516-9129DCD6FA1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Tests", "Tauchbolde.Tests\Tauchbolde.Tests.csproj", "{ACA74A03-4AFB-412B-B516-9129DCD6FA1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
