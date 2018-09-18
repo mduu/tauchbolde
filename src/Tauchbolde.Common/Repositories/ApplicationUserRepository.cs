@@ -30,8 +30,7 @@ namespace Tauchbolde.Common.Repositories
                 .Include(u => u.AdditionalUserInfos)
                 .Include(u => u.Roles)
                 .Where(u =>
-                    !u.LockoutEnabled &&
-                    u.Roles.Any(r => r.RoleId == tauchboldeRole.Id))
+                    !u.LockoutEnabled && u.Roles.Any(r => r.RoleId == tauchboldeRole.Id))
                 .ToListAsync();
         }
     }

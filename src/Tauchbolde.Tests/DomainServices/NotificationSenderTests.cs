@@ -119,7 +119,7 @@ namespace Tauchbolde.Tests.DomainServices
         {
             return new ApplicationUser
             {
-                Id = "hans.meier@test.com",
+                Id = 1,
                 UserName = "hans.meier@test.com",
                 AdditionalUserInfos = new UserInfo
                 {
