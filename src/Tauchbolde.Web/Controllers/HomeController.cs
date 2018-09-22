@@ -5,24 +5,12 @@ namespace Tauchbolde.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public async Task<IActionResult> Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
-        public IActionResult About()
-        {
-            return View();
-        }
+        public IActionResult About() => View();
 
-        public IActionResult Contact()
-        {
-            return View();
-        }
+        public IActionResult Contact() => View();
 
-        public IActionResult Error()
-        {
-            return View();
-        }
+        public IActionResult Error() => View();
     }
 }
