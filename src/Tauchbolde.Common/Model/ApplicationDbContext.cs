@@ -7,9 +7,9 @@ namespace Tauchbolde.Common.Model
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
+        : base(options)
+        { }
+
         public DbSet<Event> Events { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<Comment> Comments { get; set; }
