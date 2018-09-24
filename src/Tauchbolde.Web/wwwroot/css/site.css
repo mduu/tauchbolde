@@ -1,4 +1,6 @@
-﻿body {
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
+for details on configuring this project to bundle and minify static web assets. */
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -10,35 +12,20 @@
     padding-right: 15px;
 }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
     line-height: 1.4;
 }
 
-/* buttons and links extension to use brackets: [ click me ] */
-.btn-bracketed::before {
-    display: inline-block;
-    content: "[";
-    padding-right: 0.5em;
-}
-
-.btn-bracketed::after {
-    display: inline-block;
-    content: "]";
-    padding-left: 0.5em;
-}
-
 /* Make .svg files in the carousel display properly in older browsers */
 .carousel-inner .item img[src$=".svg"] {
     width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
 }
 
 /* Hide/rearrange for smaller screens */
@@ -48,49 +35,3 @@ textarea {
         display: none;
     }
 }
-
-/* Event Participation List */
-
-.event-participationlist {
-    border-left: 4px solid;
-    padding: 1px 5px 8px 10px;
-}
-
-    .event-participationlist.event-participationlist-accepted {
-        border-left-color: green;
-        background-color: rgba(0, 255, 0, 0.05);
-    }
-
-        .event-participationlist.event-participationlist-accepted h4 {
-            color: green;
-        }
-
-        .event-participationlist.event-participationlist-accepted .event-participationlist-name {
-            color: green;
-        }
-
-    .event-participationlist.event-participationlist-tentative {
-        border-left-color: grey;
-        background-color: rgba(0, 0, 0, 0.05);
-    }
-
-        .event-participationlist.event-participationlist-tentative h4 {
-            color: grey;
-        }
-
-        .event-participationlist.event-participationlist-tentative .event-participationlist-name {
-            color: grey;
-        }
-
-    .event-participationlist.event-participationlist-declined {
-        border-left-color: rgb(200, 0, 0);
-        background-color: rgba(200, 0, 0, 0.05);
-    }
-
-        .event-participationlist.event-participationlist-declined h4 {
-            color: rgb(200, 0, 0);
-        }
-
-        .event-participationlist.event-participationlist-declined .event-participationlist-name {
-            color: rgb(200, 0, 0);
-        }

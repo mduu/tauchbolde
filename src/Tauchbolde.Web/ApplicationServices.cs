@@ -9,7 +9,7 @@ namespace Tauchbolde.Web
 {
     public class ApplicationServices
     {
-        public static void Register(Startup instance, IServiceCollection services, bool isDevelopment)
+        public static void Register(IServiceCollection services)
         {
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -30,16 +30,22 @@ namespace Tauchbolde.Web
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<INotificationSender, NotificationSender>();
             services.AddTransient<INotificationFormatter, HtmlNotificationFormatter>();
-
-            if (isDevelopment)
-            {
-                services.AddTransient<INotificationSubmitter, ConsoleNotificationSubmitter>();
-            }
-            else
-            {
-                services.AddTransient<INotificationSubmitter, SmtpNotificationSubmitter>();
-            }
         }
+
+        public static void RegisterDevelopment(IServiceCollection services)
+        {
+            if (services == null) { throw new System.ArgumentNullException(nameof(services)); }
+
+            services.AddTransient<INotificationSubmitter, ConsoleNotificationSubmitter>();
+        }
+
+        public static void RegisterProduction(IServiceCollection services)
+        {
+            if (services == null) { throw new System.ArgumentNullException(nameof(services)); }
+
+            services.AddTransient<INotificationSubmitter, SmtpNotificationSubmitter>();
+        }
+
 
     }
 }

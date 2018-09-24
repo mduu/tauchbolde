@@ -1,30 +1,26 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Tauchbolde.Common;
 using Tauchbolde.Common.Model;
+using Tauchbolde.Common;
 
 namespace Tauchbolde.Web
 {
     public class Startup
     {
-        private IHostingEnvironment CurrentEnvironment { get; set; }
-
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            CurrentEnvironment = env;
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        private void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -33,16 +29,11 @@ namespace Tauchbolde.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Tauchbolde.Web")));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlite(
+                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            // ASP.Net Core Identity
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/LogIn");
 
             // External authorization
             services.AddAuthentication()
@@ -52,42 +43,33 @@ namespace Tauchbolde.Web
                     options.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
                 });
 
-            // Policies
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole(Rolenames.Tauchbold));
             });
 
-            // MVC
-            services.AddMvc(options =>
-            {
-                options.CacheProfiles.Add("OneDay",
-                    new CacheProfile
-                    {
-                        Duration = 86400 // 24h cache
-                    });
-                options.CacheProfiles.Add("Never",
-                    new CacheProfile
-                    {
-                        Location = ResponseCacheLocation.None,
-                        NoStore = true
-                    });
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            ApplicationServices.Register(this, services, CurrentEnvironment.IsDevelopment());
+            ApplicationServices.Register(services);
+        }
+
+        private void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            ApplicationServices.RegisterDevelopment(services);
+        }
+
+        private void ConfigureProductionServices(IServiceCollection services)
+        {
+            ApplicationServices.RegisterProduction(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-                //app.UseBrowserLink();
             }
             else
             {
@@ -98,7 +80,9 @@ namespace Tauchbolde.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
             app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
