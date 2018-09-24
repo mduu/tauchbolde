@@ -1,19 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common;
-using Tauchbolde.Common.DomainServices;
-using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
-using Tauchbolde.Web.Services;
 
 namespace Tauchbolde.Web
 {
@@ -31,8 +26,16 @@ namespace Tauchbolde.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Caching Middleware
-            services.AddResponseCaching();
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Tauchbolde.Web")));
+            services.AddDefaultIdentity<ApplicationUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // ASP.Net Core Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -41,28 +44,13 @@ namespace Tauchbolde.Web
 
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/LogIn");
 
+            // External authorization
             services.AddAuthentication()
-                    .AddMicrosoftAccount(options =>
-            {
-                options.ClientId = Configuration["Authentication:Microsoft:ClientId"];
-                options.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
-            });
-
-            // ASP.Net Core MVC
-            services.AddMvc(options =>
-            {
-                options.CacheProfiles.Add("OneDay",
-                    new CacheProfile()
-                    {
-                        Duration = 86400 // 24h cache
-                    });
-                options.CacheProfiles.Add("Never",
-                    new CacheProfile()
-                    {
-                        Location = ResponseCacheLocation.None,
-                        NoStore = true
-                    });
-            });
+                .AddMicrosoftAccount(options =>
+                {
+                    options.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+                    options.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+                });
 
             // Policies
             services.AddAuthorization(options =>
@@ -70,38 +58,23 @@ namespace Tauchbolde.Web
                 options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole(Rolenames.Tauchbold));
             });
 
-            // EF
-            services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Tauchbolde.Web")));
-
-            // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
-            services.AddScoped<ApplicationDbContext>();
-
-            // Repos
-            services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
-            services.AddTransient<IEventRepository, EventRepository>();
-            services.AddTransient<IParticipantRepository, ParticipantRepository>();
-            services.AddTransient<INotificationRepository, NotificationRepository>();
-            services.AddTransient<IPostRepository, PostRepository>();
-            services.AddTransient<IPostImageRepository, PostImageRepository>();
-
-            // DomainServices
-            services.AddTransient<IParticipationService, ParticipationService>();
-            services.AddTransient<IEventService, EventService>();
-            services.AddTransient<INotificationService, NotificationService>();
-            services.AddTransient<INotificationSender, NotificationSender>();
-            services.AddTransient<INotificationFormatter, HtmlNotificationFormatter>();
-
-            if (CurrentEnvironment.IsDevelopment())
+            // MVC
+            services.AddMvc(options =>
             {
-                services.AddTransient<INotificationSubmitter, ConsoleNotificationSubmitter>();
-            }
-            else
-            {
-                services.AddTransient<INotificationSubmitter, SmtpNotificationSubmitter>();
-            }
+                options.CacheProfiles.Add("OneDay",
+                    new CacheProfile
+                    {
+                        Duration = 86400 // 24h cache
+                    });
+                options.CacheProfiles.Add("Never",
+                    new CacheProfile
+                    {
+                        Location = ResponseCacheLocation.None,
+                        NoStore = true
+                    });
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            ApplicationServices.Register(this, services, CurrentEnvironment.IsDevelopment());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -119,9 +92,12 @@ namespace Tauchbolde.Web
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseMvc(routes =>
             {

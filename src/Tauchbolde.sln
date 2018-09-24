@@ -60,9 +60,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{43B7956B-644C-49A3-AA44-E3498AD15A5E} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
-		{B26B5EA0-30CF-4259-996A-2EDA74CB4BB7} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
-		{ACA74A03-4AFB-412B-B516-9129DCD6FA1E} = {0F46429A-DFB4-421C-99F7-6DE0D845CFE0}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
