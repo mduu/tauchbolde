@@ -16,9 +16,6 @@
     <ProjectReference Include="..\Tauchbolde.Common\Tauchbolde.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Data\ApplicationDbContext.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Data\Migrations\" />
   </ItemGroup>
 </Project>
