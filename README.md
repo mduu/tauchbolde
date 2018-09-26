@@ -1,8 +1,9 @@
+**Build:** [![Build status](https://dev.azure.com/tauchbolde/Tauchbolde/_apis/build/status/Tauchbolde-ASP.NET%20Core-CI)](https://dev.azure.com/tauchbolde/Tauchbolde/_build/latest?definitionId=2)
+
 # tauchbolde
 Next generation website fro http://tauchbolde.ch
 
-This is the code for the upcoming Tauchbolde Website. The current website is built using Drupal 7. Its not bad it has several downsides.
-So the new website is a complete rewrite in C# / ASP.Net Core - a custom development.
+This is the code for the upcoming Tauchbolde Website. The current website is built using Drupal 7. Its not bad it has several downsides. So the new website is a complete rewrite in C# / ASP.Net Core - a custom development.
 
 ## Primary goals
 
