@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 namespace Tauchbolde.Common.Model
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -27,35 +26,35 @@ namespace Tauchbolde.Common.Model
             // Add your customizations after calling base.OnModelCreating(builder);
 
             // ApplicationUser
-            builder.Entity<ApplicationUser>()
+            builder.Entity<UserInfo>()
                 .HasMany(e => e.Notificationses)
                 .WithOne(e => e.Recipient)
                 .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<ApplicationUser>()
+            builder.Entity<UserInfo>()
                 .HasMany(e => e.Comments)
                 .WithOne(e => e.Author)
                 .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<ApplicationUser>()
+            builder.Entity<UserInfo>()
                 .HasMany(e => e.Events)
                 .WithOne(e => e.Organisator)
                 .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<ApplicationUser>()
+            builder.Entity<UserInfo>()
                 .HasMany(e => e.Posts)
                 .WithOne(e => e.Author)
                 .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<ApplicationUser>()
+            builder.Entity<UserInfo>()
                 .HasMany(e => e.Claims)
                 .WithOne()
                 .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<ApplicationUser>()
+            builder.Entity<UserInfo>()
                 .HasMany(e => e.Logins)
                 .WithOne()
                 .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<ApplicationUser>()
+            builder.Entity<UserInfo>()
                 .HasMany(e => e.Roles)
                 .WithOne()
                 .HasForeignKey(e => e.UserId)

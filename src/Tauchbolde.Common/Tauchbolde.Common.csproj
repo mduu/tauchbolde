@@ -27,4 +27,8 @@
       <DependentUpon>BuddyTeamNames.cs</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Model\ApplicationUser.cs" />
+    <Compile Remove="Repositories\ApplicationUserRepository.cs" />
+  </ItemGroup>
 </Project>

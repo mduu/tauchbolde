@@ -26,7 +26,6 @@ namespace Tauchbolde.Common.Repositories
             var query = Context.Posts
                 .Where(p => p.Category == category)
                 .Include(p => p.Author)
-                .ThenInclude(a => a.AdditionalUserInfos)
                 .OrderByDescending(p => p.PublishDate);
 
             if (countPosts > 0)
@@ -45,7 +44,6 @@ namespace Tauchbolde.Common.Repositories
             return await Context.Posts
                 .Include(p => p.PostImages)
                 .Include(p => p.Author)
-                .ThenInclude(a => a.AdditionalUserInfos)
                 .FirstOrDefaultAsync(p => p.Id == postId);
         }
 
@@ -56,7 +54,6 @@ namespace Tauchbolde.Common.Repositories
                 .OrderByDescending(p => p.PublishDate)
                 .Include(p => p.PostImages)
                 .Include(p => p.Author)
-                .ThenInclude(a => a.AdditionalUserInfos)
                 .ToAsyncEnumerable();
         }
     }

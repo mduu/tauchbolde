@@ -13,7 +13,7 @@ namespace Tauchbolde.Common.Repositories
         {
         }
 
-        public async Task<Participant> GetParticipationForEventAndUserAsync(ApplicationUser user, Guid eventId)
+        public async Task<Participant> GetParticipationForEventAndUserAsync(UserInfo user, Guid eventId)
         {
             return await Context.Participants.FirstOrDefaultAsync(p =>
                 p.EventId == eventId && p.User.Id == user.Id);
@@ -26,7 +26,6 @@ namespace Tauchbolde.Common.Repositories
             var query = Context.Participants
                 .Include(p => p.Event)
                 .Include(p => p.User)
-                .ThenInclude(u => u.AdditionalUserInfos)
                 .Where(p => p.EventId == eventId);
 
             if (status.HasValue)

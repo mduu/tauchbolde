@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common;
+using Microsoft.AspNetCore.Identity;
 
 namespace Tauchbolde.Web
 {
@@ -32,7 +33,7 @@ namespace Tauchbolde.Web
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<ApplicationUser>()
+            services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // External authorization

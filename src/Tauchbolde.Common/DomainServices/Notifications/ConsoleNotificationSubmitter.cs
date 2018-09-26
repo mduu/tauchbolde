@@ -7,16 +7,16 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     public class ConsoleNotificationSubmitter : INotificationSubmitter
     {
         /// <inheritdoc />
-#pragma warning disable 1998
-        public async Task SubmitAsync(ApplicationUser recipient, string content)
-#pragma warning restore 1998
+        public async Task SubmitAsync(UserInfo recipient, string content)
         {
             var oldColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.Magenta;
 
-            Console.WriteLine($"Sent notification to {recipient.Email}: {content}.");
+            Console.WriteLine($"Sent notification to {recipient.User.Email}: {content}.");
 
             Console.ForegroundColor = oldColor;
+
+            await Task.FromResult<object>(null);
         }
     }
 }

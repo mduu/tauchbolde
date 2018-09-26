@@ -9,7 +9,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 {
     public class SmtpNotificationSubmitter : INotificationSubmitter
     {
-        public async Task SubmitAsync(ApplicationUser recipient, string content)
+        public async Task SubmitAsync(UserInfo recipient, string content)
         {
             if (recipient == null) throw new ArgumentNullException(nameof(recipient));
 

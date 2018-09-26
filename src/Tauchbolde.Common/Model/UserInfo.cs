@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace Tauchbolde.Common.Model
 {
@@ -53,8 +56,32 @@ namespace Tauchbolde.Common.Model
         [Display(Name = "Benachrichtigungen zuletzt geprüft um")]
         public DateTime? LastNotificationCheckAt { get; set; }
 
-        public int UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public string UserId { get; set; }
+        public IdentityUser User { get; set; }
+
+        [NotMapped]
+        public string Realname => string.IsNullOrWhiteSpace(Fullname) ? User.UserName : Fullname;
+
+        public virtual ICollection<Notification> Notificationses { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+
+        /// <summary>
+        /// Navigation property for the roles this user belongs to.
+        /// </summary>
+        public virtual ICollection<IdentityUserRole<int>> Roles { get; } = new List<IdentityUserRole<int>>();
+
+        /// <summary>
+        /// Navigation property for the claims this user possesses.
+        /// </summary>
+        public virtual ICollection<IdentityUserClaim<int>> Claims { get; } = new List<IdentityUserClaim<int>>();
+
+        /// <summary>
+        /// Navigation property for this users login accounts.
+        /// </summary>
+        public virtual ICollection<IdentityUserLogin<int>> Logins { get; } = new List<IdentityUserLogin<int>>();
+
 
     }
 }

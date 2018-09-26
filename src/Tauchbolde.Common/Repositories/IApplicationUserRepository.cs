@@ -5,19 +5,19 @@ using Tauchbolde.Common.Repository;
 
 namespace Tauchbolde.Common.Repositories
 {
-    public interface IApplicationUserRepository: IRepository<ApplicationUser>
+    public interface IApplicationUserRepository: IRepository<UserInfo>
     {
         /// <summary>
-        /// Finds a <see cref="ApplicationUser"/> by its username.
+        /// Finds a <see cref="UserInfo"/> by its username.
         /// </summary>
         /// <param name="username">The username to search for.</param>
         /// <returns>The user if found; otherwise <c>Null</c> will be returned.</returns>
-        Task<ApplicationUser> FindByUserNameAsync(string username);
+        Task<UserInfo> FindByUserNameAsync(string username);
 
         /// <summary>
         /// Get a collection of all users that are members of Tauchbolde.
         /// </summary>
         /// <returns>A collection of all users that are members of Tauchbolde.</returns>
-        Task<ICollection<ApplicationUser>> GetAllTauchboldeUsersAsync();
+        Task<ICollection<UserInfo>> GetAllTauchboldeUsersAsync();
     }
 }

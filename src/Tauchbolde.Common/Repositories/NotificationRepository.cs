@@ -16,12 +16,11 @@ namespace Tauchbolde.Common.Repositories
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<IGrouping<ApplicationUser, Notification>>> GetPendingNotificationByUserAsync()
+        public async Task<IEnumerable<IGrouping<UserInfo, Notification>>> GetPendingNotificationByUserAsync()
         {
             return await Context.Notifications
                 .Include(n => n.Event)
                 .Include(n => n.Recipient)
-                    .ThenInclude(a => a.AdditionalUserInfos)
                 .Where(n => !n.AlreadySent)
                 .GroupBy(n => n.Recipient)
                 .ToListAsync();

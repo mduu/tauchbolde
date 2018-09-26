@@ -15,6 +15,6 @@ namespace Tauchbolde.Common.Repositories
         /// Gets all pending notification grouped by user asynchronous.
         /// </summary>
         /// <returns>All pending notification grouped by user.</returns>
-        Task<IEnumerable<IGrouping<ApplicationUser, Notification>>> GetPendingNotificationByUserAsync();
+        Task<IEnumerable<IGrouping<UserInfo, Notification>>> GetPendingNotificationByUserAsync();
     }
 }

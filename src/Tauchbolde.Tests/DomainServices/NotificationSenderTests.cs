@@ -8,6 +8,7 @@ using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Xunit;
+using Microsoft.AspNetCore.Identity;
 
 namespace Tauchbolde.Tests.DomainServices
 {
@@ -27,8 +28,8 @@ namespace Tauchbolde.Tests.DomainServices
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => formatter.Format(A<ApplicationUser>._, A<IGrouping<ApplicationUser, Notification>>._)).MustNotHaveHappened();
-            A.CallTo(() => submitter.SubmitAsync(A<ApplicationUser>._, A<string>._)).MustNotHaveHappened();
+            A.CallTo(() => formatter.Format(A<UserInfo>._, A<IGrouping<UserInfo, Notification>>._)).MustNotHaveHappened();
+            A.CallTo(() => submitter.SubmitAsync(A<UserInfo>._, A<string>._)).MustNotHaveHappened();
         }
 
         [Fact]
@@ -49,8 +50,8 @@ namespace Tauchbolde.Tests.DomainServices
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => formatter.Format(A<ApplicationUser>._, A<IGrouping<ApplicationUser, Notification>>._)).MustNotHaveHappened();
-            A.CallTo(() => submitter.SubmitAsync(A<ApplicationUser>._, A<string>._)).MustNotHaveHappened();
+            A.CallTo(() => formatter.Format(A<UserInfo>._, A<IGrouping<UserInfo, Notification>>._)).MustNotHaveHappened();
+            A.CallTo(() => submitter.SubmitAsync(A<UserInfo>._, A<string>._)).MustNotHaveHappened();
         }
 
         [Fact]
@@ -66,19 +67,19 @@ namespace Tauchbolde.Tests.DomainServices
             var sender = new NotificationSender();
 
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
-            A.CallTo(() => formatter.Format(A<ApplicationUser>._, A<IGrouping<ApplicationUser, Notification>>._)).Returns("Some content!");
+            A.CallTo(() => formatter.Format(A<UserInfo>._, A<IGrouping<UserInfo, Notification>>._)).Returns("Some content!");
 
             // Act
             await sender.Send(notificationRepository, formatter, submitter);
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => formatter.Format(A<ApplicationUser>._, A<IGrouping<ApplicationUser, Notification>>._)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => submitter.SubmitAsync(A<ApplicationUser>._, A<string>._)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => formatter.Format(A<UserInfo>._, A<IGrouping<UserInfo, Notification>>._)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => submitter.SubmitAsync(A<UserInfo>._, A<string>._)).MustHaveHappened(Repeated.Exactly.Once);
 
             notifications.First().CountOfTries.Should().Be(1);
-            userHansMeier.AdditionalUserInfos.LastNotificationCheckAt.Should().HaveValue();
-            userHansMeier.AdditionalUserInfos.LastNotificationCheckAt.Should().BeAfter(lastNotificationCheckAt);
+            userHansMeier.LastNotificationCheckAt.Should().HaveValue();
+            userHansMeier.LastNotificationCheckAt.Should().BeAfter(lastNotificationCheckAt);
         }
 
         [Fact]
@@ -94,7 +95,7 @@ namespace Tauchbolde.Tests.DomainServices
             var sender = new NotificationSender();
 
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
-            A.CallTo(() => formatter.Format(A<ApplicationUser>._, A<IGrouping<ApplicationUser, Notification>>._)).Returns("Some content!");
+            A.CallTo(() => formatter.Format(A<UserInfo>._, A<IGrouping<UserInfo, Notification>>._)).Returns("Some content!");
 
             // Act
             await sender.Send(notificationRepository, formatter, submitter);
@@ -102,37 +103,37 @@ namespace Tauchbolde.Tests.DomainServices
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => formatter.Format(
-                A<ApplicationUser>._,
-                A<IGrouping<ApplicationUser, Notification>>.That.Matches(g => g.Count() == 3)))
+                A<UserInfo>._,
+                A<IGrouping<UserInfo, Notification>>.That.Matches(g => g.Count() == 3)))
                 .MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => submitter.SubmitAsync(A<ApplicationUser>._, A<string>._)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => submitter.SubmitAsync(A<UserInfo>._, A<string>._)).MustHaveHappened(Repeated.Exactly.Once);
 
             foreach (var notification in notifications)
             {
                 notification.CountOfTries.Should().Be(1);
             }
 
-            userHansMeier.AdditionalUserInfos.LastNotificationCheckAt.Should().BeAfter(lastNotificationCheckAt);
+            userHansMeier.LastNotificationCheckAt.Should().BeAfter(lastNotificationCheckAt);
         }
 
-        private static ApplicationUser CreateTestUser(DateTime lastNotificationCheckAt, int notificationIntervalInHours)
+        private static UserInfo CreateTestUser(DateTime lastNotificationCheckAt, int notificationIntervalInHours)
         {
-            return new ApplicationUser
+            return new UserInfo
             {
-                Id = 1,
-                UserName = "hans.meier@test.com",
-                AdditionalUserInfos = new UserInfo
+                Id = Guid.NewGuid(),
+                Firstname = "Hans",
+                Lastname = "Meier",
+                LastNotificationCheckAt = lastNotificationCheckAt,
+                NotificationIntervalInHours = notificationIntervalInHours,
+                User = new IdentityUser
                 {
-                    Id = Guid.NewGuid(),
-                    Firstname = "Hans",
-                    Lastname = "Meier",
-                    LastNotificationCheckAt = lastNotificationCheckAt,
-                    NotificationIntervalInHours = notificationIntervalInHours,
+                    Id = "1",
+                    UserName = "hans.meier@test.com",
                 },
             };
         }
 
-        private static List<Notification> CreateTestNotifications(ApplicationUser userHansMeier, int countNotifications = 1)
+        private static List<Notification> CreateTestNotifications(UserInfo userHansMeier, int countNotifications = 1)
         {
             var result = new List<Notification>();
 

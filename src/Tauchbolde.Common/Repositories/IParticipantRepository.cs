@@ -9,7 +9,7 @@ namespace Tauchbolde.Common.Repositories
 {
     public interface IParticipantRepository : IRepository<Participant>
     {
-        Task<Participant> GetParticipationForEventAndUserAsync(ApplicationUser user, Guid eventId);
+        Task<Participant> GetParticipationForEventAndUserAsync(UserInfo user, Guid eventId);
         Task<ICollection<Participant>> GetParticipantsForEventByStatusAsync(Guid eventId, ParticipantStatus? status);
     }
 }

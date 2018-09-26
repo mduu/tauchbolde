@@ -33,8 +33,10 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc />
-        public async Task<Event> UpdateEventAsync(IEventRepository eventRepository, Guid eventId, string name, string description,
-            DateTime startTime, DateTime? endTime, string location, string meetingPoint, ApplicationUser currentUser)
+        public async Task<Event> UpdateEventAsync(IEventRepository eventRepository, 
+            Guid eventId, string name, string description,DateTime startTime, 
+            DateTime? endTime, string location, string meetingPoint,
+            UserInfo currentUser)
         {
             if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
             if (eventId == Guid.Empty) throw new ArgumentException("EventId can not be empty!", nameof(eventId));
@@ -51,8 +53,6 @@ namespace Tauchbolde.Common.DomainServices
             evt.MeetingPoint = meetingPoint;
             evt.StartTime = startTime;
             evt.EndTime = endTime;
-
-
 
             throw new NotImplementedException();
         }

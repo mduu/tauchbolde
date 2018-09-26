@@ -18,9 +18,9 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             foreach (var pendingNotificationsForRecipient in pendingNotifications)
             {
                 var recipient = pendingNotificationsForRecipient.Key;
-                if (!recipient.AdditionalUserInfos.LastNotificationCheckAt.HasValue ||
-                    recipient.AdditionalUserInfos.LastNotificationCheckAt.Value.AddHours(
-                        recipient.AdditionalUserInfos.NotificationIntervalInHours) < DateTime.Now)
+                if (!recipient.LastNotificationCheckAt.HasValue ||
+                    recipient.LastNotificationCheckAt.Value.AddHours(
+                        recipient.NotificationIntervalInHours) < DateTime.Now)
                 {
                     // Format
                     var content = notificationFormatter.Format(recipient, pendingNotificationsForRecipient);
@@ -45,7 +45,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                         }
                     }
 
-                    recipient.AdditionalUserInfos.LastNotificationCheckAt = DateTime.Now;
+                    recipient.LastNotificationCheckAt = DateTime.Now;
                 }
             }
         }

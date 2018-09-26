@@ -16,7 +16,7 @@ namespace Tauchbolde.Common.Model
 
         [Display(Name = "Organisator")]
         [Required]
-        public ApplicationUser Organisator { get; set; }
+        public UserInfo Organisator { get; set; }
 
         [Display(Name = "Ort / TP")]
         public string Location { get; set; }

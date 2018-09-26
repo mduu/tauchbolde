@@ -14,6 +14,6 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         /// <param name="recipient">The recipient to address.</param>
         /// <param name="notifications">The notifications to format.</param>
         /// <returns>A formated text of the list of notifications.</returns>
-        string Format(ApplicationUser recipient, IGrouping<ApplicationUser, Notification> notifications);
+        string Format(UserInfo recipient, IGrouping<UserInfo, Notification> notifications);
     }
 }

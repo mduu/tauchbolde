@@ -17,7 +17,6 @@ namespace Tauchbolde.Web
             services.AddScoped<ApplicationDbContext>();
 
             // Repos
-            services.AddTransient<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<IParticipantRepository, ParticipantRepository>();
             services.AddTransient<INotificationRepository, NotificationRepository>();

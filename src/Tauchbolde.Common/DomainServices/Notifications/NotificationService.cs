@@ -124,7 +124,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             await InsertNotification(notificationRepository, null, recipients, NotificationType.NewPost, message);
         }
 
-        private async Task<List<ApplicationUser>> GetAllTauchboldeButDeclinedParticipantsAsync(
+        private async Task<List<UserInfo>> GetAllTauchboldeButDeclinedParticipantsAsync(
             IApplicationUserRepository userRepository,
             IParticipantRepository participantRepository, Guid eventId)
         {
@@ -140,7 +140,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         private static async Task InsertNotification(
             INotificationRepository notificationRepository,
             Event relatedEvent,
-            ICollection<ApplicationUser> recipients,
+            ICollection<UserInfo> recipients,
             NotificationType notificationType,
             string message)
         {
