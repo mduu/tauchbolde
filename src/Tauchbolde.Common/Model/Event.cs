@@ -47,16 +47,10 @@ namespace Tauchbolde.Common.Model
 
         [Display(Name = "Datum / Zeit")]
         [NotMapped]
-        public string StartEndTimeAsString
-        {
-            get
-            {
-                return EndTime != null
-                    ? StartTime.Date == EndTime.Value.Date 
-                        ? $"{StartTime:g} - {EndTime.Value:t}"
-                        : $"{StartTime:g} - {EndTime.Value:g}"
-                    : $"{StartTime:g}";
-            }
-        }
+        public string StartEndTimeAsString => EndTime != null
+            ? StartTime.Date == EndTime.Value.Date
+                ? $"{StartTime:g} - {EndTime.Value:t}"
+                : $"{StartTime:g} - {EndTime.Value:g}"
+            : $"{StartTime:g}";
     }
 }
