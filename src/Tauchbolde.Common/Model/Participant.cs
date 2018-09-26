@@ -16,7 +16,7 @@ namespace Tauchbolde.Common.Model
 
         [Display(Name = "Teilnehmer")]
         [Required]
-        public Diver User { get; set; }
+        public Diver ParticipatingDiver { get; set; }
 
         [Display(Name = "Anzahl Personen")]
         [Required]

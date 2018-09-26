@@ -54,7 +54,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             // Recipients alle Tauchbolde that did not yet "decline" the Event already
             var declinedParticipants = await participantRepository.GetParticipantsForEventByStatusAsync(canceledEvent.Id, ParticipantStatus.Declined);
             var recipients = (await userRepository.GetAllTauchboldeUsersAsync())
-                .Where(u => declinedParticipants.All(p => p.User.Id != u.Id))
+                .Where(u => declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
                 .ToList();
 
             var message = $"Aktivität '{canceledEvent.Name}' ({canceledEvent.StartEndTimeAsString}) wurde abgesagt von {canceledEvent.Organisator.Realname}.";
@@ -76,19 +76,19 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             switch (participant.Status)
             {
                 case ParticipantStatus.None:
-                    message = $"Teilnahme: {participant.User.Realname} weiss nicht ob Er/Sie an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil nimmt.";
+                    message = $"Teilnahme: {participant.ParticipatingDiver.Realname} weiss nicht ob Er/Sie an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil nimmt.";
                     notificationType = NotificationType.Neutral;
                     break;
                 case ParticipantStatus.Accepted:
-                    message = $"Teilnahme: {participant.User.Realname} nimmt an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
+                    message = $"Teilnahme: {participant.ParticipatingDiver.Realname} nimmt an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Accepted;
                     break;
                 case ParticipantStatus.Declined:
-                    message = $"Teilnahme: {participant.User.Realname} hat für die Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) abgesagt.";
+                    message = $"Teilnahme: {participant.ParticipatingDiver.Realname} hat für die Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) abgesagt.";
                     notificationType = NotificationType.Declined;
                     break;
                 case ParticipantStatus.Tentative:
-                    message = $"Teilnahme: {participant.User.Realname} nimmt eventuell an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
+                    message = $"Teilnahme: {participant.ParticipatingDiver.Realname} nimmt eventuell an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Tentative;
                     break;
                 default:
@@ -131,7 +131,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             var declinedParticipants = await participantRepository.GetParticipantsForEventByStatusAsync(eventId, ParticipantStatus.Declined);
 
             var result = (await userRepository.GetAllTauchboldeUsersAsync())
-                .Where(u => declinedParticipants.All(p => p.User.Id != u.Id))
+                .Where(u => declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
                 .ToList();
 
             return result;

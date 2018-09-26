@@ -50,7 +50,7 @@ namespace Tauchbolde.Common.DomainServices
             }
 
             participant.Status = status;
-            participant.User = user;
+            participant.ParticipatingDiver = user;
             participant.BuddyTeamName = buddyTeamName;
             participant.Note = note;
             participant.CountPeople = numberOfPeople;

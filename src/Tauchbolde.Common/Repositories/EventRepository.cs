@@ -21,7 +21,7 @@ namespace Tauchbolde.Common.Repositories
                 .Include(e => e.Comments)
                     .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
-                    .ThenInclude(p => p.User)
+                    .ThenInclude(p => p.ParticipatingDiver)
                 .ToListAsync();
         }
 
@@ -32,7 +32,7 @@ namespace Tauchbolde.Common.Repositories
                 .Include(e => e.Comments)
                     .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
-                    .ThenInclude(p => p.User)
+                    .ThenInclude(p => p.ParticipatingDiver)
                 .ToListAsync();
         }
 
@@ -42,7 +42,7 @@ namespace Tauchbolde.Common.Repositories
                 .Include(e => e.Comments)
                 .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
-                .ThenInclude(p => p.User)
+                .ThenInclude(p => p.ParticipatingDiver)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
