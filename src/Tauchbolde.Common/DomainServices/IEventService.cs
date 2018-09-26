@@ -16,7 +16,7 @@ namespace Tauchbolde.Common.DomainServices
         /// <returns>The updated event.</returns>
         Task<Event> UpdateEventAsync(IEventRepository eventRepository, Guid eventId, string name,
             string description, DateTime startTime, DateTime? endTime, string location,
-            string meetingPoint, UserInfo currentUser);
+            string meetingPoint, Diver currentUser);
 
         /// <summary>
         /// Insert or update the given <paramref name="eventToUpsert"/>.

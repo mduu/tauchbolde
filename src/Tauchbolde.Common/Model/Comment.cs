@@ -16,7 +16,7 @@ namespace Tauchbolde.Common.Model
 
         [Display(Name = "Autor")]
         [Required]
-        public UserInfo Author { get; set; }
+        public Diver Author { get; set; }
 
         [Display(Name = "Geschrieben um")]
         [Required]

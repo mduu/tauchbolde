@@ -36,7 +36,7 @@ namespace Tauchbolde.Common.DomainServices
         public async Task<Event> UpdateEventAsync(IEventRepository eventRepository, 
             Guid eventId, string name, string description,DateTime startTime, 
             DateTime? endTime, string location, string meetingPoint,
-            UserInfo currentUser)
+            Diver currentUser)
         {
             if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
             if (eventId == Guid.Empty) throw new ArgumentException("EventId can not be empty!", nameof(eventId));

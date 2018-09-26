@@ -13,6 +13,6 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         /// </summary>
         /// <param name="recipient">Recipient to submit the Notification to.</param>
         /// <param name="content">Text content of the notification.</param>
-        Task SubmitAsync(UserInfo recipient, string content);
+        Task SubmitAsync(Diver recipient, string content);
     }
 }

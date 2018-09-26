@@ -22,7 +22,7 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc />
-        public async Task<Participant> GetExistingParticipationAsync(UserInfo user, Guid eventId)
+        public async Task<Participant> GetExistingParticipationAsync(Diver user, Guid eventId)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
             if (eventId == null) throw new ArgumentNullException(nameof(eventId));
@@ -31,7 +31,7 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc />
-        public async Task<Participant> ChangeParticipationAsync(UserInfo user, Guid eventId, ParticipantStatus status, int numberOfPeople, string note, string buddyTeamName)
+        public async Task<Participant> ChangeParticipationAsync(Diver user, Guid eventId, ParticipantStatus status, int numberOfPeople, string note, string buddyTeamName)
         {
             if (user == null) { throw new ArgumentNullException(nameof(user)); }
             if (eventId == null) { throw new ArgumentNullException(nameof(eventId)); }

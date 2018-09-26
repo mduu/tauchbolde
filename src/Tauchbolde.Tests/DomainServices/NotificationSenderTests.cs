@@ -28,8 +28,8 @@ namespace Tauchbolde.Tests.DomainServices
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => formatter.Format(A<UserInfo>._, A<IGrouping<UserInfo, Notification>>._)).MustNotHaveHappened();
-            A.CallTo(() => submitter.SubmitAsync(A<UserInfo>._, A<string>._)).MustNotHaveHappened();
+            A.CallTo(() => formatter.Format(A<Diver>._, A<IGrouping<Diver, Notification>>._)).MustNotHaveHappened();
+            A.CallTo(() => submitter.SubmitAsync(A<Diver>._, A<string>._)).MustNotHaveHappened();
         }
 
         [Fact]
@@ -50,8 +50,8 @@ namespace Tauchbolde.Tests.DomainServices
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => formatter.Format(A<UserInfo>._, A<IGrouping<UserInfo, Notification>>._)).MustNotHaveHappened();
-            A.CallTo(() => submitter.SubmitAsync(A<UserInfo>._, A<string>._)).MustNotHaveHappened();
+            A.CallTo(() => formatter.Format(A<Diver>._, A<IGrouping<Diver, Notification>>._)).MustNotHaveHappened();
+            A.CallTo(() => submitter.SubmitAsync(A<Diver>._, A<string>._)).MustNotHaveHappened();
         }
 
         [Fact]
@@ -67,15 +67,15 @@ namespace Tauchbolde.Tests.DomainServices
             var sender = new NotificationSender();
 
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
-            A.CallTo(() => formatter.Format(A<UserInfo>._, A<IGrouping<UserInfo, Notification>>._)).Returns("Some content!");
+            A.CallTo(() => formatter.Format(A<Diver>._, A<IGrouping<Diver, Notification>>._)).Returns("Some content!");
 
             // Act
             await sender.Send(notificationRepository, formatter, submitter);
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => formatter.Format(A<UserInfo>._, A<IGrouping<UserInfo, Notification>>._)).MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => submitter.SubmitAsync(A<UserInfo>._, A<string>._)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => formatter.Format(A<Diver>._, A<IGrouping<Diver, Notification>>._)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => submitter.SubmitAsync(A<Diver>._, A<string>._)).MustHaveHappened(Repeated.Exactly.Once);
 
             notifications.First().CountOfTries.Should().Be(1);
             userHansMeier.LastNotificationCheckAt.Should().HaveValue();
@@ -95,7 +95,7 @@ namespace Tauchbolde.Tests.DomainServices
             var sender = new NotificationSender();
 
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
-            A.CallTo(() => formatter.Format(A<UserInfo>._, A<IGrouping<UserInfo, Notification>>._)).Returns("Some content!");
+            A.CallTo(() => formatter.Format(A<Diver>._, A<IGrouping<Diver, Notification>>._)).Returns("Some content!");
 
             // Act
             await sender.Send(notificationRepository, formatter, submitter);
@@ -103,10 +103,10 @@ namespace Tauchbolde.Tests.DomainServices
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
             A.CallTo(() => formatter.Format(
-                A<UserInfo>._,
-                A<IGrouping<UserInfo, Notification>>.That.Matches(g => g.Count() == 3)))
+                A<Diver>._,
+                A<IGrouping<Diver, Notification>>.That.Matches(g => g.Count() == 3)))
                 .MustHaveHappened(Repeated.Exactly.Once);
-            A.CallTo(() => submitter.SubmitAsync(A<UserInfo>._, A<string>._)).MustHaveHappened(Repeated.Exactly.Once);
+            A.CallTo(() => submitter.SubmitAsync(A<Diver>._, A<string>._)).MustHaveHappened(Repeated.Exactly.Once);
 
             foreach (var notification in notifications)
             {
@@ -116,9 +116,9 @@ namespace Tauchbolde.Tests.DomainServices
             userHansMeier.LastNotificationCheckAt.Should().BeAfter(lastNotificationCheckAt);
         }
 
-        private static UserInfo CreateTestUser(DateTime lastNotificationCheckAt, int notificationIntervalInHours)
+        private static Diver CreateTestUser(DateTime lastNotificationCheckAt, int notificationIntervalInHours)
         {
-            return new UserInfo
+            return new Diver
             {
                 Id = Guid.NewGuid(),
                 Firstname = "Hans",
@@ -133,7 +133,7 @@ namespace Tauchbolde.Tests.DomainServices
             };
         }
 
-        private static List<Notification> CreateTestNotifications(UserInfo userHansMeier, int countNotifications = 1)
+        private static List<Notification> CreateTestNotifications(Diver userHansMeier, int countNotifications = 1)
         {
             var result = new List<Notification>();
 

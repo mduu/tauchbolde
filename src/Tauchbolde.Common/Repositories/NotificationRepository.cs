@@ -16,7 +16,7 @@ namespace Tauchbolde.Common.Repositories
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<IGrouping<UserInfo, Notification>>> GetPendingNotificationByUserAsync()
+        public async Task<IEnumerable<IGrouping<Diver, Notification>>> GetPendingNotificationByUserAsync()
         {
             return await Context.Notifications
                 .Include(n => n.Event)

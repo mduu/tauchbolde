@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Tauchbolde.Common.Model
 {
-    public class UserInfo
+    public class Diver
     {
         public Guid Id { get; set; }
 

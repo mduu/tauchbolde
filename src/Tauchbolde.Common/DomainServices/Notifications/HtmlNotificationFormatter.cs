@@ -12,7 +12,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     public class HtmlNotificationFormatter : INotificationFormatter
     {
         /// <inheritdoc />
-        public string Format(UserInfo recipient, IGrouping<UserInfo, Notification> notifications)
+        public string Format(Diver recipient, IGrouping<Diver, Notification> notifications)
         {
             if (recipient == null) throw new ArgumentNullException(nameof(recipient));
             if (notifications == null) throw new ArgumentNullException(nameof(notifications));
@@ -26,7 +26,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             return sb.ToString();
         }
 
-        private void FormatHeader(StringBuilder sb, UserInfo recipient, IEnumerable<Notification> notifications)
+        private void FormatHeader(StringBuilder sb, Diver recipient, IEnumerable<Notification> notifications)
         {
             sb.AppendLine($"<h2>Hallo {recipient.Firstname},</h2>");
 
@@ -35,7 +35,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             sb.AppendLine("</p>");
         }
 
-        private void FormatNotification(StringBuilder sb, UserInfo recipient, IEnumerable<Notification> notifications)
+        private void FormatNotification(StringBuilder sb, Diver recipient, IEnumerable<Notification> notifications)
         {
             sb.AppendLine("<ul>");
 

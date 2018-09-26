@@ -9,7 +9,7 @@ namespace Tauchbolde.Common.Model
 
         [Display(Name = "Empfänger")]
         [Required]
-        public UserInfo Recipient { get; set; }
+        public Diver Recipient { get; set; }
 
         [Display(Name = "Ereigniszeit")]
         [Required]
