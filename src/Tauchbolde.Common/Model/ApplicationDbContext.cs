@@ -12,7 +12,7 @@ namespace Tauchbolde.Common.Model
         public DbSet<Event> Events { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<Diver> UserInfos { get; set; }
+        public DbSet<Diver> Diver { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostImage> PostImages { get; set; }
