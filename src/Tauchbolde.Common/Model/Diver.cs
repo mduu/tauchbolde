@@ -56,7 +56,7 @@ namespace Tauchbolde.Common.Model
         [Display(Name = "Benachrichtigungen zuletzt geprüft um")]
         public DateTime? LastNotificationCheckAt { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public IdentityUser User { get; set; }
 
         [NotMapped]
