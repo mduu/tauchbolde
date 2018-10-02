@@ -9,7 +9,7 @@ using Tauchbolde.Common.Model;
 namespace Tauchbolde.Common.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181002050543_initial")]
+    [Migration("20181002051420_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
