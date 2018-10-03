@@ -21,7 +21,18 @@ namespace Tauchbolde.Web
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            ConfigureServices(services);
+            ApplicationServices.RegisterDevelopment(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            ConfigureServices(services);
+            ApplicationServices.RegisterProduction(services);
+        }
+
         private void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
@@ -65,16 +76,6 @@ namespace Tauchbolde.Web
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             ApplicationServices.Register(services);
-        }
-
-        private void ConfigureDevelopmentServices(IServiceCollection services)
-        {
-            ApplicationServices.RegisterDevelopment(services);
-        }
-
-        private void ConfigureProductionServices(IServiceCollection services)
-        {
-            ApplicationServices.RegisterProduction(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
