@@ -11,7 +11,7 @@ namespace Tauchbolde.Web.Controllers
     {
         private readonly INotificationFormatter _formatter;
         private readonly INotificationSubmitter _submitter;
-        private readonly IApplicationUserRepository _userRepository;
+        private readonly IDiverRepository _userRepository;
         private readonly INotificationRepository _notificationRepository;
         private readonly ApplicationDbContext _databaseContext;
         private readonly INotificationSender _notificationSender;
@@ -19,7 +19,7 @@ namespace Tauchbolde.Web.Controllers
         public NotificationController(
             ApplicationDbContext databaseContext,
             INotificationRepository notificationRepository,
-            IApplicationUserRepository userRepository,
+            IDiverRepository userRepository,
             INotificationSender sender,
             INotificationFormatter formatter,
             INotificationSubmitter submitter)

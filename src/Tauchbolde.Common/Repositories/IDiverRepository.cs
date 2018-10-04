@@ -5,7 +5,7 @@ using Tauchbolde.Common.Repository;
 
 namespace Tauchbolde.Common.Repositories
 {
-    public interface IApplicationUserRepository: IRepository<Diver>
+    public interface IDiverRepository: IRepository<Diver>
     {
         /// <summary>
         /// Finds a <see cref="Diver"/> by its username.

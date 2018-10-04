@@ -16,18 +16,18 @@ using Tauchbolde.Web.Services;
 namespace Tauchbolde.Web.Controllers
 {
 
-    [Authorize(Policy = PolicyNames.RequireTauchbold)]
+    //[Authorize(Policy = PolicyNames.RequireTauchbold)]
     public class EventController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IApplicationUserRepository _applicationUserRepository;
+        private readonly IDiverRepository _applicationUserRepository;
         private readonly IEventRepository _eventRepository;
         private readonly IParticipationService _participationService;
         private readonly IEventService _eventService;
 
         public EventController(
             ApplicationDbContext context,
-            IApplicationUserRepository applicationUserRepository,
+            IDiverRepository applicationUserRepository,
             IEventRepository eventRepository,
             IParticipationService participationService,
             IEventService eventService)

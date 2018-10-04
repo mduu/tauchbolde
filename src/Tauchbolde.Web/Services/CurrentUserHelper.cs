@@ -15,9 +15,9 @@ namespace Tauchbolde.Web.Services
         /// Get the user enttity instance for the currenctly logged in user.
         /// </summary>
         /// <param name="controller">The MVC controller used to access the identity.</param>
-        /// <param name="applicationUserRepository">The <see cref="IApplicationUserRepository"/> used to access the database.</param>
+        /// <param name="applicationUserRepository">The <see cref="IDiverRepository"/> used to access the database.</param>
         /// <returns>Return the <see cref="Diver"/> instance or <c>Null</c> if none was found.</returns>
-        public static async Task<Diver> GetCurrentUserAsync(this Controller controller, IApplicationUserRepository applicationUserRepository)
+        public static async Task<Diver> GetCurrentUserAsync(this Controller controller, IDiverRepository applicationUserRepository)
         {
             if (controller == null) throw new ArgumentNullException(nameof(controller));
             if (applicationUserRepository == null) throw new ArgumentNullException(nameof(applicationUserRepository));

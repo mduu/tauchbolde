@@ -15,7 +15,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         /// <inheritdoc />
         public async Task NotifyForNewEventAsync(
             INotificationRepository notificationRepository,
-            IApplicationUserRepository userRepository,
+            IDiverRepository userRepository,
             Event newEvent)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
@@ -31,7 +31,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         /// <inheritdoc />
         public async Task NotifyForChangedEventAsync(
             INotificationRepository notificationRepository,
-            IApplicationUserRepository userRepository,
+            IDiverRepository userRepository,
             Event changedEvent)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
@@ -45,7 +45,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         }
 
         /// <inheritdoc />
-        public async Task NotifyForCanceledEventAsync(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Event canceledEvent)
+        public async Task NotifyForCanceledEventAsync(INotificationRepository notificationRepository, IDiverRepository userRepository, IParticipantRepository participantRepository, Event canceledEvent)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
             if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
@@ -63,7 +63,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         }
 
         /// <inheritdoc />
-        public async Task NotifyForChangedParticipation(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Participant participant)
+        public async Task NotifyForChangedParticipation(INotificationRepository notificationRepository, IDiverRepository userRepository, IParticipantRepository participantRepository, Participant participant)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
             if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
@@ -99,7 +99,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         }
 
         /// <inheritdoc />
-        public async Task NotifyForEventComment(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, IParticipantRepository participantRepository, Comment comment)
+        public async Task NotifyForEventComment(INotificationRepository notificationRepository, IDiverRepository userRepository, IParticipantRepository participantRepository, Comment comment)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
             if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
@@ -112,7 +112,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         }
 
         /// <inheritdoc />
-        public async Task NotifyForNewPost(INotificationRepository notificationRepository, IApplicationUserRepository userRepository, Post newPost)
+        public async Task NotifyForNewPost(INotificationRepository notificationRepository, IDiverRepository userRepository, Post newPost)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
             if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
@@ -125,7 +125,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         }
 
         private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(
-            IApplicationUserRepository userRepository,
+            IDiverRepository userRepository,
             IParticipantRepository participantRepository, Guid eventId)
         {
             var declinedParticipants = await participantRepository.GetParticipantsForEventByStatusAsync(eventId, ParticipantStatus.Declined);
