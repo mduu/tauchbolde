@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tauchbolde.Common
+﻿namespace Tauchbolde.Common
 {
     public static class PolicyNames
     {
