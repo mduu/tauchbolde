@@ -20,20 +20,20 @@ namespace Tauchbolde.Web.Controllers
     public class EventController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IDiverRepository _applicationUserRepository;
+        private readonly IDiverRepository _diverRepository;
         private readonly IEventRepository _eventRepository;
         private readonly IParticipationService _participationService;
         private readonly IEventService _eventService;
 
         public EventController(
             ApplicationDbContext context,
-            IDiverRepository applicationUserRepository,
+            IDiverRepository diverRepository,
             IEventRepository eventRepository,
             IParticipationService participationService,
             IEventService eventService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _applicationUserRepository = applicationUserRepository ?? throw new ArgumentNullException(nameof(applicationUserRepository));
+            _diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             _participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
             _eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
@@ -59,7 +59,7 @@ namespace Tauchbolde.Web.Controllers
                 return BadRequest("Event does not exists!");
             }
 
-            var currentUser = await _applicationUserRepository.FindByUserNameAsync(User.Identity.Name);
+            var currentUser = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
             if (currentUser == null)
             {
                 return StatusCode(400, "No curren user would be found!");
@@ -99,7 +99,7 @@ namespace Tauchbolde.Web.Controllers
                 }
             }
 
-            var currentUser = await this.GetCurrentUserAsync(_applicationUserRepository);
+            var currentUser = await this.GetCurrentUserAsync(_diverRepository);
 
             var model = new EventEditViewModel
             {
@@ -128,7 +128,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 try
                 {
-                    var organizer = await this.GetCurrentUserAsync(_applicationUserRepository);
+                    var organizer = await this.GetCurrentUserAsync(_diverRepository);
                     var evt = new Event
                     {
                         Id = model.Id,
@@ -206,7 +206,7 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = await _applicationUserRepository.FindByUserNameAsync(User.Identity.Name);
+                var currentUser = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
                     return StatusCode(400, "No curren user would be found!");
