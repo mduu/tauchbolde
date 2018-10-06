@@ -14,6 +14,10 @@ namespace Tauchbolde.Common.Model
         [Required]
         public string Name { get; set; }
 
+        [Display(Name = "Organisator Id")]
+        [Required]
+        public Guid OrganisatorId { get; set; }
+
         [Display(Name = "Organisator")]
         [Required]
         public Diver Organisator { get; set; }

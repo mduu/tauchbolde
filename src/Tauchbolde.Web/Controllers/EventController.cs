@@ -138,34 +138,41 @@ namespace Tauchbolde.Web.Controllers
                         Description = model.Description,
                         Location = model.Location,
                         MeetingPoint = model.MeetingPoint,
-                        Organisator = organizer,
+                        OrganisatorId = organizer.Id,
                     };
 
-                    var persistantEvent = await _eventService.UpsertEventAsync(_eventRepository, evt);
+                    var persistedEvent = await _eventService.UpsertEventAsync(_eventRepository, evt);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Details", new { persistantEvent.Id });
+                    return RedirectToAction("Details", new { persistedEvent.Id });
                 }
                 catch (Exception ex)
                 {
                     ModelState.AddModelError("", "Unable to save changes. " +
                         "Try again, and if the problem persists " +
-                        $"see your system administrator. Message: {ex.Message}");
+                                             $"see your system administrator. Message: {ex.Message}, {ex.InnerException.Message}");
+                    model.BuddyTeamNames = GetBuddyTeamNames();
+                    return View(model);
                 }
             }
 
-            var detailsForEvent = await _eventRepository.FindByIdAsync(id);
-            if (detailsForEvent == null)
+            EventEditViewModel viewModel;
+            if (id != Guid.Empty)
             {
-                return BadRequest("Event does not exists!");
+                var detailsForEvent = await _eventRepository.FindByIdAsync(id);
+                if (detailsForEvent == null)
+                {
+                    return NotFound("Event does not exists!");
+                }
+
+                viewModel = new EventEditViewModel { OriginalEvent = detailsForEvent };
+            }
+            else
+            {
+                viewModel = model;
             }
 
-            var viewModel = new EventEditViewModel()
-            {
-                OriginalEvent = detailsForEvent,
-                BuddyTeamNames = GetBuddyTeamNames(),
-            };
-
+            viewModel.BuddyTeamNames = GetBuddyTeamNames();
 
             return View(viewModel);
         }
