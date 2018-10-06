@@ -150,7 +150,7 @@ namespace Tauchbolde.Web.Controllers
                 {
                     ModelState.AddModelError("", "Unable to save changes. " +
                         "Try again, and if the problem persists " +
-                                             $"see your system administrator. Message: {ex.Message}, {ex.InnerException.Message}");
+                         $"see your system administrator. Message: {ex.Message}, {ex.InnerException.Message}");
                     model.BuddyTeamNames = GetBuddyTeamNames();
                     return View(model);
                 }
