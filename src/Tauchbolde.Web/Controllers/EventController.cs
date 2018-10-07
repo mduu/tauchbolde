@@ -15,8 +15,7 @@ using Tauchbolde.Web.Services;
 
 namespace Tauchbolde.Web.Controllers
 {
-
-    //[Authorize(Policy = PolicyNames.RequireTauchbold)]
+    [Authorize(Policy = PolicyNames.RequireTauchbold)]
     public class EventController : Controller
     {
         private readonly ApplicationDbContext _context;
