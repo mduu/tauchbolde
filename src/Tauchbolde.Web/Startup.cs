@@ -47,7 +47,9 @@ namespace Tauchbolde.Web
                     Configuration.GetConnectionString("DefaultConnection"),
                     x => x.SuppressForeignKeyEnforcement()));
 
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<IdentityOptions>(options =>
