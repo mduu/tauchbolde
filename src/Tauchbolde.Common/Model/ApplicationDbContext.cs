@@ -25,7 +25,7 @@ namespace Tauchbolde.Common.Model
         {
             base.OnModelCreating(builder);
 
-            // ApplicationUser
+            // Diver
             builder.Entity<Diver>()
                 .HasMany(e => e.Notificationses)
                 .WithOne(e => e.Recipient)
@@ -42,7 +42,11 @@ namespace Tauchbolde.Common.Model
                 .HasMany(e => e.Posts)
                 .WithOne(e => e.Author)
                 .OnDelete(DeleteBehavior.Restrict);
-
+            builder.Entity<Diver>()
+               .Property(e => e.NotificationIntervalInHours)
+               .HasDefaultValue(1);
+            builder.Entity<Diver>()
+               .HasOne(d => d.User);
 
             // Comment
             builder.Entity<Comment>().HasOne(e => e.Event).WithMany(e => e.Comments).OnDelete(DeleteBehavior.Restrict);
@@ -64,9 +68,6 @@ namespace Tauchbolde.Common.Model
             builder.Entity<Post>().HasIndex(p => new { p.Category, p.PublishDate });
 
             // PostImage
-
-            // UserInfo
-            builder.Entity<Diver>().Property(e => e.NotificationIntervalInHours).HasDefaultValue(1);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

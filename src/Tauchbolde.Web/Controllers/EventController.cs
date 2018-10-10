@@ -99,6 +99,9 @@ namespace Tauchbolde.Web.Controllers
             }
 
             var currentUser = await this.GetCurrentUserAsync(_diverRepository);
+            if (currentUser == null) {
+                return BadRequest();
+            }
 
             var model = new EventEditViewModel
             {

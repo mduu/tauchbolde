@@ -20,7 +20,7 @@ namespace Tauchbolde.Common.Repositories
 
             return await Context.Diver
                                 .Include(d => d.User)
-                                .FirstOrDefaultAsync(u => u.User.UserName.Equals(username));
+                                .FirstOrDefaultAsync(u => u.User.UserName.Equals(username, StringComparison.CurrentCultureIgnoreCase));
         }
 
         /// <inheritdoc />
