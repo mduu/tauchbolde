@@ -154,7 +154,9 @@
     {
         <div class="row">
             <div class="comment">
-
+                <div class="comment-author">@comment.Author.Fullname</div>
+                <div class="comment-createdate">@comment.CreateDate.ToString("g")</div>
+                <div class="comment-text">@comment.Text</div>
             </div>
         </div>
     }
