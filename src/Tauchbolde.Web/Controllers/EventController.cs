@@ -70,7 +70,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 Event = detailsForEvent,
                 BuddyTeamNames = GetBuddyTeamNames(),
-                AllowEdit = detailsForEvent == null || detailsForEvent?.Organisator?.Id == currentUser.Id,
+                AllowEdit = detailsForEvent == null || detailsForEvent?.OrganisatorId == currentUser.Id,
                 ChangeParticipantViewModel = new ChangeParticipantViewModel
                 {
                     EventId = detailsForEvent.Id,
