@@ -65,12 +65,12 @@ namespace Tauchbolde.Web.Controllers
             }
 
             var existingParticipation = await _participationService.GetExistingParticipationAsync(currentUser, id);
-
+            var allowEdit = detailsForEvent == null || detailsForEvent?.OrganisatorId == currentUser.Id;
             var model = new EventViewModel
             {
                 Event = detailsForEvent,
                 BuddyTeamNames = GetBuddyTeamNames(),
-                AllowEdit = detailsForEvent == null || detailsForEvent?.OrganisatorId == currentUser.Id,
+                AllowEdit = allowEdit,
                 ChangeParticipantViewModel = new ChangeParticipantViewModel
                 {
                     EventId = detailsForEvent.Id,
@@ -130,7 +130,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 try
                 {
-                    var organizer = await this.GetCurrentUserAsync(_diverRepository);
+                    var currentDiver = await this.GetCurrentUserAsync(_diverRepository);
                     var evt = new Event
                     {
                         Id = model.Id,
@@ -140,7 +140,7 @@ namespace Tauchbolde.Web.Controllers
                         Description = model.Description,
                         Location = model.Location,
                         MeetingPoint = model.MeetingPoint,
-                        OrganisatorId = organizer.Id,
+                        OrganisatorId = currentDiver.Id,
                     };
 
                     var persistedEvent = await _eventService.UpsertEventAsync(_eventRepository, evt);
