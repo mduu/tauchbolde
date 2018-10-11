@@ -17,23 +17,27 @@
         <div class="col-md-6">
             <div class="row">
                 <label class="col-md-6" asp-for="Event.StartEndTimeAsString"></label>
-                <span lass>@Model.Event.StartEndTimeAsString</span>
+                <span class="form-control-static">@Model.Event.StartEndTimeAsString</span>
             </div>
             <div class="row">
                 <label class="col-md-6" asp-for="Event.Name"></label>
-                <span lass>@Model.Event.Name</span>
+                <span class="form-control-static">@Model.Event.Name</span>
             </div>
             <div class="row">
                 <label class="col-md-6" asp-for="Event.Location"></label>
-                <span lass>@Model.Event.Location</span>
+                <span class="form-control-static">@Model.Event.Location</span>
             </div>
             <div class="row">
                 <label class="col-md-6" asp-for="Event.MeetingPoint"></label>
-                <span lass>@Model.Event.MeetingPoint</span>
+                <span class="form-control-static">@Model.Event.MeetingPoint</span>
             </div>
             <div class="row">
                 <label class="col-md-6" asp-for="Event.Organisator"></label>
-                <span lass>@Model.Event.Organisator</span>
+                <span class="form-control-static">@Model.Event.Organisator.Fullname</span>
+            </div>            
+            <div class="row">
+                <label class="col-md-12" asp-for="Event.Description"></label>
+                <span class="col-md-12 form-control-static">@Model.Event.Description</span>
             </div>
             <div class="row">
                 <div class="col-md-12">
