@@ -77,11 +77,11 @@ namespace Tauchbolde.Common.DomainServices
             else
             {
                 eventToStore = new Event { Id = Guid.NewGuid() };
+                eventToStore.OrganisatorId = eventToUpsert.OrganisatorId;
             }
 
             eventToStore.Name = eventToUpsert.Name;
             eventToStore.Description = eventToUpsert.Description;
-            eventToStore.Organisator = eventToUpsert.Organisator;
             eventToStore.Location = eventToUpsert.Location;
             eventToStore.MeetingPoint = eventToUpsert.MeetingPoint;
             eventToStore.StartTime = eventToUpsert.StartTime;
