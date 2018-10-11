@@ -38,12 +38,20 @@ namespace Tauchbolde.Common.Repositories
 
         public override async Task<Event> FindByIdAsync(Guid id)
         {
-            return await Context.Events
+            // HACK: The following magic line seems to enforce that the comments
+            //       get loaded. If this line is not pressent the loading of the
+            //       event does not load its comments even proper include statements
+            //       are present! Don't get it why.
+            var comments = await Context.Comments.Where(c => c.EventId == id).ToListAsync();
+
+            var result = await Context.Events
                 .Include(e => e.Comments)
-                .ThenInclude(c => c.Author)
+                    .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
-                .ThenInclude(p => p.ParticipatingDiver)
+                    .ThenInclude(p => p.ParticipatingDiver)
                 .FirstOrDefaultAsync(e => e.Id == id);
+
+            return result;
         }
 
         public IQueryable<Event> CreateQueryForStartingAt(DateTime startDate, bool includeCanceled = false)

@@ -14,6 +14,10 @@ namespace Tauchbolde.Common.Model
         [Required]
         public Event Event { get; set; }
 
+        [Display(Name = "Autor ID")]
+        [Required]
+        public Guid AuthorId { get; set; }
+
         [Display(Name = "Autor")]
         [Required]
         public Diver Author { get; set; }

@@ -5,14 +5,11 @@
     ViewBag.Title = $"Aktivität - {Model.Event.Name}";
     Layout = "_Layout";
 }
-
 <div class="container">
     <div class="row">
         <h2>@ViewBag.Title</h2>
     </div>
-
     <div class="row">
-
 
         <div class="col-md-6">
             <div class="row">
@@ -34,7 +31,7 @@
             <div class="row">
                 <label class="col-md-6" asp-for="Event.Organisator"></label>
                 <span class="form-control-static">@Model.Event.Organisator.Fullname</span>
-            </div>            
+            </div>
             <div class="row">
                 <label class="col-md-12" asp-for="Event.Description"></label>
                 <span class="col-md-12 form-control-static">@Model.Event.Description</span>
@@ -49,10 +46,8 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-6">
             <h3>Teilnehmer</h3>
-
             @if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Accepted))
             {
                 <section class="event-participationlist event-participationlist-accepted">
@@ -63,14 +58,13 @@
                             <span class="label label-success">
                                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                             </span>
-                            <span class="event-participationlist-name" style="padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
+                            <span class="event-participationlist-name" style="        padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
                             <span class="badge" title="Anzahl Personen: @participant.CountPeople">@participant.CountPeople</span><div class="col-sm-1"></div>
-                            <mark style="margin-left: 10px;">@participant.Note</mark>
+                            <mark style="        margin-left: 10px;">@participant.Note</mark>
                         </div>
                     }
                 </section>
             }
-
             @if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Tentative))
             {
                 <section class="event-participationlist event-participationlist-tentative">
@@ -81,14 +75,13 @@
                             <span class="label label-default">
                                 <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
                             </span>
-                            <span class="event-participationlist-name" style="padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
+                            <span class="event-participationlist-name" style="        padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
                             <span class="badge" title="Anzahl Personen: @participant.CountPeople">@participant.CountPeople</span><div class="col-sm-1"></div>
-                            <mark style="margin-left: 10px;">@participant.Note</mark>
+                            <mark style="        margin-left: 10px;">@participant.Note</mark>
                         </div>
                     }
                 </section>
             }
-
             @if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Declined))
             {
                 <section class="event-participationlist event-participationlist-declined">
@@ -99,75 +92,86 @@
                             <span class="label label-danger">
                                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                             </span>
-                            <span class="event-participationlist-name" style="padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
+                            <span class="event-participationlist-name" style="        padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
                             <span class="badge" title="Anzahl Personen: @participant.CountPeople">@participant.CountPeople</span><div class="col-sm-1"></div>
-                            <mark style="margin-left: 10px;">@participant.Note</mark>
+                            <mark style="        margin-left: 10px;">@participant.Note</mark>
                         </div>
                     }
                 </section>
             }
 
-
-            <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="margin-top: 15px;">
+            <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="        margin-top: 15px;">
                 An-/Abmeldung
             </a>
-
-            <div class="collapse" id="collapseExample" style="margin-top: 5px;">
-
+            <div class="collapse" id="collapseExample" style="        margin-top: 5px;">
                 <form id="ChangeParticipantForm" asp-action="ChangeParticipation" asp-antiforgery="true">
                     <input type="hidden" asp-for="ChangeParticipantViewModel.EventId" Value="@Model.Event.Id" />
-
                     <div class="well">
-
                         @* Status *@
                         <div class="form-group">
                             <label asp-for="ChangeParticipantViewModel.Status"></label>
                             <select class="form-control" asp-for="ChangeParticipantViewModel.Status" asp-items="Html.GetEnumSelectList<ParticipantStatus>()"></select>
                         </div>
-
                         @* Buddyteam *@
                         <div class="form-group">
                             <label asp-for="ChangeParticipantViewModel.BuddyTeamName">Buddy-Team</label>
                             <select class="form-control" asp-for="ChangeParticipantViewModel.BuddyTeamName" asp-items="@Model.BuddyTeamNames"></select>
                         </div>
-
                         @* Notiz *@
                         <div class="form-group">
                             <label asp-for="ChangeParticipantViewModel.Note">Notiz</label>
                             <input type="text" class="form-control" id="note" placeholder="Notiz" asp-for="ChangeParticipantViewModel.Note">
                         </div>
-
                         @* Anzahl *@
                         <div class="form-group">
                             <label asp-for="ChangeParticipantViewModel.CountPeople">Anzahl Personen</label>
                             <input type="number" class="form-control" step="1" min="1" asp-for="ChangeParticipantViewModel.CountPeople">
                         </div>
-
                         <input class="btn btn-success" type="submit" value="Speichern" />
-                        <a href="#" id="cnacel-participant-change">Abbrechen</a>
-
                     </div>
                 </form>
-
             </div>
         </div>
 
+        <hr />
+
+        <div class="col-md-12">
+            <h3>Kommentare</h3>
+        </div>
+
+        @foreach (var comment in Model.Event.Comments.OrderBy(c => c.CreateDate))
+        {
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@comment.Author.Fullname &mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm:ss")</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>@comment.Text</p>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Kommentar hinzufügen</h3>
+                </div>
+                <div class="panel-body">
+                    <form id="AddComment" asp-action="AddComment" asp-antiforgery="true">
+                        <input type="hidden" id="eventId" name="eventId" Value="@Model.Event.Id" />
+                        <textarea id="commentText" name="commentText" rows="3" style="        width: 100%" autofocus></textarea>
+                        <input class="btn btn-primary" type="submit" value="Kommentar speichern" />
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    @foreach (var comment in Model.Event.Comments.OrderBy(c => c.CreateDate))
-    {
-        <div class="row">
-            <div class="comment">
-                <div class="comment-author">@comment.Author.Fullname</div>
-                <div class="comment-createdate">@comment.CreateDate.ToString("g")</div>
-                <div class="comment-text">@comment.Text</div>
-            </div>
-        </div>
-    }
 </div>
 
 @section Scripts
-{
+    {
     <environment names="Development">
         <script src="~/lib/knockout/dist/knockout.debug.js" asp-append-version="true"></script>
         <script src="~/Scripts/ParticipationViewModel.js" asp-append-version="true"></script>
@@ -176,13 +180,4 @@
         <script src="~/lib/knockout/dist/knockout.js" asp-append-version="true"></script>
         <script src="~/Scripts/ParticipationViewModel.min.js" asp-append-version="true"></script>
     </environment>
-
-    <script>
-        // Participation form
-        @*Window.participationViewModel = new Tauchbolde.EvenDiv.ParticipationViewModel(
-            $("#ChangeParticipantForm"),
-            '@Url.Action("ChangeParticipation")'
-        );
-        ko.applyBindings(Window.participationViewModel, $("#ChangeParticipantForm"));*@
-    </script>
 }

@@ -23,19 +23,22 @@ namespace Tauchbolde.Web.Controllers
         private readonly IEventRepository _eventRepository;
         private readonly IParticipationService _participationService;
         private readonly IEventService _eventService;
+        private readonly ICommentRepository _commentRepository;
 
         public EventController(
             ApplicationDbContext context,
             IDiverRepository diverRepository,
             IEventRepository eventRepository,
             IParticipationService participationService,
-            IEventService eventService)
+            IEventService eventService,
+            ICommentRepository commentRepository)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             _participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
             _eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
+            _commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
         }
 
         // GET: Event
@@ -69,7 +72,7 @@ namespace Tauchbolde.Web.Controllers
             var model = new EventViewModel
             {
                 Event = detailsForEvent,
-                BuddyTeamNames = GetBuddyTeamNames(),
+                BuddyTeamNames = GetBuddyTeamNames(),   
                 AllowEdit = allowEdit,
                 ChangeParticipantViewModel = new ChangeParticipantViewModel
                 {
@@ -99,7 +102,8 @@ namespace Tauchbolde.Web.Controllers
             }
 
             var currentUser = await this.GetCurrentUserAsync(_diverRepository);
-            if (currentUser == null) {
+            if (currentUser == null)
+            {
                 return BadRequest();
             }
 
@@ -229,6 +233,9 @@ namespace Tauchbolde.Web.Controllers
             return await Details(model.EventId);
         }
 
+        /// <summary>
+        /// Download a .ical file of the specified event.
+        /// </summary>
         public async Task<IActionResult> Ical(Guid id)
         {
             if (!ModelState.IsValid)
@@ -239,6 +246,36 @@ namespace Tauchbolde.Web.Controllers
             var stream = await _eventService.CreateIcalForEvent(id, _eventRepository);
 
             return File(stream, "text/calendar");
+        }
+
+        /// <summary>
+        /// Adds a new comment to an event.
+        /// </summary>
+        /// <param name="eventId">ID of the event to add the comment to.</param>
+        /// <param name="commentText">The text to add as a comment.</param>
+        public async Task<IActionResult> AddComment(Guid eventId, string commentText)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentUser = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
+                if (currentUser == null)
+                {
+                    return StatusCode(400, "No curren user would be found!");
+                }
+
+                var comment = await _eventService.AddCommentAsync(eventId, commentText, currentUser, _commentRepository);
+                if (comment != null)
+                {
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Fehler beim Speichern des Kommentares!");
+                }
+
+            }
+
+            return RedirectToAction("Details", new { id = eventId });
         }
 
         private static IEnumerable<SelectListItem> GetBuddyTeamNames()

@@ -23,5 +23,13 @@ namespace Tauchbolde.Common.DomainServices
         /// <param name="eventToUpsert">Eventdata to insert or update.</param>
         /// <returns>The inserted or updated <see cref="Event"/>.</returns>
         Task<Event> UpsertEventAsync(IEventRepository eventRepository, Event eventToUpsert);
+
+        /// <summary>
+        /// Adds the comment to a event async.
+        /// </summary>
+        /// <returns>The comment that was added.</returns>
+        /// <param name="eventId">The Id of the event to add the comment to.</param>
+        /// <param name="commentToAdd">Comment to add to the event.</param>
+        Task<Comment> AddCommentAsync(Guid eventId, string commentToAdd, Diver authorDiver, ICommentRepository commentRepositor);
     }
 }

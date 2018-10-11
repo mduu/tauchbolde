@@ -74,6 +74,30 @@ namespace Tauchbolde.Common.DomainServices
             return eventToStore;
         }
 
+        public async Task<Comment> AddCommentAsync(Guid eventId, string commentToAdd, Diver authorDiver, ICommentRepository commentRepository)
+        {
+            if (eventId == Guid.Empty) { throw new ArgumentException("Empty Guid not allowed as Event-Id!", nameof(eventId)); }
+            if (authorDiver == null) throw new ArgumentNullException(nameof(authorDiver));
+
+            if (!string.IsNullOrWhiteSpace(commentToAdd))
+            {
+                var comment = new Comment
+                {
+                    Id = Guid.NewGuid(),
+                    AuthorId = authorDiver.Id,
+                    CreateDate = DateTime.Now,
+                    EventId = eventId,
+                    Text = commentToAdd,
+                };
+
+                await commentRepository.InsertAsync(comment);
+
+                return comment;
+            }
+
+            return null;
+        }
+
         private static Stream CreateIcalStream(Event evt)
         {
             var sb = new StringBuilder();

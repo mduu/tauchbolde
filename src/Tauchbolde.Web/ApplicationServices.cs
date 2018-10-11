@@ -23,6 +23,7 @@ namespace Tauchbolde.Web
             services.AddTransient<INotificationRepository, NotificationRepository>();
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<IPostImageRepository, PostImageRepository>();
+            services.AddTransient<ICommentRepository, CommentRepository>();
 
             // DomainServices
             services.AddTransient<IParticipationService, ParticipationService>();
