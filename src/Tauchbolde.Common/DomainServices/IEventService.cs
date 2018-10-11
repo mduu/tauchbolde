@@ -8,15 +8,13 @@ namespace Tauchbolde.Common.DomainServices
 {
     public interface IEventService
     {
-        Task<Stream> CreateIcalForEvent(Guid eventId, IEventRepository eventRepository);
-
         /// <summary>
-        /// Updates an existing event with new values.
+        /// Returns a stream with the content of a .ical file for the given event.
         /// </summary>
-        /// <returns>The updated event.</returns>
-        Task<Event> UpdateEventAsync(IEventRepository eventRepository, Guid eventId, string name,
-            string description, DateTime startTime, DateTime? endTime, string location,
-            string meetingPoint, Diver currentUser);
+        /// <returns>The ical data in a stream for the event.</returns>
+        /// <param name="eventId">Event ID to get the .ical file for.</param>
+        /// <param name="eventRepository">Event repository.</param>
+        Task<Stream> CreateIcalForEvent(Guid eventId, IEventRepository eventRepository);
 
         /// <summary>
         /// Insert or update the given <paramref name="eventToUpsert"/>.

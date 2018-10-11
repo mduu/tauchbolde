@@ -33,31 +33,6 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc />
-        public async Task<Event> UpdateEventAsync(IEventRepository eventRepository, 
-            Guid eventId, string name, string description,DateTime startTime, 
-            DateTime? endTime, string location, string meetingPoint,
-            Diver currentUser)
-        {
-            if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
-            if (eventId == Guid.Empty) throw new ArgumentException("EventId can not be empty!", nameof(eventId));
-
-            var evt = await eventRepository.FindByIdAsync(eventId);
-            if (evt == null)
-            {
-                throw new InvalidOperationException("Zu bearbeitendes Event wurde nicht in der Datenbank gefunden!");
-            }
-
-            evt.Name = name;
-            evt.Description = description;
-            evt.Location = location;
-            evt.MeetingPoint = meetingPoint;
-            evt.StartTime = startTime;
-            evt.EndTime = endTime;
-
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
         public async Task<Event> UpsertEventAsync(IEventRepository eventRepository, Event eventToUpsert)
         {
             if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
