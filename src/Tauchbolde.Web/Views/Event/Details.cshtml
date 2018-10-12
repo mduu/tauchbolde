@@ -149,7 +149,7 @@
                 <div class="panel panel-primary">
 
                     <div class="panel-body">
-                        <div><strong>@comment.Author.Fullname</strong> <small>&mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm")</small></div>
+                        <div><strong>@comment.Author.Fullname</strong> <small>&mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm") @(comment.ModifiedDate.HasValue ? (" Geändert: " + comment.ModifiedDate.Value.ToString("dd.MM.yyyy HH:mm")) : "")</small></div>
                         <p>@comment.Text</p>
                     </div>
                 </div>
