@@ -7,7 +7,11 @@
 }
 <div class="container">
     <div class="row">
-        <h2>@ViewBag.Title</h2>
+        <div class="col-md-12">
+            <div class="page-header">
+                <h2>@ViewBag.Title</h2>
+            </div>
+        </div>
     </div>
     <div class="row">
 
@@ -33,8 +37,8 @@
                 <span class="form-control-static">@Model.Event.Organisator.Fullname</span>
             </div>
             <div class="row">
-                <label class="col-md-12" asp-for="Event.Description"></label>
-                <span class="col-md-12 form-control-static">@Model.Event.Description</span>
+                    <label class="col-md-12" asp-for="Event.Description"></label>
+                    <span class="col-md-12 form-control-static">@Model.Event.Description</span>
             </div>
             <div class="row">
                 <div class="col-md-12">
