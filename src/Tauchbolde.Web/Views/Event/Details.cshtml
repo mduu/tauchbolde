@@ -158,8 +158,8 @@
                             <small> &mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm") @(comment.ModifiedDate.HasValue ? ("Geändert: " + comment.ModifiedDate.Value.ToString("dd.MM.yyyy HH:mm")) : "")</small>
                             @if (comment.AuthorId == Model.CurrentDiver.Id)
                             {
-                                <button class="btn btn-default btn-xs editCommentBtn" data-commentId="@comment.Id" data-commentText="@comment.Text">Ändern</button>
-                                <button class="btn btn-default btn-xs deleteCommentBtn" data-commentId="@comment.Id" data-commentText="@comment.Text">Löschen</button>
+                                <button class="btn btn-default btn-xs editCommentBtn" data-commentId="@comment.Id" data-commentText="@comment.Text"><span class="glyphicon glyphicon-pencil"></span></button>
+                                <button class="btn btn-default btn-xs deleteCommentBtn" data-commentId="@comment.Id" data-commentText="@comment.Text"><span class="glyphicon glyphicon-trash"></span></button>
                             }
                         </div>
                         <p>@comment.Text</p>
