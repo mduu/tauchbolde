@@ -306,7 +306,7 @@ namespace Tauchbolde.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteComment(Guid eventId, Guid commentId)
+        public async Task<IActionResult> DeleteComment(Guid deleteEventId, Guid deleteCommentId)
         {
             if (ModelState.IsValid)
             {
@@ -316,11 +316,11 @@ namespace Tauchbolde.Web.Controllers
                     return StatusCode(400, "No curren user would be found!");
                 }
 
-                await _eventService.DeleteCommentAsync(commentId, currentUser, _commentRepository);
+                await _eventService.DeleteCommentAsync(deleteCommentId, currentUser, _commentRepository);
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Details", new { id = eventId });
+            return RedirectToAction("Details", new { id = deleteEventId });
         }
 
         private static IEnumerable<SelectListItem> GetBuddyTeamNames()

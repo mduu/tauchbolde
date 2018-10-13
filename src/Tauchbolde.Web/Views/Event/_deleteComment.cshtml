@@ -9,8 +9,8 @@
                 <p>Bist Du sicher, dass Du Deinen Kommentar löschen willst?</p>
                 <p><blockquote><span id="deleteCommentText"></span></blockquote></p>
                 <form id="deleteCommentForm" asp-action="DeleteComment" asp-antiforgery="true">
-                    <input type="hidden" id="commentId" name="commentId" />
-                    <input type="hidden" id="eventId" name="eventId" />
+                    <input type="hidden" id="deleteCommentId" name="deleteCommentId" />
+                    <input type="hidden" id="deleteEventId" name="deleteEventId" />
                 </form>
             </div>
             <div class="modal-footer">

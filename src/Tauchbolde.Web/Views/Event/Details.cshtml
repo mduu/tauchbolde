@@ -158,8 +158,26 @@
                             <small> &mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm") @(comment.ModifiedDate.HasValue ? ("Geändert: " + comment.ModifiedDate.Value.ToString("dd.MM.yyyy HH:mm")) : "")</small>
                             @if (comment.AuthorId == Model.CurrentDiver.Id)
                             {
-                                <button class="btn btn-default btn-xs editCommentBtn" data-commentId="@comment.Id" data-commentText="@comment.Text"><span class="glyphicon glyphicon-pencil"></span></button>
-                                <button class="btn btn-default btn-xs deleteCommentBtn" data-commentId="@comment.Id" data-commentText="@comment.Text"><span class="glyphicon glyphicon-trash"></span></button>
+                                <button
+                                    class="btn btn-default btn-xs editCommentBtn"
+                                    data-commentId="@comment.Id"
+                                    data-commentText="@comment.Text">
+                                    <span
+                                        class="glyphicon glyphicon-pencil"
+                                        data-commentId="@comment.Id"
+                                        data-commentText="@comment.Text">
+                                    </span>
+                                </button>
+                                <button
+                                    class="btn btn-default btn-xs deleteCommentBtn"
+                                    data-commentId="@comment.Id"
+                                    data-commentText="@comment.Text">
+                                    <span
+                                        class="glyphicon glyphicon-trash"
+                                        data-commentId="@comment.Id"
+                                        data-commentText="@comment.Text">
+                                    </span>
+                                </button>
                             }
                         </div>
                         <p>@comment.Text</p>
@@ -213,12 +231,15 @@
 
             $('.deleteCommentBtn').click(function() {
                 let button = $(event.target);
+                console.log(button);
                 let commentId = button.data('commentid');
                 let commentText = button.data('commenttext');
+                console.log(commentId);
+                console.log(commentText);
                 let modal = $('#commentDeleteModal')
 
-                modal.find('#commentId').val(commentId);
-                modal.find('#eventId').val('@Model.Event.Id')
+                modal.find('#deleteCommentId').val(commentId);
+                modal.find('#deleteEventId').val('@Model.Event.Id')
                 modal.find('#deleteCommentText').text(commentText);
 
                 modal.modal('show');
