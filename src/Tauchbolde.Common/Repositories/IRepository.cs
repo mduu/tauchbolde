@@ -14,5 +14,7 @@ namespace Tauchbolde.Common.Repository
         Task<EntityEntry<TEntity>> InsertAsync(TEntity entity);
 
         EntityEntry<TEntity> Update(TEntity entity);
+
+        void Delete(TEntity entity);
     }
 }

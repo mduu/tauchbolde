@@ -47,5 +47,10 @@ namespace Tauchbolde.Common.Repositories
 
             return Context.Update(entity);
         }
+
+        public virtual void Delete(TEntity entity)
+        {
+            Context.Set<TEntity>().Remove(entity);
+        }
     }
 }

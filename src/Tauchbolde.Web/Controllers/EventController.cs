@@ -305,6 +305,24 @@ namespace Tauchbolde.Web.Controllers
             return RedirectToAction("Details", new { id = eventId });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteComment(Guid eventId, Guid commentId)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentUser = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
+                if (currentUser == null)
+                {
+                    return StatusCode(400, "No curren user would be found!");
+                }
+
+                await _eventService.DeleteCommentAsync(commentId, currentUser, _commentRepository);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Details", new { id = eventId });
+        }
+
         private static IEnumerable<SelectListItem> GetBuddyTeamNames()
         {
             return BuddyTeamNames.Names.Select(n => new SelectListItem { Text = n });

@@ -23,5 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\lib\moment\bower.json" />
+    <Content Remove="wwwroot\lib\jquery\src\ajax.js" />
+    <Content Remove="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
   </ItemGroup>
 </Project>

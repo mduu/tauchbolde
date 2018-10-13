@@ -119,6 +119,24 @@ namespace Tauchbolde.Common.DomainServices
             return comment;
         }
 
+        public async Task DeleteCommentAsync(Guid commentId, Diver currentUser, ICommentRepository commentRepository)
+        {
+            if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
+            if (currentUser == null) throw new ArgumentNullException(nameof(currentUser));
+            if (commentRepository == null) throw new ArgumentNullException(nameof(commentRepository));
+
+            var comment = await commentRepository.FindByIdAsync(commentId);
+            if (comment != null)
+            {
+                if (comment.AuthorId != currentUser.Id)
+                {
+                    throw new UnauthorizedAccessException();
+                }
+
+                commentRepository.Delete(comment);
+            }
+        }
+
         private static Stream CreateIcalStream(Event evt)
         {
             var sb = new StringBuilder();

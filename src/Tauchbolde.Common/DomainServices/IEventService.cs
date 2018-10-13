@@ -41,5 +41,13 @@ namespace Tauchbolde.Common.DomainServices
         /// <param name="currentUser">Current user.</param>
         /// <param name="commentRepository">Comment repository.</param>
         Task<Comment> EditCommentAsync(Guid commentId, string commentText, Diver currentUser, ICommentRepository commentRepository);
+
+        /// <summary>
+        /// Deletes a comment async.
+        /// </summary>
+        /// <param name="commentId">Id of the comment to delete.</param>
+        /// <param name="currentUser">uCrrent user.</param>
+        /// <param name="commentRepository">Comment repository.</param>
+        Task DeleteCommentAsync(Guid commentId, Diver currentUser, ICommentRepository commentRepository);
     }
 }
