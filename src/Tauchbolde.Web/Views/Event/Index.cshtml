@@ -13,7 +13,7 @@
     </form>
 </div>
 
-<table class="table">
+<table class="table table-hover">
     <tr>
         <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().StartTime)</th>
         <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Name)</th>
@@ -29,7 +29,7 @@
             <td>@upcommingEvent.Location</td>
             <td>@upcommingEvent.MeetingPoint</td>
             <td>
-                <a class="btn btn-default btn-sm" asp-action="Details" asp-route-id="@upcommingEvent.Id"><span class="glyphicon glyphicon-search"></span>&nbsp;Details</a>
+                <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@upcommingEvent.Id"><span class="glyphicon glyphicon-search"></span>&nbsp;Details</a>
             </td>
         </tr>
     }
