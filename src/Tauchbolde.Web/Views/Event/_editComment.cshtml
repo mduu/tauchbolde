@@ -1,0 +1,21 @@
+﻿<div class="modal fade" id="commentEditModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Kommentar bearbeiten</h4>
+            </div>
+            <div class="modal-body">
+                <form id="editCommentForm" asp-action="EditComment" asp-antiforgery="true">
+                    <input type="hidden" id="commentId" name="commentId" />
+                    <input type="hidden" id="eventId" name="eventId" />
+                    <textarea id="commentText" name="commentText" rows="3" style="width: 100%"></textarea>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Abbrechen</button>
+                <button type="submit" form="editCommentForm" class="btn btn-primary" id="editCommentSubmitBtn">Änderungen speichern</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

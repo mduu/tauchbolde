@@ -61,17 +61,18 @@ namespace Tauchbolde.Web.Controllers
                 return BadRequest("Event does not exists!");
             }
 
-            var currentUser = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
-            if (currentUser == null)
+            var currentDiver = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
+            if (currentDiver == null)
             {
                 return StatusCode(400, "No curren user would be found!");
             }
 
-            var existingParticipation = await _participationService.GetExistingParticipationAsync(currentUser, id);
-            var allowEdit = detailsForEvent == null || detailsForEvent?.OrganisatorId == currentUser.Id;
+            var existingParticipation = await _participationService.GetExistingParticipationAsync(currentDiver, id);
+            var allowEdit = detailsForEvent == null || detailsForEvent?.OrganisatorId == currentDiver.Id;
             var model = new EventViewModel
             {
                 Event = detailsForEvent,
+                CurrentDiver = currentDiver,
                 BuddyTeamNames = GetBuddyTeamNames(),   
                 AllowEdit = allowEdit,
                 ChangeParticipantViewModel = new ChangeParticipantViewModel
@@ -252,8 +253,8 @@ namespace Tauchbolde.Web.Controllers
         /// Adds a new comment to an event.
         /// </summary>
         /// <param name="eventId">ID of the event to add the comment to.</param>
-        /// <param name="commentText">The text to add as a comment.</param>
-        public async Task<IActionResult> AddComment(Guid eventId, string commentText)
+        /// <param name="newCommentText">The text to add as a comment.</param>
+        public async Task<IActionResult> AddComment(Guid eventId, string newCommentText)
         {
             if (ModelState.IsValid)
             {
@@ -263,7 +264,33 @@ namespace Tauchbolde.Web.Controllers
                     return StatusCode(400, "No curren user would be found!");
                 }
 
-                var comment = await _eventService.AddCommentAsync(eventId, commentText, currentUser, _commentRepository);
+                var comment = await _eventService.AddCommentAsync(eventId, newCommentText, currentUser, _commentRepository);
+                if (comment != null)
+                {
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Fehler beim Speichern des Kommentares!");
+                }
+
+            }
+
+            return RedirectToAction("Details", new { id = eventId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditComment(Guid eventId, Guid commentId, string commentText)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentUser = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
+                if (currentUser == null)
+                {
+                    return StatusCode(400, "No curren user would be found!");
+                }
+
+                var comment = await _eventService.EditCommentAsync(commentId, commentText, currentUser, _commentRepository);
                 if (comment != null)
                 {
                     await _context.SaveChangesAsync();

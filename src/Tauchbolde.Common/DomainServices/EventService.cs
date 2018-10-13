@@ -74,6 +74,7 @@ namespace Tauchbolde.Common.DomainServices
             return eventToStore;
         }
 
+        /// <inheritdoc/>
         public async Task<Comment> AddCommentAsync(Guid eventId, string commentToAdd, Diver authorDiver, ICommentRepository commentRepository)
         {
             if (eventId == Guid.Empty) { throw new ArgumentException("Empty Guid not allowed as Event-Id!", nameof(eventId)); }
@@ -96,6 +97,26 @@ namespace Tauchbolde.Common.DomainServices
             }
 
             return null;
+        }
+
+        /// <inheritdoc/>
+        public async Task<Comment> EditCommentAsync(Guid commentId, string commentText, Diver currentUser, ICommentRepository commentRepository)
+        {
+            if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
+            if (currentUser == null) { throw new ArgumentNullException(nameof(currentUser)); }
+            if (commentRepository == null) { throw new ArgumentNullException(nameof(commentRepository)); }
+
+            var comment = await commentRepository.FindByIdAsync(commentId);
+            if (comment != null) {
+                if (comment.AuthorId != currentUser.Id)
+                {
+                    throw new UnauthorizedAccessException();
+                }
+
+                comment.Text = commentText;
+            }
+
+            return comment;
         }
 
         private static Stream CreateIcalStream(Event evt)

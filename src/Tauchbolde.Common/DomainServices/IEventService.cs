@@ -31,5 +31,15 @@ namespace Tauchbolde.Common.DomainServices
         /// <param name="eventId">The Id of the event to add the comment to.</param>
         /// <param name="commentToAdd">Comment to add to the event.</param>
         Task<Comment> AddCommentAsync(Guid eventId, string commentToAdd, Diver authorDiver, ICommentRepository commentRepositor);
+
+        /// <summary>
+        /// Edits the comment async.
+        /// </summary>
+        /// <returns>The edited comment async.</returns>
+        /// <param name="commentId">The Id of the comment to edit.</param>
+        /// <param name="commentText">New comment text.</param>
+        /// <param name="currentUser">Current user.</param>
+        /// <param name="commentRepository">Comment repository.</param>
+        Task<Comment> EditCommentAsync(Guid commentId, string commentText, Diver currentUser, ICommentRepository commentRepository);
     }
 }

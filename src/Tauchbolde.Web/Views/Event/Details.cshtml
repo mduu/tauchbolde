@@ -5,6 +5,8 @@
     ViewBag.Title = $"Aktivität - {Model.Event.Name}";
     Layout = "_Layout";
 }
+
+<partial name="_editComment" />
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -17,28 +19,28 @@
 
         <div class="col-md-6">
             <div class="row">
-                <label class="col-md-6" asp-for="Event.StartEndTimeAsString"></label>
+                <label class="col-md-6">Startzeit</label>
                 <span class="form-control-static">@Model.Event.StartEndTimeAsString</span>
             </div>
             <div class="row">
-                <label class="col-md-6" asp-for="Event.Name"></label>
+                <label class="col-md-6">Titel</label>
                 <span class="form-control-static">@Model.Event.Name</span>
             </div>
             <div class="row">
-                <label class="col-md-6" asp-for="Event.Location"></label>
+                <label class="col-md-6">Ort / TP</label>
                 <span class="form-control-static">@Model.Event.Location</span>
             </div>
             <div class="row">
-                <label class="col-md-6" asp-for="Event.MeetingPoint"></label>
+                <label class="col-md-6">Treffpunkt</label>
                 <span class="form-control-static">@Model.Event.MeetingPoint</span>
             </div>
             <div class="row">
-                <label class="col-md-6" asp-for="Event.Organisator"></label>
+                <label class="col-md-6">Organisator</label>
                 <span class="form-control-static">@Model.Event.Organisator.Fullname</span>
             </div>
             <div class="row">
-                    <label class="col-md-12" asp-for="Event.Description"></label>
-                    <span class="col-md-12 form-control-static">@Model.Event.Description</span>
+                <label class="col-md-12">Beschreibung</label>
+                <span class="col-md-12 form-control-static">@Model.Event.Description</span>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -62,9 +64,9 @@
                             <span class="label label-success">
                                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                             </span>
-                            <span class="event-participationlist-name" style="        padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
+                            <span class="event-participationlist-name" style="padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
                             <span class="badge" title="Anzahl Personen: @participant.CountPeople">@participant.CountPeople</span><div class="col-sm-1"></div>
-                            <mark style="        margin-left: 10px;">@participant.Note</mark>
+                            <mark style="margin-left: 10px;">@participant.Note</mark>
                         </div>
                     }
                 </section>
@@ -79,9 +81,9 @@
                             <span class="label label-default">
                                 <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
                             </span>
-                            <span class="event-participationlist-name" style="        padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
+                            <span class="event-participationlist-name" style="padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
                             <span class="badge" title="Anzahl Personen: @participant.CountPeople">@participant.CountPeople</span><div class="col-sm-1"></div>
-                            <mark style="        margin-left: 10px;">@participant.Note</mark>
+                            <mark style="margin-left: 10px;">@participant.Note</mark>
                         </div>
                     }
                 </section>
@@ -96,9 +98,9 @@
                             <span class="label label-danger">
                                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                             </span>
-                            <span class="event-participationlist-name" style="        padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
+                            <span class="event-participationlist-name" style="padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
                             <span class="badge" title="Anzahl Personen: @participant.CountPeople">@participant.CountPeople</span><div class="col-sm-1"></div>
-                            <mark style="        margin-left: 10px;">@participant.Note</mark>
+                            <mark style="margin-left: 10px;">@participant.Note</mark>
                         </div>
                     }
                 </section>
@@ -107,7 +109,7 @@
             <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="        margin-top: 15px;">
                 An-/Abmeldung
             </a>
-            <div class="collapse" id="collapseExample" style="        margin-top: 5px;">
+            <div class="collapse" id="collapseExample" style="margin-top: 5px;">
                 <form id="ChangeParticipantForm" asp-action="ChangeParticipation" asp-antiforgery="true">
                     <input type="hidden" asp-for="ChangeParticipantViewModel.EventId" Value="@Model.Event.Id" />
                     <div class="well">
@@ -124,7 +126,7 @@
                         @* Notiz *@
                         <div class="form-group">
                             <label asp-for="ChangeParticipantViewModel.Note">Notiz</label>
-                            <input type="text" class="form-control" id="note" placeholder="Notiz" asp-for="ChangeParticipantViewModel.Note">
+                            <input type="text" class="form-control" placeholder="Notiz" asp-for="ChangeParticipantViewModel.Note">
                         </div>
                         @* Anzahl *@
                         <div class="form-group">
@@ -152,6 +154,11 @@
                         <div>
                             <strong>@comment.Author.Fullname</strong>
                             <small> &mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm") @(comment.ModifiedDate.HasValue ? ("Geändert: " + comment.ModifiedDate.Value.ToString("dd.MM.yyyy HH:mm")) : "")</small>
+                            @if (comment.AuthorId == Model.CurrentDiver.Id)
+                            {
+                                <button class="btn btn-default btn-xs editCommentBtn" data-commentId="@comment.Id" data-commentText="@comment.Text">Ändern</button>
+                                <button class="btn btn-default btn-xs">Löschen</button>
+                            }
                         </div>
                         <p>@comment.Text</p>
                     </div>
@@ -160,14 +167,14 @@
         }
 
         <div class="col-md-12">
-            <div class="panel panel-primary">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     Kommentar hinzufügen
                 </div>
                 <div class="panel-body">
                     <form id="AddComment" asp-action="AddComment" asp-antiforgery="true">
                         <input type="hidden" id="eventId" name="eventId" Value="@Model.Event.Id" />
-                        <textarea id="commentText" name="commentText" rows="3" style="        width: 100%" autofocus></textarea>
+                        <textarea id="newCommentText" name="newCommentText" rows="3" style="        width: 100%" autofocus></textarea>
                         <input class="btn btn-primary" type="submit" value="Kommentar speichern" />
                     </form>
                 </div>
@@ -186,4 +193,23 @@
         <script src="~/lib/knockout/dist/knockout.js" asp-append-version="true"></script>
         <script src="~/Scripts/ParticipationViewModel.min.js" asp-append-version="true"></script>
     </environment>
+
+    <script>
+        $(function() {
+            $('.editCommentBtn').click(function() {
+                let button = $(event.target);
+                let commentId = button.data('commentid');
+                let commentText = button.data('commenttext');
+                let modal = $('#commentEditModal')
+
+                modal.find('#commentId').val(commentId);
+                modal.find('#commentText').val(commentText);
+                modal.find('#eventId').val('@Model.Event.Id')
+
+                modal.find('#editCommentSubmitBtn').disabled = false;
+
+                modal.modal('show');
+            });
+        })
+    </script>
 }
