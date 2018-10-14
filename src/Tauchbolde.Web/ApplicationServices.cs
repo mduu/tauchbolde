@@ -31,6 +31,7 @@ namespace Tauchbolde.Web
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<INotificationSender, NotificationSender>();
             services.AddTransient<INotificationFormatter, HtmlNotificationFormatter>();
+            services.AddTransient<IDiverService, DiversService>();
         }
 
         public static void RegisterDevelopment(IServiceCollection services)

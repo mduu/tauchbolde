@@ -1,0 +1,49 @@
+﻿@model Tauchbolde.Web.Models.AboutViewModels.AboutViewModel
+
+@foreach (var member in Model.Members)
+{
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-body memeber-card">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>
+                            @member.Firstname
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="@Url.Content("~/images/empty_avatar.svg")" alt="Avatar @member.Firstname" class="img-circle" style="max-width: 144px; max-height: 144px">
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-4">Ausbildung:</div>
+                            <div class="col-md-8"><strong>@member.Education</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Erfahrung:</div>
+                            <div class="col-md-8"><strong>@member.Experience</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Tauchbold seit:</div>
+                            <div class="col-md-8"><strong>@member.MemberSince</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Motto:</div>
+                            <div class="col-md-8"><strong>@member.Slogan</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Webseite:</div>
+                            <div class="col-md-8"><strong><a href="@member.WebsiteUrl" target="_blank">@member.WebsiteUrl</a></strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="clearfix"></div>

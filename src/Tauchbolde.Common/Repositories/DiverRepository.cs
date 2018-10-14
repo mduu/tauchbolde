@@ -4,13 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Common.Model;
+using Microsoft.AspNetCore.Identity;
 
 namespace Tauchbolde.Common.Repositories
 {
     public class DiverRepository : RepositoryBase<Diver>, IDiverRepository
     {
-        public DiverRepository(ApplicationDbContext context) : base(context)
+        private readonly UserManager<IdentityUser> userManager;
+
+        public DiverRepository(ApplicationDbContext context, UserManager<IdentityUser> userManager) : base(context)
         {
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         /// <inheritdoc />
@@ -28,14 +32,21 @@ namespace Tauchbolde.Common.Repositories
         {
             var tauchboldeRole = await Context.Roles.FirstOrDefaultAsync(r => r.Name == Rolenames.Tauchbold);
 
-            var usersIds = await Context.UserRoles
-                                        .Where(u => u.RoleId == tauchboldeRole.Id)
-                                        .Select(u => u.UserId).ToListAsync();
+            var usersIds = (await userManager.GetUsersInRoleAsync(Rolenames.Tauchbold))
+                .Select(u => u.Id)
+                .ToList();
 
-            return await Context.Diver
-                                .Include(u => u.User)
-                                .Where(u => !u.User.LockoutEnabled && usersIds.Any(i => i == u.UserId))
-                                .ToListAsync();
+            var divers = await Context.Diver
+                .Include(u => u.User)
+                .OrderBy(d => d.Firstname)
+                .ThenBy(d => d.Lastname)
+                .ToListAsync();
+
+            var result = divers
+                .Where(u => usersIds.Contains(u.UserId))
+                .ToArray();
+
+            return result;
         }
     }
 }
