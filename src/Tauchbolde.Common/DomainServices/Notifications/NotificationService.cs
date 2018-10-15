@@ -111,19 +111,6 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             await InsertNotification(notificationRepository, comment.Event, recipients, NotificationType.Commented, message);
         }
 
-        /// <inheritdoc />
-        public async Task NotifyForNewPost(INotificationRepository notificationRepository, IDiverRepository userRepository, Post newPost)
-        {
-            if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
-            if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
-            if (newPost == null) throw new ArgumentNullException(nameof(newPost));
-
-            var recipients = await userRepository.GetAllTauchboldeUsersAsync();
-            var message = $"Neuer Beitrag von {newPost.Author.Realname} veröffentlicht: {newPost.Title}";
-
-            await InsertNotification(notificationRepository, null, recipients, NotificationType.NewPost, message);
-        }
-
         private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(
             IDiverRepository userRepository,
             IParticipantRepository participantRepository, Guid eventId)

@@ -18,8 +18,6 @@ namespace Tauchbolde.Common.Model
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Diver> Diver { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        public DbSet<Post> Posts { get; set; }
-        public DbSet<PostImage> PostImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -37,10 +35,6 @@ namespace Tauchbolde.Common.Model
             builder.Entity<Diver>()
                 .HasMany(e => e.Events)
                 .WithOne(e => e.Organisator)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<Diver>()
-                .HasMany(e => e.Posts)
-                .WithOne(e => e.Author)
                 .OnDelete(DeleteBehavior.Restrict);
             builder.Entity<Diver>()
                .Property(e => e.NotificationIntervalInHours)
@@ -64,9 +58,6 @@ namespace Tauchbolde.Common.Model
             // Participants
             builder.Entity<Participant>().HasOne(e => e.Event).WithMany(e => e.Participants).OnDelete(DeleteBehavior.Restrict);
             builder.Entity<Participant>().Property(e => e.CountPeople).HasDefaultValue(1);
-
-            // Post
-            builder.Entity<Post>().HasIndex(p => new { p.Category, p.PublishDate });
 
             // PostImage
         }

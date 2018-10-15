@@ -14,6 +14,5 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         Task NotifyForCanceledEventAsync(INotificationRepository notificationRepository, IDiverRepository userRepository, IParticipantRepository participantRepository, Event canceledEvent);
         Task NotifyForChangedParticipation(INotificationRepository notificationRepository, IDiverRepository userRepository, IParticipantRepository participantRepository, Participant participant);
         Task NotifyForEventComment(INotificationRepository notificationRepository, IDiverRepository userRepository, IParticipantRepository participantRepository, Comment comment);
-        Task NotifyForNewPost(INotificationRepository notificationRepository, IDiverRepository userRepository, Post newPost);
     }
 }
