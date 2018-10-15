@@ -1,12 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#myCarousel" data-slide-to="1"></li>
-
     </ol>
     <div class="carousel-inner" role="listbox">
         <div class="item active">
@@ -41,19 +39,25 @@
         <span class="sr-only">Next</span>
     </a>
 </div>
-
 <div class="row">
     <div class="col-md-4">
-        <h2>Willkommen</h2>
-        <p>Die Tauchbolde sind ein kleiner Haufen angefressener Taucher die auch noch bei Wind und Wetter in die einheimischen Seen und Flüsse steigen.
+        <h3>Willkommen</h3>
+        <p>
+            Die Tauchbolde sind ein kleiner Haufen angefressener Taucher die auch noch bei Wind und Wetter in die einheimischen Seen und Flüsse steigen.
             Wir gehören keinem Tauchshop und keiner Tauchschule an und verstehen uns auch nicht als Tauchclub. Am besten würde es das Wort
-            "Interessensgemeinschaft" treffen.</p>
+            "Interessensgemeinschaft" treffen.
+        </p>
         <a class="btn btn-default" asp-action="About" asp-controller="Home">Mehr ...</a>
-        <h2>Aktititäten</h2>
+
+        <h3>Aktititäten</h3>
         @await Component.InvokeAsync("RecentAndUpcomingEvents")
+
+        <hr />
+
+        <a href="https://twitter.com/tauchbolde?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-show-screen-name="false" data-lang="de" data-show-count="false">Follow @@tauchbolde</a>
     </div>
     <div class="col-md-8">
-        <h2>Neuste Beiträge</h2>
-        @await Component.InvokeAsync("RecentNews")
+        <a class="twitter-timeline" data-lang="de" data-link-color="#2196f3" href="https://twitter.com/tauchbolde?ref_src=twsrc%5Etfw">Tweets von uns</a>
     </div>
 </div>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
