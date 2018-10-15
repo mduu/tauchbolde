@@ -8,9 +8,12 @@
                     <div class="col-md-12">
                         <h3>
                             @member.Firstname
-                            <a href="https://twitter.com/@member.GetTwitterUrl()" target="_blank">
-                                <img src="@Url.Content("~/images/twitter.png")" alt="Link zum Twitter-Profil von @member.Firstname" />
-                            </a>
+                            @if (!string.IsNullOrWhiteSpace(member.TwitterHandle))
+                            {
+                                <a href="https://twitter.com/@member.GetTwitterUrl()" target="_blank">
+                                    <img src="@Url.Content("~/images/twitter.png")" alt="Link zum Twitter-Profil von @member.Firstname" />
+                                </a>
+                            }
                         </h3>
                     </div>
                 </div>
