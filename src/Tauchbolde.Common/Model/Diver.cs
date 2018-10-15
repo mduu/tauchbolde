@@ -66,5 +66,20 @@ namespace Tauchbolde.Common.Model
         public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public string GetTwitterUrl()
+        {
+            if (string.IsNullOrWhiteSpace(TwitterHandle))
+            {
+                return "";
+            }
+
+            if (TwitterHandle.StartsWith("@", StringComparison.CurrentCulture))
+            {
+                return TwitterHandle.Substring(1);
+            }
+
+            return TwitterHandle;
+        }
     }
 }

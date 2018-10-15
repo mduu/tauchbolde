@@ -1,5 +1,4 @@
 ﻿@model Tauchbolde.Web.Models.AboutViewModels.AboutViewModel
-
 @foreach (var member in Model.Members)
 {
     <div class="col-md-6">
@@ -9,15 +8,16 @@
                     <div class="col-md-12">
                         <h3>
                             @member.Firstname
+                            <a href="https://twitter.com/@member.GetTwitterUrl()" target="_blank">
+                                <img src="@Url.Content("~/images/twitter.png")" alt="Link zum Twitter-Profil von @member.Firstname" />
+                            </a>
                         </h3>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-3">
                         <img src="@Url.Content("~/images/empty_avatar.svg")" alt="Avatar @member.Firstname" class="img-circle" style="max-width: 144px; max-height: 144px">
                     </div>
-
                     <div class="col-md-9">
                         <div class="row">
                             <div class="col-md-4">Ausbildung:</div>
@@ -45,5 +45,4 @@
         </div>
     </div>
 }
-
 <div class="clearfix"></div>
