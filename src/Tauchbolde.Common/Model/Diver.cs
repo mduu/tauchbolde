@@ -34,6 +34,9 @@ namespace Tauchbolde.Common.Model
         [Display(Name = "Twitter Handle")]
         public string TwitterHandle { get; set; }
 
+        [Display(Name = "Facebookname oder -Id")]
+        public string FacebookId { get; set; }
+
         [Display(Name = "Skype ID")]
         public string SkypeId { get; set; }
 
