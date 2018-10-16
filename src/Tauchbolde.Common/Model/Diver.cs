@@ -28,6 +28,9 @@ namespace Tauchbolde.Common.Model
         [Display(Name = "Tauchbolde verlassen am")]
         public DateTime? MemberUntil { get; set; }
 
+        [Display(Name = "Avatar ID")]
+        public string AvatarId { get; set; }
+
         [Display(Name = "Webseite")]
         public string WebsiteUrl { get; set; }
 
