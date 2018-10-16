@@ -6,10 +6,10 @@ namespace Tauchbolde.Tests.Mocks
     public class DiverTests
     {
         [Theory]
-        [InlineData("myname", "myname")]
-        [InlineData("@myname", "myname")]
-        [InlineData("_myname", "_myname")]
-        [InlineData("@@myname", "@myname")]
+        [InlineData("myname", "https://twitter.com/myname")]
+        [InlineData("@myname", "https://twitter.com/myname")]
+        [InlineData("_myname", "https://twitter.com/_myname")]
+        [InlineData("@@myname", "https://twitter.com/@myname")]
         [InlineData("", "")]
         public void GetTwitterUrl(string twitterHandle, string expectedUrl)
         {

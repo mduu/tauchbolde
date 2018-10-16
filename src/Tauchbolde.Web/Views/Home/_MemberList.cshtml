@@ -11,7 +11,7 @@
 
                             @if (!string.IsNullOrWhiteSpace(member.TwitterHandle))
                             {
-                                <a href="https://twitter.com/@member.GetTwitterUrl()" target="_blank" title="Link zum Twitter-Profil von @member.Realname">
+                                <a href="@member.GetTwitterUrl()" target="_blank" title="Link zum Twitter-Profil von @member.Realname">
                                     <img src="@Url.Content("~/images/twitter.png")"/>
                                 </a>
                             }

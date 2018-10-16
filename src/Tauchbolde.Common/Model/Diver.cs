@@ -76,12 +76,14 @@ namespace Tauchbolde.Common.Model
                 return "";
             }
 
+            var twitterUrl = TwitterHandle;
+
             if (TwitterHandle.StartsWith("@", StringComparison.CurrentCulture))
             {
-                return TwitterHandle.Substring(1);
+                twitterUrl = TwitterHandle.Substring(1);
             }
 
-            return TwitterHandle;
+            return $"https://twitter.com/{twitterUrl}";
         }
 
         public string GetFacebookeUrl()
