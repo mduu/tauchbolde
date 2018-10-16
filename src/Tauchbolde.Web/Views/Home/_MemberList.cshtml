@@ -8,10 +8,18 @@
                     <div class="col-md-12">
                         <h3>
                             @member.Firstname
+
                             @if (!string.IsNullOrWhiteSpace(member.TwitterHandle))
                             {
-                                <a href="https://twitter.com/@member.GetTwitterUrl()" target="_blank">
-                                    <img src="@Url.Content("~/images/twitter.png")" alt="Link zum Twitter-Profil von @member.Firstname" />
+                                <a href="https://twitter.com/@member.GetTwitterUrl()" target="_blank" title="Link zum Twitter-Profil von @member.Realname">
+                                    <img src="@Url.Content("~/images/twitter.png")"/>
+                                </a>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(member.FacebookId))
+                            {
+                                <a href="@member.GetFacebookeUrl()" target="_blank" title="Link zum Facebook-Profil von @member.Realname">
+                                    <img src="@Url.Content("~/images/facebook.png")" />
                                 </a>
                             }
                         </h3>
@@ -20,7 +28,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <gravatar 
-                            email-address="@member.User.Email">S
+                            email-address="@member.User.Email">
                         </gravatar>
                        </div>
                     <div class="col-md-9">

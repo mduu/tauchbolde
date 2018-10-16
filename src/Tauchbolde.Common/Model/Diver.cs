@@ -83,5 +83,15 @@ namespace Tauchbolde.Common.Model
 
             return TwitterHandle;
         }
+
+        public string GetFacebookeUrl()
+        {
+            if (string.IsNullOrWhiteSpace(FacebookId))
+            {
+                return "";
+            }
+
+            return new Uri($"https://facebook.com/{FacebookId}" ).AbsoluteUri;
+        }
     }
 }

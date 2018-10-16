@@ -18,5 +18,19 @@ namespace Tauchbolde.Tests.Mocks
 
             Assert.Equal(expectedUrl, twitterUrl);
         }
+
+        [Theory]
+        [InlineData("myname", "https://facebook.com/myname")]
+        [InlineData("@myname", "https://facebook.com/@myname")]
+        [InlineData("_myname", "https://facebook.com/_myname")]
+        [InlineData("@@myname", "https://facebook.com/@@myname")]
+        [InlineData("", "")]
+        public void GetFacebookUrl(string facebookId, string expectedUrl)
+        {
+            var diver = new Diver { FacebookId = facebookId };
+            var facebookUrl = diver.GetFacebookeUrl();
+
+            Assert.Equal(expectedUrl, facebookUrl);
+        }
     }
 }
