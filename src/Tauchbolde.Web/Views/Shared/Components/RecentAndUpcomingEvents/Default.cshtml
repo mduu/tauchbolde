@@ -16,7 +16,7 @@
         <ul style="list-style: none; padding-left: 0;">
             @foreach (var e in upcomingEvents)
             {
-                <li><small>@e.StartEndTimeAsString</small> @e.Name</li>
+                <li><a asp-action="Details" asp-controller="Event" asp-route-id="@e.Id" ><small>@e.StartEndTimeAsString</small> @e.Name</a></li>
             }
         </ul>
     }
