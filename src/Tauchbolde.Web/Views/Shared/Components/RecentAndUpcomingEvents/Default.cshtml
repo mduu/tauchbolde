@@ -1,28 +1,32 @@
 @using Tauchbolde.Web.Models.ViewComponentModels
 @model RecentAndUpcomingEventsViewModel
-
 @{
     var upcomingEvents = Model.RecentEvents.Where(e => e.StartTime > DateTime.Now).ToList();
     var recentEvents = Model.RecentEvents.Where(e => e.StartTime < DateTime.Now).ToList();
 }
 
 <section>
-    <h4>Bevorstehend</h4>
-    <ul>
-        @foreach (var e in upcomingEvents)
-        {
-            <li>@e.Name</li>
-        }
-    </ul>
+    <h5>Bevorstehend</h5>
+    @if (!upcomingEvents.Any())
+    {
+        <p>Nichts geplant</p>
+    }
+    else
+    {
+        <ul style="list-style: none; padding-left: 0;">
+            @foreach (var e in upcomingEvents)
+            {
+                <li><small>@e.StartEndTimeAsString</small> @e.Name</li>
+            }
+        </ul>
+    }
 </section>
-
 <section>
-    <h4>Vergangene</h4>
-
-    <ul>
+    <h5>Vergangene</h5>
+    <ul style="list-style: none; padding-left: 0;">
         @foreach (var e in recentEvents)
         {
-            <li>@e.Name</li>
+            <li><small>@e.StartEndTimeAsString</small> @e.Name</li>
         }
     </ul>
 </section>
