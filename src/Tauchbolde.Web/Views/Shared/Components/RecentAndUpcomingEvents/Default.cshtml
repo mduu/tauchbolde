@@ -13,20 +13,16 @@
     }
     else
     {
-        <ul style="list-style: none; padding-left: 0;">
-            @foreach (var e in upcomingEvents)
-            {
-                <li><a asp-action="Details" asp-controller="Event" asp-route-id="@e.Id" ><small>@e.StartEndTimeAsString</small> @e.Name</a></li>
-            }
-        </ul>
+        @foreach (var e in upcomingEvents)
+        {
+            <div><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString <strong>@e.Name</strong></a></div>
+        }
     }
 </section>
 <section>
     <h5>Vergangene</h5>
-    <ul style="list-style: none; padding-left: 0;">
-        @foreach (var e in recentEvents)
-        {
-            <li><small>@e.StartEndTimeAsString</small> @e.Name</li>
-        }
-    </ul>
+    @foreach (var e in recentEvents)
+    {
+        <div><a class="text-muted" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString <strong>@e.Name</strong></a></div>
+    }
 </section>
