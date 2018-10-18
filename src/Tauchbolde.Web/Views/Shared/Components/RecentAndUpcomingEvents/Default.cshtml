@@ -4,25 +4,59 @@
     var upcomingEvents = Model.RecentEvents.Where(e => e.StartTime > DateTime.Now).ToList();
     var recentEvents = Model.RecentEvents.Where(e => e.StartTime < DateTime.Now).ToList();
 }
-
 <section>
-    <h5>Bevorstehend</h5>
-    @if (!upcomingEvents.Any())
-    {
-        <p>Nichts geplant</p>
-    }
-    else
-    {
-        @foreach (var e in upcomingEvents)
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Bevorstehend</div>
+        @if (!upcomingEvents.Any())
         {
-            <div><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString <strong>@e.Name</strong></a></div>
+            <div class="panel-footer">Nichts geplant</div>
         }
-    }
+        else
+        {
+            <!-- Table -->
+            <table class="table">
+                <tr>
+                    <th>Wann</th>
+                    <th>Was</th>
+                </tr>
+                <tbody></tbody>
+                @foreach (var e in upcomingEvents)
+                {
+                    <tr>
+                        <td><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
+                        <td><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id"><strong>@e.Name</strong></a></td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
 </section>
 <section>
-    <h5>Vergangene</h5>
-    @foreach (var e in recentEvents)
-    {
-        <div><a class="text-muted" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString <strong>@e.Name</strong></a></div>
-    }
+    <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Vergangene</div>
+        @if (!recentEvents.Any())
+        {
+            <div class="panel-footer">Nichts</div>
+        }
+        else
+        {
+            <!-- Table -->
+            <table class="table">
+                <tr>
+                    <th>Wann</th>
+                    <th>Was</th>
+                </tr>
+                <tbody></tbody>
+                @foreach (var e in recentEvents)
+                {
+                    <tr>
+                        <td><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
+                        <td><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id"><strong>@e.Name</strong></a></td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
 </section>
