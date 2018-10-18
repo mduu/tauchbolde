@@ -48,13 +48,15 @@
             "Interessensgemeinschaft" treffen.
         </p>
         <a class="btn btn-default" asp-action="About" asp-controller="Home">Mehr ...</a>
-
         <h3>Aktititäten</h3>
         @await Component.InvokeAsync("RecentAndUpcomingEvents")
 
         <hr />
 
-        <a href="https://twitter.com/tauchbolde?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-show-screen-name="false" data-lang="de" data-show-count="false">Follow @@tauchbolde</a>
+        <div class="h3">
+            <a href="https://twitter.com/tauchbolde" target="_blank" title="Tauchbolde auf Twitter"><i class="fab fa-twitter-square"></i></a>
+            <a href="https://facebook.com/tauchbolde" target="_blank" title="Tauchbolde auf Facebook"><i class="fab fa-facebook-square"></i></a>
+        </div>
     </div>
     <div class="col-md-8">
         <a class="twitter-timeline" data-lang="de" data-link-color="#2196f3" href="https://twitter.com/tauchbolde?ref_src=twsrc%5Etfw">Tweets von uns</a>
