@@ -5,7 +5,11 @@
 {
     <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-            <a id="umenu" class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@UserManager.GetUserName(User) <span class="caret"></span></a>
+            <a id="umenu" class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <gravatar additional-css-classes="img-circle" email-address="@UserManager.GetUserName(User)" image-size="24">
+                </gravatar>
+                @UserManager.GetUserName(User) <span class="caret"></span>
+            </a>
             <ul class="dropdown-menu" aria-labelledby="umenu">
                 <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a></li>
                 <li><a href="#">Profil</a></li>
