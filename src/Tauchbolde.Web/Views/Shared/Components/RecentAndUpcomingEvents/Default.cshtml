@@ -15,7 +15,8 @@
         else
         {
             <!-- Table -->
-            <table class="table">
+
+            <table class="table table-condensed table-hover">
                 <tr>
                     <th>Wann</th>
                     <th>Was</th>
@@ -24,11 +25,12 @@
                 @foreach (var e in upcomingEvents)
                 {
                     <tr>
-                        <td><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
+                        <td width="170px"><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
                         <td><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id"><strong>@e.Name</strong></a></td>
                     </tr>
                 }
             </table>
+
         }
     </div>
 </section>
@@ -43,7 +45,7 @@
         else
         {
             <!-- Table -->
-            <table class="table">
+            <table class="table table-condensed table-hover">
                 <tr>
                     <th>Wann</th>
                     <th>Was</th>
@@ -52,7 +54,7 @@
                 @foreach (var e in recentEvents)
                 {
                     <tr>
-                        <td><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
+                        <td width="170px"><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
                         <td><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id"><strong>@e.Name</strong></a></td>
                     </tr>
                 }
