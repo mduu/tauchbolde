@@ -1,17 +1,9 @@
 ﻿@model Tauchbolde.Web.Models.EventViewModels.EventListViewModel
-
 @{
     ViewBag.Title = "Aktivitäten";
     Layout = "_Layout";
 }
-
 <h2>Aktivitäten</h2>
-
-<div class="navbar navbar-default">
-    <form class="navbar-form navbar-left" role="search">
-        <a href="@Url.Action("Edit")" id="create-event" class="btn btn-primary">Neue Aktivität</a>
-    </form>
-</div>
 
 <table class="table table-hover">
     <tr>
@@ -34,3 +26,5 @@
         </tr>
     }
 </table>
+
+<a href="@Url.Action("Edit")" id="create-event" class="btn btn-primary"><strong>Neue Aktivität</strong></a>
