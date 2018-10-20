@@ -5,12 +5,11 @@
 }
 <h2>Benutzerprofil von @Model.Profile.Realname</h2>
 
-
-<div class="col-md-6">
-    <form class="form-horizontal">
+<form class="form-horizontal">
+    <div class="col-md-6">
         <div class="form-group">
-            <label class="col-sm-2 control-label" asp-for="Profile.User.Email"></label>
-            <div class="col-sm-10">
+            <label class="col-sm- control-label" asp-for="Profile.User.Email"></label>
+            <div class="col-sm->
                 <p class="form-control-static">
                     <a href="mailto:@Model.Profile.User.Email" title="Email an @Model.Profile.Realname senden">
                         @Model.Profile.User.Email
@@ -18,25 +17,29 @@
                 </p>
             </div>
         </div>
-
         <div class="form-group">
-            <label class="col-sm-2 control-label" asp-for="Profile.Firstname"></label>
-            <div class="col-sm-10">
+            <label class="col-sm- control-label" asp-for="Profile.Firstname"></label>
+            <div class="col-sm->
                 <p class="form-control-static">@Model.Profile.Firstname</p>
             </div>
         </div>
-
         <div class="form-group">
-            <label class="col-sm-2 control-label" asp-for="Profile.Lastname"></label>
-            <div class="col-sm-10">
+            <label class="col-sm- control-label" asp-for="Profile.Lastname"></label>
+            <div class="col-sm->
                 <p class="form-control-static">@Model.Profile.Lastname</p>
             </div>
+        </div>       
+        <div class="form-group">
+            <label class="col-sm- control-label" asp-for="Profile.MemberSince"></label>
+            <div class="col-sm->
+                <p class="form-control-static">@Model.Profile.MemberSince.ToStringSwiss()</p>
+            </div>
         </div>
-    </form>
-</div>
 
-<div class="col-md-6">
-</div>
+    </div>
 
+    <div class="col-md-6">
+    </div>
 
+</form>
 <div class="clearfix"></div>
