@@ -2,34 +2,33 @@
 @{
     ViewData["Title"] = "Tauchen";
 }
-
 <h2>@ViewData["Title"]</h2>
-
 <div>
-    <p>
-        Auf dieser Seite haben wir einige Hilfsmittel für die Tauchgangsplanung zusammen gestellt. Für falsche Informationen/Berechnungen etc. übernehmen wir keine Haftung. Jeder Taucher ist selbst für seine Tauchgangsplanung verantwortlich.
-    </p>
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-exclamation-sign"></span> Haftungsausschluss</h3>
+        </div>
+        <div class="panel-body">
+            Auf dieser Seite haben wir einige Hilfsmittel für die Tauchgangsplanung zusammen gestellt.<br />
+            <strong>
+                Für falsche Informationen/Berechnungen etc. übernehmen wir keine Haftung. Jeder Taucher ist selbst für seine Tauchgangsplanung verantwortlich.
+            </strong>
+        </div>
+    </div>
 </div>
-
 <div>
-
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#weather" aria-controls="wetter" role="tab" data-toggle="tab">Wetter</a></li>
-        <li role="presentation"><a href="#conditions" aria-controls="MOD" role="tab" data-toggle="tab">Bedingungen</a></li>
+        <li role="presentation" class="active"><a href="#conditions" aria-controls="MOD" role="tab" data-toggle="tab">Bedingungen</a></li>
         <li role="presentation"><a href="#mod" aria-controls="MOD" role="tab" data-toggle="tab">MOD</a></li>
         <li role="presentation"><a href="#bestmix" aria-controls="Best Mix" role="tab" data-toggle="tab">Best Mix</a></li>
         <li role="presentation"><a href="#mix" aria-controls="Mischen" role="tab" data-toggle="tab">Mischen</a></li>
         <li role="presentation"><a href="#rockbottom" aria-controls="Rock Bottom" role="tab" data-toggle="tab">Rock Bottom</a></li>
     </ul>
-
     <!-- Tab panes -->
     <div class="tab-content" style="padding-top: 10px;">
-        <div role="tabpanel" class="tab-pane active" id="weather">
-            <partial name="_weather" />
-        </div>
-        <div role="tabpanel" class="tab-pane" id="conditions">
-            <partial name="_conditions"/>
+        <div role="tabpanel" class="tab-pane active" id="conditions">
+            <partial name="_conditions" />
         </div>
         <div role="tabpanel" class="tab-pane" id="mod">
             <partial name="_mod" />
@@ -44,5 +43,4 @@
             <partial name="_rockbottom" />
         </div>
     </div>
-
 </div>
