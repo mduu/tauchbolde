@@ -1,0 +1,42 @@
+﻿@model Tauchbolde.Web.Models.UserProfileModels.ReadProfileModel
+@{
+    ViewBag.Title = "Profil von " + Model.Profile.Realname;
+    Layout = "_Layout";
+}
+<h2>Benutzerprofil von @Model.Profile.Realname</h2>
+
+
+<div class="col-md-6">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" asp-for="Profile.User.Email"></label>
+            <div class="col-sm-10">
+                <p class="form-control-static">
+                    <a href="mailto:@Model.Profile.User.Email" title="Email an @Model.Profile.Realname senden">
+                        @Model.Profile.User.Email
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" asp-for="Profile.Firstname"></label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@Model.Profile.Firstname</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" asp-for="Profile.Lastname"></label>
+            <div class="col-sm-10">
+                <p class="form-control-static">@Model.Profile.Lastname</p>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="col-md-6">
+</div>
+
+
+<div class="clearfix"></div>

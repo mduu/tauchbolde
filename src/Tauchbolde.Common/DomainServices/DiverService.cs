@@ -29,6 +29,14 @@ namespace Tauchbolde.Common.DomainServices
             if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
 
             return await diverRepository.GetAllTauchboldeUsersAsync();
+        }        
+
+        /// <inheritdoc/>
+        public async Task<Diver> GetMemberAsync(IDiverRepository diverRepository, string userName)
+        {
+            if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
+
+            return await diverRepository.FindByUserNameAsync(userName);
         }
     }
 }

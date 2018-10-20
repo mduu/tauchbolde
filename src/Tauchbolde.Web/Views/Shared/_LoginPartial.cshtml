@@ -11,10 +11,16 @@
                 @UserManager.GetUserName(User) <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="umenu">
-                <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a></li>
-                <li><a href="#">Profil</a></li>
+                <li>
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
+                </li>
+                <li>
+                    <a asp-controller="UserProfile" asp-action="Index" asp-route-id="@UserManager.GetUserName(User)">Profil</a>
+                </li>
                 <li role="separator" class="divider"></li>
-                <li><a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" title="Abmelden">Abmelden</a></li>
+                <li>
+                    <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" title="Abmelden">Abmelden</a>
+                </li>
             </ul>
         </li>
     </ul>
