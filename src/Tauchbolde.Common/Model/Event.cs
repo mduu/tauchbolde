@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Tauchbolde.Common;
 
 namespace Tauchbolde.Common.Model
 {
@@ -53,8 +54,8 @@ namespace Tauchbolde.Common.Model
         [NotMapped]
         public string StartEndTimeAsString => EndTime != null
             ? StartTime.Date == EndTime.Value.Date
-                ? $"{StartTime:g} - {EndTime.Value:t}"
-                : $"{StartTime:g} - {EndTime.Value:g}"
-            : $"{StartTime:g}";
+                ? $"{StartTime.ToStringSwiss()} - {EndTime.Value.ToStringSwissTime()}"
+                : $"{StartTime.ToStringSwiss()} - {EndTime.ToStringSwiss()}"
+            : $"{StartTime.ToStringSwissDateTime()}";
     }
 }
