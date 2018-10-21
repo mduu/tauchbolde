@@ -2,11 +2,9 @@
 @{
     ViewBag.Title = "Profil von " + Model.Profile.Realname;
     Layout = "_Layout";
-}
-
-
+}   
 <h2>
-    <small>Benutzerprofil von</small><br />
+    <small>Benutzerprofil</small><br />
     @Model.Profile.Realname
 </h2>
 
@@ -142,7 +140,7 @@
     </div>
 
     <div class="col-xs-12">
-        <button class="btn btn-primary" title="Profil bearbeiten">Bearbeiten</button>
+        <a class="btn btn-primary" title="Profil bearbeiten" asp-action="edit" asp-route-id="@Model.Profile.User.UserName">Bearbeiten</a>
     </div>
 
 </form>

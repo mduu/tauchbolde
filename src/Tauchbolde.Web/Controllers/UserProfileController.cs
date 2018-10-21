@@ -58,21 +58,47 @@ namespace Tauchbolde.Web.Controllers
                 return StatusCode(400, "Member (Diver) not found!");
             }
 
-            var viewModel = new ReadProfileModel
+            return View(new ReadProfileModel
             {
                 AllowEdit = member.Id == currentDiver.Id || isAdmin,
                 Profile = member,
-            };
-
-            return View(viewModel);
+            });
         }
 
-        //// GET: /profil/edit
-        //[HttpGet]
-        //public IActionResult Edit()
-        //{
-        //    return View();
-        //}
+        // GET: /profil/edit
+        [Route("edit/{id}")]
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return BadRequest();
+            }
+
+            var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
+            if (currentDiver == null)
+            {
+                return StatusCode(400, "No curren user would be found!");
+            }
+
+            var isAdmin = await userManager.IsInRoleAsync(currentDiver.User, Rolenames.Administrator);
+
+            var member = await diverService.GetMemberAsync(diverRepository, id);
+            if (member == null)
+            {
+                return StatusCode(400, "Member (Diver) not found!");
+            }
+
+            if (member.Id != currentDiver.Id && !isAdmin)
+            {
+                return Forbid();
+            }
+
+            return base.View(new WriteProfileModel
+            {
+                Profile = member,
+            });
+        }
 
         //// GET: /profil/edit
         //[HttpPost]
