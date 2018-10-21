@@ -37,7 +37,7 @@ namespace Tauchbolde.Common.Model
         [Display(Name = "Twitter Handle")]
         public string TwitterHandle { get; set; }
 
-        [Display(Name = "Facebookname oder -Id")]
+        [Display(Name = "Facebookname/-id")]
         public string FacebookId { get; set; }
 
         [Display(Name = "Skype ID")]
@@ -97,6 +97,16 @@ namespace Tauchbolde.Common.Model
             }
 
             return new Uri($"https://facebook.com/{FacebookId}" ).AbsoluteUri;
+        }
+
+        public string GetSkypeUrl()
+        {
+            if (string.IsNullOrWhiteSpace(SkypeId))
+            {
+                return "";
+            }
+
+            return new Uri($"skype:{SkypeId}" ).AbsoluteUri;
         }
     }
 }
