@@ -8,6 +8,7 @@ body {
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
+    margin-top: 17px;
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -26,6 +27,11 @@ body {
 /* QR code generator */
 #qrCode {
     margin: 15px;
+}
+
+.alert {
+    margin-top: 5px;
+    margin-bottom: 5px !important;
 }
 
 /* Hide/rearrange for smaller screens */

@@ -20,6 +20,7 @@
     <Folder Include="Models\AboutViewModels\" />
     <Folder Include="Views\UserProfile\" />
     <Folder Include="Models\UserProfileModels\" />
+    <Folder Include="Core\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20170205143205_InitialCreate.cs" />
