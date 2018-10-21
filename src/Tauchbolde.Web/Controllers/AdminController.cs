@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Tauchbolde.Common;
 using Microsoft.AspNetCore.Identity;
+using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -25,6 +27,7 @@ namespace Tauchbolde.Web.Controllers
         public async Task<IActionResult> ConfigureRoles()
         {
             await roleManager.CreateAsync(new IdentityRole(Rolenames.Tauchbold));
+            await roleManager.CreateAsync(new IdentityRole(Rolenames.Administrator));
 
             return Ok();
         }
@@ -40,6 +43,7 @@ namespace Tauchbolde.Web.Controllers
                 if (userMarc != null)
                 {
                     await userManager.AddToRoleAsync(userMarc, Rolenames.Tauchbold);
+                    await userManager.AddToRoleAsync(userMarc, Rolenames.Administrator);
                     return Ok();
                 }
 

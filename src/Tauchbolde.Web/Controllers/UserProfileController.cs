@@ -9,6 +9,7 @@ using Tauchbolde.Common.DomainServices;
 using Tauchbolde.Common;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Models.UserProfileModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -18,13 +19,19 @@ namespace Tauchbolde.Web.Controllers
     {
         private readonly IDiverRepository diverRepository;
         private readonly IDiverService diverService;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
         public UserProfileController(
             IDiverRepository diverRepository,
-            IDiverService diverService)
+            IDiverService diverService,
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
         }
 
         // GET: /profil/<id>
@@ -37,15 +44,23 @@ namespace Tauchbolde.Web.Controllers
                 return BadRequest();
             }
 
+            var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
+            if (currentDiver == null)
+            {
+                return StatusCode(400, "No curren user would be found!");
+            }
+
+            var isAdmin = await userManager.IsInRoleAsync(currentDiver.User, Rolenames.Administrator);
+
             var member = await diverService.GetMemberAsync(diverRepository, id);
             if (member == null)
             {
-                return NotFound();
+                return StatusCode(400, "Member (Diver) not found!");
             }
 
             var viewModel = new ReadProfileModel
             {
-                AllowEdit = false,
+                AllowEdit = member.Id == currentDiver.Id || isAdmin,
                 Profile = member,
             };
 

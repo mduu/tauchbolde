@@ -3,126 +3,146 @@
     ViewBag.Title = "Profil von " + Model.Profile.Realname;
     Layout = "_Layout";
 }
-<h2>Benutzerprofil von @Model.Profile.Realname</h2>
+
+
+<h2>
+    <small>Benutzerprofil von</small><br />
+    @Model.Profile.Realname
+</h2>
 
 <form class="form-horizontal">
 
     <div class="col-md-6">
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.Firstname"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static">@Model.Profile.Firstname</p>
-            </div>
-        </div>
+        <fieldset>
+            <legend>Informationen</legend>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.Lastname"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static">@Model.Profile.Lastname</p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.Firstname"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">@Model.Profile.Firstname</p>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.MemberSince"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static">@Model.Profile.MemberSince.ToStringSwiss()</p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.Lastname"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">@Model.Profile.Lastname</p>
+                </div>
             </div>
-        </div>       
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.Slogan"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static" style="max-width: 300px">@Model.Profile.Slogan)</p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.MemberSince"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">@Model.Profile.MemberSince.ToStringSwiss()</p>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.Education"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static" style="max-width: 300px">@Model.Profile.Education)</p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.Slogan"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static" style="max-width: 300px">@Model.Profile.Slogan)</p>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.Experience"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static">@Model.Profile.Experience)</p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.Education"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static" style="max-width: 300px">@Model.Profile.Education)</p>
+                </div>
             </div>
-        </div>
 
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.Experience"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">@Model.Profile.Experience)</p>
+                </div>
+            </div>
+
+        </fieldset>
     </div>
     <div class="col-md-6">
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.User.Email"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static">
-                    <a href="mailto:@Model.Profile.User.Email" title="Email an @Model.Profile.Realname senden">
-                        @Model.Profile.User.Email
-                    </a>
-                </p>
+        <fieldset>
+            <legend>Kommunikation </legend>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.User.Email"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">
+                        <a href="mailto:@Model.Profile.User.Email" title="Email an @Model.Profile.Realname senden">
+                            <span class="glyphicon glyphicon-envelope"></span>
+                            @Model.Profile.User.Email
+                        </a>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.MobilePhone"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static">
-                    <a href="tel:@Model.Profile.MobilePhone" title="@(Model.Profile.Realname) anrufen">
-                        <span class="glyphicon glyphicon-facetime-video"></span>
-                        @Model.Profile.MobilePhone
-                    </a>
-                </p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.MobilePhone"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">
+                        <a href="tel:@Model.Profile.MobilePhone" title="@(Model.Profile.Realname) anrufen">
+                            <span class="glyphicon glyphicon-facetime-video"></span>
+                            @Model.Profile.MobilePhone
+                        </a>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.WebsiteUrl"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static">
-                    <a href="@Model.Profile.WebsiteUrl" target="_blank" title="Webseite von @Model.Profile.Realname aufrufen">
-                        @Model.Profile.WebsiteUrl
-                    </a>
-                </p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.WebsiteUrl"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">
+                        <a href="@Model.Profile.WebsiteUrl" target="_blank" title="Webseite von @Model.Profile.Realname aufrufen">
+                            <span class="glyphicon glyphicon-globe"></span>
+                            @Model.Profile.WebsiteUrl
+                        </a>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.TwitterHandle"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static">
-                    <a href="@Model.Profile.GetTwitterUrl()" target="_blank" title="Twitter-Profil von @Model.Profile.Realname">
-                        @Model.Profile.TwitterHandle
-                    </a>
-                </p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.TwitterHandle"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">
+                        <a href="@Model.Profile.GetTwitterUrl()" target="_blank" title="Twitter-Profil von @Model.Profile.Realname">
+                            <span class="glyphicon glyphicon-globe"></span>
+                            @Model.Profile.TwitterHandle
+                        </a>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.FacebookId"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static">
-                    <a href="@Model.Profile.GetFacebookeUrl()" target="_blank" title="Facebook-Profil von @Model.Profile.Realname">
-                        @Model.Profile.FacebookId
-                    </a>
-                </p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.FacebookId"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">
+                        <a href="@Model.Profile.GetFacebookeUrl()" target="_blank" title="Facebook-Profil von @Model.Profile.Realname">
+                            <span class="glyphicon glyphicon-globe"></span>
+                            @Model.Profile.FacebookId
+                        </a>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="col-sm-3 control-label" asp-for="Profile.SkypeId"></label>
-            <div class="col-sm-9">
-                <p class="form-control-static">
-                    <a href="@Model.Profile.GetSkypeUrl()" title="Mit Skype @(Model.Profile.Realname) anrufen">
-                        <span class="glyphicon glyphicon-facetime-video"></span>
-                        @Model.Profile.SkypeId
-                    </a>
-                </p>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.SkypeId"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">
+                        <a href="@Model.Profile.GetSkypeUrl()" title="Mit Skype @(Model.Profile.Realname) anrufen">
+                            <span class="glyphicon glyphicon-facetime-video"></span>
+                            @Model.Profile.SkypeId
+                        </a>
+                    </p>
+                </div>
             </div>
-        </div>
 
+        </fieldset>
+    </div>
 
+    <div class="col-xs-12">
+        <button class="btn btn-primary" title="Profil bearbeiten">Bearbeiten</button>
     </div>
 
 </form>

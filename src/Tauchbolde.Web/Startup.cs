@@ -95,6 +95,7 @@ namespace Tauchbolde.Web
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole(Rolenames.Tauchbold));
+                options.AddPolicy(PolicyNames.RequireAdministrator, policy => policy.RequireRole(Rolenames.Administrator));
             });
 
             services.AddMvc()
