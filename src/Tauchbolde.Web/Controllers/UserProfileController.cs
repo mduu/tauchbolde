@@ -10,12 +10,13 @@ using Tauchbolde.Common;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Models.UserProfileModels;
 using Microsoft.AspNetCore.Identity;
+using Tauchbolde.Web.Core;
 
 namespace Tauchbolde.Web.Controllers
 {
     [Route("/profil")]
     [Authorize(Policy = PolicyNames.RequireTauchbold)]
-    public class UserProfileController : Controller
+    public class UserProfileController : AppControllerBase
     {
         private readonly IDiverRepository diverRepository;
         private readonly IDiverService diverService;
@@ -100,11 +101,24 @@ namespace Tauchbolde.Web.Controllers
             });
         }
 
-        //// GET: /profil/edit
-        //[HttpPost]
-        //public IActionResult Edit(Diver diver)
-        //{
-        //    return View();
-        //}
+        // GET: /profil/edit
+        [Route("edit/{id}")]
+        [HttpPost]
+        public IActionResult Edit(string id, WriteProfileModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ShowSuccessMessage("Profil wurde gespeichert.");
+                
+                return RedirectToAction("Index", new { id = model.Profile.User.UserName });
+            }
+
+            ShowErrorMessage("Fehler beim Speichern aufgetreten!");
+        
+            return View(new WriteProfileModel
+            {
+                Profile = model.Profile,
+            });
+        }
     }
 }

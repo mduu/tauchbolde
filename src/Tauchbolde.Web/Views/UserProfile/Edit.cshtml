@@ -3,103 +3,93 @@
     ViewBag.Title = "Profil von " + Model.Profile.Realname + "bearbeiten";
     Layout = "_Layout";
 }
-<h2>
+<h3>
     <small>Benutzerprofil bearbeiten</small><br />
     @Model.Profile.Realname
-</h2>
+</h3>
 
-<form class="form">
+<form asp-action="Edit" role="form" class="form-horizontal">
     <input type="hidden" asp-for="Profile.Id" />
-
+    <input type="hidden" asp-for="Profile.User.UserName" />
+    
     <div class="col-md-6">
-
         <fieldset>
             <legend>Informationen</legend>
-
+            <div class="form-group">
+                <label class="col-sm-4 control-label" asp-for="Profile.Fullname"></label>
+                <div class="col-sm-8">
+                    <input asp-for="Profile.Fullname" class="form-control" required />
+                </div>
+            </div>
             <div class="form-group">
                 <label class="col-sm-4 control-label" asp-for="Profile.Firstname"></label>
                 <div class="col-sm-8">
                     <input asp-for="Profile.Firstname" class="form-control" required />
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label" asp-for="Profile.Lastname"></label>
                 <div class="col-sm-8">
                     <input asp-for="Profile.Lastname" class="form-control" required />
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label" asp-for="Profile.Slogan"></label>
                 <div class="col-sm-8">
                     <textarea asp-for="Profile.Slogan" class="form-control" rows="2"></textarea>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label" asp-for="Profile.Education"></label>
                 <div class="col-sm-8">
                     <input asp-for="Profile.Education" class="form-control" />
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label" asp-for="Profile.Experience"></label>
                 <div class="col-sm-8">
                     <input asp-for="Profile.Experience" class="form-control" />
                 </div>
             </div>
-
         </fieldset>
-
     </div>
     <div class="col-md-6">
-
         <fieldset>
             <legend>Komunikation</legend>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label" asp-for="Profile.MobilePhone"></label>
                 <div class="col-sm-8">
                     <input asp-for="Profile.MobilePhone" class="form-control" />
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label" asp-for="Profile.WebsiteUrl"></label>
                 <div class="col-sm-8">
                     <input asp-for="Profile.WebsiteUrl" class="form-control" />
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label" asp-for="Profile.TwitterHandle"></label>
                 <div class="col-sm-8">
                     <input asp-for="Profile.TwitterHandle" class="form-control" />
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label" asp-for="Profile.FacebookId"></label>
                 <div class="col-sm-8">
                     <input asp-for="Profile.FacebookId" class="form-control" />
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-4 control-label" asp-for="Profile.SkypeId"></label>
                 <div class="col-sm-8">
                     <input asp-for="Profile.SkypeId" class="form-control" />
                 </div>
             </div>
-
         </fieldset>
-
     </div>
-
     <div class="col-md-12">
-        <button type="submit" class="btn btn-primary">Speichern</button> 
+        <button type="submit" class="btn btn-primary">Speichern</button>
     </div>
 </form>
 
