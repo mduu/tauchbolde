@@ -12,6 +12,10 @@
     <input type="hidden" asp-for="Profile.Id" />
     <input type="hidden" asp-for="Profile.User.UserName" />
     
+    <div class="col-xs-12">
+        @Html.ValidationSummary()
+    </div>
+    
     <div class="col-md-6">
         <fieldset>
             <legend>Informationen</legend>
