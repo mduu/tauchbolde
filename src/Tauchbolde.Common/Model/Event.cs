@@ -32,10 +32,12 @@ namespace Tauchbolde.Common.Model
         [Display(Name = "Beschreibung")]
         public string Description { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Startzeit")]
         [Required]
         public DateTime StartTime { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Endzeit")]
         public DateTime? EndTime { get; set; }
 
