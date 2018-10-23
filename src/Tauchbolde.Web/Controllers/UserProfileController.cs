@@ -18,17 +18,20 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireTauchbold)]
     public class UserProfileController : AppControllerBase
     {
+        private readonly ApplicationDbContext context;
         private readonly IDiverRepository diverRepository;
         private readonly IDiverService diverService;
         private readonly UserManager<IdentityUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
 
         public UserProfileController(
+            ApplicationDbContext context,
             IDiverRepository diverRepository,
             IDiverService diverService,
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
@@ -104,12 +107,14 @@ namespace Tauchbolde.Web.Controllers
         // GET: /profil/edit
         [Route("edit/{id}")]
         [HttpPost]
-        public IActionResult Edit(string id, WriteProfileModel model)
+        public async Task<IActionResult> Edit(string id, WriteProfileModel model)
         {
             if (ModelState.IsValid)
             {
-                ShowSuccessMessage("Profil wurde gespeichert.");
+                await diverService.UpdateUserProfil(diverRepository, model.Profile);
+                await context.SaveChangesAsync();
                 
+                ShowSuccessMessage("Profil wurde gespeichert.");
                 return RedirectToAction("Index", new { id = model.Profile.User.UserName });
             }
 
