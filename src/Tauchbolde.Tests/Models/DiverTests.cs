@@ -1,7 +1,7 @@
 ﻿using Tauchbolde.Common.Model;
 using Xunit;
 
-namespace Tauchbolde.Tests.Mocks
+namespace Tauchbolde.Tests.Models
 {
     public class DiverTests
     {
