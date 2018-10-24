@@ -6,7 +6,6 @@
 }
 <section>
     <div class="panel panel-default">
-        <!-- Default panel contents -->
         <div class="panel-heading">Bevorstehend</div>
         @if (!upcomingEvents.Any())
         {
@@ -14,8 +13,6 @@
         }
         else
         {
-            <!-- Table -->
-
             <table class="table table-condensed table-hover">
                 <tr>
                     <th>Wann</th>
@@ -25,26 +22,23 @@
                 @foreach (var e in upcomingEvents)
                 {
                     <tr>
-                        <td width="170px"><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
-                        <td><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id"><strong>@e.Name</strong></a></td>
+                        <td width="170px"><a class="text-default" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
+                        <td><a class="text-default" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id"><strong>@e.Name</strong></a></td>
                     </tr>
                 }
             </table>
-
         }
     </div>
 </section>
 <section>
     <div class="panel panel-default">
-        <!-- Default panel contents -->
-        <div class="panel-heading">Vergangene</div>
+        <div class="panel-heading">Vergangen</div>
         @if (!recentEvents.Any())
         {
             <div class="panel-footer">Nichts</div>
         }
         else
         {
-            <!-- Table -->
             <table class="table table-condensed table-hover">
                 <tr>
                     <th>Wann</th>
@@ -54,8 +48,8 @@
                 @foreach (var e in recentEvents)
                 {
                     <tr>
-                        <td width="170px"><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
-                        <td><a class="text-info" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id"><strong>@e.Name</strong></a></td>
+                        <td width="170px"><a class="text-muted" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
+                        <td><a class="text-muted" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id"><strong>@e.Name</strong></a></td>
                     </tr>
                 }
             </table>
