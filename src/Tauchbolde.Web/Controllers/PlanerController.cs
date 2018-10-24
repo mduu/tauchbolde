@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Tauchbolde.Web.Controllers
 {
-    public class DiveController : Controller
+    public class PlanerController : Controller
     {
         public IActionResult Index()
         {
