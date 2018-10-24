@@ -16,6 +16,7 @@ namespace Tauchbolde.Web.Controllers
 {
     [Route("/profil")]
     [Authorize(Policy = PolicyNames.RequireTauchbold)]
+    [Authorize(Policy = PolicyNames.RequireAdministrator)]
     public class UserProfileController : AppControllerBase
     {
         private readonly ApplicationDbContext context;
