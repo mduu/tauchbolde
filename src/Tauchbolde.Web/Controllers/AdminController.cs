@@ -30,6 +30,11 @@ namespace Tauchbolde.Web.Controllers
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
+        
+        public IActionResult Index()
+        {
+            return NotFound();
+        }
 
         public async Task<IActionResult> ConfigureRoles()
         {

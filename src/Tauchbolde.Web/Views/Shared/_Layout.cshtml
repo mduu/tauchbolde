@@ -58,18 +58,7 @@
     </nav>
     <partial name="_CookieConsentPartial" />
     <div class="container body-content">
-        @if (TempData["success_message"] != null)
-        {
-            <div class="alert alert-success success-message" role="alert">@TempData["success_message"]</div>
-        }
-        @if (TempData["error_message"] != null)
-        {
-            <div class="alert alert-warning alert-dismissible error-message" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <strong>Fehler!</strong> @TempData["error_message"]
-            </div>
-        }
-
+        <partial name="_messages"/>
         @RenderBody()
         <hr />
         <footer>
@@ -88,13 +77,5 @@
     </environment>
     <script src="~/lib//eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
     @RenderSection("Scripts", required: false)
-
-    <script>
-
-    $(function() {
-        $('.success-message').delay(8000).fadeOut();
-    });
-
-    </script>
 </body>
 </html>

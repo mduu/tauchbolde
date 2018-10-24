@@ -1,6 +1,16 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@{
+    var isAdmin = false;
+
+    if (User != null)
+    {
+        var user = await UserManager.GetUserAsync(User);
+        isAdmin = user != null && await UserManager.IsInRoleAsync(user, Rolenames.Administrator);
+    }
+}
+
 @if (SignInManager.IsSignedIn(User))
 {
     <ul class="nav navbar-nav navbar-right">
@@ -17,6 +27,13 @@
                 <li>
                     <a asp-controller="UserProfile" asp-action="Index" asp-route-id="@UserManager.GetUserName(User)">Mein Tauchbolde-Profil</a>
                 </li>
+                @if (isAdmin)
+                {
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a asp-controller="Admin" asp-action="Index">Administration</a>
+                    </li>
+                }
                 <li role="separator" class="divider"></li>
                 <li>
                     <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" title="Abmelden">Abmelden</a>
