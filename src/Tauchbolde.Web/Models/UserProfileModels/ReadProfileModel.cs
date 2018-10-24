@@ -1,4 +1,6 @@
 ﻿using Tauchbolde.Common.Model;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tauchbolde.Web.Models.UserProfileModels
 {
@@ -6,5 +8,8 @@ namespace Tauchbolde.Web.Models.UserProfileModels
     {
         public bool AllowEdit { get; set; }
         public Diver Profile { get; set; }
+        
+        [Display(Name = "Rollen/Rechte")]
+        public IEnumerable<string> Roles { get; set; }
     }
 }

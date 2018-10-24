@@ -67,6 +67,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 AllowEdit = member.Id == currentDiver.Id || isAdmin,
                 Profile = member,
+                Roles = await userManager.GetRolesAsync(member.User),
             });
         }
 

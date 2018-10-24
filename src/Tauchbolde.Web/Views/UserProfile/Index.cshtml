@@ -4,7 +4,7 @@
     Layout = "_Layout";
 }   
 <h2>
-    <small>Benutzerprofil</small><br />
+    <small>Tauchbolde-Profil</small><br />
     @Model.Profile.Realname
 </h2>
 
@@ -39,21 +39,33 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Profile.Slogan"></label>
                 <div class="col-sm-9">
-                    <p class="form-control-static" style="max-width: 300px">@Model.Profile.Slogan)</p>
+                    <p class="form-control-static" style="max-width: 300px">@Model.Profile.Slogan</p>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Profile.Education"></label>
                 <div class="col-sm-9">
-                    <p class="form-control-static" style="max-width: 300px">@Model.Profile.Education)</p>
+                    <p class="form-control-static" style="max-width: 300px">@Model.Profile.Education</p>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Profile.Experience"></label>
                 <div class="col-sm-9">
-                    <p class="form-control-static">@Model.Profile.Experience)</p>
+                    <p class="form-control-static">@Model.Profile.Experience</p>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Roles"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">
+                        @foreach (var role in Model.Roles)
+                        {
+                        <span class="label label-primary">@role</span>
+                        }
+                    </p>
                 </div>
             </div>
 
