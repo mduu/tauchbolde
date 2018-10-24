@@ -16,11 +16,11 @@
     <ProjectReference Include="..\Tauchbolde.Common\Tauchbolde.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\Migrations\" />
     <Folder Include="Models\AboutViewModels\" />
     <Folder Include="Views\UserProfile\" />
     <Folder Include="Models\UserProfileModels\" />
     <Folder Include="Core\" />
+    <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20170205143205_InitialCreate.cs" />
