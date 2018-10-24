@@ -10,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common;
 using System.Data.SqlClient;
+using Microsoft.AspNetCore.Localization;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace Tauchbolde.Web
 {
@@ -102,6 +105,13 @@ namespace Tauchbolde.Web
                 options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole(Rolenames.Tauchbold));
                 options.AddPolicy(PolicyNames.RequireAdministrator, policy => policy.RequireRole(Rolenames.Administrator));
             });
+            
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new RequestCulture("de-CH");
+                options.SupportedCultures = new List<CultureInfo> { new CultureInfo("de-CH") };
+                options.RequestCultureProviders = new List<IRequestCultureProvider>();
+            });
 
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
@@ -130,6 +140,7 @@ namespace Tauchbolde.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseRequestLocalization();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
