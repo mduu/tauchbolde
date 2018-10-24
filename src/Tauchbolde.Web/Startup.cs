@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common;
+using System.Data.SqlClient;
 
 namespace Tauchbolde.Web
 {
@@ -42,10 +43,14 @@ namespace Tauchbolde.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            var builder = new SqlConnectionStringBuilder(
+                Configuration.GetConnectionString("TauchboldeConnection"))
+            {
+                UserID = Configuration["DbUser"],
+                Password = Configuration["DbPassword"]
+            };
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(
-                    Configuration.GetConnectionString("DefaultConnection"),
-                    x => x.SuppressForeignKeyEnforcement()));
+                options.UseSqlServer(builder.ConnectionString));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
