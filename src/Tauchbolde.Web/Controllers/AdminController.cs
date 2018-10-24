@@ -8,6 +8,7 @@ using Tauchbolde.Common;
 using Microsoft.AspNetCore.Identity;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -16,12 +17,18 @@ namespace Tauchbolde.Web.Controllers
         private readonly ApplicationDbContext context;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly IDiverRepository diverRepository;
 
-        public AdminController(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public AdminController(
+            ApplicationDbContext context,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<IdentityUser> userManager,
+            IDiverRepository diverRepository)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
 
         public async Task<IActionResult> ConfigureRoles()
@@ -53,6 +60,22 @@ namespace Tauchbolde.Web.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        
+        public async Task<IActionResult> ShowMyRoles()
+        {
+            var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
+            if (currentDiver == null)
+            {
+                return Json(new { error = $"Diver not found with username {User.Identity.Name}."});
+            }
+
+            var roles = await userManager.GetRolesAsync(currentDiver.User);
+
+            return Json(new {
+                UserIdentityName = User.Identity.Name,
+                Roles = roles.ToArray()
+             });
         }
     }
 }
