@@ -21,6 +21,8 @@
     <Folder Include="Models\UserProfileModels\" />
     <Folder Include="Core\" />
     <Folder Include="Data\" />
+    <Folder Include="Views\Admin\" />
+    <Folder Include="Models\AdminViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20170205143205_InitialCreate.cs" />

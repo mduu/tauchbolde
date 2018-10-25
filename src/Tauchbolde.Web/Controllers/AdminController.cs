@@ -9,9 +9,14 @@ using Microsoft.AspNetCore.Identity;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Common.Repositories;
+using Tauchbolde.Web.Models.EventViewModels;
+using System.Linq.Expressions;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Tauchbolde.Web.Controllers
 {
+    [Authorize(Policy = PolicyNames.RequireAdministrator)]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext context;
@@ -30,14 +35,36 @@ namespace Tauchbolde.Web.Controllers
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
-        
+
+        [HttpGet]
         public IActionResult Index()
         {
-            return NotFound();
+            return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> MemberManagement()
+        {
+            var profiles = (await diverRepository.GetAllTauchboldeUsersAsync()).ToArray();
+
+            var members = new List<MemberViewModel>();
+            foreach (var member in profiles)
+            {
+                members.Add(await CreateMemberViewModel(member));
+            }
+
+            var viewModel = new MemberManagementViewModel
+            {
+                Members = members,
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> ConfigureRoles()
         {
+
             await roleManager.CreateAsync(new IdentityRole(Rolenames.Tauchbold));
             await roleManager.CreateAsync(new IdentityRole(Rolenames.Administrator));
 
@@ -66,21 +93,14 @@ namespace Tauchbolde.Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        
-        public async Task<IActionResult> ShowMyRoles()
+
+        private async Task<MemberViewModel> CreateMemberViewModel(Diver diver)
         {
-            var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
-            if (currentDiver == null)
+            return new MemberViewModel
             {
-                return Json(new { error = $"Diver not found with username {User.Identity.Name}."});
-            }
-
-            var roles = await userManager.GetRolesAsync(currentDiver.User);
-
-            return Json(new {
-                UserIdentityName = User.Identity.Name,
-                Roles = roles.ToArray()
-             });
+                Roles = await userManager.GetRolesAsync(diver.User),
+                Profile = diver,
+            };
         }
     }
 }
