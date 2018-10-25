@@ -18,6 +18,6 @@ namespace Tauchbolde.Common.Repositories
         /// Get a collection of all users that are members of Tauchbolde.
         /// </summary>
         /// <returns>A collection of all users that are members of Tauchbolde.</returns>
-        Task<ICollection<Diver>> GetAllTauchboldeUsersAsync();
+        Task<ICollection<Diver>> GetAllTauchboldeUsersAsync(bool includingAdmins = false);
     }
 }

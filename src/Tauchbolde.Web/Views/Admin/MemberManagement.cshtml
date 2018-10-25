@@ -1,5 +1,39 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Tauchbolde.Web.Models.AdminViewModels.MemberManagementViewModel
 @{
+    ViewData["Title"] = "Mitgliederverwaltung";
 }
+<h2>@ViewData["Title"]</h2>
+
+
+<table class="table">
+    <tr>
+        <th>Realnae</th>
+        <th>Fullname</th>
+        <th>UserName</th>
+        <th>Email</th>
+        <th>Email Confirmed</th>
+        <th>Locked</th>
+        <th>Roles</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var member in Model.Members)
+    {
+        <tr>
+            <td>@member.Profile.Realname</td>
+            <td>@member.Profile.Fullname</td>
+            <td>@member.Profile.User.UserName</td>
+            <td>@member.Profile.User.Email</td>
+            <td>@member.Profile.User.EmailConfirmed</td>
+            <td>@member.Profile.User.LockoutEnabled</td>
+            <td>
+                @foreach (var role in member.Roles)
+                {
+                <span class="label label-primary">@role</span>
+                }
+            </td>
+            <td>
+                <a class="btn btn-primary" asp-action="EditRoles" asp-route-username="@member.Profile.User.UserName">Rollen</a>
+            </td>
+        </tr>
+    }
+</table>

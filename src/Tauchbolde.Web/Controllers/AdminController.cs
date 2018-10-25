@@ -6,34 +6,36 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Tauchbolde.Common;
 using Microsoft.AspNetCore.Identity;
-using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Common.Repositories;
-using Tauchbolde.Web.Models.EventViewModels;
-using System.Linq.Expressions;
-using System.Collections;
 using System.Collections.Generic;
+using Tauchbolde.Web.Models.AdminViewModels;
+using Tauchbolde.Common.DomainServices;
+using Tauchbolde.Web.Core;
 
 namespace Tauchbolde.Web.Controllers
 {
     [Authorize(Policy = PolicyNames.RequireAdministrator)]
-    public class AdminController : Controller
+    public class AdminController : AppControllerBase
     {
         private readonly ApplicationDbContext context;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> userManager;
         private readonly IDiverRepository diverRepository;
+        private readonly IDiverService diverService;
 
         public AdminController(
             ApplicationDbContext context,
             RoleManager<IdentityRole> roleManager,
             UserManager<IdentityUser> userManager,
-            IDiverRepository diverRepository)
+            IDiverRepository diverRepository,
+            IDiverService diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
+            this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
         }
 
         [HttpGet]
@@ -45,7 +47,7 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> MemberManagement()
         {
-            var profiles = (await diverRepository.GetAllTauchboldeUsersAsync()).ToArray();
+            var profiles = (await diverRepository.GetAllTauchboldeUsersAsync(true)).ToArray();
 
             var members = new List<MemberViewModel>();
             foreach (var member in profiles)
@@ -59,6 +61,41 @@ namespace Tauchbolde.Web.Controllers
             };
 
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditRoles(string userName)
+        {
+            var member = await diverService.GetMemberAsync(diverRepository, userName);
+            if (member == null)
+            {
+                return BadRequest();
+            }
+
+            var assignedRoles = await userManager.GetRolesAsync(member.User);
+
+            return View(new EditRolesViewModel
+            {
+                Roles = new[] { Rolenames.Tauchbold, Rolenames.Administrator },
+                AssignedRoles = assignedRoles,
+                Profile = member,
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditRoles(string userName, string[] roles)
+        {
+            var member = await diverService.GetMemberAsync(diverRepository, userName);
+            if (member == null)
+            {
+                return BadRequest();
+            }
+
+            await diverService.UpdateRolesAsync(member, roles);
+            await context.SaveChangesAsync();
+
+            ShowSuccessMessage($"Rollenzuweisung an {member.Realname} erfolgreich: {string.Join(",", roles)}");
+            return RedirectToAction("MemberManagement");
         }
 
         [HttpGet]
@@ -96,9 +133,11 @@ namespace Tauchbolde.Web.Controllers
 
         private async Task<MemberViewModel> CreateMemberViewModel(Diver diver)
         {
+            var roles = await userManager.GetRolesAsync(diver.User);
+
             return new MemberViewModel
             {
-                Roles = await userManager.GetRolesAsync(diver.User),
+                Roles = roles,
                 Profile = diver,
             };
         }

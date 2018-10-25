@@ -10,5 +10,6 @@ namespace Tauchbolde.Common.DomainServices
         Task<ICollection<Diver>> GetMembersAsync(IDiverRepository diverRepository);
         Task<Diver> GetMemberAsync(IDiverRepository diverRepository, string userName);
         Task UpdateUserProfil(IDiverRepository diverRepository, Diver profile);
+        Task UpdateRolesAsync(Diver member, ICollection<string> roles);
     }
 }

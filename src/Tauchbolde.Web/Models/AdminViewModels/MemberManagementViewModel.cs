@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Tauchbolde.Common.Model;
 
-namespace Tauchbolde.Web.Models.EventViewModels
+namespace Tauchbolde.Web.Models.AdminViewModels
 {
     public class MemberManagementViewModel
     {

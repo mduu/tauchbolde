@@ -1,0 +1,32 @@
+﻿@model Tauchbolde.Web.Models.AdminViewModels.EditRolesViewModel
+@{
+    ViewData["Title"] = "Rollenzuweisungen bearbeiten";
+}
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" asp-antiforgery="true">
+
+    <input type="hidden" asp-for="@Model.Profile.User.UserName" />
+
+    <div class="col-xs-12">
+
+        <h5>@Model.Profile.Fullname</h5>
+      
+        @foreach (var role in Model.Roles)
+        {
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="roles" value="@role" @if (Model.AssignedRoles.Contains(role)) { <text>checked</text> }>
+                    @role
+                </label>
+            </div>
+        }
+        
+        <button type="submit" class="btn btn-danger">Rollen zuweisen</button>
+        <a asp-action="MemberManagement" class="btn btn-default">Abbrechen</a>
+
+    </div>
+
+</form>
+
+<div class="clearfix"></div>

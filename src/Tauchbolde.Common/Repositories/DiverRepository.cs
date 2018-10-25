@@ -28,13 +28,22 @@ namespace Tauchbolde.Common.Repositories
         }
 
         /// <inheritdoc />
-        public async Task<ICollection<Diver>> GetAllTauchboldeUsersAsync()
+        public async Task<ICollection<Diver>> GetAllTauchboldeUsersAsync(bool includingAdmins = false)
         {
             var tauchboldeRole = await Context.Roles.FirstOrDefaultAsync(r => r.Name == Rolenames.Tauchbold);
 
             var usersIds = (await userManager.GetUsersInRoleAsync(Rolenames.Tauchbold))
                 .Select(u => u.Id)
                 .ToList();
+
+            if (includingAdmins)
+            {
+                var admins = (await userManager.GetUsersInRoleAsync(Rolenames.Administrator))
+                    .Select(u => u.Id)
+                    .ToList();
+
+                usersIds = usersIds.Union(admins).Distinct().ToList();
+            }
 
             var divers = await Context.Diver
                 .Include(u => u.User)

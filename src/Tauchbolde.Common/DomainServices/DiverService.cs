@@ -1,26 +1,32 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Org.BouncyCastle.Asn1.Mozilla;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
+using Microsoft.AspNetCore.Identity;
+using System.Linq;
 
 namespace Tauchbolde.Common.DomainServices
 {
     public class DiversService : IDiverService
     {
-        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly ApplicationDbContext context;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<IdentityUser> userManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:DiversService"/> class.
         /// </summary>
         /// <param name="applicationDbContext">Application db context.</param>
-        public DiversService(ApplicationDbContext applicationDbContext)
+        /// <param name="userManager">The Identity UserManager to use.</param>
+        public DiversService(
+            ApplicationDbContext applicationDbContext,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<IdentityUser> userManager)
         {
-            if (applicationDbContext == null) throw new ArgumentNullException(nameof(applicationDbContext));
-
-            _applicationDbContext = applicationDbContext;
+            context = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
+            this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         /// <inheritdoc/>
@@ -29,7 +35,7 @@ namespace Tauchbolde.Common.DomainServices
             if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
 
             return await diverRepository.GetAllTauchboldeUsersAsync();
-        }        
+        }
 
         /// <inheritdoc/>
         public async Task<Diver> GetMemberAsync(IDiverRepository diverRepository, string userName)
@@ -38,7 +44,7 @@ namespace Tauchbolde.Common.DomainServices
 
             return await diverRepository.FindByUserNameAsync(userName);
         }
-        
+
         public async Task UpdateUserProfil(IDiverRepository diverRepository, Diver profile)
         {
             if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
@@ -63,6 +69,31 @@ namespace Tauchbolde.Common.DomainServices
             diver.MobilePhone = profile.MobilePhone;
 
             diverRepository.Update(diver);
+        }
+
+        public async Task UpdateRolesAsync(Diver member, ICollection<string> roles)
+        {
+            if (member == null) { throw new ArgumentNullException(nameof(member)); }
+
+            var allRoles = roleManager.Roles.ToArray();
+
+            foreach (var role in allRoles)
+            {
+                if (roles.Contains(role.Name))
+                {
+                    if (!await userManager.IsInRoleAsync(member.User, role.Name))
+                    {
+                        await userManager.AddToRoleAsync(member.User, role.Name);
+                    }
+                }
+                else
+                {
+                    if (await userManager.IsInRoleAsync(member.User, role.Name))
+                    {
+                        await userManager.RemoveFromRoleAsync(member.User, role.Name);
+                    }
+                }
+            }
         }
     }
 }
