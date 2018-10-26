@@ -8,7 +8,6 @@
                     <div class="col-md-12">
                         <h3>
                             @member.Firstname
-
                             <small>
                                 @if (!string.IsNullOrWhiteSpace(member.TwitterHandle))
                                 {
@@ -52,10 +51,27 @@
                             <div class="col-md-4">Webseite:</div>
                             <div class="col-md-8"><strong><a href="@member.WebsiteUrl" target="_blank">@member.WebsiteUrl</a></strong></div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                @if (Model.IsTauchbold)
+                                {
+                                    <a class="btn btn-primary btn-small" asp-action="Index" asp-controller="UserProfile" asp-route-id="@member.User.UserName" data-toggle="tooltip" data-placement="top" title="Nur für Tauchbolde einsehbar.">Profil</a>
+                                }
+
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 }
+
 <div class="clearfix"></div>
+
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>

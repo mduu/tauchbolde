@@ -6,6 +6,7 @@ namespace Tauchbolde.Web.Models.AboutViewModels
 {
     public class AboutViewModel
     {
+        public bool IsTauchbold { get; set; }
         public ICollection<Diver> Members;
     }
 }

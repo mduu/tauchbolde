@@ -8,6 +8,8 @@ using Tauchbolde.Common.DomainServices;
 using Tauchbolde.Web.Models;
 using Tauchbolde.Web.Models.AboutViewModels;
 using Tauchbolde.Common.Repositories;
+using Microsoft.AspNetCore.Identity;
+using Tauchbolde.Common;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -15,14 +17,17 @@ namespace Tauchbolde.Web.Controllers
     {
         private readonly IDiverService diverService;
         private readonly IDiverRepository diverRepository;
+        private readonly UserManager<IdentityUser> userManager;
 
         public HomeController(
             IDiverService diverService,
-            IDiverRepository diverRepository
+            IDiverRepository diverRepository,
+            UserManager<IdentityUser> userManager
         )
         {
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
+            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         public IActionResult Index()
@@ -32,9 +37,21 @@ namespace Tauchbolde.Web.Controllers
 
         public async Task<IActionResult> About()
         {
+            var isTauchbold = false;
+
+            if (User?.Identity != null && !string.IsNullOrWhiteSpace(User.Identity.Name))
+            {
+                var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
+                if (currentDiver != null)
+                {
+                    isTauchbold = await userManager.IsInRoleAsync(currentDiver.User, Rolenames.Tauchbold);
+                }
+            }
+        
             var model = new AboutViewModel
             {
-                Members = await diverService.GetMembersAsync(diverRepository)
+                Members = await diverService.GetMembersAsync(diverRepository),
+                IsTauchbold = isTauchbold,
             };
 
            return View(model);
