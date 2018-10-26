@@ -19,5 +19,12 @@ namespace Tauchbolde.Common.Repositories
         /// </summary>
         /// <returns>A collection of all users that are members of Tauchbolde.</returns>
         Task<ICollection<Diver>> GetAllTauchboldeUsersAsync(bool includingAdmins = false);
+
+        /// <summary>
+        /// Get all <see cref="Diver"/> entities including the <see cref="Diver.User"/>
+        /// relation loaded.
+        /// </summary>
+        /// <returns>The all divers.</returns>
+        Task<ICollection<Diver>> GetAllDiversAsync();
     }
 }

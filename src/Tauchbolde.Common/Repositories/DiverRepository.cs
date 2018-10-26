@@ -57,5 +57,14 @@ namespace Tauchbolde.Common.Repositories
 
             return result;
         }
+
+        /// <inheritdoc />
+        public async Task<ICollection<Diver>> GetAllDiversAsync() =>
+            await Context.Diver
+                .Include(u => u.User)
+                .OrderBy(d => d.Firstname)
+                .ThenBy(d => d.Lastname)
+                .ToListAsync();
+
     }
 }

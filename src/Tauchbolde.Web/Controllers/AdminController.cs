@@ -47,7 +47,7 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> MemberManagement()
         {
-            var profiles = (await diverRepository.GetAllTauchboldeUsersAsync(true)).ToArray();
+            var profiles = (await diverRepository.GetAllDiversAsync()).ToArray();
 
             var members = new List<MemberViewModel>();
             foreach (var member in profiles)
