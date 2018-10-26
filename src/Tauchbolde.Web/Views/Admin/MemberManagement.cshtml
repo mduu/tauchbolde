@@ -20,32 +20,33 @@
                 <th>Actions</th>
             </tr>
             @foreach (var member in Model.Members)
-        {
-            <tr>
-                <td>@member.Profile.Realname</td>
-                <td>@member.Profile.Fullname</td>
-                <td>@member.Profile.User.UserName</td>
-                <td>@member.Profile.User.Email</td>
-                <td>@member.Profile.User.EmailConfirmed</td>
-                <td>@member.Profile.User.LockoutEnabled</td>
-                <td>
-                    @foreach (var role in member.Roles)
-                {
-                    <span class="label label-primary">@role</span>
+            {
+                <tr>
+                    <td>@member.Profile.Realname</td>
+                    <td>@member.Profile.Fullname</td>
+                    <td>@member.Profile.User.UserName</td>
+                    <td>@member.Profile.User.Email</td>
+                    <td>@member.Profile.User.EmailConfirmed</td>
+                    <td>@member.Profile.User.LockoutEnabled</td>
+                    <td>
+                        @foreach (var role in member.Roles)
+                        {
+                            <span class="label label-info">@role</span>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="EditRoles" asp-route-username="@member.Profile.User.UserName">Rollen</a>
+                        <a class="btn btn-primary" asp-action="Index" asp-controller="UserProfile" asp-route-id="@member.Profile.User.UserName">Profil</a>
+                    </td>
+                </tr>
             }
-                </td>
-                <td>
-                    <a class="btn btn-primary" asp-action="EditRoles" asp-route-username="@member.Profile.User.UserName">Rollen</a>
-                </td>
-            </tr>
-    }
         </table>
     </fieldset>
 </div>
 
 <div class="col-lg-12">
     <fieldset>
-        <legend>Mitglied hinzufügen</legend>        
+        <legend>Mitglied hinzufügen</legend>
         <partial name="_addMemberForm" model="@Model" />
     </fieldset>
 </div>
