@@ -2,11 +2,20 @@
 {
     <div class="alert alert-success success-message" role="alert">@TempData["success_message"]</div>
 }
+
 @if (TempData["error_message"] != null)
+{
+    <div class="alert alert-danger alert-dismissible error-message" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Fehler!</strong> @TempData["error_message"]
+    </div>
+}
+
+@if (TempData["error_warning"] != null)
 {
     <div class="alert alert-warning alert-dismissible error-message" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <strong>Fehler!</strong> @TempData["error_message"]
+        <strong>Warnung!</strong> @TempData["warning_message"]
     </div>
 }
 

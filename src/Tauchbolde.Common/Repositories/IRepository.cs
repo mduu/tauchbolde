@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Tauchbolde.Common.Repository
@@ -9,6 +9,7 @@ namespace Tauchbolde.Common.Repository
         where TEntity: class, new()
     {
         Task<TEntity> FindByIdAsync(Guid id);
+        Task<ICollection<TEntity>> GetAllAsync();
 
         EntityEntry<TEntity> Insert(TEntity entity);
         Task<EntityEntry<TEntity>> InsertAsync(TEntity entity);

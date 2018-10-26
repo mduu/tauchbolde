@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repository;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tauchbolde.Common.Repositories
 {
@@ -25,6 +27,11 @@ namespace Tauchbolde.Common.Repositories
         public virtual async Task<TEntity> FindByIdAsync(Guid id)
         {
             return await Context.Set<TEntity>().FindAsync(id);
+        }
+        
+        public virtual async Task<ICollection<TEntity>> GetAllAsync()
+        {
+            return await Context.Set<TEntity>().ToListAsync();
         }
 
         public EntityEntry<TEntity> Insert(TEntity entity)

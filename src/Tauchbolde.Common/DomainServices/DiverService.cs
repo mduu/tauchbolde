@@ -5,6 +5,7 @@ using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using Microsoft.Extensions.FileProviders;
 
 namespace Tauchbolde.Common.DomainServices
 {
@@ -94,6 +95,44 @@ namespace Tauchbolde.Common.DomainServices
                     }
                 }
             }
+        }
+
+        public async Task<string> AddMembersAsync(IDiverRepository diverRepository, string userName, string firstname, string lastname)
+        {
+            if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
+            if (string.IsNullOrWhiteSpace(userName)) throw new ArgumentNullException(nameof(userName));
+            if (string.IsNullOrWhiteSpace(firstname)) throw new ArgumentNullException(nameof(firstname));
+            if (string.IsNullOrWhiteSpace(lastname)) throw new ArgumentNullException(nameof(lastname));
+
+            string warningMessage = "";
+
+            var user = await userManager.FindByNameAsync(userName);
+
+            var diver = new Diver
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id,
+                Firstname = firstname,
+                Lastname = lastname,
+                Fullname = $"{firstname} {lastname}",
+                MobilePhone = user.PhoneNumber,
+            };
+
+            await userManager.AddToRoleAsync(user, Rolenames.Tauchbold);
+
+            await diverRepository.InsertAsync(diver);
+
+            if (user.LockoutEnabled)
+            {
+                warningMessage += "User ist noch gesperrt (LockoutEnabled). ";
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                warningMessage += "User hat seine Emailadresse noch nicht bestätigt (EmailConfirmed=false). ";
+            }
+
+            return warningMessage.Trim();
         }
     }
 }

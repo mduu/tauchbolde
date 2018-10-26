@@ -13,5 +13,10 @@ namespace Tauchbolde.Web.Core
         {
             TempData["error_message"] = message;
         }
+        
+        protected void ShowWarningMessage(string message)
+        {
+             TempData["warning_message"] = message;
+        }
     }
 }

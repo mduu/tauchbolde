@@ -1,0 +1,23 @@
+﻿@model Tauchbolde.Web.Models.AdminViewModels.MemberManagementViewModel
+
+<form class="form-inline" asp-action="AddMembers" method="post" asp-antiforgery="true">
+
+    <div class="form-group">
+        <label for="addMember">User:</label>
+        <select class="form-control"
+                name="userName"
+                asp-items="@(new SelectList(Model.AddableUsers,"UserName","UserName"))"></select>
+    </div>
+    
+    <div class="form-group">
+        <label for="firstname">Vorname:</label>
+        <input name="firstname" type="text" required class="form-control" />
+    </div>
+    
+    <div class="form-group">
+        <label for="lastname">Nachname:</label>
+        <input name="lastname" type="text" required class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Hinzufügen</button>
+</form>

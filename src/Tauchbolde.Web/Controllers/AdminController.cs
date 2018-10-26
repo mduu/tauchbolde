@@ -55,12 +55,44 @@ namespace Tauchbolde.Web.Controllers
                 members.Add(await CreateMemberViewModel(member));
             }
 
+            var allMembers = await diverRepository.GetAllAsync();
+            var allUsers = userManager.Users
+                .ToArray()
+                .Where(u => allMembers.All(d => d.UserId != u.Id));
+
             var viewModel = new MemberManagementViewModel
             {
                 Members = members,
+                AddableUsers = allUsers.ToArray(),
             };
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddMembers(string userName, string firstname, string lastname)
+        {
+            if (string.IsNullOrWhiteSpace(userName) ||
+                string.IsNullOrWhiteSpace(firstname) ||
+                string.IsNullOrWhiteSpace(lastname))
+            {
+                ShowErrorMessage("Kein Benutzername, Vor- oder Nachname!");
+            }
+            else
+            {
+                try
+                {
+                    await diverService.AddMembersAsync(diverRepository, userName, firstname, lastname);
+                    await context.SaveChangesAsync();
+                    ShowSuccessMessage("Mitglied erfolgreich hinzugefügt!");
+                }
+                catch (Exception ex)
+                {                
+                    ShowErrorMessage($"Fehler beim Hinzufügen des Mitgliedes {userName}: {ex.UnwindMessage()}");
+                }
+            }
+
+            return RedirectToAction("MemberManagement");
         }
 
         [HttpGet]
