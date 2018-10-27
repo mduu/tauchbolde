@@ -27,6 +27,9 @@
                 <li>
                     <a asp-controller="UserProfile" asp-action="Index" asp-route-id="@UserManager.GetUserName(User)">Mein Tauchbolde-Profil</a>
                 </li>
+                <li>
+                    <a asp-controller="MassMail" asp-action="Index">Email-Versand</a>
+                </li>
                 @if (isAdmin)
                 {
                     <li role="separator" class="divider"></li>

@@ -1,0 +1,102 @@
+﻿@model Tauchbolde.Web.Models.MassMail.MassMailViewModel
+@{
+    ViewBag.Title = "Email-Versand";
+    Layout = "_Layout";
+}
+<h2> @ViewBag.Title</h2>
+<div class="col-xs-12">
+    <h3>Anleitung</h3>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <p>
+            Hier kannst Du ein Email an alle Tauchbolde versenden.Es funktioniert so,
+            dass Du ein Email mittels Deinem normal Email-Programm schreibst und versendest.
+            Auf diese Weise hast Du alle Funktionen Deines Email-Programmes zur Verfügung.
+        </p>
+        <p>
+            Unten siehst Du zwei Varianten, wie Du an die Email-Verteilerliste
+            von allen Tauchbolden kommst.Am einfachsten ist Variante 1.
+            Je nachdem wie Dein Computer konfiguriert ist, kann es sein, dass Variante 1 nicht
+            funktioniert. In diesem Fall kann Du mit Variante 2 verwenden.
+        </p>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">Heinweis</div>
+            <div class="panel-body">
+                Diese Funktion steht nur den Tauchbolden zur Verfügung.
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <fieldset>
+        <legend><strong>Variante 1:</strong> Standard-Email Programm</legend>
+        <p>
+            Klicke auf <em>Neues Email erstellen</em>.Dein Email-Programm sollte sich
+            mit einem neuen Email und vorausgefüllter Empfängerliste öffnen.Schreibe und
+            sende das Email mit Deinem Email-Programm wie Du sonst auch Emails versendest.
+        </p>
+
+        <a href="mailto:@Model.TauchboldeEmailReceiver" class="btn btn-primary"><span class="glyphicon glyphicon-envelope"></span> Neues E-Mail versenden...</a>
+
+    </fieldset>
+</div>
+<div class="col-md-6">
+    <fieldset>
+        <legend><strong>Variante 2:</strong> Verteilerliste zum Kopieren</legend>
+        <p>
+            Kopiere die Empfängerliste in die Zwischenablage.Dann erstelle ein neues
+            Email und füge die Empfängerliste aus der Zwischenablage in das Empfängerfeld
+            des neuen Emails.
+        </p>
+
+        <textarea id="mailReceivers" name="mailReceivers" class="form-control" cols="40" rows="3">@Model.TauchboldeEmailReceiver</textarea>
+        <button id="copyToClipboard" name="copyToClipboard" class="btn btn-primary"><span class="glyphicon glyphicon-copy"></span> Empfänger in die Zwischenablage kopieren</button>
+        <div id="copySuccessLabel" class="label label-success" style="display: none">Kopiert.</div>
+
+    </fieldset>
+</div>
+
+<script>
+function fallbackCopyTextToClipboard(text) {
+  var textArea = document.createElement("textarea");
+  textArea.value = text;
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    var successful = document.execCommand('copy');
+    var msg = successful ? 'successful' : 'unsuccessful';
+    console.log('Fallback: Copying text command was ' + msg);
+  } catch (err) {
+    console.error('Fallback: Oops, unable to copy', err);
+  }
+
+  document.body.removeChild(textArea);
+}
+
+function copyTextToClipboard(text) {
+  if (!navigator.clipboard) {
+    fallbackCopyTextToClipboard(text);
+    return;
+  }
+  navigator.clipboard.writeText(text).then(function() {
+    console.log('Async: Copying to clipboard was successful!');
+  }, function(err) {
+    console.error('Async: Could not copy text: ', err);
+  });
+}
+
+$(function() {
+    $('#copyToClipboard').click(function() {
+        copyTextToClipboard($('#mailReceivers').val());
+        $('#copySuccessLabel')
+            .show('fast')
+            .delay(4000)
+            .hide('fade');
+    });
+});
+</script>
