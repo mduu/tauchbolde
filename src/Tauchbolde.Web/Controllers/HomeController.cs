@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Common.DomainServices;
@@ -10,24 +8,30 @@ using Tauchbolde.Web.Models.AboutViewModels;
 using Tauchbolde.Common.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common;
+using Tauchbolde.Web.Models.HomeViewModels;
+using Tauchbolde.Web.Core;
+using Tauchbolde.Common.DomainServices.SMTPSender;
 
 namespace Tauchbolde.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AppControllerBase
     {
         private readonly IDiverService diverService;
         private readonly IDiverRepository diverRepository;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly IAppEmailSender emailSender;
 
         public HomeController(
             IDiverService diverService,
             IDiverRepository diverRepository,
-            UserManager<IdentityUser> userManager
+            UserManager<IdentityUser> userManager,
+            IAppEmailSender emailSender
         )
         {
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this.emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
 
         public IActionResult Index()
@@ -59,9 +63,42 @@ namespace Tauchbolde.Web.Controllers
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            var rand = new Random();
+            var viewModel = new ContactViewModel
+            {
+                NumberA = rand.Next(1, 10),
+                NumberB = rand.Next(1, 10),
+            };
 
-            return View();
+            return View(viewModel);
+        }
+        
+        [HttpPost]
+        public IActionResult Contact(ContactViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = model.NumberA + model.NumberB;
+                if (model.Result != result)
+                {
+                    ModelState.AddModelError(nameof(model.Result), "Falsches Resultat!");
+                }
+                else
+                {
+                    emailSender.Send(
+                        "Webmaster",
+                        "marc@marcduerst.com",
+                        model.YourName,
+                        model.YourEmail,
+                        "Tauchbolde Kontaktformular",
+                        model.Text);
+
+                    ShowSuccessMessage("Vielen Dank für Deine Nachricht. Du wirst von uns höhren.");
+                    return RedirectToAction("Indedx", "Home");
+                }
+            }
+            
+            return View(model);
         }
 
         public IActionResult Privacy()

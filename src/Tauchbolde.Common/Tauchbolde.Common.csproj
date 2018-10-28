@@ -31,4 +31,7 @@
     <Compile Remove="Model\ApplicationUser.cs" />
     <Compile Remove="Repositories\ApplicationUserRepository.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DomainServices\SMTPSender\" />
+  </ItemGroup>
 </Project>

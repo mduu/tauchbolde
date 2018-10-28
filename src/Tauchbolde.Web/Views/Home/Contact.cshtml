@@ -1,16 +1,53 @@
-﻿@{
-    ViewData["Title"] = "Contact";
+﻿@model Tauchbolde.Web.Models.HomeViewModels.ContactViewModel
+@{
+    ViewData["Title"] = "Kontakt";
 }
-<h2>@ViewData["Title"]</h2>
+<div class="col-xs-12">
+    <h2>@ViewData["Title"]</h2>
+</div>
+<div class="col-xs-12">
+    <address>
+        <strong>Webmaster:</strong><br />
+        Marc Dürst<br />
+        8332 Rumlikon<br />
+    </address>
+</div>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<form class="form" asp-action="Contact" asp-antiforgery="true" method="post">
+    <input asp-for="@Model.NumberA" type="hidden" />
+    <input asp-for="@Model.NumberB" type="hidden" />
+    
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="@Model.YourName"></label>
+            <input class="form-control" asp-for="@Model.YourName" required />
+        </div>
+    </div>
 
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="@Model.YourEmail"></label>
+            <input class="form-control" asp-for="@Model.YourEmail" required />
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            <label asp-for="@Model.Text"></label>
+            <textarea class="form-control" asp-for="@Model.Text" rows="4" required></textarea>
+        </div>
+    </div>
+
+    <div class="col-xs-3" style="margin-bottom: 1em;">
+        <h4>Rechnung:</h4>
+        <p>Was ergibt: @Model.NumberA + @Model.NumberB = ?</p>
+        <label asp-for="@Model.Result"></label>
+        <input class="form-control" asp-for="@Model.Result" required />
+    </div>
+
+    <div class="col-xs-12">
+        <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-envelope"></span> Senden
+        </button>
+    </div>
+</form>

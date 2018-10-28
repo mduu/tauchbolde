@@ -58,12 +58,13 @@
     </nav>
     <partial name="_CookieConsentPartial" />
     <div class="container body-content">
-        <partial name="_messages"/>
+        <partial name="_messages" />
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Tauchbolde</p>
-        </footer>
+        <div class="clearfix"></div>
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Tauchbolde</p>
+    </footer>
     </div>
     <environment include="Development">
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>

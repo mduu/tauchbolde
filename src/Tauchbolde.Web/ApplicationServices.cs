@@ -4,6 +4,7 @@ using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Services;
+using Tauchbolde.Common.DomainServices.SMTPSender;
 
 namespace Tauchbolde.Web
 {
@@ -15,6 +16,7 @@ namespace Tauchbolde.Web
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddScoped<ApplicationDbContext>();
+            services.AddTransient<IAppEmailSender, SmtpSender>();
 
             // Repos
             services.AddTransient<IDiverRepository, DiverRepository>();
