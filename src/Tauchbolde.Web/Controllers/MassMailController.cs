@@ -4,10 +4,8 @@ using Tauchbolde.Common;
 using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Repositories;
-using Tauchbolde.Common.Model;
-using System.Collections.Generic;
-using System.Linq;
 using Tauchbolde.Web.Models.MassMail;
+using Tauchbolde.Common.DomainServices;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -17,10 +15,14 @@ namespace Tauchbolde.Web.Controllers
     public class MassMailController : AppControllerBase
     {
         private readonly IDiverRepository diverRepository;
+        private readonly IMassMailService massMailService;
 
-        public MassMailController(IDiverRepository diverRepository)
+        public MassMailController(
+            IDiverRepository diverRepository,
+            IMassMailService massMailService)
         {
             this.diverRepository = diverRepository ?? throw new System.ArgumentNullException(nameof(diverRepository));
+            this.massMailService = massMailService ?? throw new System.ArgumentNullException(nameof(massMailService));
         }
 
         // GET: /MassMail/
@@ -30,16 +32,8 @@ namespace Tauchbolde.Web.Controllers
 
             return base.View(new MassMailViewModel
             {
-                TauchboldeEmailReceiver = CreateReceiver(tauchbolde)
+                TauchboldeEmailReceiver = massMailService.CreateReceiverString(tauchbolde)
             });
-        }
-
-        // TODO Write unit-tests for this function
-        private static string CreateReceiver(ICollection<Diver> divers)
-        {
-            return string.Join(
-                ";",
-                divers.Select(d => $"\"{d.Fullname}\"<{d.User.Email}>"));
         }
     }
 }
