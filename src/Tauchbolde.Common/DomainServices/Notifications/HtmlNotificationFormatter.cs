@@ -43,7 +43,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             {
                 sb.AppendLine("<li>");
 
-                sb.Append($"<small>{notification.OccuredAt.ToString("dd.MM.yyyy HH.mm")}</small> ");
+                sb.Append($"<small>{notification.OccuredAt.ToString("dd.MM.yyyy HH.mm")}</small> {NotificationTypeToString(notification.Type)}: ");
                 sb.Append(notification.Message);
                 sb.AppendLine();
 
@@ -58,6 +58,31 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             sb.AppendLine("<p>");
             sb.AppendLine("Guet Gas!");
             sb.AppendLine("</p>");
+        }
+        
+        private string NotificationTypeToString(NotificationType notificationType)
+        {
+            switch (notificationType)
+            {
+                case NotificationType.NewEvent:
+                    return "Neue Aktivität";
+                case NotificationType.CancelEvent:
+                    return "Aktivität abgesagt";
+                case NotificationType.EditEvent:
+                    return "Aktivität geändert";
+                case NotificationType.Commented:
+                    return "Neuer Kommentar";
+                case NotificationType.Accepted:
+                    return "Zusage";
+                case NotificationType.Declined:
+                    return "Absage";
+                case NotificationType.Tentative:
+                    return "Vorbehalt";
+                case NotificationType.Neutral:
+                    return "Unklar";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(notificationType));
+            }
         }
     }
 }

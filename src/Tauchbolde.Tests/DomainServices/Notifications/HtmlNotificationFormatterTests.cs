@@ -5,36 +5,48 @@ using Tauchbolde.Common.DomainServices.Notifications;
 using Xunit;
 using Tauchbolde.Common.Model;
 using System.Collections.Generic;
+using ApprovalTests.Namers;
 
 namespace Tauchbolde.Tests.DomainServices.Notifications
 {
     public class HtmlNotificationFormatterTests
     {
-        [Fact]
+        [Theory]
+        [InlineData(NotificationType.NewEvent)]
+        [InlineData(NotificationType.CancelEvent)]
+        [InlineData(NotificationType.EditEvent)]
+        [InlineData(NotificationType.Commented)]
+        [InlineData(NotificationType.Accepted)]
+        [InlineData(NotificationType.Declined)]
+        [InlineData(NotificationType.Neutral)]
+        [InlineData(NotificationType.Tentative)]
         [UseReporter(typeof(DiffReporter))]
-        public void SimpleFormat()
+        public void Format(NotificationType notificationType)
         {
-            var formatter = new HtmlNotificationFormatter();
-            var receiver = new Diver
+            using (ApprovalResults.ForScenario(notificationType.ToString()))
             {
-                Id = new Guid("4c3b714e-522f-4ef8-85f4-db74f0ccdd76"),
-                Fullname = "John Doe",
-                Firstname = "John",
-                Lastname = "Doe",
-            };
-            var notifications = new List<Notification>()
-            {
-                new Notification { 
-                    Id = new Guid("fc1beb5a-5ad0-4deb-b35a-595d81d575e0"),
-                    OccuredAt = new DateTime(2018, 10, 1, 14, 0, 0),
-                    Message = "Notification 1",
-                    Type = NotificationType.NewEvent,
-                }
-            };
+                var formatter = new HtmlNotificationFormatter();
+                var receiver = new Diver
+                {
+                    Id = new Guid("4c3b714e-522f-4ef8-85f4-db74f0ccdd76"),
+                    Fullname = "John Doe",
+                    Firstname = "John",
+                    Lastname = "Doe",
+                };
+                var notifications = new List<Notification>()
+                {
+                    new Notification {
+                        Id = new Guid("fc1beb5a-5ad0-4deb-b35a-595d81d575e0"),
+                        OccuredAt = new DateTime(2018, 10, 1, 14, 0, 0),
+                        Message = "Notification 1",
+                        Type = notificationType,
+                    }
+                };
 
-            var result = formatter.Format(receiver, notifications);
+                var result = formatter.Format(receiver, notifications);
 
-            Approvals.VerifyHtml(result);
+                Approvals.VerifyHtml(result);
+            }
         }
     }
 }
