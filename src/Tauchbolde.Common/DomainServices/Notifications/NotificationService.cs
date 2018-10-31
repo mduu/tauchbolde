@@ -51,7 +51,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
             if (canceledEvent == null) throw new ArgumentNullException(nameof(canceledEvent));
 
-            // Recipients alle Tauchbolde that did not yet "decline" the Event already
+            // Recipients all Tauchbolde that did not yet "decline" the Event already
             var declinedParticipants = await participantRepository.GetParticipantsForEventByStatusAsync(canceledEvent.Id, ParticipantStatus.Declined);
             var recipients = (await userRepository.GetAllTauchboldeUsersAsync())
                 .Where(u => declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
