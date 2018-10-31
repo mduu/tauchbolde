@@ -10,7 +10,7 @@ using Tauchbolde.Common.Repositories;
 using Xunit;
 using Microsoft.AspNetCore.Identity;
 
-namespace Tauchbolde.Tests.DomainServices
+namespace Tauchbolde.Tests.DomainServices.Notifications
 {
     public class NotificationSenderTests
     {
