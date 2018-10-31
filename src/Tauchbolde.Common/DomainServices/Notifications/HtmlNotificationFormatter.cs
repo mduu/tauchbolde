@@ -12,7 +12,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     public class HtmlNotificationFormatter : INotificationFormatter
     {
         /// <inheritdoc />
-        public string Format(Diver recipient, IGrouping<Diver, Notification> notifications)
+        public string Format(Diver recipient, IEnumerable<Notification> notifications)
         {
             if (recipient == null) throw new ArgumentNullException(nameof(recipient));
             if (notifications == null) throw new ArgumentNullException(nameof(notifications));
@@ -43,7 +43,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             {
                 sb.AppendLine("<li>");
 
-                sb.Append($"<small>{notification.OccuredAt.ToString("dd.MM.yyyy HH.mm")}</small>");
+                sb.Append($"<small>{notification.OccuredAt.ToString("dd.MM.yyyy HH.mm")}</small> ");
                 sb.Append(notification.Message);
                 sb.AppendLine();
 
