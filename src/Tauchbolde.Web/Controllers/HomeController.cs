@@ -88,10 +88,11 @@ namespace Tauchbolde.Web.Controllers
                     emailSender.Send(
                         "Webmaster",
                         "marc@marcduerst.com",
-                        model.YourName,
+
+                         "Tauchbolde Kontaktformular",
+                        model.Text,
                         model.YourEmail,
-                        "Tauchbolde Kontaktformular",
-                        model.Text);
+                        model.YourName);
 
                     ShowSuccessMessage("Vielen Dank für Deine Nachricht. Du wirst von uns höhren.");
                     return RedirectToAction("Indedx", "Home");

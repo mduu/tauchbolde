@@ -13,6 +13,7 @@ using System.Data.SqlClient;
 using Microsoft.AspNetCore.Localization;
 using System.Collections.Generic;
 using System.Globalization;
+using Tauchbolde.Common.DomainServices.SMTPSender;
 
 namespace Tauchbolde.Web
 {
@@ -39,6 +40,8 @@ namespace Tauchbolde.Web
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<SmtpSenderConfiguration>(Configuration);
+        
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.

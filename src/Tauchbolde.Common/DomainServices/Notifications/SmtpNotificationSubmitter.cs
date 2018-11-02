@@ -20,11 +20,12 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             await emailSender.Send(
                 recipient.Fullname,
                 recipient.User.Email,
-                "Tauchbolde Webmaster",
-                "webmaster@tauchbolde.ch",
-                "Tauchbolde Action-Log",
+
+                 "Tauchbolde Action-Log",
                 content
-            );
+,
+                "webmaster@tauchbolde.ch",
+                "Tauchbolde Webmaster");
         }
     }
 }
