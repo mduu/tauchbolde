@@ -1,4 +1,4 @@
-**Build:** [![Build status](https://dev.azure.com/tauchbolde/Tauchbolde/_apis/build/status/Tauchbolde-ASP.NET%20Core-CI)](https://dev.azure.com/tauchbolde/Tauchbolde/_build/latest?definitionId=2)
+**Build:** ![Build status](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_apis/build/status/tauchbolde-CI)
 
 # tauchbolde
 Next generation website fro http://tauchbolde.ch
