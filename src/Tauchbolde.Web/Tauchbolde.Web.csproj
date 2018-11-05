@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20170205143205_InitialCreate.cs" />
+    <Compile Remove="ApplicationDbContextFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\lib\moment\bower.json" />
