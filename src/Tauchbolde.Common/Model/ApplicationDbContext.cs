@@ -61,10 +61,5 @@ namespace Tauchbolde.Common.Model
 
             // PostImage
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-        }
-
     }
 }
