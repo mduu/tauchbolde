@@ -49,12 +49,8 @@ namespace Tauchbolde.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            var builder = new SqlConnectionStringBuilder(
-                Configuration.GetConnectionString("TauchboldeConnection"))
-            {
-                UserID = Configuration["DbUser"],
-                Password = Configuration["DbPassword"]
-            };
+            var connectionString = Configuration.GetConnectionString("TauchboldeConnection");
+            var builder = new SqlConnectionStringBuilder(connectionString);
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.ConnectionString));
 
