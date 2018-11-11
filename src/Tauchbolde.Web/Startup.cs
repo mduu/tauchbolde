@@ -116,6 +116,14 @@ namespace Tauchbolde.Web
                     options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowTwitter", builder => builder
+                    .WithOrigins("https://platform.twitter.com")
+                    .WithOrigins("https://twitter.com"));
+            });
+
+
             ApplicationServices.Register(services);
         }
 
@@ -132,7 +140,7 @@ namespace Tauchbolde.Web
             {
                 builder.Password = Configuration["DbPassword"];
             }
-            
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.ConnectionString));
         }
@@ -151,17 +159,19 @@ namespace Tauchbolde.Web
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
-            app.UseAuthentication();
-            app.UseRequestLocalization();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app
+                .UseHttpsRedirection()
+                .UseStaticFiles()
+                .UseCookiePolicy()
+                .UseAuthentication()
+                .UseRequestLocalization()
+                .UseCors()
+                .UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Home}/{action=Index}/{id?}");
+                });
         }
     }
 }

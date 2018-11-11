@@ -11,6 +11,7 @@ using Tauchbolde.Common;
 using Tauchbolde.Web.Models.HomeViewModels;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Common.DomainServices.SMTPSender;
+using Microsoft.AspNetCore.Cors;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -34,6 +35,7 @@ namespace Tauchbolde.Web.Controllers
             this.emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
 
+        [EnableCors("AllowTwitter")]
         public IActionResult Index()
         {
             return View();
