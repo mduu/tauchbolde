@@ -41,7 +41,7 @@ namespace Tauchbolde.Web
         private void ConfigureServices(IServiceCollection services)
         {
             services.Configure<SmtpSenderConfiguration>(Configuration);
-        
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -49,10 +49,7 @@ namespace Tauchbolde.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            var connectionString = Configuration.GetConnectionString("TauchboldeConnection");
-            var builder = new SqlConnectionStringBuilder(connectionString);
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.ConnectionString));
+            ConfigureDatabase(services);
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
@@ -104,7 +101,7 @@ namespace Tauchbolde.Web
                 options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole(Rolenames.Tauchbold));
                 options.AddPolicy(PolicyNames.RequireAdministrator, policy => policy.RequireRole(Rolenames.Administrator));
             });
-            
+
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("de-CH");
@@ -119,6 +116,24 @@ namespace Tauchbolde.Web
                 );
 
             ApplicationServices.Register(services);
+        }
+
+        private void ConfigureDatabase(IServiceCollection services)
+        {
+            var connectionString = Configuration.GetConnectionString("TauchboldeConnection");
+            var builder = new SqlConnectionStringBuilder(connectionString);
+
+            if (!string.IsNullOrWhiteSpace(Configuration["DbUser"]))
+            {
+                builder.UserID = Configuration["DbUser"];
+            }
+            if (!string.IsNullOrWhiteSpace(Configuration["DbPassword"]))
+            {
+                builder.Password = Configuration["DbPassword"];
+            }
+            
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.ConnectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
