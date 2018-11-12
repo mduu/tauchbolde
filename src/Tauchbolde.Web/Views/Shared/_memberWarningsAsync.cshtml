@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    if (User != null)
+    {
+        var user = await UserManager.GetUserAsync(User);
+        if (user != null)
+        {
+
+            if (!(await UserManager.IsEmailConfirmedAsync(user)))
+            {
+                <text>
+                    <div class="alert alert-warning alert-dismissible emailconfirmed-message" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>Warnung!</strong> Deine Email-Adresse ist noch bestätigt. Du solltest
+                        ein Email mit den entsprechenen Informationen erhalten haben.
+                    </div>
+                </text>
+            }
+
+            if (await UserManager.IsLockedOutAsync(user))
+            {
+                <text>
+                    <div class="alert alert-warning alert-dismissible lockedout-message" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>Warnung!</strong> Du bist zwar auf der Webseite angemeldet aber Dein Account
+                        is gesperrt. Dies kann u.a. der Fall sein, wenn Du Dich neu registriert hast, aber
+                        Du Deine Registrierung noch nicht bestätigt hast.
+                    </div>
+                </text>
+            }
+        }
+    }
+}
