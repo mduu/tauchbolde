@@ -21,31 +21,31 @@
 
         <div class="col-md-6">
             <div class="row">
-                <label class="col-md-6">Startzeit</label>
-                <span class="form-control-static">@Model.Event.StartEndTimeAsString</span>
+                <label class="col-xs-4">Startzeit</label>
+                <span class="form-control-static"><strong>@Model.Event.StartEndTimeAsString</strong></span>
             </div>
             <div class="row">
-                <label class="col-md-6">Titel</label>
-                <span class="form-control-static">@Model.Event.Name</span>
+                <label class="col-xs-4">Titel</label>
+                <span class="form-control-static"><strong>@Model.Event.Name</strong></span>
             </div>
             <div class="row">
-                <label class="col-md-6">Ort / TP</label>
-                <span class="form-control-static">@Model.Event.Location</span>
+                <label class="col-xs-4">Ort / TP</label>
+                <span class="form-control-static"><strong>@Model.Event.Location</strong></span>
             </div>
             <div class="row">
-                <label class="col-md-6">Treffpunkt</label>
-                <span class="form-control-static">@Model.Event.MeetingPoint</span>
+                <label class="col-xs-4">Treffpunkt</label>
+                <span class="form-control-static"><strong>@Model.Event.MeetingPoint</strong></span>
             </div>
             <div class="row">
-                <label class="col-md-6">Organisator</label>
-                <span class="form-control-static">@Model.Event.Organisator.Fullname</span>
+                <label class="col-xs-4">Organisator</label>
+                <span class="form-control-static"><strong>@Model.Event.Organisator.Fullname</strong></span>
             </div>
             <div class="row">
-                <label class="col-md-12">Beschreibung</label>
-                <span class="col-md-12 form-control-static">@Model.Event.Description</span>
+                <label class="col-xs-12">Beschreibung</label>
+                <span class="col-md-12 form-control-static"><strong>@Model.Event.Description</strong></span>
             </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-xs-12">
                     <a asp-action="Ical" asp-route-id="@Model.Event.Id" class="btn btn-primary"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> iCal</a>
                     @if (Model.AllowEdit)
                     {
@@ -56,7 +56,7 @@
         </div>
         <div class="col-md-6">
             <div class="row">
-                <h3>Teilnehmer</h3>
+                <h5>Teilnehmer</h5>
             </div>
             @if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Accepted))
             {
