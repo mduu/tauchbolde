@@ -5,6 +5,9 @@
     Layout = "_Layout";
 }
 
+<script src="~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" asp-append-version="false" />
+
 <form asp-action="Edit" role="form" class="form-horizontal">
     <div class="container">
 
@@ -78,3 +81,16 @@
         </div>
     </div>
 </form>
+
+<script>
+$(function() {
+    $('#StartTime').datetimepicker({
+        format: 'DD.MM.YYYY HH:mm',
+        locale: 'de-CH'
+    });
+    $('#EndTime').datetimepicker({
+        format: 'DD.MM.YYYY HH:mm',
+        locale: 'de-CH'
+    });
+});
+</script>
