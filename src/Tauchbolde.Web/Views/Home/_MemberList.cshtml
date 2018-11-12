@@ -1,58 +1,65 @@
 ﻿@model Tauchbolde.Web.Models.AboutViewModels.AboutViewModel
 @foreach (var member in Model.Members)
 {
-    <div class="col-md-6">
-        <div class="panel panel-primary">
+    <div class="col-sm-6">
+        <div class="panel panel-primary" style="border: 1px solid #2196f3;">
             <div class="panel-body memeber-card">
                 <div class="row">
+
                     <div class="col-md-12">
-                        <h3>
-                            @member.Firstname
-                            <small>
-                                @if (!string.IsNullOrWhiteSpace(member.TwitterHandle))
-                                {
-                                    <a href="@member.GetTwitterUrl()" target="_blank" title="Link zum Twitter-Profil von @member.Realname">
-                                        <i class="fab fa-twitter-square"></i>
-                                    </a>
-                                }
-                                @if (!string.IsNullOrWhiteSpace(member.FacebookId))
-                                {
-                                    <a href="@member.GetFacebookeUrl()" target="_blank" title="Link zum Facebook-Profil von @member.Realname">
-                                        <i class="fab fa-facebook-square"></i>
-                                    </a>
-                                }
-                            </small>
-                        </h3>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <gravatar email-address="@member.User.Email">
-                        </gravatar>
-                    </div>
-                    <div class="col-md-9">
+
                         <div class="row">
-                            <div class="col-md-4">Ausbildung:</div>
-                            <div class="col-md-8"><strong>@member.Education</strong></div>
+                            <div class="col-xs-4">
+                                <gravatar email-address="@member.User.Email">
+                                </gravatar>
+                            </div>
+                            <div class="col-xs-8">
+                                <h3>
+                                    @member.Firstname
+                                    <small>
+                                        @if (!string.IsNullOrWhiteSpace(member.TwitterHandle))
+                                        {
+                                            <a href="@member.GetTwitterUrl()" target="_blank" title="Link zum Twitter-Profil von @member.Realname">
+                                                <i class="fab fa-twitter-square"></i>
+                                            </a>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(member.FacebookId))
+                                        {
+                                            <a href="@member.GetFacebookeUrl()" target="_blank" title="Link zum Facebook-Profil von @member.Realname">
+                                                <i class="fab fa-facebook-square"></i>
+                                            </a>
+                                        }
+                                    </small>
+                                </h3>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <hr />
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-xs-4">Ausbildung:</div>
+                            <div class="col-xs-8"><strong>@member.Education</strong></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">Erfahrung:</div>
-                            <div class="col-md-8"><strong>@member.Experience</strong></div>
+                            <div class="col-xs-4">Erfahrung:</div>
+                            <div class="col-xs-8"><strong>@member.Experience</strong></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">Tauchbold seit:</div>
-                            <div class="col-md-8"><strong>@member.MemberSince.ToStringSwiss()</strong></div>
+                            <div class="col-xs-4">Tauchbold seit:</div>
+                            <div class="col-xs-8"><strong>@member.MemberSince.ToStringSwiss()</strong></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">Motto:</div>
-                            <div class="col-md-8"><strong>@member.Slogan</strong></div>
+                            <div class="col-xs-4">Motto:</div>
+                            <div class="col-xs-8"><strong>@member.Slogan</strong></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">Webseite:</div>
-                            <div class="col-md-8"><strong><a href="@member.WebsiteUrl" target="_blank">@member.WebsiteUrl</a></strong></div>
+                            <div class="col-xs-4">Webseite:</div>
+                            <div class="col-xs-8"><strong><a href="@member.WebsiteUrl" target="_blank">@member.WebsiteUrl</a></strong></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-xs-12">
                                 @if (Model.IsTauchbold)
                                 {
                                     <a class="btn btn-primary btn-small" asp-action="Index" asp-controller="UserProfile" asp-route-id="@member.User.UserName" data-toggle="tooltip" data-placement="top" title="Nur für Tauchbolde einsehbar.">Profil</a>
