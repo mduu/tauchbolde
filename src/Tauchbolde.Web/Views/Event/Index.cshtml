@@ -3,28 +3,39 @@
     ViewBag.Title = "Aktivitäten";
     Layout = "_Layout";
 }
+
+@* HACK FOR FIREFOX AND RESPONSIVE TABLES *@
+<style>
+@@-moz-document url-prefix() {
+    fieldset {
+        display: table-cell;
+    }
+}
+</style>
+
 <h2>Aktivitäten</h2>
 
-<table class="table table-hover">
-    <tr>
-        <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().StartTime)</th>
-        <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Name)</th>
-        <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Location)</th>
-        <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().MeetingPoint)</th>
-        <th></th>
-    </tr>
-    @foreach (var upcommingEvent in Model.UpcommingEvents)
-    {
+<div class="table-responsive">
+    <table class="table table-hover">
         <tr>
-            <td>@upcommingEvent.StartEndTimeAsString</td>
-            <td>@upcommingEvent.Name</td>
-            <td>@upcommingEvent.Location</td>
-            <td>@upcommingEvent.MeetingPoint</td>
-            <td>
-                <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@upcommingEvent.Id"><span class="glyphicon glyphicon-search"></span>&nbsp;Details</a>
-            </td>
+            <th></th>
+            <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().StartTime)</th>
+            <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Name)</th>
+            <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Location)</th>
+            <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().MeetingPoint)</th>
         </tr>
-    }
-</table>
-
+        @foreach (var upcommingEvent in Model.UpcommingEvents)
+        {
+            <tr>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@upcommingEvent.Id"><span class="glyphicon glyphicon-search"></span></a>
+                </td>
+                <td>@upcommingEvent.StartEndTimeAsString</td>
+                <td>@upcommingEvent.Name</td>
+                <td>@upcommingEvent.Location</td>
+                <td>@upcommingEvent.MeetingPoint</td>
+            </tr>
+        }
+    </table>
+</div>
 <a href="@Url.Action("Edit")" id="create-event" class="btn btn-primary"><strong>Neue Aktivität</strong></a>
