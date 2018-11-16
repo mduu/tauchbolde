@@ -12,6 +12,7 @@ using Tauchbolde.Web.Models.HomeViewModels;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Common.DomainServices.SMTPSender;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -39,6 +40,14 @@ namespace Tauchbolde.Web.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+        
+        [Authorize]
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete(GlobalConstants.AuthCookieName);
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> About()

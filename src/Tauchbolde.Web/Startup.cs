@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Localization;
 using System.Collections.Generic;
 using System.Globalization;
 using Tauchbolde.Common.DomainServices.SMTPSender;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Tauchbolde.Web.Core;
 
 namespace Tauchbolde.Web
 {
@@ -87,10 +89,11 @@ namespace Tauchbolde.Web
                 options.LoginPath = "/Identity/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
+                options.Cookie.Name = GlobalConstants.AuthCookieName;
             });
 
             // External authorization
-            services.AddAuthentication()
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddMicrosoftAccount(options =>
                 {
                     options.ClientId = Configuration["Authentication:Microsoft:ClientId"];
@@ -109,13 +112,7 @@ namespace Tauchbolde.Web
                 options.SupportedCultures = new List<CultureInfo> { new CultureInfo("de-CH") };
                 options.RequestCultureProviders = new List<IRequestCultureProvider>();
             });
-
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddJsonOptions(
-                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                );
-
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowTwitter", builder => builder
@@ -123,6 +120,11 @@ namespace Tauchbolde.Web
                     .WithOrigins("https://twitter.com"));
             });
 
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
 
             ApplicationServices.Register(services);
         }
