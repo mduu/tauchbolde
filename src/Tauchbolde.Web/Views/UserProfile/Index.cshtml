@@ -2,19 +2,27 @@
 @{
     ViewBag.Title = "Profil von " + Model.Profile.Realname;
     Layout = "_Layout";
-}   
+}
 <h2>
-    <small>Tauchbolde-Profil</small><br />
-    @Model.Profile.Realname
+    Tauchbolde-Profil
 </h2>
 
 <form class="form-horizontal">
-
     <div class="col-md-6">
-
         <fieldset>
             <legend>Informationen</legend>
-
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Profilbild</label>
+                <div class="col-sm-9">
+                    <partial name="_UserAvatar" model="@Model.Profile" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="Profile.Realname"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">@Model.Profile.Realname</p>
+                </div>
+            </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Profile.Firstname"></label>
                 <div class="col-sm-9">
@@ -56,26 +64,23 @@
                     <p class="form-control-static">@Model.Profile.Experience</p>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Roles"></label>
                 <div class="col-sm-9">
                     <p class="form-control-static">
                         @foreach (var role in Model.Roles)
                         {
-                        <span class="label label-primary">@role</span>
+                            <span class="label label-primary">@role</span>
                         }
                     </p>
                 </div>
             </div>
-
         </fieldset>
     </div>
     <div class="col-md-6">
-
         <fieldset>
             <legend>Kommunikation </legend>
-
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Profile.User.Email"></label>
                 <div class="col-sm-9">
@@ -87,7 +92,6 @@
                     </p>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Profile.MobilePhone"></label>
                 <div class="col-sm-9">
@@ -99,7 +103,6 @@
                     </p>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Profile.WebsiteUrl"></label>
                 <div class="col-sm-9">
@@ -111,7 +114,6 @@
                     </p>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Profile.TwitterHandle"></label>
                 <div class="col-sm-9">
@@ -123,7 +125,6 @@
                     </p>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Profile.FacebookId"></label>
                 <div class="col-sm-9">
@@ -135,7 +136,6 @@
                     </p>
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-3 control-label" asp-for="Profile.SkypeId"></label>
                 <div class="col-sm-9">
@@ -147,14 +147,10 @@
                     </p>
                 </div>
             </div>
-
         </fieldset>
     </div>
-
     <div class="col-xs-12">
         <a class="btn btn-primary" title="Profil bearbeiten" asp-action="edit" asp-route-id="@Model.Profile.User.UserName">Bearbeiten</a>
     </div>
-
 </form>
-
 <div class="clearfix"></div>
