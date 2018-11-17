@@ -111,6 +111,9 @@ namespace Tauchbolde.Web
                 options.DefaultRequestCulture = new RequestCulture("de-CH");
                 options.SupportedCultures = new List<CultureInfo> { new CultureInfo("de-CH") };
                 options.RequestCultureProviders = new List<IRequestCultureProvider>();
+                options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(
+                    async context => new ProviderCultureResult("de")
+                ));
             });
             
             services.AddCors(options =>
