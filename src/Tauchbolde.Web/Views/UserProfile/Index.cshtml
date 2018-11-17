@@ -150,7 +150,10 @@
         </fieldset>
     </div>
     <div class="col-xs-12">
+    @if (Model.AllowEdit)
+    {
         <a class="btn btn-primary" title="Profil bearbeiten" asp-action="edit" asp-route-id="@Model.Profile.User.UserName">Bearbeiten</a>
+    }
     </div>
 </form>
 <div class="clearfix"></div>
