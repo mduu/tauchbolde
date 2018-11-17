@@ -15,6 +15,10 @@
                 <label class="col-sm-3 control-label">Profilbild</label>
                 <div class="col-sm-9">
                     <partial name="_UserAvatar" model="@Model.Profile" />
+                    @if(Model.AllowEdit)
+                    {
+                        <button class="btn btn-default btn-sm">Bild ändern ...</button>
+                    }
                 </div>
             </div>
             <div class="form-group">
