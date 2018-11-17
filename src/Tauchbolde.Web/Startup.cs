@@ -16,6 +16,7 @@ using System.Globalization;
 using Tauchbolde.Common.DomainServices.SMTPSender;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Tauchbolde.Web.Core;
+using System.Threading.Tasks;
 
 namespace Tauchbolde.Web
 {
@@ -112,7 +113,7 @@ namespace Tauchbolde.Web
                 options.SupportedCultures = new List<CultureInfo> { new CultureInfo("de-CH") };
                 options.RequestCultureProviders = new List<IRequestCultureProvider>();
                 options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(
-                    async context => new ProviderCultureResult("de")
+                    async context => await Task.FromResult(new ProviderCultureResult("de"))
                 ));
             });
             
