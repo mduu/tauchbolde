@@ -1,31 +1,38 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject Tauchbolde.Common.Repositories.IDiverRepository DiverRepository
 @{
     var isAdmin = false;
+    var userName = "";
+    Tauchbolde.Common.Model.Diver diver = null;
 
     if (User != null)
     {
         var user = await UserManager.GetUserAsync(User);
         isAdmin = user != null && await UserManager.IsInRoleAsync(user, Rolenames.Administrator);
+        userName = UserManager.GetUserName(User);
+        if (!string.IsNullOrWhiteSpace(userName))
+        {
+            diver = await DiverRepository.FindByUserNameAsync(userName);
+        }
     }
 }
-
 @if (SignInManager.IsSignedIn(User))
 {
     <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
             <a id="umenu" class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <gravatar additional-css-classes="img-circle" email-address="@UserManager.GetUserName(User)" image-size="24">
+                <gravatar additional-css-classes="img-circle" email-address="@userName" image-size="24">
                 </gravatar>
-                @UserManager.GetUserName(User) <span class="caret"></span>
+                @userName <span class="caret"></span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="umenu">
                 <li>
                     <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
                 </li>
                 <li>
-                    <a asp-controller="UserProfile" asp-action="Index" asp-route-id="@UserManager.GetUserName(User)">Mein Tauchbolde-Profil</a>
+                    <a asp-controller="UserProfile" asp-action="Index" asp-route-id="@diver.Id">Mein Tauchbolde-Profil</a>
                 </li>
                 <li>
                     <a asp-controller="MassMail" asp-action="Index">Email-Versand</a>

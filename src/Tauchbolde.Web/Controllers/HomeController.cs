@@ -28,7 +28,7 @@ namespace Tauchbolde.Web.Controllers
             IDiverRepository diverRepository,
             UserManager<IdentityUser> userManager,
             IAppEmailSender emailSender
-        )
+        ) : base (userManager, diverRepository)
         {
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));

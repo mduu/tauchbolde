@@ -33,5 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DomainServices\SMTPSender\" />
+    <Folder Include="Misc\" />
+    <Folder Include="DomainServices\Avatar\" />
   </ItemGroup>
 </Project>

@@ -26,6 +26,16 @@ namespace Tauchbolde.Common.Repositories
                                 .Include(d => d.User)
                                 .FirstOrDefaultAsync(u => u.User.UserName.Equals(username, StringComparison.CurrentCultureIgnoreCase));
         }
+        
+        /// <inheritdoc />
+        public override async Task<Diver> FindByIdAsync(Guid id)
+        {
+            if (id == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(id)); }
+            
+            return await Context.Diver
+                                .Include(d => d.User)
+                                .FirstOrDefaultAsync(u => u.Id == id);
+        }
 
         /// <inheritdoc />
         public async Task<ICollection<Diver>> GetAllTauchboldeUsersAsync(bool includingAdmins = false)

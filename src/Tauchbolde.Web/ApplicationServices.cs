@@ -5,6 +5,9 @@ using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Services;
 using Tauchbolde.Common.DomainServices.SMTPSender;
+using Tauchbolde.Web.Core;
+using Tauchbolde.Commom.Misc;
+using Tauchbolde.Common.DomainServices.Avatar;
 
 namespace Tauchbolde.Web
 {
@@ -16,7 +19,11 @@ namespace Tauchbolde.Web
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddScoped<ApplicationDbContext>();
+            services.AddSingleton<IMimeMapping, MimeMapping>();
             services.AddTransient<IAppEmailSender, SmtpSender>();
+            services.AddSingleton<IAvatarPathProvider, AvatarPathProvider>();
+            services.AddSingleton<IAvatarIdGenerator, AvatarIdGenerator>();
+            services.AddSingleton<IAvatarStore, AvatarStore>();
 
             // Repos
             services.AddTransient<IDiverRepository, DiverRepository>();

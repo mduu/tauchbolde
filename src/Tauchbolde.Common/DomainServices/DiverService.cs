@@ -5,7 +5,6 @@ using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
-using Microsoft.Extensions.FileProviders;
 
 namespace Tauchbolde.Common.DomainServices
 {
@@ -45,7 +44,16 @@ namespace Tauchbolde.Common.DomainServices
 
             return await diverRepository.FindByUserNameAsync(userName);
         }
+        
+        /// <inheritdoc/>
+        public async Task<Diver> GetMemberAsync(IDiverRepository diverRepository, Guid diverId)
+        {
+            if (diverId == Guid.Empty) { throw new ArgumentException("Guid.Empty now allowed!", nameof(diverId)); }
+        
+            return await diverRepository.FindByIdAsync(diverId);            
+        }
 
+        /// <inheritdoc/>
         public async Task UpdateUserProfil(IDiverRepository diverRepository, Diver profile)
         {
             if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
@@ -72,6 +80,7 @@ namespace Tauchbolde.Common.DomainServices
             diverRepository.Update(diver);
         }
 
+        /// <inheritdoc/>
         public async Task UpdateRolesAsync(Diver member, ICollection<string> roles)
         {
             if (member == null) { throw new ArgumentNullException(nameof(member)); }
@@ -97,6 +106,7 @@ namespace Tauchbolde.Common.DomainServices
             }
         }
 
+        /// <inheritdoc/>
         public async Task<string> AddMembersAsync(IDiverRepository diverRepository, string userName, string firstname, string lastname)
         {
             if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
