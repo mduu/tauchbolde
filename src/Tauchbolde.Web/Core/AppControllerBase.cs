@@ -14,7 +14,6 @@ namespace Tauchbolde.Web.Core
     /// </summary>
     public abstract class AppControllerBase: Controller
     {
-        private readonly IHostingEnvironment hostingEnvironment;
         private readonly UserManager<IdentityUser> userManager;
         private readonly IDiverRepository diverRepository;
 
@@ -27,7 +26,6 @@ namespace Tauchbolde.Web.Core
             UserManager<IdentityUser> userManager,
             IDiverRepository diverRepository)
         {
-            this.hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
