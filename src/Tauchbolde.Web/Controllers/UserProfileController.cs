@@ -178,7 +178,7 @@ namespace Tauchbolde.Web.Controllers
             }
             catch (Exception ex)
             {
-                ShowSuccessMessage($"Fheler beim Aktualisieren des Profilbildes: {ex.Message}");
+                ShowErrorMessage($"Fehler beim Aktualisieren des Profilbildes: {ex.Message}");
             }
             
             return RedirectToAction("Index", new { id });
