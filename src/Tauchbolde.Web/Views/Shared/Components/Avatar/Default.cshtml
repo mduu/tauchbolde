@@ -1,0 +1,33 @@
+﻿@using Tauchbolde.Common.DomainServices.Avatar
+@using Tauchbolde.Web.ViewComponents
+@model Tauchbolde.Web.Models.ViewComponentModels.AvatarViewModel
+
+@{
+    var avatarSize = AvatarConstants.SizeMd;
+    var cssClass = "img-circle";
+    switch (Model.AvatarSize)
+    {
+        case AvatarSize.Medium:
+            avatarSize = AvatarConstants.SizeMd;
+            cssClass = "img-rounded";
+            break;
+        case AvatarSize.Small:
+            avatarSize = AvatarConstants.SizeSm;
+            break;
+        default:
+            throw new System.ArgumentOutOfRangeException();
+    }
+}
+@if (string.IsNullOrWhiteSpace(Model.Diver.AvatarId))
+{
+    <gravatar additional-css-classes="@cssClass"
+              email-address="@Model.Diver.User.Email"
+              image-size="@avatarSize">
+    </gravatar>
+}
+else
+{
+    <img class="@cssClass"
+         style="width: @(avatarSize)px; height: @(avatarSize)px;"
+         src="@Url.Action("GetAvatar", "UserProfile", new { avatarId = Model.Diver.AvatarId })" />
+}

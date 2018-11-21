@@ -1,4 +1,5 @@
-﻿@model Tauchbolde.Web.Models.UserProfileModels.WriteProfileModel
+﻿@using Tauchbolde.Common.DomainServices.Avatar
+@model Tauchbolde.Web.Models.UserProfileModels.WriteProfileModel
 @{
     ViewBag.Title = "Profil von " + Model.Profile.Realname + "bearbeiten";
     Layout = "_Layout";
@@ -27,8 +28,14 @@
         }
 
     #img-upload {
-        width: 80px;
-        height: 80px;
+        width: @(AvatarConstants.SizeMd)px;
+        height: @(AvatarConstants.SizeMd)px;
+    }
+
+    #img-upload-small {
+        margin-left: 30px;
+        width: @(AvatarConstants.SizeSm)px;
+        height: @(AvatarConstants.SizeSm)px;
     }
 </style>
 
@@ -38,8 +45,6 @@
 </h3>
 
 <form class="form" asp-antiforgery="true" asp-action="UploadAvatar" method="post" enctype="multipart/form-data">
-    @*<input type="hidden" asp-for="Profile.Id" />*@
-    @*<input type="file" id="files">*@
     <div class="form-group">
         <label>Bild hochladen</label>
         <div class="input-group">
@@ -55,7 +60,8 @@
     <div class="form-group">
         <label>Vorschau</label>
         <div class="input-group">
-            <img id='img-upload' class="img-circle" />
+            <img id='img-upload' class="img-rounded" />
+            <img id='img-upload-small' class="img-circle" />
         </div>
     </div>
 
@@ -89,6 +95,7 @@
 
                 reader.onload = function (e) {
                     $('#img-upload').attr('src', e.target.result);
+                    $('#img-upload-small').attr('src', e.target.result);
                 }
 
                 reader.readAsDataURL(input.files[0]);

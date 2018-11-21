@@ -19,7 +19,7 @@ namespace Tauchbolde.Common.DomainServices.Avatar
         }
         
         /// <inheritdoc/>
-        public async Task<byte[]> GetAvatarBytes(string avatarId)
+        public async Task<byte[]> GetAvatarBytesAsync(string avatarId)
         {
             var avatarPath = avatarPathProvider.MapPath(avatarId);
             return await File.ReadAllBytesAsync(avatarPath);      
@@ -32,7 +32,10 @@ namespace Tauchbolde.Common.DomainServices.Avatar
 
             // TODO Resize Avatar
             await StoreNewAvatarAsync(fileContent, newAvatarId);
-            DeleteAllByAvatarId(oldAvatarId);
+            if (!string.IsNullOrWhiteSpace(oldAvatarId))
+            {
+                DeleteAllByAvatarId(oldAvatarId);
+            }
 
             return newAvatarId;
         }

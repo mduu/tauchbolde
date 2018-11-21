@@ -8,7 +8,7 @@ namespace Tauchbolde.Common.DomainServices.Avatar
     /// </summary>
     public interface IAvatarStore
     {
-        Task<byte[]> GetAvatarBytes(string avatarId);
+        Task<byte[]> GetAvatarBytesAsync(string avatarId);
         Task<string> StoreAvatarAsync(string firstName, string oldAvatarId, string fileExt, Stream fileContent);
     }
 }

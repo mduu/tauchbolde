@@ -32,6 +32,7 @@
     <Folder Include="Views\MassMail\" />
     <Folder Include="Models\MassMail\" />
     <Folder Include="Models\HomeViewModels\" />
+    <Folder Include="Views\Shared\Components\Avatar\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20170205143205_InitialCreate.cs" />
@@ -43,5 +44,8 @@
     <Content Remove="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
     <Content Remove="wwwroot\fonts\glyphicons-halflings-regular.svg" />
     <Content Remove="wwwroot\fonts\glyphicons-halflings-regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="appdata\avatar\Marc_1.jpg" />
   </ItemGroup>
 </Project>

@@ -23,6 +23,9 @@ namespace Tauchbolde.Web.Core
             _hostingEnvironment = environment;
         }
 
-        protected override string GetRootPath() => _hostingEnvironment.ContentRootPath;
+        protected override string GetRootPath()
+            => Path.Combine(
+                _hostingEnvironment.ContentRootPath,
+                "appdata");
     }
 }

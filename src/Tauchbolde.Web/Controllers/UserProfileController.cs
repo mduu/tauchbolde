@@ -90,6 +90,22 @@ namespace Tauchbolde.Web.Controllers
                 Profile = memberContext.Member,
             });
         }
+        
+        // GET: /avatar/marc_3.jpg
+        [Route("avatar/{avatarId}")]
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAvatar(string avatarId)
+        {
+            if (string.IsNullOrWhiteSpace(avatarId))
+            {
+                return BadRequest();
+            }
+
+            return File(
+                await avatarStore.GetAvatarBytesAsync(avatarId),
+                mimeMapping.GetMimeMapping(Path.GetExtension(avatarId)));
+        }
 
         // GET: /profil/edit
         [Route("edit/{id}")]
