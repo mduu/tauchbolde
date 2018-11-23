@@ -24,6 +24,7 @@ namespace Tauchbolde.Web
             services.AddSingleton<IAvatarPathProvider, AvatarPathProvider>();
             services.AddSingleton<IAvatarIdGenerator, AvatarIdGenerator>();
             services.AddSingleton<IAvatarStore, AvatarStore>();
+            services.AddSingleton<IImageResizer, ImageResizer>();
 
             // Repos
             services.AddTransient<IDiverRepository, DiverRepository>();

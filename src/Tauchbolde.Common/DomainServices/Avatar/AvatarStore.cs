@@ -9,13 +9,16 @@ namespace Tauchbolde.Common.DomainServices.Avatar
     {
         private readonly IAvatarIdGenerator avatarIdGenerator;
         private readonly IAvatarPathProvider avatarPathProvider;
+        private readonly IImageResizer imageResizer;
 
         public AvatarStore(
             IAvatarIdGenerator avatarIdGenerator,
-            IAvatarPathProvider avatarPathProvider)
+            IAvatarPathProvider avatarPathProvider,
+            IImageResizer imageResizer)
         {
             this.avatarIdGenerator = avatarIdGenerator ?? throw new ArgumentNullException(nameof(avatarIdGenerator));
             this.avatarPathProvider = avatarPathProvider ?? throw new ArgumentNullException(nameof(avatarPathProvider));
+            this.imageResizer = imageResizer ?? throw new ArgumentNullException(nameof(imageResizer));
         }
         
         /// <inheritdoc/>
@@ -29,9 +32,16 @@ namespace Tauchbolde.Common.DomainServices.Avatar
         public async Task<string> StoreAvatarAsync(string firstName, string oldAvatarId, string fileExt, Stream fileContent)
         {
             var newAvatarId = avatarIdGenerator.Generate(firstName, fileExt);
+            
+            using (var resizedImageStream = imageResizer.Resize(
+                AvatarConstants.MaxSize,
+                AvatarConstants.MaxSize,
+                fileContent,
+                fileExt))
+            {
+                await StoreNewAvatarAsync(resizedImageStream, newAvatarId);
+            }
 
-            // TODO Resize Avatar
-            await StoreNewAvatarAsync(fileContent, newAvatarId);
             if (!string.IsNullOrWhiteSpace(oldAvatarId))
             {
                 DeleteAllByAvatarId(oldAvatarId);
