@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Web.Models.MassMail;
 using Tauchbolde.Common.DomainServices;
+using Microsoft.AspNetCore.Identity;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -19,7 +20,9 @@ namespace Tauchbolde.Web.Controllers
 
         public MassMailController(
             IDiverRepository diverRepository,
-            IMassMailService massMailService)
+            IMassMailService massMailService,
+            UserManager<IdentityUser> userManager)
+            : base (userManager, diverRepository)
         {
             this.diverRepository = diverRepository ?? throw new System.ArgumentNullException(nameof(diverRepository));
             this.massMailService = massMailService ?? throw new System.ArgumentNullException(nameof(massMailService));

@@ -14,7 +14,11 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">Profilbild</label>
                 <div class="col-sm-9">
-                    <partial name="_UserAvatar" model="@Model.Profile" />
+                    <vc:avatar Diver="@Model.Profile" avatar-size="Medium" />
+                    @if(Model.AllowEdit)
+                    {
+                        <a class="btn btn-default btn-sm" asp-action="EditAvatar" asp-route-id="@Model.Profile.Id">Bild ändern ...</a>
+                    }
                 </div>
             </div>
             <div class="form-group">
@@ -152,7 +156,7 @@
     <div class="col-xs-12">
     @if (Model.AllowEdit)
     {
-        <a class="btn btn-primary" title="Profil bearbeiten" asp-action="edit" asp-route-id="@Model.Profile.User.UserName">Bearbeiten</a>
+        <a class="btn btn-primary" title="Profil bearbeiten" asp-action="edit" asp-route-id="@Model.Profile.Id">Bearbeiten</a>
     }
     </div>
 </form>

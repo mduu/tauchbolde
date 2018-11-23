@@ -30,6 +30,7 @@ namespace Tauchbolde.Web.Controllers
             UserManager<IdentityUser> userManager,
             IDiverRepository diverRepository,
             IDiverService diverService)
+            : base(userManager, diverRepository)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));

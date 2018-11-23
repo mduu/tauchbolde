@@ -43,9 +43,18 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="DomainServices\Notifications\" />
+    <Folder Include="Web\" />
+    <Folder Include="Web\Core\" />
+    <Folder Include="DomainServices\Avatar\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="DomainServices\Notifications\HtmlNotificationFormatterTests.SimpleFormat.approved.txt" />
+    <None Remove="DomainServices\Avatar\TestData\john-1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="DomainServices\Avatar\AvatarIdGeneratorTests.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 </Project>
