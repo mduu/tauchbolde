@@ -37,6 +37,7 @@ namespace Tauchbolde.Common.DomainServices.Avatar
                 }
             }
 
+            outStream.Seek(0, 0);
             return outStream;
         }
     }
