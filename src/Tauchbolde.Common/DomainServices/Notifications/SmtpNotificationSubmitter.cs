@@ -22,8 +22,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                 recipient.User.Email,
 
                  "Tauchbolde Action-Log",
-                content
-,
+                content,
                 "webmaster@tauchbolde.ch",
                 "Tauchbolde Webmaster");
         }
