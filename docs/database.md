@@ -12,5 +12,10 @@ We use Entity Framework Core to manage and access our database. Currently we run
 
 ## Update database
 
-1. Open a terminal and navigate into the `/src/Tauchbolde.Web` folder.
-1. Execute the command: `dotnet ef database update -p ../Tauchbolde.Common`.
+1. Open a terminal and navigate into the `/src/Tauchbolde.Common` folder.
+1. Execute the command: `dotnet ef database update -s ../Tauchbolde.Web`.
+
+## Create SQL migration scrip
+
+1. Open a terminal and navigate to `/src/Tauchbolde.Common' folder.
+1. Execute: `dotnet ef migrations script -i  -o ../../sql/update_to_latest.sql -s ../Tauchbolde.Web`.
