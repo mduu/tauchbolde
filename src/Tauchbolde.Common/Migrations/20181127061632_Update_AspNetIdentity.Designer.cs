@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181127061632_Update_AspNetIdentity")]
+    partial class Update_AspNetIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,8 +240,6 @@ namespace Tauchbolde.Common.Migrations
                     b.Property<int>("NotificationIntervalInHours")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(1);
-
-                    b.Property<bool>("SendOwnNoticiations");
 
                     b.Property<string>("SkypeId");
 

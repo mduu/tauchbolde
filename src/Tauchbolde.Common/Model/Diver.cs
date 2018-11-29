@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 
 namespace Tauchbolde.Common.Model
 {
@@ -58,6 +59,10 @@ namespace Tauchbolde.Common.Model
         [Display(Name = "Benachrichtigungsintervall (in Stunden)")]
         [Required]
         public int NotificationIntervalInHours { get; set; }
+        
+        [Display(Name = "Eigene Aktionen in meine Benachrichtungen")]
+        [Required, DefaultValue(false)]
+        public bool SendOwnNoticiations { get; set; }
 
         [Display(Name = "Benachrichtigungen zuletzt geprüft um")]
         public DateTime? LastNotificationCheckAt { get; set; }

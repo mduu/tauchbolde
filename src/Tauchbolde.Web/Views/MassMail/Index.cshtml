@@ -52,7 +52,7 @@
             des neuen Emails.
         </p>
 
-        <textarea id="mailReceivers" name="mailReceivers" class="form-control" cols="40" rows="3">@Model.TauchboldeEmailReceiver</textarea>
+        <textarea id="mailReceivers" name="mailReceivers" readonly cols="40" rows="3" style="font-weight: bold; margin-bottom: 8px; width: 100%; background-color: #f0f0f0; border: 1px solid gray;">@Model.TauchboldeEmailReceiver</textarea>
         <button id="copyToClipboard" name="copyToClipboard" class="btn btn-primary"><span class="glyphicon glyphicon-copy"></span> Empfänger in die Zwischenablage kopieren</button>
         <div id="copySuccessLabel" class="label label-success" style="display: none">Kopiert.</div>
 
