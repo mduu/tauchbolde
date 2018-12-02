@@ -30,12 +30,15 @@
                 <li>
                     <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
                 </li>
-                <li>
-                    <a asp-controller="UserProfile" asp-action="Index" asp-route-id="@diver.Id">Mein Tauchbolde-Profil</a>
-                </li>
-                <li>
-                    <a asp-controller="MassMail" asp-action="Index">Email-Versand</a>
-                </li>
+                @if (diver != null)
+                {
+                    <li>
+                        <a asp-controller="UserProfile" asp-action="Index" asp-route-id="@diver.Id">Mein Tauchbolde-Profil</a>
+                    </li>
+                    <li>
+                        <a asp-controller="MassMail" asp-action="Index">Email-Versand</a>
+                    </li>
+                }
                 @if (isAdmin)
                 {
                     <li role="separator" class="divider"></li>
