@@ -17,6 +17,7 @@ using Tauchbolde.Common.DomainServices.SMTPSender;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
+using Tauchbolde.Web.Filters;
 
 namespace Tauchbolde.Web
 {
@@ -124,7 +125,10 @@ namespace Tauchbolde.Web
                     .WithOrigins("https://twitter.com"));
             });
 
-            services.AddMvc()
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(BuildNumberFilter));
+            })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore

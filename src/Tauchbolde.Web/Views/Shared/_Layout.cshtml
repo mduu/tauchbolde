@@ -76,7 +76,9 @@
         <div class="clearfix"></div>
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Tauchbolde</p>
+            <p>
+                &copy; @DateTime.Now.Year - Tauchbolde | Build: @ViewData["buildNumber"]
+            </p>
         </footer>
     </div>
     <environment include="Development">
