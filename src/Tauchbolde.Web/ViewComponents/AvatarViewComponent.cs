@@ -16,8 +16,6 @@ namespace Tauchbolde.Web.ViewComponents
     {
         public IViewComponentResult Invoke(Diver diver, AvatarSize avatarSize)
         {
-            if (diver == null) { throw new ArgumentNullException(nameof(diver)); }
-
             return View(new AvatarViewModel
             {
                 Diver = diver,
