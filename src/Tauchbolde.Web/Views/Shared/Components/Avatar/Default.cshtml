@@ -18,7 +18,7 @@
             throw new System.ArgumentOutOfRangeException();
     }
 }
-@if (string.IsNullOrWhiteSpace(Model.Diver.AvatarId))
+@if (string.IsNullOrWhiteSpace(Model.Diver?.AvatarId))
 {
     <gravatar additional-css-classes="@cssClass"
               email-address="@Model.Diver.User.Email"
