@@ -1,7 +1,8 @@
-﻿@using Tauchbolde.Common.DomainServices.Avatar
+﻿@using Microsoft.AspNetCore.Identity
+@using Tauchbolde.Common.DomainServices.Avatar
 @using Tauchbolde.Web.ViewComponents
+@inject UserManager<IdentityUser> UserManager
 @model Tauchbolde.Web.Models.ViewComponentModels.AvatarViewModel
-
 @{
     var avatarSize = AvatarConstants.SizeMd;
     var cssClass = "img-circle";
@@ -17,17 +18,24 @@
         default:
             throw new System.ArgumentOutOfRangeException();
     }
+
+    var emailAddress = "";
+    if (User != null)
+    {
+        var user = await UserManager.GetUserAsync(User);
+        emailAddress = user.Email;
+    }
 }
-@if (string.IsNullOrWhiteSpace(Model.Diver?.AvatarId))
-{
-    <gravatar additional-css-classes="@cssClass"
-              email-address="@Model.Diver.User.Email"
-              image-size="@avatarSize">
-    </gravatar>
-}
-else
+@if (!string.IsNullOrWhiteSpace(Model.Diver?.AvatarId))
 {
     <img class="@cssClass"
          style="width: @(avatarSize)px; height: @(avatarSize)px;"
          src="@Url.Action("GetAvatar", "UserProfile", new { avatarId = Model.Diver.AvatarId })" />
+}
+else if (!string.IsNullOrWhiteSpace(emailAddress))
+{
+    <gravatar additional-css-classes="@cssClass"
+              email-address="@emailAddress"
+              image-size="@avatarSize">
+    </gravatar>
 }
