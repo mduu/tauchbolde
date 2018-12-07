@@ -117,7 +117,7 @@ namespace Tauchbolde.Web
                     async context => await Task.FromResult(new ProviderCultureResult("de"))
                 ));
             });
-            
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowTwitter", builder => builder
@@ -140,26 +140,22 @@ namespace Tauchbolde.Web
         private void ConfigureDatabase(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("TauchboldeConnection");
- 
-            //var builder = new SqlConnectionStringBuilder(connectionString);
-            //if (!string.IsNullOrWhiteSpace(Configuration["DbUser"]))
-            //{
-            //    builder.UserID = Configuration["DbUser"];
-            //}
-            //if (!string.IsNullOrWhiteSpace(Configuration["DbPassword"]))
-            //{
-            //    builder.Password = Configuration["DbPassword"];
-            //}
+
+            if (!string.IsNullOrWhiteSpace(Configuration["DbUser"]))
+            {
+                connectionString += $"User ID={Configuration["DbUser"]};";
+            }
+            if (!string.IsNullOrWhiteSpace(Configuration["DbPassword"]))
+            {
+                  connectionString += $"Password={Configuration["DbPassword"]};";
+            }
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(
                     connectionString,
                     b => b.MigrationsAssembly("Tauchbolde.Common")
-        )
-    );
-               
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseNpgsql(builder.ConnectionString));
+                )
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
