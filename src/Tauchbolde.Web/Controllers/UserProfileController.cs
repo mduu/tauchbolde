@@ -118,7 +118,7 @@ namespace Tauchbolde.Web.Controllers
                 await context.SaveChangesAsync();
 
                 ShowSuccessMessage("Profil wurde gespeichert.");
-                return RedirectToAction("Index", new { id = model.Profile.User.UserName });
+                return RedirectToAction("Index", new { id = model.Profile.Id });
             }
 
             ShowErrorMessage("Fehler beim Speichern aufgetreten!");

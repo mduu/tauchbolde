@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common;
-using System.Data.SqlClient;
+using Npgsql;
 using Microsoft.AspNetCore.Localization;
 using System.Collections.Generic;
 using System.Globalization;
@@ -117,7 +117,7 @@ namespace Tauchbolde.Web
                     async context => await Task.FromResult(new ProviderCultureResult("de"))
                 ));
             });
-            
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowTwitter", builder => builder
@@ -129,7 +129,7 @@ namespace Tauchbolde.Web
             {
                 options.Filters.Add(typeof(BuildNumberFilter));
             })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
@@ -140,19 +140,22 @@ namespace Tauchbolde.Web
         private void ConfigureDatabase(IServiceCollection services)
         {
             var connectionString = Configuration.GetConnectionString("TauchboldeConnection");
-            var builder = new SqlConnectionStringBuilder(connectionString);
 
             if (!string.IsNullOrWhiteSpace(Configuration["DbUser"]))
             {
-                builder.UserID = Configuration["DbUser"];
+                connectionString += $"User ID={Configuration["DbUser"]};";
             }
             if (!string.IsNullOrWhiteSpace(Configuration["DbPassword"]))
             {
-                builder.Password = Configuration["DbPassword"];
+                  connectionString += $"Password={Configuration["DbPassword"]};";
             }
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.ConnectionString));
+                options.UseNpgsql(
+                    connectionString,
+                    b => b.MigrationsAssembly("Tauchbolde.Common")
+                )
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -4,19 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181015192404_AddFacebookId")]
-    partial class AddFacebookId
+    [Migration("20181207214004_Initial_Postgres")]
+    partial class Initial_Postgres
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.3-rtm-32065");
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
+                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -205,6 +208,8 @@ namespace Tauchbolde.Common.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AvatarId");
+
                     b.Property<string>("Education");
 
                     b.Property<string>("Experience");
@@ -231,6 +236,8 @@ namespace Tauchbolde.Common.Migrations
                     b.Property<int>("NotificationIntervalInHours")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(1);
+
+                    b.Property<bool>("SendOwnNoticiations");
 
                     b.Property<string>("SkypeId");
 

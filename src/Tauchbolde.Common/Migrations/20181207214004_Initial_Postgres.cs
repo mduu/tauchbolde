@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Tauchbolde.Common.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial_Postgres : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,7 +52,7 @@ namespace Tauchbolde.Common.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -72,7 +73,7 @@ namespace Tauchbolde.Common.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -162,15 +163,17 @@ namespace Tauchbolde.Common.Migrations
                     Lastname = table.Column<string>(nullable: false),
                     MemberSince = table.Column<DateTime>(nullable: true),
                     MemberUntil = table.Column<DateTime>(nullable: true),
+                    AvatarId = table.Column<string>(nullable: true),
                     WebsiteUrl = table.Column<string>(nullable: true),
                     TwitterHandle = table.Column<string>(nullable: true),
+                    FacebookId = table.Column<string>(nullable: true),
                     SkypeId = table.Column<string>(nullable: true),
                     Slogan = table.Column<string>(nullable: true),
                     Education = table.Column<string>(nullable: true),
                     Experience = table.Column<string>(nullable: true),
                     MobilePhone = table.Column<string>(nullable: true),
-                    NotificationIntervalInHours = table.Column<int>(nullable: false, defaultValue: 1)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    NotificationIntervalInHours = table.Column<int>(nullable: false, defaultValue: 1),
+                    SendOwnNoticiations = table.Column<bool>(nullable: false),
                     LastNotificationCheckAt = table.Column<DateTime>(nullable: true),
                     UserId = table.Column<string>(nullable: true)
                 },
@@ -212,31 +215,6 @@ namespace Tauchbolde.Common.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Posts",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Category = table.Column<int>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    PublishDate = table.Column<DateTime>(nullable: false),
-                    ModificationDate = table.Column<DateTime>(nullable: false),
-                    AuthorId = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: false),
-                    Text = table.Column<string>(nullable: true),
-                    IntroImageId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Posts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Posts_Diver_AuthorId",
-                        column: x => x.AuthorId,
-                        principalTable: "Diver",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -272,8 +250,7 @@ namespace Tauchbolde.Common.Migrations
                     RecipientId = table.Column<Guid>(nullable: false),
                     OccuredAt = table.Column<DateTime>(nullable: false),
                     AlreadySent = table.Column<bool>(nullable: false, defaultValue: false),
-                    CountOfTries = table.Column<int>(nullable: false, defaultValue: 0)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    CountOfTries = table.Column<int>(nullable: false, defaultValue: 0),
                     Message = table.Column<string>(nullable: false),
                     Type = table.Column<int>(nullable: false),
                     EventId = table.Column<Guid>(nullable: false)
@@ -302,8 +279,7 @@ namespace Tauchbolde.Common.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     EventId = table.Column<Guid>(nullable: false),
                     ParticipatingDiverId = table.Column<Guid>(nullable: false),
-                    CountPeople = table.Column<int>(nullable: false, defaultValue: 1)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    CountPeople = table.Column<int>(nullable: false, defaultValue: 1),
                     Note = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     BuddyTeamName = table.Column<string>(nullable: true)
@@ -321,27 +297,6 @@ namespace Tauchbolde.Common.Migrations
                         name: "FK_Participants_Diver_ParticipatingDiverId",
                         column: x => x.ParticipatingDiverId,
                         principalTable: "Diver",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PostImages",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    PostId = table.Column<Guid>(nullable: false),
-                    Caption = table.Column<string>(nullable: true),
-                    ImageUrlThumbnail = table.Column<string>(nullable: true),
-                    ImageUrlLarge = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PostImages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PostImages_Posts_PostId",
-                        column: x => x.PostId,
-                        principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -427,21 +382,6 @@ namespace Tauchbolde.Common.Migrations
                 name: "IX_Participants_ParticipatingDiverId",
                 table: "Participants",
                 column: "ParticipatingDiverId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PostImages_PostId",
-                table: "PostImages",
-                column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Posts_AuthorId",
-                table: "Posts",
-                column: "AuthorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Posts_Category_PublishDate",
-                table: "Posts",
-                columns: new[] { "Category", "PublishDate" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -471,16 +411,10 @@ namespace Tauchbolde.Common.Migrations
                 name: "Participants");
 
             migrationBuilder.DropTable(
-                name: "PostImages");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Events");
-
-            migrationBuilder.DropTable(
-                name: "Posts");
 
             migrationBuilder.DropTable(
                 name: "Diver");
