@@ -4,18 +4,23 @@ using System.Text;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DomainServices.Notifications;
 
 namespace Tauchbolde.Common.DomainServices
 {
     public class EventService : IEventService
     {
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly INotificationService notificationService;
 
-        public EventService(ApplicationDbContext applicationDbContext)
+        public EventService(
+            ApplicationDbContext applicationDbContext,
+            INotificationService notificationService)
         {
             if (applicationDbContext == null) throw new ArgumentNullException(nameof(applicationDbContext));
 
             _applicationDbContext = applicationDbContext;
+            this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
         /// <inheritdoc />

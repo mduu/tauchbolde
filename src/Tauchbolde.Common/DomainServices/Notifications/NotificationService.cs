@@ -12,64 +12,65 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     /// </summary>
     public class NotificationService : INotificationService
     {
+        private readonly INotificationRepository notificationRepository;
+        private readonly IDiverRepository diverRepository;
+        private readonly IParticipantRepository participantRepository;
+
+        public NotificationService(
+            INotificationRepository notificationRepository,
+            IDiverRepository diverRepository,
+            IParticipantRepository participantRepository)
+        {
+            this.notificationRepository = notificationRepository ?? throw new ArgumentNullException(nameof(notificationRepository));
+            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
+            this.participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
+        }
+
         /// <inheritdoc />
         public async Task NotifyForNewEventAsync(
-            INotificationRepository notificationRepository,
-            IDiverRepository userRepository,
             Event newEvent)
         {
-            if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
-            if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
             if (newEvent == null) throw new ArgumentNullException(nameof(newEvent));
 
-            var recipients = await userRepository.GetAllTauchboldeUsersAsync();
+            var recipients = await diverRepository.GetAllTauchboldeUsersAsync();
             var message = $"Neue Aktivität '{newEvent.Name}' ({newEvent.StartEndTimeAsString}) von {newEvent.Organisator.Realname} erstellt";
 
-            await InsertNotification(notificationRepository, newEvent, recipients, NotificationType.NewEvent, message);
+            await InsertNotification(newEvent, recipients, NotificationType.NewEvent, message);
         }
 
         /// <inheritdoc />
-        public async Task NotifyForChangedEventAsync(
-            INotificationRepository notificationRepository,
-            IDiverRepository userRepository,
-            Event changedEvent)
+        public async Task NotifyForChangedEventAsync(Event changedEvent)
         {
-            if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
-            if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
             if (changedEvent == null) throw new ArgumentNullException(nameof(changedEvent));
 
-            var recipients = await userRepository.GetAllTauchboldeUsersAsync();
+            var recipients = await diverRepository.GetAllTauchboldeUsersAsync();
             var message = $"Aktivität geändert '{changedEvent.Name}' ({changedEvent.StartEndTimeAsString}) von {changedEvent.Organisator.Realname}";
 
-            await InsertNotification(notificationRepository, changedEvent, recipients, NotificationType.EditEvent, message);
+            await InsertNotification(changedEvent, recipients, NotificationType.EditEvent, message);
         }
 
         /// <inheritdoc />
-        public async Task NotifyForCanceledEventAsync(INotificationRepository notificationRepository, IDiverRepository userRepository, IParticipantRepository participantRepository, Event canceledEvent)
+        public async Task NotifyForCanceledEventAsync(Event canceledEvent)
         {
-            if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
-            if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
             if (canceledEvent == null) throw new ArgumentNullException(nameof(canceledEvent));
 
             // Recipients all Tauchbolde that did not yet "decline" the Event already
             var declinedParticipants = await participantRepository.GetParticipantsForEventByStatusAsync(canceledEvent.Id, ParticipantStatus.Declined);
-            var recipients = (await userRepository.GetAllTauchboldeUsersAsync())
+            var recipients = (await diverRepository.GetAllTauchboldeUsersAsync())
                 .Where(u => declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
                 .ToList();
 
             var message = $"Aktivität '{canceledEvent.Name}' ({canceledEvent.StartEndTimeAsString}) wurde abgesagt von {canceledEvent.Organisator.Realname}.";
 
-            await InsertNotification(notificationRepository, canceledEvent, recipients, NotificationType.CancelEvent, message);
+            await InsertNotification(canceledEvent, recipients, NotificationType.CancelEvent, message);
         }
 
         /// <inheritdoc />
-        public async Task NotifyForChangedParticipation(INotificationRepository notificationRepository, IDiverRepository userRepository, IParticipantRepository participantRepository, Participant participant)
+        public async Task NotifyForChangedParticipation(Participant participant)
         {
-            if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
-            if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
             if (participant == null) throw new ArgumentNullException(nameof(participant));
 
-            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(userRepository, participantRepository, participant.EventId);
+            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(participant.EventId);
 
             var message = "";
             NotificationType notificationType;
@@ -95,37 +96,32 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                     throw new ArgumentOutOfRangeException();
             }
 
-            await InsertNotification(notificationRepository, participant.Event, recipients, notificationType, message);
+            await InsertNotification(participant.Event, recipients, notificationType, message);
         }
 
         /// <inheritdoc />
-        public async Task NotifyForEventComment(INotificationRepository notificationRepository, IDiverRepository userRepository, IParticipantRepository participantRepository, Comment comment)
+        public async Task NotifyForEventComment(Comment comment)
         {
-            if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
-            if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
             if (comment == null) throw new ArgumentNullException(nameof(comment));
 
-            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(userRepository, participantRepository, comment.EventId);
+            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(comment.EventId);
             var message = $"Neuer Kommentar von '{comment.Author.Realname}' für Event '{comment.Event.Name}' ({comment.Event.StartEndTimeAsString}): {comment.Text}";
 
-            await InsertNotification(notificationRepository, comment.Event, recipients, NotificationType.Commented, message);
+            await InsertNotification(comment.Event, recipients, NotificationType.Commented, message);
         }
 
-        private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(
-            IDiverRepository userRepository,
-            IParticipantRepository participantRepository, Guid eventId)
+        private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(Guid eventId)
         {
             var declinedParticipants = await participantRepository.GetParticipantsForEventByStatusAsync(eventId, ParticipantStatus.Declined);
 
-            var result = (await userRepository.GetAllTauchboldeUsersAsync())
+            var result = (await diverRepository.GetAllTauchboldeUsersAsync())
                 .Where(u => declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
                 .ToList();
 
             return result;
         }
 
-        private static async Task InsertNotification(
-            INotificationRepository notificationRepository,
+        private async Task InsertNotification(
             Event relatedEvent,
             ICollection<Diver> recipients,
             NotificationType notificationType,
