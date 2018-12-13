@@ -33,7 +33,7 @@ namespace Tauchbolde.Common.DomainServices
             {
                 throw new InvalidOperationException($"Event with ID [{eventId}] not found!");
             }
-
+            
             return CreateIcalStream(evt);
         }
 
@@ -70,10 +70,12 @@ namespace Tauchbolde.Common.DomainServices
             if (isNew)
             {
                 await eventRepository.InsertAsync(eventToStore);
+                await notificationService.NotifyForNewEventAsync(eventToStore);
             }
             else
             {
                 eventRepository.Update(eventToStore);
+                await notificationService.NotifyForChangedEventAsync(eventToStore);
             }
 
             return eventToStore;
@@ -97,6 +99,7 @@ namespace Tauchbolde.Common.DomainServices
                 };
 
                 await commentRepository.InsertAsync(comment);
+                await notificationService.NotifyForEventComment(comment);
 
                 return comment;
             }
@@ -120,6 +123,8 @@ namespace Tauchbolde.Common.DomainServices
 
                 comment.Text = commentText;
             }
+
+            await notificationService.NotifyForEventComment(comment);
 
             return comment;
         }
