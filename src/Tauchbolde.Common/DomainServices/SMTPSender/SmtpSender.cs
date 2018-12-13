@@ -18,11 +18,11 @@ namespace Tauchbolde.Common.DomainServices.SMTPSender
         /// <param name="options">SMTP Configuration options to use.</param>
         public SmtpSender(IOptions<SmtpSenderConfiguration> options)
         {
-            this.options = options?.Value ?? throw new System.ArgumentNullException(nameof(options));
+            this.options = options?.Value ?? throw new ArgumentNullException(nameof(options));
         }
 
         /// <inheritdoc/>
-        public async Task Send(
+        public async Task SendAsync(
             string receiverName,
             string receiverEmail,
             string subject,

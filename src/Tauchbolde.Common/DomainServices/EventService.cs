@@ -24,7 +24,7 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc />
-        public async Task<Stream> CreateIcalForEvent(Guid eventId, IEventRepository eventRepository)
+        public async Task<Stream> CreateIcalForEventAsync(Guid eventId, IEventRepository eventRepository)
         {
             if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
 
@@ -99,7 +99,7 @@ namespace Tauchbolde.Common.DomainServices
                 };
 
                 await commentRepository.InsertAsync(comment);
-                await notificationService.NotifyForEventComment(comment);
+                await notificationService.NotifyForEventCommentAsync(comment);
 
                 return comment;
             }
@@ -124,7 +124,7 @@ namespace Tauchbolde.Common.DomainServices
                 comment.Text = commentText;
             }
 
-            await notificationService.NotifyForEventComment(comment);
+            await notificationService.NotifyForEventCommentAsync(comment);
 
             return comment;
         }

@@ -11,7 +11,12 @@ namespace Tauchbolde.Common.DomainServices
         /// </summary>
         Task<Participant> ChangeParticipationAsync(Diver user, Guid eventId, ParticipantStatus status, int numberOfPeople, string note, string buddyTeamName);
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets the existing participation status for a user and event.
+        /// </summary>
+        /// <returns>The existing participation status for a user and event.
+        /// <param name="user">ID of the User to get the participation status for.</param>
+        /// <param name="eventId">Id of the event to get the participation status for.</param>
         Task<Participant> GetExistingParticipationAsync(Diver user, Guid eventId);
     }
 }

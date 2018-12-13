@@ -66,7 +66,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         }
 
         /// <inheritdoc />
-        public async Task NotifyForChangedParticipation(Participant participant)
+        public async Task NotifyForChangedParticipationAsync(Participant participant)
         {
             if (participant == null) throw new ArgumentNullException(nameof(participant));
 
@@ -100,7 +100,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         }
 
         /// <inheritdoc />
-        public async Task NotifyForEventComment(Comment comment)
+        public async Task NotifyForEventCommentAsync(Comment comment)
         {
             if (comment == null) throw new ArgumentNullException(nameof(comment));
 

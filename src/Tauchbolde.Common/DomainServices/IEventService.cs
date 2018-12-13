@@ -14,7 +14,7 @@ namespace Tauchbolde.Common.DomainServices
         /// <returns>The ical data in a stream for the event.</returns>
         /// <param name="eventId">Event ID to get the .ical file for.</param>
         /// <param name="eventRepository">Event repository.</param>
-        Task<Stream> CreateIcalForEvent(Guid eventId, IEventRepository eventRepository);
+        Task<Stream> CreateIcalForEventAsync(Guid eventId, IEventRepository eventRepository);
 
         /// <summary>
         /// Insert or update the given <paramref name="eventToUpsert"/>.

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {
@@ -12,7 +11,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         Task NotifyForNewEventAsync(Event newEvent);
         Task NotifyForChangedEventAsync(Event changedEvent);
         Task NotifyForCanceledEventAsync(Event canceledEvent);
-        Task NotifyForChangedParticipation(Participant participant);
-        Task NotifyForEventComment(Comment comment);
+        Task NotifyForChangedParticipationAsync(Participant participant);
+        Task NotifyForEventCommentAsync(Comment comment);
     }
 }
