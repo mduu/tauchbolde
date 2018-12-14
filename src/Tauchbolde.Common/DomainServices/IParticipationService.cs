@@ -17,6 +17,7 @@ namespace Tauchbolde.Common.DomainServices
         /// <returns>The existing participation status for a user and event.
         /// <param name="user">ID of the User to get the participation status for.</param>
         /// <param name="eventId">Id of the event to get the participation status for.</param>
+        /// <return>The existing <see cref="Participant"/> object for the user / event.</return>
         Task<Participant> GetExistingParticipationAsync(Diver user, Guid eventId);
     }
 }
