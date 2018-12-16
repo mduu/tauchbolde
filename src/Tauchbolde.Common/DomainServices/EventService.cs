@@ -11,30 +11,29 @@ namespace Tauchbolde.Common.DomainServices
     public class EventService : IEventService
     {
         private readonly ApplicationDbContext _applicationDbContext;
-        private readonly INotificationService notificationService;
+        private readonly INotificationService _notificationService;
+        private readonly IEventRepository _eventRepository;
 
         public EventService(
             ApplicationDbContext applicationDbContext,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IEventRepository eventRepository)
         {
-            if (applicationDbContext == null) throw new ArgumentNullException(nameof(applicationDbContext));
-
-            _applicationDbContext = applicationDbContext;
-            this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+            _applicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
+            _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+            _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
         }
 
         /// <inheritdoc />
-        public async Task<Stream> CreateIcalForEventAsync(Guid eventId, IEventRepository eventRepository)
+        public async Task<Stream> CreateIcalForEventAsync(Guid eventId, DateTime? createTime = null)
         {
-            if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
-
-            var evt = await eventRepository.FindByIdAsync(eventId);
+            var evt = await _eventRepository.FindByIdAsync(eventId);
             if (evt == null)
             {
                 throw new InvalidOperationException($"Event with ID [{eventId}] not found!");
             }
             
-            return CreateIcalStream(evt);
+            return CreateIcalStream(evt, createTime);
         }
 
         /// <inheritdoc />
@@ -70,12 +69,12 @@ namespace Tauchbolde.Common.DomainServices
             if (isNew)
             {
                 await eventRepository.InsertAsync(eventToStore);
-                await notificationService.NotifyForNewEventAsync(eventToStore);
+                await _notificationService.NotifyForNewEventAsync(eventToStore);
             }
             else
             {
                 eventRepository.Update(eventToStore);
-                await notificationService.NotifyForChangedEventAsync(eventToStore);
+                await _notificationService.NotifyForChangedEventAsync(eventToStore);
             }
 
             return eventToStore;
@@ -99,7 +98,7 @@ namespace Tauchbolde.Common.DomainServices
                 };
 
                 await commentRepository.InsertAsync(comment);
-                await notificationService.NotifyForEventCommentAsync(comment);
+                await _notificationService.NotifyForEventCommentAsync(comment);
 
                 return comment;
             }
@@ -124,7 +123,7 @@ namespace Tauchbolde.Common.DomainServices
                 comment.Text = commentText;
             }
 
-            await notificationService.NotifyForEventCommentAsync(comment);
+            await _notificationService.NotifyForEventCommentAsync(comment);
 
             return comment;
         }
@@ -147,11 +146,14 @@ namespace Tauchbolde.Common.DomainServices
             }
         }
 
-        private static Stream CreateIcalStream(Event evt)
+        private static Stream CreateIcalStream(Event evt, DateTime? createTime = null)
         {
             var sb = new StringBuilder();
             const string dateFormat = "yyyyMMddTHHmmssZ";
-            var now = DateTime.Now.ToUniversalTime().ToString(dateFormat);
+            var createAt = createTime != null
+                ? createTime.Value
+                : DateTime.Now;
+            var createAtString = createAt.ToUniversalTime().ToString(dateFormat);
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("PRODID:-//Tauchbolde//TauchboldeWebsite//EN");
@@ -166,12 +168,12 @@ namespace Tauchbolde.Common.DomainServices
             sb.AppendLine("BEGIN:VEVENT");
             sb.AppendLine("DTSTART:" + dtStart.ToUniversalTime().ToString(dateFormat));
             sb.AppendLine("DTEND:" + dtEnd.ToUniversalTime().ToString(dateFormat));
-            sb.AppendLine("DTSTAMP:" + now);
+            sb.AppendLine("DTSTAMP:" + createAtString);
             sb.AppendLine("UID:" + evt.Id);
-            sb.AppendLine("CREATED:" + now);
+            sb.AppendLine("CREATED:" + createAtString);
             sb.AppendLine("X-ALT-DESC;FMTTYPE=text/html:" + evt.Description);
             sb.AppendLine("DESCRIPTION:" + evt.Description);
-            sb.AppendLine("LAST-MODIFIED:" + now);
+            sb.AppendLine("LAST-MODIFIED:" + createAtString);
             sb.AppendLine("LOCATION:" + evt.Location);
             sb.AppendLine("SEQUENCE:0");
             sb.AppendLine("STATUS:CONFIRMED");

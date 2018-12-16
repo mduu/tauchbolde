@@ -245,7 +245,7 @@ namespace Tauchbolde.Web.Controllers
                 return BadRequest("Invalid Event!");
             }
 
-            var stream = await _eventService.CreateIcalForEventAsync(id, _eventRepository);
+            var stream = await _eventService.CreateIcalForEventAsync(id);
 
             return File(stream, "text/calendar");
         }

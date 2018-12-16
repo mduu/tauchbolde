@@ -13,8 +13,8 @@ namespace Tauchbolde.Common.DomainServices
         /// </summary>
         /// <returns>The ical data in a stream for the event.</returns>
         /// <param name="eventId">Event ID to get the .ical file for.</param>
-        /// <param name="eventRepository">Event repository.</param>
-        Task<Stream> CreateIcalForEventAsync(Guid eventId, IEventRepository eventRepository);
+        /// <param name="createTime">Optional created DateTime. If noll current time will be used.</param>
+        Task<Stream> CreateIcalForEventAsync(Guid eventId, DateTime? createTime = null);
 
         /// <summary>
         /// Insert or update the given <paramref name="eventToUpsert"/>.
