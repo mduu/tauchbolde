@@ -11,6 +11,7 @@ using Tauchbolde.Common.DomainServices;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Common.DomainServices.Notifications;
 using System.Globalization;
+using System.Threading;
 
 namespace Tauchbolde.Tests.DomainServices
 {
@@ -25,6 +26,7 @@ namespace Tauchbolde.Tests.DomainServices
         [InlineData("StartEndMultiDay", "2018/12/13 19:00:00", "2018/12/15 23:00:00")]
         public async Task CreateIcalForEventAsync(string name, string startTime, string endTime)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfoByIetfLanguageTag("en-US");
             using (ApprovalResults.ForScenario(name))
             {
                 // ARRANGE
