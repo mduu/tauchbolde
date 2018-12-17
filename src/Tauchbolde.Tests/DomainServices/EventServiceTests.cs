@@ -19,7 +19,7 @@ namespace Tauchbolde.Tests.DomainServices
         private Guid eventId = new Guid("e6a5f186-31f0-4424-9fd3-89d6935e19eb");
                 
         [Theory]
-        [UseReporter(typeof(DiffReporter))]
+        [UseReporter(typeof(MsTestReporter))]
         [InlineData("StartEnd", "2018/12/13 19:00:00", "2018/12/13 23:00:00")]
         [InlineData("Start", "2018/12/13 19:00:00", null)]
         [InlineData("StartEndMultiDay", "2018/12/13 19:00:00", "2018/12/15 23:00:00")]
