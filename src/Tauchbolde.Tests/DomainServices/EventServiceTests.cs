@@ -12,13 +12,15 @@ using Tauchbolde.Common.Repositories;
 using Tauchbolde.Common.DomainServices.Notifications;
 using System.Globalization;
 using System.Threading;
+using FluentAssertions;
 
 namespace Tauchbolde.Tests.DomainServices
 {
     public class EventServiceTests
     {
         private Guid eventId = new Guid("e6a5f186-31f0-4424-9fd3-89d6935e19eb");
-                
+        private INotificationService _notitifacationService;
+
         [Theory]
         [UseReporter(typeof(DiffReporter))]
         [InlineData("StartEnd", "2018/12/13 19:00:00", "2018/12/13 23:00:00")]
@@ -34,7 +36,7 @@ namespace Tauchbolde.Tests.DomainServices
                 var end = endTime != null
                     ? (DateTimeOffset?)DateTimeOffset.ParseExact(endTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture)
                     : null;
-                    
+
                 var evt = CreateEvent(start, end);
                 var eventService = CreateEventService(evt);
                 var createDateTime = new DateTime(2018, 9, 13, 8, 0, 0);
@@ -47,7 +49,28 @@ namespace Tauchbolde.Tests.DomainServices
                 var icalText = reader.ReadToEnd();
 
                 Approvals.Verify(icalText);
-            }       
+            }
+        }
+
+        [Fact]
+        public async Task UpdateEvent()
+        {
+            // ARRANGE
+            var evt = CreateEvent(
+                new DateTimeOffset(2018, 09, 23, 19, 00, 0, TimeSpan.Zero),
+                new DateTimeOffset(2018, 09, 23, 23, 00, 0, TimeSpan.Zero));
+            var eventService = CreateEventService(evt);
+            var updateEvt = CreateEvent(
+                new DateTimeOffset(2018, 09, 23, 19, 30, 0, TimeSpan.Zero),
+                new DateTimeOffset(2018, 09, 23, 23, 30, 0, TimeSpan.Zero));
+            
+
+            // ACT
+            var updatedEvent = await eventService.UpsertEventAsync(updateEvt);
+
+            // ASSERT
+            updatedEvent.Should().BeEquivalentTo(updateEvt);
+            A.CallTo(() => _notitifacationService.NotifyForChangedEventAsync(updatedEvent)).MustHaveHappenedOnceExactly();
         }
 
         private EventService CreateEventService(Event evt)
@@ -55,7 +78,8 @@ namespace Tauchbolde.Tests.DomainServices
             return new EventService(
                 A.Fake<ApplicationDbContext>(),
                 CreateNotificationService(),
-                CreateEventRepositoryFake(evt));
+                CreateEventRepositoryFake(evt),
+                A.Fake<ICommentRepository>());
         }
 
         private Event CreateEvent(DateTimeOffset start, DateTimeOffset? end)
@@ -71,7 +95,7 @@ namespace Tauchbolde.Tests.DomainServices
                 MeetingPoint = "MP Test",
             };
         }
-        
+
         private IEventRepository CreateEventRepositoryFake(Event evt)
         {
             var fake = A.Fake<IEventRepository>();
@@ -83,9 +107,9 @@ namespace Tauchbolde.Tests.DomainServices
 
         private INotificationService CreateNotificationService()
         {
-            var fake = A.Fake<INotificationService>();
-            
-            return fake;
+            _notitifacationService = A.Fake<INotificationService>();
+
+            return _notitifacationService;
         }
     }
 }

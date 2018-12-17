@@ -13,15 +13,18 @@ namespace Tauchbolde.Common.DomainServices
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly INotificationService _notificationService;
         private readonly IEventRepository _eventRepository;
+        private readonly ICommentRepository _commentRepository;
 
         public EventService(
             ApplicationDbContext applicationDbContext,
             INotificationService notificationService,
-            IEventRepository eventRepository)
+            IEventRepository eventRepository,
+            ICommentRepository commentRepository)
         {
             _applicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
+            _commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
         }
 
         /// <inheritdoc />
@@ -37,16 +40,15 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc />
-        public async Task<Event> UpsertEventAsync(IEventRepository eventRepository, Event eventToUpsert)
+        public async Task<Event> UpsertEventAsync(Event eventToUpsert)
         {
-            if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
             if (eventToUpsert == null) throw new ArgumentNullException(nameof(eventToUpsert));
 
             Event eventToStore = null;
             bool isNew = eventToUpsert.Id == Guid.Empty;
             if (eventToUpsert.Id != Guid.Empty)
             {
-                eventToStore = await eventRepository.FindByIdAsync(eventToUpsert.Id);
+                eventToStore = await _eventRepository.FindByIdAsync(eventToUpsert.Id);
 
                 if (eventToStore == null)
                 {
@@ -68,12 +70,12 @@ namespace Tauchbolde.Common.DomainServices
 
             if (isNew)
             {
-                await eventRepository.InsertAsync(eventToStore);
+                await _eventRepository.InsertAsync(eventToStore);
                 await _notificationService.NotifyForNewEventAsync(eventToStore);
             }
             else
             {
-                eventRepository.Update(eventToStore);
+                _eventRepository.Update(eventToStore);
                 await _notificationService.NotifyForChangedEventAsync(eventToStore);
             }
 
@@ -81,7 +83,7 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc/>
-        public async Task<Comment> AddCommentAsync(Guid eventId, string commentToAdd, Diver authorDiver, ICommentRepository commentRepository)
+        public async Task<Comment> AddCommentAsync(Guid eventId, string commentToAdd, Diver authorDiver)
         {
             if (eventId == Guid.Empty) { throw new ArgumentException("Empty Guid not allowed as Event-Id!", nameof(eventId)); }
             if (authorDiver == null) throw new ArgumentNullException(nameof(authorDiver));
@@ -97,7 +99,7 @@ namespace Tauchbolde.Common.DomainServices
                     Text = commentToAdd,
                 };
 
-                await commentRepository.InsertAsync(comment);
+                await _commentRepository.InsertAsync(comment);
                 await _notificationService.NotifyForEventCommentAsync(comment);
 
                 return comment;
@@ -107,13 +109,12 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc/>
-        public async Task<Comment> EditCommentAsync(Guid commentId, string commentText, Diver currentUser, ICommentRepository commentRepository)
+        public async Task<Comment> EditCommentAsync(Guid commentId, string commentText, Diver currentUser)
         {
             if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
             if (currentUser == null) { throw new ArgumentNullException(nameof(currentUser)); }
-            if (commentRepository == null) { throw new ArgumentNullException(nameof(commentRepository)); }
 
-            var comment = await commentRepository.FindByIdAsync(commentId);
+            var comment = await _commentRepository.FindByIdAsync(commentId);
             if (comment != null) {
                 if (comment.AuthorId != currentUser.Id)
                 {
@@ -128,13 +129,12 @@ namespace Tauchbolde.Common.DomainServices
             return comment;
         }
 
-        public async Task DeleteCommentAsync(Guid commentId, Diver currentUser, ICommentRepository commentRepository)
+        public async Task DeleteCommentAsync(Guid commentId, Diver currentUser)
         {
             if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
             if (currentUser == null) throw new ArgumentNullException(nameof(currentUser));
-            if (commentRepository == null) throw new ArgumentNullException(nameof(commentRepository));
 
-            var comment = await commentRepository.FindByIdAsync(commentId);
+            var comment = await _commentRepository.FindByIdAsync(commentId);
             if (comment != null)
             {
                 if (comment.AuthorId != currentUser.Id)
@@ -142,7 +142,7 @@ namespace Tauchbolde.Common.DomainServices
                     throw new UnauthorizedAccessException();
                 }
 
-                commentRepository.Delete(comment);
+                _commentRepository.Delete(comment);
             }
         }
 

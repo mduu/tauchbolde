@@ -24,7 +24,6 @@ namespace Tauchbolde.Web.Controllers
         private readonly IEventRepository _eventRepository;
         private readonly IParticipationService _participationService;
         private readonly IEventService _eventService;
-        private readonly ICommentRepository _commentRepository;
 
         public EventController(
             ApplicationDbContext context,
@@ -39,7 +38,6 @@ namespace Tauchbolde.Web.Controllers
             _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             _participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
             _eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
-            _commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
         }
 
         // GET: Event
@@ -149,7 +147,7 @@ namespace Tauchbolde.Web.Controllers
                         OrganisatorId = currentDiver.Id,
                     };
 
-                    var persistedEvent = await _eventService.UpsertEventAsync(_eventRepository, evt);
+                    var persistedEvent = await _eventService.UpsertEventAsync(evt);
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("Details", new { persistedEvent.Id });
@@ -265,7 +263,7 @@ namespace Tauchbolde.Web.Controllers
                     return StatusCode(400, "No curren user would be found!");
                 }
 
-                var comment = await _eventService.AddCommentAsync(eventId, newCommentText, currentUser, _commentRepository);
+                var comment = await _eventService.AddCommentAsync(eventId, newCommentText, currentUser);
                 if (comment != null)
                 {
                     await _context.SaveChangesAsync();
@@ -291,7 +289,7 @@ namespace Tauchbolde.Web.Controllers
                     return StatusCode(400, "No curren user would be found!");
                 }
 
-                var comment = await _eventService.EditCommentAsync(commentId, commentText, currentUser, _commentRepository);
+                var comment = await _eventService.EditCommentAsync(commentId, commentText, currentUser);
                 if (comment != null)
                 {
                     await _context.SaveChangesAsync();
@@ -317,7 +315,7 @@ namespace Tauchbolde.Web.Controllers
                     return StatusCode(400, "No curren user would be found!");
                 }
 
-                await _eventService.DeleteCommentAsync(deleteCommentId, currentUser, _commentRepository);
+                await _eventService.DeleteCommentAsync(deleteCommentId, currentUser);
                 await _context.SaveChangesAsync();
             }
 
