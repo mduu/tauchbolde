@@ -53,6 +53,26 @@ namespace Tauchbolde.Tests.DomainServices
         }
 
         [Fact]
+        public async Task NewEvent()
+        {
+            // ARRANGE
+            var eventService = CreateEventService(null);
+            var newEvt = CreateEvent(
+                new DateTimeOffset(2018, 09, 23, 18, 00, 0, TimeSpan.Zero),
+                new DateTimeOffset(2018, 09, 23, 22, 00, 0, TimeSpan.Zero),
+                Guid.Empty);
+            
+            // ACT
+            var createdEvent = await eventService.UpsertEventAsync(newEvt);
+            newEvt.Id = createdEvent.Id;
+
+            // ASSERT
+            createdEvent.Should().BeEquivalentTo(newEvt);
+            A.CallTo(() => _notitifacationService.NotifyForNewEventAsync(createdEvent)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _notitifacationService.NotifyForChangedEventAsync(A<Event>._)).MustNotHaveHappened();
+        }
+        
+        [Fact]
         public async Task UpdateEvent()
         {
             // ARRANGE
@@ -71,6 +91,7 @@ namespace Tauchbolde.Tests.DomainServices
             // ASSERT
             updatedEvent.Should().BeEquivalentTo(updateEvt);
             A.CallTo(() => _notitifacationService.NotifyForChangedEventAsync(updatedEvent)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _notitifacationService.NotifyForNewEventAsync(A<Event>._)).MustNotHaveHappened();
         }
 
         private EventService CreateEventService(Event evt)
@@ -82,11 +103,11 @@ namespace Tauchbolde.Tests.DomainServices
                 A.Fake<ICommentRepository>());
         }
 
-        private Event CreateEvent(DateTimeOffset start, DateTimeOffset? end)
+        private Event CreateEvent(DateTimeOffset start, DateTimeOffset? end, Guid? id = null)
         {
             return new Event
             {
-                Id = eventId,
+                Id = id ?? eventId,
                 StartTime = start.ToUniversalTime().DateTime,
                 EndTime = end?.ToUniversalTime().DateTime,
                 Name = "Test Event",
