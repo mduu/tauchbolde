@@ -10,7 +10,7 @@ using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DomainServices;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Common.DomainServices.Notifications;
-
+using System.Globalization;
 
 namespace Tauchbolde.Tests.DomainServices
 {
@@ -28,8 +28,10 @@ namespace Tauchbolde.Tests.DomainServices
             using (ApprovalResults.ForScenario(name))
             {
                 // ARRANGE
-                var start = DateTime.Parse(startTime);
-                var end = endTime != null ? (DateTime?)DateTime.Parse(endTime) : null;
+                var start = DateTime.ParseExact(startTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
+                var end = endTime != null
+                    ? (DateTime?)DateTime.ParseExact(endTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture)
+                    : null;
                 var evt = CreateEvent(start, end);
                 var eventService = CreateEventService(evt);
                 var createDateTime = new DateTime(2018, 9, 13, 8, 0, 0);
