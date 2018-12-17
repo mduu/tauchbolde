@@ -146,14 +146,14 @@ namespace Tauchbolde.Common.DomainServices
             }
         }
 
-        private static Stream CreateIcalStream(Event evt, DateTime? createTime = null)
+        private static Stream CreateIcalStream(Event evt, DateTimeOffset? createTime = null)
         {
             var sb = new StringBuilder();
             const string dateFormat = "yyyyMMddTHHmmssZ";
             var createAt = createTime != null
                 ? createTime.Value
-                : DateTime.Now;
-            var createAtString = createAt.ToUniversalTime().ToString(dateFormat);
+                : DateTimeOffset.Now;
+            var createAtString = createAt.ToString(dateFormat);
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("PRODID:-//Tauchbolde//TauchboldeWebsite//EN");
@@ -162,12 +162,12 @@ namespace Tauchbolde.Common.DomainServices
 
 
             var evtEndTime = evt.EndTime ?? evt.StartTime.AddHours(4);
-            var dtStart = Convert.ToDateTime(evt.StartTime);
-            var dtEnd = Convert.ToDateTime(evtEndTime);
+            var dtStart = evt.StartTime.ToLocalTime();
+            var dtEnd = evtEndTime.ToLocalTime();
 
             sb.AppendLine("BEGIN:VEVENT");
-            sb.AppendLine("DTSTART:" + dtStart.ToUniversalTime().ToString(dateFormat));
-            sb.AppendLine("DTEND:" + dtEnd.ToUniversalTime().ToString(dateFormat));
+            sb.AppendLine("DTSTART:" + dtStart.ToString(dateFormat));
+            sb.AppendLine("DTEND:" + dtEnd.ToString(dateFormat));
             sb.AppendLine("DTSTAMP:" + createAtString);
             sb.AppendLine("UID:" + evt.Id);
             sb.AppendLine("CREATED:" + createAtString);

@@ -20,7 +20,7 @@ namespace Tauchbolde.Tests.DomainServices
         private Guid eventId = new Guid("e6a5f186-31f0-4424-9fd3-89d6935e19eb");
                 
         [Theory]
-        [UseReporter(typeof(MsTestReporter))]
+        [UseReporter(typeof(DiffReporter))]
         [InlineData("StartEnd", "2018/12/13 19:00:00", "2018/12/13 23:00:00")]
         [InlineData("Start", "2018/12/13 19:00:00", null)]
         [InlineData("StartEndMultiDay", "2018/12/13 19:00:00", "2018/12/15 23:00:00")]
@@ -30,10 +30,11 @@ namespace Tauchbolde.Tests.DomainServices
             using (ApprovalResults.ForScenario(name))
             {
                 // ARRANGE
-                var start = DateTime.ParseExact(startTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
+                var start = DateTimeOffset.ParseExact(startTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
                 var end = endTime != null
-                    ? (DateTime?)DateTime.ParseExact(endTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture)
+                    ? (DateTimeOffset?)DateTimeOffset.ParseExact(endTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture)
                     : null;
+                    
                 var evt = CreateEvent(start, end);
                 var eventService = CreateEventService(evt);
                 var createDateTime = new DateTime(2018, 9, 13, 8, 0, 0);
@@ -57,13 +58,13 @@ namespace Tauchbolde.Tests.DomainServices
                 CreateEventRepositoryFake(evt));
         }
 
-        private Event CreateEvent(DateTime start, DateTime? end)
+        private Event CreateEvent(DateTimeOffset start, DateTimeOffset? end)
         {
             return new Event
             {
                 Id = eventId,
-                StartTime = start,
-                EndTime = end,
+                StartTime = start.ToUniversalTime().DateTime,
+                EndTime = end?.ToUniversalTime().DateTime,
                 Name = "Test Event",
                 Description = "Description Test",
                 Location = "Lake 1",
