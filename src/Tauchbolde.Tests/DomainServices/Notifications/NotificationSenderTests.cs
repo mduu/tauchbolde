@@ -24,7 +24,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             var sender = new NotificationSender();
 
             // Act
-            await sender.Send(notificationRepository, formatter, submitter);
+            await sender.SendAsync(notificationRepository, formatter, submitter);
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
@@ -46,7 +46,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
 
             // Act
-            await sender.Send(notificationRepository, formatter, submitter);
+            await sender.SendAsync(notificationRepository, formatter, submitter);
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
@@ -70,7 +70,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             A.CallTo(() => formatter.Format(A<Diver>._, A<IGrouping<Diver, Notification>>._)).Returns("Some content!");
 
             // Act
-            await sender.Send(notificationRepository, formatter, submitter);
+            await sender.SendAsync(notificationRepository, formatter, submitter);
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);
@@ -98,7 +98,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             A.CallTo(() => formatter.Format(A<Diver>._, A<IGrouping<Diver, Notification>>._)).Returns("Some content!");
 
             // Act
-            await sender.Send(notificationRepository, formatter, submitter);
+            await sender.SendAsync(notificationRepository, formatter, submitter);
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappened(Repeated.Exactly.Once);

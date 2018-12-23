@@ -4,45 +4,51 @@ using System.Text;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DomainServices.Notifications;
 
 namespace Tauchbolde.Common.DomainServices
 {
     public class EventService : IEventService
     {
         private readonly ApplicationDbContext _applicationDbContext;
+        private readonly INotificationService _notificationService;
+        private readonly IEventRepository _eventRepository;
+        private readonly ICommentRepository _commentRepository;
 
-        public EventService(ApplicationDbContext applicationDbContext)
+        public EventService(
+            ApplicationDbContext applicationDbContext,
+            INotificationService notificationService,
+            IEventRepository eventRepository,
+            ICommentRepository commentRepository)
         {
-            if (applicationDbContext == null) throw new ArgumentNullException(nameof(applicationDbContext));
-
-            _applicationDbContext = applicationDbContext;
+            _applicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
+            _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+            _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
+            _commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
         }
 
         /// <inheritdoc />
-        public async Task<Stream> CreateIcalForEvent(Guid eventId, IEventRepository eventRepository)
+        public async Task<Stream> CreateIcalForEventAsync(Guid eventId, DateTime? createTime = null)
         {
-            if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
-
-            var evt = await eventRepository.FindByIdAsync(eventId);
+            var evt = await _eventRepository.FindByIdAsync(eventId);
             if (evt == null)
             {
                 throw new InvalidOperationException($"Event with ID [{eventId}] not found!");
             }
-
-            return CreateIcalStream(evt);
+            
+            return CreateIcalStream(evt, createTime);
         }
 
         /// <inheritdoc />
-        public async Task<Event> UpsertEventAsync(IEventRepository eventRepository, Event eventToUpsert)
+        public async Task<Event> UpsertEventAsync(Event eventToUpsert)
         {
-            if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
             if (eventToUpsert == null) throw new ArgumentNullException(nameof(eventToUpsert));
 
             Event eventToStore = null;
             bool isNew = eventToUpsert.Id == Guid.Empty;
             if (eventToUpsert.Id != Guid.Empty)
             {
-                eventToStore = await eventRepository.FindByIdAsync(eventToUpsert.Id);
+                eventToStore = await _eventRepository.FindByIdAsync(eventToUpsert.Id);
 
                 if (eventToStore == null)
                 {
@@ -64,18 +70,20 @@ namespace Tauchbolde.Common.DomainServices
 
             if (isNew)
             {
-                await eventRepository.InsertAsync(eventToStore);
+                await _eventRepository.InsertAsync(eventToStore);
+                await _notificationService.NotifyForNewEventAsync(eventToStore);
             }
             else
             {
-                eventRepository.Update(eventToStore);
+                _eventRepository.Update(eventToStore);
+                await _notificationService.NotifyForChangedEventAsync(eventToStore);
             }
 
             return eventToStore;
         }
 
         /// <inheritdoc/>
-        public async Task<Comment> AddCommentAsync(Guid eventId, string commentToAdd, Diver authorDiver, ICommentRepository commentRepository)
+        public async Task<Comment> AddCommentAsync(Guid eventId, string commentToAdd, Diver authorDiver)
         {
             if (eventId == Guid.Empty) { throw new ArgumentException("Empty Guid not allowed as Event-Id!", nameof(eventId)); }
             if (authorDiver == null) throw new ArgumentNullException(nameof(authorDiver));
@@ -91,7 +99,8 @@ namespace Tauchbolde.Common.DomainServices
                     Text = commentToAdd,
                 };
 
-                await commentRepository.InsertAsync(comment);
+                await _commentRepository.InsertAsync(comment);
+                await _notificationService.NotifyForEventCommentAsync(comment);
 
                 return comment;
             }
@@ -100,13 +109,12 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc/>
-        public async Task<Comment> EditCommentAsync(Guid commentId, string commentText, Diver currentUser, ICommentRepository commentRepository)
+        public async Task<Comment> EditCommentAsync(Guid commentId, string commentText, Diver currentUser)
         {
             if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
             if (currentUser == null) { throw new ArgumentNullException(nameof(currentUser)); }
-            if (commentRepository == null) { throw new ArgumentNullException(nameof(commentRepository)); }
 
-            var comment = await commentRepository.FindByIdAsync(commentId);
+            var comment = await _commentRepository.FindByIdAsync(commentId);
             if (comment != null) {
                 if (comment.AuthorId != currentUser.Id)
                 {
@@ -116,16 +124,17 @@ namespace Tauchbolde.Common.DomainServices
                 comment.Text = commentText;
             }
 
+            await _notificationService.NotifyForEventCommentAsync(comment);
+
             return comment;
         }
 
-        public async Task DeleteCommentAsync(Guid commentId, Diver currentUser, ICommentRepository commentRepository)
+        public async Task DeleteCommentAsync(Guid commentId, Diver currentUser)
         {
             if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
             if (currentUser == null) throw new ArgumentNullException(nameof(currentUser));
-            if (commentRepository == null) throw new ArgumentNullException(nameof(commentRepository));
 
-            var comment = await commentRepository.FindByIdAsync(commentId);
+            var comment = await _commentRepository.FindByIdAsync(commentId);
             if (comment != null)
             {
                 if (comment.AuthorId != currentUser.Id)
@@ -133,15 +142,18 @@ namespace Tauchbolde.Common.DomainServices
                     throw new UnauthorizedAccessException();
                 }
 
-                commentRepository.Delete(comment);
+                _commentRepository.Delete(comment);
             }
         }
 
-        private static Stream CreateIcalStream(Event evt)
+        private static Stream CreateIcalStream(Event evt, DateTimeOffset? createTime = null)
         {
             var sb = new StringBuilder();
             const string dateFormat = "yyyyMMddTHHmmssZ";
-            var now = DateTime.Now.ToUniversalTime().ToString(dateFormat);
+            var createAt = createTime != null
+                ? createTime.Value
+                : DateTimeOffset.Now;
+            var createAtString = createAt.ToString(dateFormat);
 
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("PRODID:-//Tauchbolde//TauchboldeWebsite//EN");
@@ -150,18 +162,18 @@ namespace Tauchbolde.Common.DomainServices
 
 
             var evtEndTime = evt.EndTime ?? evt.StartTime.AddHours(4);
-            var dtStart = Convert.ToDateTime(evt.StartTime);
-            var dtEnd = Convert.ToDateTime(evtEndTime);
+            var dtStart = evt.StartTime.ToLocalTime();
+            var dtEnd = evtEndTime.ToLocalTime();
 
             sb.AppendLine("BEGIN:VEVENT");
-            sb.AppendLine("DTSTART:" + dtStart.ToUniversalTime().ToString(dateFormat));
-            sb.AppendLine("DTEND:" + dtEnd.ToUniversalTime().ToString(dateFormat));
-            sb.AppendLine("DTSTAMP:" + now);
+            sb.AppendLine("DTSTART:" + dtStart.ToString(dateFormat));
+            sb.AppendLine("DTEND:" + dtEnd.ToString(dateFormat));
+            sb.AppendLine("DTSTAMP:" + createAtString);
             sb.AppendLine("UID:" + evt.Id);
-            sb.AppendLine("CREATED:" + now);
+            sb.AppendLine("CREATED:" + createAtString);
             sb.AppendLine("X-ALT-DESC;FMTTYPE=text/html:" + evt.Description);
             sb.AppendLine("DESCRIPTION:" + evt.Description);
-            sb.AppendLine("LAST-MODIFIED:" + now);
+            sb.AppendLine("LAST-MODIFIED:" + createAtString);
             sb.AppendLine("LOCATION:" + evt.Location);
             sb.AppendLine("SEQUENCE:0");
             sb.AppendLine("STATUS:CONFIRMED");

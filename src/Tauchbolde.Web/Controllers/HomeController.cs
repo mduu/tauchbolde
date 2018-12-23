@@ -96,7 +96,7 @@ namespace Tauchbolde.Web.Controllers
                 }
                 else
                 {
-                    emailSender.Send(
+                    emailSender.SendAsync(
                         "Webmaster",
                         "marc@marcduerst.com",
 

@@ -143,7 +143,7 @@ namespace Tauchbolde.Web
 
             if (!string.IsNullOrWhiteSpace(Configuration["DbUser"]))
             {
-                connectionString += $"User ID={Configuration["DbUser"]};";
+                connectionString += $"Username={Configuration["DbUser"]};";
             }
             if (!string.IsNullOrWhiteSpace(Configuration["DbPassword"]))
             {

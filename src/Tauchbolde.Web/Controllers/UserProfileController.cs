@@ -114,7 +114,7 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await diverService.UpdateUserProfil(diverRepository, model.Profile);
+                await diverService.UpdateUserProfilAsync(diverRepository, model.Profile);
                 await context.SaveChangesAsync();
 
                 ShowSuccessMessage("Profil wurde gespeichert.");

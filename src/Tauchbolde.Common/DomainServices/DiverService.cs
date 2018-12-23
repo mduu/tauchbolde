@@ -54,7 +54,7 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc/>
-        public async Task UpdateUserProfil(IDiverRepository diverRepository, Diver profile)
+        public async Task UpdateUserProfilAsync(IDiverRepository diverRepository, Diver profile)
         {
             if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
             if (profile == null) { throw new ArgumentNullException(nameof(profile)); }

@@ -4,7 +4,7 @@ namespace Tauchbolde.Common.DomainServices.SMTPSender
 {
     public interface IAppEmailSender
     {
-        Task Send(
+        Task SendAsync(
             string receiverName,
             string receiverEmail,
             string subject,

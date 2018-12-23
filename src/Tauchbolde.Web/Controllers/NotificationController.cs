@@ -39,7 +39,7 @@ namespace Tauchbolde.Web.Controllers
 
         public async Task<IActionResult> ProcessNotification()
         {
-            await _notificationSender.Send(
+            await _notificationSender.SendAsync(
                 _notificationRepository,
                 _formatter,
                 _submitter);
