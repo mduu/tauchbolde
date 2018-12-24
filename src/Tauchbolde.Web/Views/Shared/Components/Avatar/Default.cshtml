@@ -23,7 +23,10 @@
     if (User != null)
     {
         var user = await UserManager.GetUserAsync(User);
-        emailAddress = user.Email;
+        if (user != null)
+        {
+            emailAddress = user.Email;
+        }
     }
 }
 @if (!string.IsNullOrWhiteSpace(Model.Diver?.AvatarId))
