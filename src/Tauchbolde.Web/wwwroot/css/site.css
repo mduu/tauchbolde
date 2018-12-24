@@ -8,7 +8,7 @@ body {
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    margin-top: 17px;
+    margin-top: 15px;
     padding-left: 15px;
     padding-right: 15px;
 }
