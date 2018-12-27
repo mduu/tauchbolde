@@ -19,7 +19,6 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             await emailSender.SendAsync(
                 recipient.Fullname,
                 recipient.User.Email,
-
                  "Tauchbolde Action-Log",
                 content,
                 "webmaster@tauchbolde.ch",

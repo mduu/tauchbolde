@@ -60,7 +60,11 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             }
         }
 
-        private async Task SubmitToRecipient(INotificationSubmitter notificationSubmitter, System.Linq.IGrouping<Diver, Notification> pendingNotificationsForRecipient, Diver recipient, string content)
+        private async Task SubmitToRecipient(
+            INotificationSubmitter notificationSubmitter,
+            System.Linq.IGrouping<Diver, Notification> pendingNotificationsForRecipient,
+            Diver recipient,
+            string content)
         {
             if (notificationSubmitter == null) { throw new ArgumentNullException(nameof(notificationSubmitter)); }
 
