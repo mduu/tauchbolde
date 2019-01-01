@@ -44,7 +44,7 @@ namespace Tauchbolde.Web
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<SmtpSenderConfiguration>(Configuration);
+            services.Configure<SmtpSenderConfiguration>(Configuration.GetSection("SMTP"));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
