@@ -1,11 +1,13 @@
 ﻿using System;
 using ApprovalTests;
 using ApprovalTests.Reporters;
-using Tauchbolde.Common.DomainServices.Notifications;
+using Tauchbolde.Common.DomainServices;
 using Xunit;
 using Tauchbolde.Common.Model;
 using System.Collections.Generic;
 using ApprovalTests.Namers;
+using FakeItEasy;
+using Tauchbolde.Common.DomainServices.Notifications;
 
 namespace Tauchbolde.Tests.DomainServices.Notifications
 {
@@ -25,7 +27,9 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
         {
             using (ApprovalResults.ForScenario(notificationType.ToString()))
             {
-                var formatter = new HtmlNotificationFormatter();
+                var urlGenerator = A.Fake<IUrlGenerator>();
+                A.CallTo(() => urlGenerator.GenerateEventUrl(A<Guid>._)).Returns("http://test/event/1");
+                var formatter = new HtmlNotificationFormatter(urlGenerator);
                 var receiver = new Diver
                 {
                     Id = new Guid("4c3b714e-522f-4ef8-85f4-db74f0ccdd76"),
