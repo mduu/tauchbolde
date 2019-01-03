@@ -19,8 +19,9 @@ namespace Tauchbolde.Common.DomainServices
         /// Insert or update the given <paramref name="eventToUpsert"/>.
         /// </summary>
         /// <param name="eventToUpsert">Eventdata to insert or update.</param>
+        /// <param name="currentUser">The current users diver record.</param>
         /// <returns>The inserted or updated <see cref="Event"/>.</returns>
-        Task<Event> UpsertEventAsync(Event eventToUpsert);
+        Task<Event> UpsertEventAsync(Event eventToUpsert, Diver currentUser);
 
         /// <summary>
         /// Adds the comment to a event async.

@@ -19,7 +19,20 @@ namespace Tauchbolde.Tests.DomainServices
     public class EventServiceTests
     {
         private Guid eventId = new Guid("e6a5f186-31f0-4424-9fd3-89d6935e19eb");
+        private Guid currentDiverId = new Guid("09a578b2-0bc9-4bc5-90bc-ee63cda48cc6");
         private INotificationService _notitifacationService;
+        private readonly Diver currentDiver;
+
+        public EventServiceTests()
+        {
+            currentDiver = new Diver
+            {
+                Id = currentDiverId,
+                Fullname = "John Doe",
+                Firstname = "John",
+                Lastname = "Doe"
+            };
+        }
 
         [Theory]
         [UseReporter(typeof(DiffReporter))]
@@ -63,13 +76,13 @@ namespace Tauchbolde.Tests.DomainServices
                 Guid.Empty);
             
             // ACT
-            var createdEvent = await eventService.UpsertEventAsync(newEvt);
+            var createdEvent = await eventService.UpsertEventAsync(newEvt, currentDiver);
             newEvt.Id = createdEvent.Id;
 
             // ASSERT
             createdEvent.Should().BeEquivalentTo(newEvt);
-            A.CallTo(() => _notitifacationService.NotifyForNewEventAsync(createdEvent)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _notitifacationService.NotifyForChangedEventAsync(A<Event>._)).MustNotHaveHappened();
+            A.CallTo(() => _notitifacationService.NotifyForNewEventAsync(createdEvent, currentDiver)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _notitifacationService.NotifyForChangedEventAsync(A<Event>._, currentDiver)).MustNotHaveHappened();
         }
         
         [Fact]
@@ -86,12 +99,12 @@ namespace Tauchbolde.Tests.DomainServices
             
 
             // ACT
-            var updatedEvent = await eventService.UpsertEventAsync(updateEvt);
+            var updatedEvent = await eventService.UpsertEventAsync(updateEvt, currentDiver);
 
             // ASSERT
             updatedEvent.Should().BeEquivalentTo(updateEvt);
-            A.CallTo(() => _notitifacationService.NotifyForChangedEventAsync(updatedEvent)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _notitifacationService.NotifyForNewEventAsync(A<Event>._)).MustNotHaveHappened();
+            A.CallTo(() => _notitifacationService.NotifyForChangedEventAsync(updatedEvent, currentDiver)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => _notitifacationService.NotifyForNewEventAsync(A<Event>._, currentDiver)).MustNotHaveHappened();
         }
 
         private EventService CreateEventService(Event evt)

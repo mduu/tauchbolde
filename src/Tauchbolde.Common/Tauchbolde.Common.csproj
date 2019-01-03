@@ -15,9 +15,6 @@
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="DomainServices\IParticipationService.d.ts">
-      <DependentUpon>IParticipationService.cs</DependentUpon>
-    </None>
     <None Update="Model\BuddyTeamNames.d.ts">
       <DependentUpon>BuddyTeamNames.cs</DependentUpon>
     </None>
