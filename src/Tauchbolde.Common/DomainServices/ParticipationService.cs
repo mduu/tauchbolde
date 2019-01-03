@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DomainServices.Notifications;
 
 namespace Tauchbolde.Common.DomainServices
 {
@@ -9,32 +10,38 @@ namespace Tauchbolde.Common.DomainServices
     {
         private readonly ApplicationDbContext _context;
         private readonly IParticipantRepository _participantRepository;
+        private readonly INotificationService notificationService;
 
         public ParticipationService(
             ApplicationDbContext context,
-            IParticipantRepository participantRepository)
+            IParticipantRepository participantRepository,
+            INotificationService notificationService)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
-            if (participantRepository == null) { throw new ArgumentNullException(nameof(participantRepository)); }
-
-            _context = context;
-            _participantRepository = participantRepository;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
+            this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
         /// <inheritdoc />
         public async Task<Participant> GetExistingParticipationAsync(Diver user, Guid eventId)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
-            if (eventId == null) throw new ArgumentNullException(nameof(eventId));
+            if (eventId == Guid.Empty) throw new ArgumentNullException(nameof(eventId));
 
             return await _participantRepository.GetParticipationForEventAndUserAsync(user, eventId);
         }
 
         /// <inheritdoc />
-        public async Task<Participant> ChangeParticipationAsync(Diver user, Guid eventId, ParticipantStatus status, int numberOfPeople, string note, string buddyTeamName)
+        public async Task<Participant> ChangeParticipationAsync(
+            Diver user,
+            Guid eventId,
+            ParticipantStatus status,
+            int numberOfPeople,
+            string note,
+            string buddyTeamName)
         {
             if (user == null) { throw new ArgumentNullException(nameof(user)); }
-            if (eventId == null) { throw new ArgumentNullException(nameof(eventId)); }
+            if (eventId == Guid.Empty) { throw new ArgumentNullException(nameof(eventId)); }
             if (numberOfPeople < 0) { throw new ArgumentOutOfRangeException(nameof(numberOfPeople)); }
 
             var participant = await _participantRepository.GetParticipationForEventAndUserAsync(user, eventId);
@@ -54,6 +61,8 @@ namespace Tauchbolde.Common.DomainServices
             participant.BuddyTeamName = buddyTeamName;
             participant.Note = note;
             participant.CountPeople = numberOfPeople;
+
+            await notificationService.NotifyForChangedParticipationAsync(participant);
 
             await _context.SaveChangesAsync();
 
