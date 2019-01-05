@@ -28,29 +28,44 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 
         /// <inheritdoc />
         public async Task NotifyForNewEventAsync(
-            Event newEvent)
+            Event newEvent,
+            Diver currentUser)
         {
             if (newEvent == null) throw new ArgumentNullException(nameof(newEvent));
 
             var recipients = await diverRepository.GetAllTauchboldeUsersAsync();
             var message = $"Neue Aktivität '{newEvent.Name}' ({newEvent.StartEndTimeAsString}) von {newEvent.Organisator.Realname} erstellt";
 
-            await InsertNotification(newEvent, recipients, NotificationType.NewEvent, message);
+            await InsertNotification(
+                newEvent,
+                recipients,
+                NotificationType.NewEvent,
+                message,
+                currentUser);
         }
 
         /// <inheritdoc />
-        public async Task NotifyForChangedEventAsync(Event changedEvent)
+        public async Task NotifyForChangedEventAsync(
+            Event changedEvent,
+            Diver currentUser)
         {
             if (changedEvent == null) throw new ArgumentNullException(nameof(changedEvent));
 
             var recipients = await diverRepository.GetAllTauchboldeUsersAsync();
             var message = $"Aktivität geändert '{changedEvent.Name}' ({changedEvent.StartEndTimeAsString}) von {changedEvent.Organisator.Realname}";
 
-            await InsertNotification(changedEvent, recipients, NotificationType.EditEvent, message);
+            await InsertNotification(
+                changedEvent,
+                recipients,
+                NotificationType.EditEvent,
+                message,
+                currentUser);
         }
 
         /// <inheritdoc />
-        public async Task NotifyForCanceledEventAsync(Event canceledEvent)
+        public async Task NotifyForCanceledEventAsync(
+            Event canceledEvent,
+            Diver currentUser)
         {
             if (canceledEvent == null) throw new ArgumentNullException(nameof(canceledEvent));
 
@@ -62,7 +77,12 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 
             var message = $"Aktivität '{canceledEvent.Name}' ({canceledEvent.StartEndTimeAsString}) wurde abgesagt von {canceledEvent.Organisator.Realname}.";
 
-            await InsertNotification(canceledEvent, recipients, NotificationType.CancelEvent, message);
+            await InsertNotification(
+                canceledEvent,
+                recipients,
+                NotificationType.CancelEvent,
+                message,
+                currentUser);
         }
 
         /// <inheritdoc />
@@ -96,18 +116,28 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                     throw new ArgumentOutOfRangeException();
             }
 
-            await InsertNotification(participant.Event, recipients, notificationType, message);
+            await InsertNotification(
+                participant.Event,
+                recipients,
+                notificationType,
+                message,
+                participant.ParticipatingDiver);
         }
 
         /// <inheritdoc />
-        public async Task NotifyForEventCommentAsync(Comment comment)
+        public async Task NotifyForEventCommentAsync(Comment comment, Diver author)
         {
             if (comment == null) throw new ArgumentNullException(nameof(comment));
 
             var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(comment.EventId);
             var message = $"Neuer Kommentar von '{comment.Author.Realname}' für Event '{comment.Event.Name}' ({comment.Event.StartEndTimeAsString}): {comment.Text}";
 
-            await InsertNotification(comment.Event, recipients, NotificationType.Commented, message);
+            await InsertNotification(
+                comment.Event,
+                recipients,
+                NotificationType.Commented,
+                message,
+                author);
         }
 
         private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(Guid eventId)
@@ -125,21 +155,28 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             Event relatedEvent,
             ICollection<Diver> recipients,
             NotificationType notificationType,
-            string message)
+            string message,
+            Diver currentDiver = null)
         {
             foreach (var recipient in recipients)
             {
-                var notification = new Notification
+                if (
+                    currentDiver.Id != recipient.Id ||
+                    currentDiver == null || 
+                    currentDiver.SendOwnNoticiations)
                 {
-                    Id = Guid.NewGuid(),
-                    Event = relatedEvent,
-                    OccuredAt = DateTime.Now,
-                    Recipient = recipient,
-                    Type = notificationType,
-                    Message = message,
-                };
+                    var notification = new Notification
+                    {
+                        Id = Guid.NewGuid(),
+                        Event = relatedEvent,
+                        OccuredAt = DateTime.Now,
+                        Recipient = recipient,
+                        Type = notificationType,
+                        Message = message,
+                    };
 
-                await notificationRepository.InsertAsync(notification);
+                    await notificationRepository.InsertAsync(notification);
+                }
             }
         }
     }

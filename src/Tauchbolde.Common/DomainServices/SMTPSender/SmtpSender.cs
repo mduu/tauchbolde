@@ -1,10 +1,10 @@
-﻿using MimeKit;
-using MailKit.Net.Smtp;
-using MimeKit.Text;
+﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using MimeKit;
+using MimeKit.Text;
+using MailKit.Net.Smtp;
 using MailKit.Security;
-using System;
 
 namespace Tauchbolde.Common.DomainServices.SMTPSender
 {

@@ -147,7 +147,7 @@ namespace Tauchbolde.Web.Controllers
                         OrganisatorId = currentDiver.Id,
                     };
 
-                    var persistedEvent = await _eventService.UpsertEventAsync(evt);
+                    var persistedEvent = await _eventService.UpsertEventAsync(evt, currentDiver);
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("Details", new { persistedEvent.Id });

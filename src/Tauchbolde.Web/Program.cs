@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace Tauchbolde.Web
 {
@@ -12,6 +13,10 @@ namespace Tauchbolde.Web
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddEnvironmentVariables();
+                })
                 .CaptureStartupErrors(true)
                 .UseSetting("detailedErrors", "true")
                 .UseApplicationInsights()

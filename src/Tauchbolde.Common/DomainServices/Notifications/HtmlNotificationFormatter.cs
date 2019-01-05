@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tauchbolde.Common.Model;
+using Tauchbolde.Common.DomainServices;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {
@@ -11,6 +12,18 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     /// </summary>
     public class HtmlNotificationFormatter : INotificationFormatter
     {
+        private readonly IUrlGenerator urlGenerator;
+
+        /// <summary>
+        /// Initializes a new instance of the
+        /// <see cref="T:Tauchbolde.Common.DomainServices.Notifications.HtmlNotificationFormatter"/> class.
+        /// </summary>
+        /// <param name="urlGenerator">URL generator.</param>
+        public HtmlNotificationFormatter(IUrlGenerator urlGenerator)
+        {
+            this.urlGenerator = urlGenerator ?? throw new ArgumentNullException(nameof(urlGenerator));
+        }
+
         /// <inheritdoc />
         public string Format(Diver recipient, IEnumerable<Notification> notifications)
         {
@@ -43,8 +56,19 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             {
                 sb.AppendLine("<li>");
 
-                sb.Append($"<small>{notification.OccuredAt.ToString("dd.MM.yyyy HH.mm")}</small> {NotificationTypeToString(notification.Type)}: ");
+                sb.Append("<span style='font-size: small; color: grey;'>");
+                sb.Append(notification.OccuredAt.ToString("dd.MM.yyyy HH.mm "));
+                sb.Append("</span>");
+                sb.Append(NotificationTypeToString(notification.Type));
+                sb.Append(": ");
                 sb.Append(notification.Message);
+
+                if (notification.EventId != Guid.Empty)
+                {
+                    var eventUrl = urlGenerator.GenerateEventUrl(notification.EventId);
+                    sb.Append($" <a href='{eventUrl}'>Mehr...</a>");
+                }
+                                
                 sb.AppendLine();
 
                 sb.AppendLine("</li>");
@@ -59,30 +83,36 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             sb.AppendLine("Guet Gas!");
             sb.AppendLine("</p>");
         }
+
+        const string TheRedColor = "#cc0000";
+        const string TheGreenColor = "#006600";
+        const string TheBlueColor = "#003399";
         
         private string NotificationTypeToString(NotificationType notificationType)
         {
             switch (notificationType)
             {
                 case NotificationType.NewEvent:
-                    return "Neue Aktivität";
+                    return GenerateColorText("Neue Aktivität", TheGreenColor);
                 case NotificationType.CancelEvent:
-                    return "Aktivität abgesagt";
+                    return GenerateColorText("Aktivität abgesagt", TheRedColor);
                 case NotificationType.EditEvent:
-                    return "Aktivität geändert";
+                    return GenerateColorText("Aktivität geändert", TheBlueColor);
                 case NotificationType.Commented:
-                    return "Neuer Kommentar";
+                    return GenerateColorText("Neuer Kommentar", TheGreenColor);
                 case NotificationType.Accepted:
-                    return "Zusage";
+                    return GenerateColorText("Zusage", TheGreenColor);
                 case NotificationType.Declined:
-                    return "Absage";
+                    return GenerateColorText("Absage", TheRedColor);
                 case NotificationType.Tentative:
-                    return "Vorbehalt";
+                    return GenerateColorText("Vorbehalt", TheBlueColor);
                 case NotificationType.Neutral:
-                    return "Unklar";
+                    return GenerateColorText("Unklar", TheBlueColor);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(notificationType));
             }
         }
+
+        private string GenerateColorText(string text, string color) => $"<span style='color: {color}'>{text}</span>";
     }
 }

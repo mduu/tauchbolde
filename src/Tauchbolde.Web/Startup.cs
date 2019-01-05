@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common;
-using Npgsql;
 using Microsoft.AspNetCore.Localization;
 using System.Collections.Generic;
 using System.Globalization;
@@ -18,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using Tauchbolde.Web.Filters;
+using System.Data.SqlClient;
 
 namespace Tauchbolde.Web
 {
@@ -44,7 +44,7 @@ namespace Tauchbolde.Web
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<SmtpSenderConfiguration>(Configuration);
+            services.Configure<SmtpSenderConfiguration>(Configuration.GetSection("SMTP"));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -139,23 +139,21 @@ namespace Tauchbolde.Web
 
         private void ConfigureDatabase(IServiceCollection services)
         {
-            var connectionString = Configuration.GetConnectionString("TauchboldeConnection");
+           var connectionString = Configuration.GetConnectionString("TauchboldeConnection");
+            var builder = new SqlConnectionStringBuilder(connectionString);
 
             if (!string.IsNullOrWhiteSpace(Configuration["DbUser"]))
             {
-                connectionString += $"Username={Configuration["DbUser"]};";
+                builder.UserID = Configuration["DbUser"];
             }
+            
             if (!string.IsNullOrWhiteSpace(Configuration["DbPassword"]))
             {
-                  connectionString += $"Password={Configuration["DbPassword"]};";
+                builder.Password = Configuration["DbPassword"];
             }
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(
-                    connectionString,
-                    b => b.MigrationsAssembly("Tauchbolde.Common")
-                )
-            );
+                options.UseSqlServer(builder.ConnectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

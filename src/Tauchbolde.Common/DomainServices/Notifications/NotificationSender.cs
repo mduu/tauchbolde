@@ -1,11 +1,29 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {
     public class NotificationSender : INotificationSender
     {
+        private readonly ILogger _logger;
+        private readonly ApplicationDbContext _databaseContext;
+
+        public NotificationSender(
+            ILoggerFactory loggerFactory,
+            ApplicationDbContext databaseContext)
+        {
+            if (loggerFactory == null)
+            {
+                throw new ArgumentNullException(nameof(loggerFactory));
+            }
+
+            _logger = loggerFactory.CreateLogger<NotificationSender>();
+            _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
+        }
+
         public async Task SendAsync(
             INotificationRepository notificationRepository,
             INotificationFormatter notificationFormatter,
@@ -13,40 +31,81 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
 
-            // Check
-            var pendingNotifications = await notificationRepository.GetPendingNotificationByUserAsync();
-            foreach (var pendingNotificationsForRecipient in pendingNotifications)
+            using (_logger.BeginScope("SendAsync"))
             {
-                var recipient = pendingNotificationsForRecipient.Key;
-                if (!recipient.LastNotificationCheckAt.HasValue ||
-                    recipient.LastNotificationCheckAt.Value.AddHours(
-                        recipient.NotificationIntervalInHours) < DateTime.Now)
+                var pendingNotifications = await notificationRepository.GetPendingNotificationByUserAsync();
+                foreach (var pendingNotificationsForRecipient in pendingNotifications)
                 {
-                    // Format
-                    var content = notificationFormatter.Format(recipient, pendingNotificationsForRecipient);
-                    if (!string.IsNullOrWhiteSpace(content))
+                    var recipient = pendingNotificationsForRecipient.Key;
+                    if (!recipient.LastNotificationCheckAt.HasValue ||
+                        recipient.LastNotificationCheckAt.Value.AddHours(
+                            recipient.NotificationIntervalInHours) < DateTime.Now)
                     {
-                        try
+                        using (_logger.BeginScope($"Send notification to {pendingNotificationsForRecipient.Key}"))
                         {
-                            // Submit
-                            await notificationSubmitter.SubmitAsync(recipient, content);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                            throw;
-                        }
-                        finally
-                        {
-                            foreach (var notification in pendingNotificationsForRecipient)
+                            var content = notificationFormatter.Format(recipient, pendingNotificationsForRecipient);
+                            if (!string.IsNullOrWhiteSpace(content))
                             {
-                                notification.CountOfTries++;
+                                await SubmitToRecipient(
+                                    notificationSubmitter,
+                                    pendingNotificationsForRecipient,
+                                    recipient,
+                                    content);
                             }
+
+                            await UpdateDatabaseForRecipient(pendingNotificationsForRecipient, recipient);
                         }
                     }
-
-                    recipient.LastNotificationCheckAt = DateTime.Now;
                 }
+            }
+        }
+
+        private async Task SubmitToRecipient(
+            INotificationSubmitter notificationSubmitter,
+            System.Linq.IGrouping<Diver, Notification> pendingNotificationsForRecipient,
+            Diver recipient,
+            string content)
+        {
+            if (notificationSubmitter == null) { throw new ArgumentNullException(nameof(notificationSubmitter)); }
+
+            try
+            {
+                await notificationSubmitter.SubmitAsync(recipient, content);
+                foreach (var notification in pendingNotificationsForRecipient)
+                {
+                    notification.AlreadySent = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error submitting notification to {recipient.Fullname}");
+            }
+            finally
+            {
+                foreach (var notification in pendingNotificationsForRecipient)
+                {
+                    notification.CountOfTries++;
+                }
+            }
+        }
+
+        private async Task UpdateDatabaseForRecipient(System.Linq.IGrouping<Diver, Notification> pendingNotificationsForRecipient, Diver recipient)
+        {
+            if (pendingNotificationsForRecipient == null) { throw new ArgumentNullException(nameof(pendingNotificationsForRecipient)); }
+            if (recipient == null) { throw new ArgumentNullException(nameof(recipient)); }
+
+            try
+            {
+                _logger.LogTrace($"Updating database records for {pendingNotificationsForRecipient.Key} ...");
+
+                recipient.LastNotificationCheckAt = DateTime.Now;
+                await _databaseContext.SaveChangesAsync();
+
+                _logger.LogTrace($"Database updated for {pendingNotificationsForRecipient.Key}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error updating database for {pendingNotificationsForRecipient.Key}");
             }
         }
     }

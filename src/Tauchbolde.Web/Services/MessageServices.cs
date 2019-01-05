@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Tauchbolde.Common.DomainServices.SMTPSender;
 
 namespace Tauchbolde.Web.Services
 {
@@ -10,10 +9,17 @@ namespace Tauchbolde.Web.Services
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
-        public Task SendEmailAsync(string email, string subject, string message)
+        private readonly IAppEmailSender emailSender;
+
+        public AuthMessageSender(
+            IAppEmailSender emailSender)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            this.emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
+        }
+
+        public async Task SendEmailAsync(string email, string subject, string message)
+        {
+            await emailSender.SendAsync(email, email, subject, message);
         }
 
         public Task SendSmsAsync(string number, string message)

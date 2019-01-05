@@ -2,18 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Xunit;
-using Microsoft.AspNetCore.Identity;
 
 namespace Tauchbolde.Tests.DomainServices.Notifications
 {
     public class NotificationSenderTests
     {
+        private ILoggerFactory _loggerFactory = A.Fake<ILoggerFactory>();
+        private ApplicationDbContext _db = A.Fake<ApplicationDbContext>();
+    
         [Fact]
         public async Task No_Check_Without_Pending_Notifications()
         {
@@ -21,7 +25,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             var notificationRepository = A.Fake<INotificationRepository>();
             var formatter = A.Fake<INotificationFormatter>();
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
-            var sender = new NotificationSender();
+            var sender = new NotificationSender(_loggerFactory, _db);
 
             // Act
             await sender.SendAsync(notificationRepository, formatter, submitter);
@@ -41,7 +45,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             var notificationRepository = A.Fake<INotificationRepository>();
             var formatter = A.Fake<INotificationFormatter>();
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
-            var sender = new NotificationSender();
+            var sender = new NotificationSender(_loggerFactory, _db);
 
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
 
@@ -64,7 +68,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             var notificationRepository = A.Fake<INotificationRepository>();
             var formatter = A.Fake<INotificationFormatter>();
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
-            var sender = new NotificationSender();
+            var sender = new NotificationSender(_loggerFactory, _db);
 
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
             A.CallTo(() => formatter.Format(A<Diver>._, A<IGrouping<Diver, Notification>>._)).Returns("Some content!");
@@ -92,7 +96,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             var notificationRepository = A.Fake<INotificationRepository>();
             var formatter = A.Fake<INotificationFormatter>();
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
-            var sender = new NotificationSender();
+            var sender = new NotificationSender(_loggerFactory, _db);
 
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
             A.CallTo(() => formatter.Format(A<Diver>._, A<IGrouping<Diver, Notification>>._)).Returns("Some content!");

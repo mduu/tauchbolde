@@ -40,13 +40,13 @@ namespace Tauchbolde.Common.DomainServices
         }
 
         /// <inheritdoc />
-        public async Task<Event> UpsertEventAsync(Event eventToUpsert)
+        public async Task<Event> UpsertEventAsync(Event eventToUpsert, Diver currentUser)
         {
             if (eventToUpsert == null) throw new ArgumentNullException(nameof(eventToUpsert));
 
             Event eventToStore = null;
             bool isNew = eventToUpsert.Id == Guid.Empty;
-            if (eventToUpsert.Id != Guid.Empty)
+            if (!isNew)
             {
                 eventToStore = await _eventRepository.FindByIdAsync(eventToUpsert.Id);
 
@@ -71,12 +71,12 @@ namespace Tauchbolde.Common.DomainServices
             if (isNew)
             {
                 await _eventRepository.InsertAsync(eventToStore);
-                await _notificationService.NotifyForNewEventAsync(eventToStore);
+                await _notificationService.NotifyForNewEventAsync(eventToStore, currentUser);
             }
             else
             {
                 _eventRepository.Update(eventToStore);
-                await _notificationService.NotifyForChangedEventAsync(eventToStore);
+                await _notificationService.NotifyForChangedEventAsync(eventToStore, currentUser);
             }
 
             return eventToStore;
@@ -100,7 +100,7 @@ namespace Tauchbolde.Common.DomainServices
                 };
 
                 await _commentRepository.InsertAsync(comment);
-                await _notificationService.NotifyForEventCommentAsync(comment);
+                await _notificationService.NotifyForEventCommentAsync(comment, authorDiver);
 
                 return comment;
             }
@@ -124,7 +124,7 @@ namespace Tauchbolde.Common.DomainServices
                 comment.Text = commentText;
             }
 
-            await _notificationService.NotifyForEventCommentAsync(comment);
+            await _notificationService.NotifyForEventCommentAsync(comment, currentUser);
 
             return comment;
         }

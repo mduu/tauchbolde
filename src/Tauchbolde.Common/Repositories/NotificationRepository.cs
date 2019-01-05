@@ -21,6 +21,7 @@ namespace Tauchbolde.Common.Repositories
             return await Context.Notifications
                 .Include(n => n.Event)
                 .Include(n => n.Recipient)
+                    .ThenInclude(r => r.User)
                 .Where(n => !n.AlreadySent)
                 .GroupBy(n => n.Recipient)
                 .ToListAsync();

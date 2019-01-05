@@ -8,10 +8,10 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     /// </summary>
     public interface INotificationService
     {
-        Task NotifyForNewEventAsync(Event newEvent);
-        Task NotifyForChangedEventAsync(Event changedEvent);
-        Task NotifyForCanceledEventAsync(Event canceledEvent);
+        Task NotifyForNewEventAsync(Event newEvent, Diver currentUser);
+        Task NotifyForChangedEventAsync(Event changedEvent, Diver currentUser);
+        Task NotifyForCanceledEventAsync(Event canceledEvent, Diver currentUser);
         Task NotifyForChangedParticipationAsync(Participant participant);
-        Task NotifyForEventCommentAsync(Comment comment);
+        Task NotifyForEventCommentAsync(Comment comment, Diver author);
     }
 }
