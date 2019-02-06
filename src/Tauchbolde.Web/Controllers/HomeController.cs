@@ -106,7 +106,7 @@ namespace Tauchbolde.Web.Controllers
                         model.YourName);
 
                     ShowSuccessMessage("Vielen Dank für Deine Nachricht. Du wirst von uns höhren.");
-                    return RedirectToAction("Indedx", "Home");
+                    return RedirectToAction("Index", "Home");
                 }
             }
             
