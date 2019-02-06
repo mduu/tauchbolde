@@ -36,6 +36,8 @@
     <Folder Include="Models\HomeViewModels\" />
     <Folder Include="Views\Shared\Components\Avatar\" />
     <Folder Include="Filters\" />
+    <Folder Include="wwwroot\avatar\" />
+    <Folder Include="appdata\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20170205143205_InitialCreate.cs" />
@@ -47,12 +49,13 @@
     <Content Remove="wwwroot\lib\jquery-validation\dist\additional-methods.js" />
     <Content Remove="wwwroot\fonts\glyphicons-halflings-regular.svg" />
     <Content Remove="wwwroot\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Remove="appdata\avatar\dummy.png" />
+    <Content Remove="wwwroot\avatar\.DS_Store" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="appdata\avatar\Marc_1.jpg" />
-    <None Remove="appdata\avatar\dummy.png" />
+    <None Remove="appdata\.DS_Store" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="appdata\avatar\dummy.png" />
+    <None Include="wwwroot\avatar\.DS_Store" />
   </ItemGroup>
 </Project>
