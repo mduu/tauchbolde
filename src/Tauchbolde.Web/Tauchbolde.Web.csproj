@@ -50,5 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="appdata\avatar\Marc_1.jpg" />
+    <None Remove="appdata\avatar\dummy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appdata\avatar\dummy.png" />
   </ItemGroup>
 </Project>
