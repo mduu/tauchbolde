@@ -26,6 +26,6 @@ namespace Tauchbolde.Web.Core
         protected override string GetRootPath()
             => Path.Combine(
                 _hostingEnvironment.ContentRootPath,
-                "appdata");
+                "wwwroot");
     }
 }
