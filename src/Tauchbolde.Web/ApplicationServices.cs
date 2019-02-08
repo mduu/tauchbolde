@@ -8,6 +8,7 @@ using Tauchbolde.Common.DomainServices.SMTPSender;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Commom.Misc;
 using Tauchbolde.Common.DomainServices.Avatar;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Tauchbolde.Web
 {
@@ -25,6 +26,8 @@ namespace Tauchbolde.Web
             services.AddSingleton<IAvatarIdGenerator, AvatarIdGenerator>();
             services.AddSingleton<IAvatarStore, AvatarStore>();
             services.AddSingleton<IImageResizer, ImageResizer>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IUrlGenerator, MvcUrlGenerator>();
 
             // Repos
             services.AddTransient<IDiverRepository, DiverRepository>();
