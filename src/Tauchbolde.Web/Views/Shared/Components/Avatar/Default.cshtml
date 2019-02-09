@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using Tauchbolde.Common.DomainServices.Avatar
 @using Tauchbolde.Web.ViewComponents
-@inject UserManager<IdentityUser> UserManager
 @model Tauchbolde.Web.Models.ViewComponentModels.AvatarViewModel
 @{
     var avatarSize = AvatarConstants.SizeMd;
@@ -18,15 +17,10 @@
         default:
             throw new System.ArgumentOutOfRangeException();
     }
-
     var emailAddress = "";
-    if (User != null)
+    if (Model?.Diver?.User != null)
     {
-        var user = await UserManager.GetUserAsync(User);
-        if (user != null)
-        {
-            emailAddress = user.Email;
-        }
+        emailAddress = Model.Diver.User.Email;
     }
 }
 @if (!string.IsNullOrWhiteSpace(Model.Diver?.AvatarId))

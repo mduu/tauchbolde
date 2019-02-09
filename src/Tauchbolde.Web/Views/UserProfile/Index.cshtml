@@ -85,72 +85,90 @@
     <div class="col-md-6">
         <fieldset>
             <legend>Kommunikation </legend>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.User.Email"></label>
-                <div class="col-sm-9">
-                    <p class="form-control-static">
-                        <a href="mailto:@Model.Profile.User.Email" title="Email an @Model.Profile.Realname senden">
-                            <span class="glyphicon glyphicon-envelope"></span>
-                            @Model.Profile.User.Email
-                        </a>
-                    </p>
+            @if (!string.IsNullOrWhiteSpace(Model.Profile.User.Email))
+            {
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" asp-for="Profile.User.Email"></label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            <a href="mailto:@Model.Profile.User.Email" title="Email an @Model.Profile.Realname senden">
+                                <span class="glyphicon glyphicon-envelope"></span>
+                                @Model.Profile.User.Email
+                            </a>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.MobilePhone"></label>
-                <div class="col-sm-9">
-                    <p class="form-control-static">
-                        <a href="tel:@Model.Profile.MobilePhone" title="@(Model.Profile.Realname) anrufen">
-                            <span class="glyphicon glyphicon-facetime-video"></span>
-                            @Model.Profile.MobilePhone
-                        </a>
-                    </p>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Profile.MobilePhone))
+            {
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" asp-for="Profile.MobilePhone"></label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            <a href="tel:@Model.Profile.MobilePhone" title="@(Model.Profile.Realname) anrufen">
+                                <span class="glyphicon glyphicon-facetime-video"></span>
+                                @Model.Profile.MobilePhone
+                            </a>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.WebsiteUrl"></label>
-                <div class="col-sm-9">
-                    <p class="form-control-static">
-                        <a href="@Model.Profile.WebsiteUrl" target="_blank" title="Webseite von @Model.Profile.Realname aufrufen">
-                            <span class="glyphicon glyphicon-globe"></span>
-                            @Model.Profile.WebsiteUrl
-                        </a>
-                    </p>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Profile.WebsiteUrl))
+            {
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" asp-for="Profile.WebsiteUrl"></label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            <a href="@Model.Profile.WebsiteUrl" target="_blank" title="Webseite von @Model.Profile.Realname aufrufen">
+                                <span class="glyphicon glyphicon-globe"></span>
+                                @Model.Profile.WebsiteUrl
+                            </a>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.TwitterHandle"></label>
-                <div class="col-sm-9">
-                    <p class="form-control-static">
-                        <a href="@Model.Profile.GetTwitterUrl()" target="_blank" title="Twitter-Profil von @Model.Profile.Realname">
-                            <span class="glyphicon glyphicon-globe"></span>
-                            @Model.Profile.TwitterHandle
-                        </a>
-                    </p>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Profile.GetTwitterUrl()))
+            {
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" asp-for="Profile.TwitterHandle"></label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            <a href="@Model.Profile.GetTwitterUrl()" target="_blank" title="Twitter-Profil von @Model.Profile.Realname">
+                                <span class="glyphicon glyphicon-globe"></span>
+                                @Model.Profile.GetTwitterUrl()
+                            </a>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.FacebookId"></label>
-                <div class="col-sm-9">
-                    <p class="form-control-static">
-                        <a href="@Model.Profile.GetFacebookeUrl()" target="_blank" title="Facebook-Profil von @Model.Profile.Realname">
-                            <span class="glyphicon glyphicon-globe"></span>
-                            @Model.Profile.FacebookId
-                        </a>
-                    </p>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Profile.GetFacebookeUrl()))
+            {
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" asp-for="Profile.FacebookId"></label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            <a href="@Model.Profile.GetFacebookeUrl()" target="_blank" title="Facebook-Profil von @Model.Profile.Realname">
+                                <span class="glyphicon glyphicon-globe"></span>
+                                @Model.Profile.GetFacebookeUrl()
+                            </a>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.SkypeId"></label>
-                <div class="col-sm-9">
-                    <p class="form-control-static">
-                        <a href="@Model.Profile.GetSkypeUrl()" title="Mit Skype @(Model.Profile.Realname) anrufen">
-                            <span class="glyphicon glyphicon-facetime-video"></span>
-                            @Model.Profile.SkypeId
-                        </a>
-                    </p>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Profile.SkypeId))
+            {
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" asp-for="Profile.SkypeId"></label>
+                    <div class="col-sm-9">
+                        <p class="form-control-static">
+                            <a href="@Model.Profile.GetSkypeUrl()" title="Mit Skype @(Model.Profile.Realname) anrufen">
+                                <span class="glyphicon glyphicon-facetime-video"></span>
+                                @Model.Profile.SkypeId
+                            </a>
+                        </p>
+                    </div>
                 </div>
-            </div>
+            }
         </fieldset>
     </div>
     <div class="col-xs-12">

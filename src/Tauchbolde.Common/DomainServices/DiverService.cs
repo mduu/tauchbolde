@@ -128,6 +128,9 @@ namespace Tauchbolde.Common.DomainServices
                 MobilePhone = user.PhoneNumber,
             };
 
+            var emailConfirmToken = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            await userManager.ConfirmEmailAsync(user, emailConfirmToken);
+            
             await userManager.AddToRoleAsync(user, Rolenames.Tauchbold);
 
             await diverRepository.InsertAsync(diver);
