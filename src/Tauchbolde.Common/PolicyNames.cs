@@ -4,5 +4,6 @@
     {
         public const string RequireTauchbold = "requireTauchbold";
         public const string RequireAdministrator = "requireAdministrator";
+        public const string RequireTauchboldeOrAdmin = "requireTauchboldeOrAdmin";
     }
 }

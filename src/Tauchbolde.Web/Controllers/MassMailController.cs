@@ -11,8 +11,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Tauchbolde.Web.Controllers
 {
 
-    [Authorize(Policy = PolicyNames.RequireTauchbold)]
-    [Authorize(Policy = PolicyNames.RequireAdministrator)]
+    [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class MassMailController : AppControllerBase
     {
         private readonly IDiverRepository diverRepository;
