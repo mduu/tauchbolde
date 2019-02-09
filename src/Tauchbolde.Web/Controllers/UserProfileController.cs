@@ -19,8 +19,7 @@ using Tauchbolde.Common.DomainServices.Avatar;
 namespace Tauchbolde.Web.Controllers
 {
     [Route("/profil")]
-    [Authorize(Policy = PolicyNames.RequireTauchbold)]
-    [Authorize(Policy = PolicyNames.RequireAdministrator)]
+    [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class UserProfileController : AppControllerBase
     {
         private readonly ApplicationDbContext context;

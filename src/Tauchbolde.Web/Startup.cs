@@ -106,6 +106,8 @@ namespace Tauchbolde.Web
             {
                 options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole(Rolenames.Tauchbold));
                 options.AddPolicy(PolicyNames.RequireAdministrator, policy => policy.RequireRole(Rolenames.Administrator));
+                options.AddPolicy(PolicyNames.RequireTauchboldeOrAdmin, policy => 
+                    policy.RequireRole(Rolenames.Administrator, Rolenames.Tauchbold));
             });
 
             services.Configure<RequestLocalizationOptions>(options =>
