@@ -15,8 +15,11 @@ namespace Tauchbolde.Common.Repositories
 
         public async Task<Participant> GetParticipationForEventAndUserAsync(Diver user, Guid eventId)
         {
-            return await Context.Participants.FirstOrDefaultAsync(p =>
-                p.EventId == eventId && p.ParticipatingDiver.Id == user.Id);
+            return await Context.Participants
+                .Include(p => p.Event)
+                .Include(p => p.ParticipatingDiver)
+                .FirstOrDefaultAsync(p =>
+                    p.EventId == eventId && p.ParticipatingDiver.Id == user.Id);
         }
 
         public async Task<ICollection<Participant>> GetParticipantsForEventByStatusAsync(Guid eventId, ParticipantStatus? status)

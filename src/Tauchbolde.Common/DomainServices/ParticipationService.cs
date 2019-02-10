@@ -61,9 +61,10 @@ namespace Tauchbolde.Common.DomainServices
             participant.BuddyTeamName = buddyTeamName;
             participant.Note = note;
             participant.CountPeople = numberOfPeople;
+            await _context.SaveChangesAsync();
 
-            await notificationService.NotifyForChangedParticipationAsync(participant);
-
+            var reReadParticipant = await _participantRepository.FindByIdAsync(participant.Id);
+            await notificationService.NotifyForChangedParticipationAsync(reReadParticipant);
             await _context.SaveChangesAsync();
 
             return participant;
