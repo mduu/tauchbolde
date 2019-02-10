@@ -36,3 +36,36 @@
         </div>
     </div>
 }
+
+<script>
+    $(function() {
+        $('.editCommentBtn').click(function() {
+            let button = $(event.target);
+            let commentId = button.data('commentid');
+            let commentText = button.data('commenttext');
+            let modal = $('#commentEditModal')
+    
+            modal.find('#commentId').val(commentId);
+            modal.find('#commentText').val(commentText);
+            modal.find('#eventId').val('@Model.Event.Id')
+    
+            modal.modal('show');
+        });
+    
+        $('.deleteCommentBtn').click(function() {
+            let button = $(event.target);
+            console.log(button);
+            let commentId = button.data('commentid');
+            let commentText = button.data('commenttext');
+            console.log(commentId);
+            console.log(commentText);
+            let modal = $('#commentDeleteModal')
+    
+            modal.find('#deleteCommentId').val(commentId);
+            modal.find('#deleteEventId').val('@Model.Event.Id')
+            modal.find('#deleteCommentText').text(commentText);
+    
+            modal.modal('show');
+        });
+    })
+</script>
