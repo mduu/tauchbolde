@@ -73,102 +73,14 @@
             <div class="row">
                 <h5>Teilnehmer</h5>
             </div>
-            @if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Accepted))
-            {
-                <section class="event-participationlist event-participationlist-accepted">
-                    <div class="row">
-                        <h5>Angemeldet:</h5>
-                    </div>
-                    @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
-                    {
-                        <div class="row">
-                            <span class="label label-success">
-                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                            </span>
-                            <span class="event-participationlist-name" style="        padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
-                            <span class="badge" title="Anzahl Personen: @participant.CountPeople">@participant.CountPeople</span><div class="col-sm-1"></div>
-                            @if (!string.IsNullOrWhiteSpace(participant.Note))
-                            {
-                                <mark style="margin-left: 10px;">@participant.Note</mark>
-                            }
-                        </div>
-                    }
-                </section>
-            }
-            @if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Tentative))
-            {
-                <section class="event-participationlist event-participationlist-tentative">
-                    <h4>Weiss noch nicht:</h4>
-                    @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Tentative))
-                    {
-                        <div class="row">
-                            <span class="label label-default">
-                                <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-                            </span>
-                            <span class="event-participationlist-name" style="        padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
-                            <span class="badge" title="Anzahl Personen: @participant.CountPeople">@participant.CountPeople</span><div class="col-sm-1"></div>
-                            @if (!string.IsNullOrWhiteSpace(participant.Note))
-                            {
-                                <mark style="margin-left: 10px;">@participant.Note</mark>
-                            }
-                        </div>
-                    }
-                </section>
-            }
-            @if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Declined))
-            {
-                <section class="event-participationlist event-participationlist-declined">
-                    <h4>Kann leider nicht:</h4>
-                    @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Declined))
-                    {
-                        <div class="row">
-                            <span class="label label-danger">
-                                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                            </span>
-                            <span class="event-participationlist-name" style="        padding-left: 5px;"><strong>@participant.ParticipatingDiver.User.UserName</strong></span>
-                            <span class="badge" title="Anzahl Personen: @participant.CountPeople">@participant.CountPeople</span><div class="col-sm-1"></div>
-                            @if (!string.IsNullOrWhiteSpace(participant.Note))
-                            {
-                                <mark style="margin-left: 10px;">@participant.Note</mark>
-                            }
-                        </div>
-                    }
-                </section>
-            }
-
+            <partial name="_ParticipantList" model="Model" />
+            
             <div class="row">
                 <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" style="        margin-top: 15px;">
                     An-/Abmeldung
                 </a>
             </div>
-            <div class="collapse" id="collapseExample" style="        margin-top: 5px;">
-                <form id="ChangeParticipantForm" asp-action="ChangeParticipation" asp-antiforgery="true">
-                    <input type="hidden" asp-for="ChangeParticipantViewModel.EventId" Value="@Model.Event.Id" />
-                    <div class="well">
-                        @* Status *@
-                        <div class="form-group">
-                            <label asp-for="ChangeParticipantViewModel.Status"></label>
-                            <select class="form-control" asp-for="ChangeParticipantViewModel.Status" asp-items="Html.GetEnumSelectList<ParticipantStatus>()"></select>
-                        </div>
-                        @* Buddyteam *@
-                        <div class="form-group">
-                            <label asp-for="ChangeParticipantViewModel.BuddyTeamName">Buddy-Team</label>
-                            <select class="form-control" asp-for="ChangeParticipantViewModel.BuddyTeamName" asp-items="@Model.BuddyTeamNames"></select>
-                        </div>
-                        @* Notiz *@
-                        <div class="form-group">
-                            <label asp-for="ChangeParticipantViewModel.Note">Notiz</label>
-                            <input type="text" class="form-control" placeholder="Notiz" asp-for="ChangeParticipantViewModel.Note">
-                        </div>
-                        @* Anzahl *@
-                        <div class="form-group">
-                            <label asp-for="ChangeParticipantViewModel.CountPeople">Anzahl Personen</label>
-                            <input type="number" class="form-control" step="1" min="1" asp-for="ChangeParticipantViewModel.CountPeople">
-                        </div>
-                        <input class="btn btn-success" type="submit" value="Speichern" />
-                    </div>
-                </form>
-            </div>
+            <partial name="_ChangeParticipation" model="Model" />
         </div>
 
         <hr />
@@ -176,58 +88,15 @@
         <div class="col-md-12">
             <h3>Kommentare</h3>
         </div>
-
-        @foreach (var comment in Model.Event.Comments.OrderBy(c => c.CreateDate))
-        {
-            <div class="col-md-12">
-                <div class="panel panel-primary">
-
-                    <div class="panel-body">
-                        <div>
-                            <strong>@comment.Author.Fullname</strong>
-                            <small> &mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm") @(comment.ModifiedDate.HasValue ? ("Geändert: " + comment.ModifiedDate.Value.ToString("dd.MM.yyyy HH:mm")) : "")</small>
-                            @if (comment.AuthorId == Model.CurrentDiver.Id)
-                            {
-                                <button
-                                    class="btn btn-default btn-xs editCommentBtn"
-                                    data-commentId="@comment.Id"
-                                    data-commentText="@comment.Text">
-                                    <span
-                                        class="glyphicon glyphicon-pencil"
-                                        data-commentId="@comment.Id"
-                                        data-commentText="@comment.Text">
-                                    </span>
-                                </button>
-                                <button
-                                    class="btn btn-default btn-xs deleteCommentBtn"
-                                    data-commentId="@comment.Id"
-                                    data-commentText="@comment.Text">
-                                    <span
-                                        class="glyphicon glyphicon-trash"
-                                        data-commentId="@comment.Id"
-                                        data-commentText="@comment.Text">
-                                    </span>
-                                </button>
-                            }
-                        </div>
-                        <p>@comment.Text</p>
-                    </div>
-                </div>
-            </div>
-        }
+        <partial name="_CommentsList" model="Model" />
 
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Kommentar hinzufügen
                 </div>
-                <div class="panel-body">
-                    <form id="AddComment" asp-action="AddComment" asp-antiforgery="true">
-                        <input type="hidden" id="eventId" name="eventId" Value="@Model.Event.Id" />
-                        <textarea id="newCommentText" name="newCommentText" rows="3" style="        width: 100%" autofocus></textarea>
-                        <input class="btn btn-primary" type="submit" value="Kommentar speichern" />
-                    </form>
-                </div>
+                
+                <partial name="_CommentCreate" model="Model" />
             </div>
         </div>
     </div>
@@ -243,37 +112,4 @@
         <script src="~/lib/knockout/dist/knockout.js" asp-append-version="true"></script>
         <script src="~/Scripts/ParticipationViewModel.min.js" asp-append-version="true"></script>
     </environment>
-
-    <script>
-        $(function() {
-            $('.editCommentBtn').click(function() {
-                let button = $(event.target);
-                let commentId = button.data('commentid');
-                let commentText = button.data('commenttext');
-                let modal = $('#commentEditModal')
-
-                modal.find('#commentId').val(commentId);
-                modal.find('#commentText').val(commentText);
-                modal.find('#eventId').val('@Model.Event.Id')
-
-                modal.modal('show');
-            });
-
-            $('.deleteCommentBtn').click(function() {
-                let button = $(event.target);
-                console.log(button);
-                let commentId = button.data('commentid');
-                let commentText = button.data('commenttext');
-                console.log(commentId);
-                console.log(commentText);
-                let modal = $('#commentDeleteModal')
-
-                modal.find('#deleteCommentId').val(commentId);
-                modal.find('#deleteEventId').val('@Model.Event.Id')
-                modal.find('#deleteCommentText').text(commentText);
-
-                modal.modal('show');
-            });
-        })
-    </script>
 }

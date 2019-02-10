@@ -1,0 +1,38 @@
+﻿@using Tauchbolde.Common.Model
+@using Tauchbolde.Web.Models.EventViewModels
+@model EventViewModel
+
+@foreach (var comment in Model.Event.Comments.OrderBy(c => c.CreateDate))
+{
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+
+            <div class="panel-body">
+                <div>
+                    <strong>@comment.Author.Fullname</strong>
+                    <small> &mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm") @(comment.ModifiedDate.HasValue ? ("Geändert: " + comment.ModifiedDate.Value.ToString("dd.MM.yyyy HH:mm")) : "")</small>
+                    @if (comment.AuthorId == Model.CurrentDiver.Id)
+                    {
+                        <button class="btn btn-default btn-xs editCommentBtn"
+                                data-commentId="@comment.Id"
+                                data-commentText="@comment.Text">
+                            <span class="glyphicon glyphicon-pencil"
+                                  data-commentId="@comment.Id"
+                                  data-commentText="@comment.Text">
+                            </span>
+                        </button>
+                        <button class="btn btn-default btn-xs deleteCommentBtn"
+                                data-commentId="@comment.Id"
+                                data-commentText="@comment.Text">
+                            <span class="glyphicon glyphicon-trash"
+                                  data-commentId="@comment.Id"
+                                  data-commentText="@comment.Text">
+                            </span>
+                        </button>
+                    }
+                </div>
+                <p>@comment.Text</p>
+            </div>
+        </div>
+    </div>
+}
