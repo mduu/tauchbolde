@@ -32,10 +32,13 @@
                 <label class="col-xs-4">Ort / TP</label>
                 <span class="form-control-static"><strong>@Model.Event.Location</strong></span>
             </div>
+            @if (!string.IsNullOrWhiteSpace(Model.Event.MeetingPoint))
+            {
             <div class="row">
                 <label class="col-xs-4">Treffpunkt</label>
                 <span class="form-control-static"><strong>@Model.Event.MeetingPoint</strong></span>
             </div>
+            }
             <div class="row">
                 <label class="col-xs-4">Organisator</label>
                 <span class="form-control-static"><strong>@Model.Event.Organisator.Fullname</strong></span>
