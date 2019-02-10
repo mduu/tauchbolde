@@ -49,6 +49,7 @@ namespace Tauchbolde.Common.Repositories
                     .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
                     .ThenInclude(p => p.ParticipatingDiver)
+                        .ThenInclude(d => d.User)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
             return result;
