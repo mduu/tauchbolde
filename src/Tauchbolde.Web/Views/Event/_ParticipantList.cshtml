@@ -1,0 +1,42 @@
+﻿@using Tauchbolde.Common.Model
+@using Tauchbolde.Web.Models.EventViewModels
+@model EventViewModel
+
+@if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Accepted))
+{
+    <section class="event-participationlist event-participationlist-accepted">
+        <div class="row">
+            <h5>Angemeldet:</h5>
+        </div>
+        @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
+        {
+            <div class="row">
+                <vc:participant-component participant="participant" />
+            </div>
+        }
+    </section>
+}
+@if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Tentative))
+{
+    <section class="event-participationlist event-participationlist-tentative">
+        <h4>Weiss noch nicht:</h4>
+        @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Tentative))
+        {
+            <div class="row">
+                <vc:participant-component participant="participant" />
+            </div>
+        }
+    </section>
+}
+@if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Declined))
+{
+    <section class="event-participationlist event-participationlist-declined">
+        <h4>Kann leider nicht:</h4>
+        @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Declined))
+        {
+            <div class="row">
+                <vc:participant-component participant="participant" />
+            </div>
+        }
+    </section>
+}

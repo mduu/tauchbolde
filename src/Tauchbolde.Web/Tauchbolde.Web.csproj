@@ -38,6 +38,7 @@
     <Folder Include="Filters\" />
     <Folder Include="wwwroot\avatar\" />
     <Folder Include="appdata\" />
+    <Folder Include="Views\Shared\Components\ParticipantComponent\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20170205143205_InitialCreate.cs" />
