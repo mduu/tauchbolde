@@ -12,7 +12,7 @@ namespace Tauchbolde.Web.ViewComponents
             return View(new ParticipantViewModel
             {
                 Diver = participant.ParticipatingDiver,
-                Name = participant.ParticipatingDiver.Realname,
+                Name = participant.ParticipatingDiver.Firstname,
                 CountPeople = participant.CountPeople,
                 Notes = participant.Note,
                 Status = participant.Status,
