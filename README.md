@@ -1,4 +1,9 @@
-**Build:** ![Build status](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_apis/build/status/tauchbolde-CI)
+**Build:**
+CI: ![Build status](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_apis/build/status/tauchbolde-CI) 
+Release: [![Build status](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_apis/build/status/tauchbolde-RELEASE)](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_build/latest?definitionId=2)
+
+**Deployments:** Stage: ![Stage](https://vsrm.dev.azure.com/tauchbolde-devops/_apis/public/Release/badge/12db4506-57a6-40c1-add4-675b966511b0/1/1)
+Prod: ![Prod](https://vsrm.dev.azure.com/tauchbolde-devops/_apis/public/Release/badge/12db4506-57a6-40c1-add4-675b966511b0/1/3)
 
 # tauchbolde
 Next generation website fro http://tauchbolde.ch
@@ -15,5 +20,4 @@ This is the code for the upcoming Tauchbolde Website. The current website is bui
 
 ## Current state
 
-The first version is still under development. Its a run-though go get the new website online as soon as possible. But its all done I the
-spare free time so it may take a while until you will see this online.
+The website using this code is in production.
