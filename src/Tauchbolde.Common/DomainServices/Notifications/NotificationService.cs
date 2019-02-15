@@ -142,10 +142,13 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 
         private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(Guid eventId)
         {
-            var declinedParticipants = await participantRepository.GetParticipantsForEventByStatusAsync(eventId, ParticipantStatus.Declined);
+            var declinedParticipants = await participantRepository
+                .GetParticipantsForEventByStatusAsync(eventId, ParticipantStatus.Declined);
 
-            var result = (await diverRepository.GetAllTauchboldeUsersAsync())
-                .Where(u => declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
+            var result = (await diverRepository
+                .GetAllTauchboldeUsersAsync())
+                .Where(u =>
+                    declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
                 .ToList();
 
             return result;
@@ -161,9 +164,9 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             foreach (var recipient in recipients)
             {
                 if (
-                    currentDiver.Id != recipient.Id ||
-                    currentDiver == null || 
-                    currentDiver.SendOwnNoticiations)
+                    currentDiver == null ||
+                    currentDiver.SendOwnNoticiations ||
+                    currentDiver.Id != recipient.Id)
                 {
                     var notification = new Notification
                     {
