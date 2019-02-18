@@ -97,19 +97,19 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             switch (participant.Status)
             {
                 case ParticipantStatus.None:
-                    message = $"Teilnahme: {participant.ParticipatingDiver.Realname} weiss nicht ob Er/Sie an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil nimmt.";
+                    message = $"Teilnahme: {participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} weiss nicht ob Er/Sie an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil nimmt.";
                     notificationType = NotificationType.Neutral;
                     break;
                 case ParticipantStatus.Accepted:
-                    message = $"Teilnahme: {participant.ParticipatingDiver.Realname} nimmt an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
+                    message = $"Teilnahme: {participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} nimmt an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Accepted;
                     break;
                 case ParticipantStatus.Declined:
-                    message = $"Teilnahme: {participant.ParticipatingDiver.Realname} hat für die Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) abgesagt.";
+                    message = $"Teilnahme: {participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} hat für die Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) abgesagt.";
                     notificationType = NotificationType.Declined;
                     break;
                 case ParticipantStatus.Tentative:
-                    message = $"Teilnahme: {participant.ParticipatingDiver.Realname} nimmt eventuell an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
+                    message = $"Teilnahme: {participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} nimmt eventuell an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Tentative;
                     break;
                 default:
