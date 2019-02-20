@@ -1,9 +1,7 @@
-**Build:**
-CI: ![Build status](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_apis/build/status/tauchbolde-CI) 
-Release: [![Build status](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_apis/build/status/tauchbolde-RELEASE)](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_build/latest?definitionId=2)
-
-**Deployments:** Stage: ![Stage](https://vsrm.dev.azure.com/tauchbolde-devops/_apis/public/Release/badge/12db4506-57a6-40c1-add4-675b966511b0/1/1)
-Prod: ![Prod](https://vsrm.dev.azure.com/tauchbolde-devops/_apis/public/Release/badge/12db4506-57a6-40c1-add4-675b966511b0/1/3)
+| Build | Deployment |
+|--|--|
+| ![Build status](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_apis/build/status/tauchbolde-CI) CI | ![Stage](https://vsrm.dev.azure.com/tauchbolde-devops/_apis/public/Release/badge/12db4506-57a6-40c1-add4-675b966511b0/1/1) STAGE |
+| [![Build status](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_apis/build/status/tauchbolde-RELEASE)](https://dev.azure.com/tauchbolde-devops/tauchbolde-devops/_build/latest?definitionId=2) RELEASE | ![Prod](https://vsrm.dev.azure.com/tauchbolde-devops/_apis/public/Release/badge/12db4506-57a6-40c1-add4-675b966511b0/1/3) PROD |
 
 # tauchbolde
 Next generation website fro http://tauchbolde.ch
