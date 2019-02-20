@@ -146,9 +146,9 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
         }
         
         [Theory]
-        [InlineData(false, 2)]
-        [InlineData(true, 4)]
-        public async Task NotifyForChangedParticipationForthAndBackAsync(bool sendOwnNotifications, int expectedNotificationInsertsPhase)
+        [InlineData(false, 1)]
+        [InlineData(true, 2)]
+        public async Task NotifyForChangedParticipationCancel(bool sendOwnNotifications, int expectedNotificationInsertsPhase)
         {
             // Arrange
             var currentUser = CreateCurrentUser(sendOwnNotifications);
@@ -156,6 +156,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             {
                 Id = new Guid("d23e977e-9b33-44c2-aa5e-1595cde11082"),
                 ParticipatingDiver = CreateDiverJane(sendOwnNotifications),
+                Status = ParticipantStatus.Declined,
                 Event = new Event
                 {
                     Id = new Guid("b4de413a-7d40-4319-80b3-517d22a9247d"),
@@ -164,15 +165,15 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
                     Organisator = CreateDiverJohn(sendOwnNotifications),
                 }
             };
-            var notificationRepo = CreateNotificationRepo();
-            var notificationService = CreateNotificationService(notificationRepo, sendOwnNotifications);
+            var participantRepo = CreateParticipantRepo();
+            A.CallTo(() => participantRepo.GetParticipantsForEventByStatusAsync(A<Guid>._, ParticipantStatus.Declined))
+                .ReturnsLazily(async (c) => await Task.FromResult(new[] { participant }));
 
-            // Act Phase 1 - Participate
-            participant.Status = ParticipantStatus.Accepted;
-            await notificationService.NotifyForChangedParticipationAsync(participant);
-            
-            // Act Phase 2 - Don't participate anymore
-            participant.Status = ParticipantStatus.Declined;
+            var notificationRepo = CreateNotificationRepo();
+                
+            var notificationService = CreateNotificationService(notificationRepo, sendOwnNotifications, participantRepo);
+
+            // Act
             await notificationService.NotifyForChangedParticipationAsync(participant);
             
             A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._))
@@ -181,17 +182,21 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
 
         private INotificationRepository CreateNotificationRepo() => A.Fake<INotificationRepository>();
 
-        private NotificationService CreateNotificationService(INotificationRepository notificationRepo, bool sendOwnNotifications = false)
+        private NotificationService CreateNotificationService(
+            INotificationRepository notificationRepo,
+            bool sendOwnNotifications = false,
+            IParticipantRepository participantRepo = null)
         {
             var diverRepo = CreateDiverRepoFakeWithTauchbolde(sendOwnNotifications);
-            var participantRepo = A.Fake<IParticipantRepository>();
 
             return new NotificationService(
                 notificationRepo,
                 diverRepo,
-                participantRepo
+                participantRepo ?? CreateParticipantRepo()
             );
         }
+
+        private IParticipantRepository CreateParticipantRepo() => A.Fake<IParticipantRepository>();
 
         private IDiverRepository CreateDiverRepoFakeWithTauchbolde(bool sendOwnNotifications = false)
         {
