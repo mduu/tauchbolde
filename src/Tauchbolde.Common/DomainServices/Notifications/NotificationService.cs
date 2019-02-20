@@ -90,7 +90,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         {
             if (participant == null) throw new ArgumentNullException(nameof(participant));
 
-            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(participant.EventId);
+            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(participant.ParticipatingDiver.Id, participant.EventId);
 
             var message = "";
             NotificationType notificationType;
@@ -129,7 +129,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         {
             if (comment == null) throw new ArgumentNullException(nameof(comment));
 
-            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(comment.EventId);
+            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(author.Id, comment.EventId);
             var message = $"Neuer Kommentar von '{comment.Author.Realname}' für Event '{comment.Event.Name}' ({comment.Event.StartEndTimeAsString}): {comment.Text}";
 
             await InsertNotification(
@@ -140,10 +140,11 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                 author);
         }
 
-        private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(Guid eventId)
+        private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(Guid currentDiverId, Guid eventId)
         {
-            var declinedParticipants = await participantRepository
-                .GetParticipantsForEventByStatusAsync(eventId, ParticipantStatus.Declined);
+            var declinedParticipants =
+                (await participantRepository.GetParticipantsForEventByStatusAsync(eventId, ParticipantStatus.Declined))
+                .Where(p => p.ParticipatingDiver.Id != currentDiverId);
 
             var result = (await diverRepository
                 .GetAllTauchboldeUsersAsync())

@@ -144,20 +144,59 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             // Assert
             A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(Repeated.Exactly.Times(expectedNotificationInserts));
         }
+        
+        [Theory]
+        [InlineData(false, 1)]
+        [InlineData(true, 2)]
+        public async Task NotifyForChangedParticipationCancel(bool sendOwnNotifications, int expectedNotificationInsertsPhase)
+        {
+            // Arrange
+            var currentUser = CreateCurrentUser(sendOwnNotifications);
+            var participant = new Participant
+            {
+                Id = new Guid("d23e977e-9b33-44c2-aa5e-1595cde11082"),
+                ParticipatingDiver = CreateDiverJane(sendOwnNotifications),
+                Status = ParticipantStatus.Declined,
+                Event = new Event
+                {
+                    Id = new Guid("b4de413a-7d40-4319-80b3-517d22a9247d"),
+                    Name = "Test Event",
+                    OrganisatorId = johnDiverId,
+                    Organisator = CreateDiverJohn(sendOwnNotifications),
+                }
+            };
+            var participantRepo = CreateParticipantRepo();
+            A.CallTo(() => participantRepo.GetParticipantsForEventByStatusAsync(A<Guid>._, ParticipantStatus.Declined))
+                .ReturnsLazily(async (c) => await Task.FromResult(new[] { participant }));
+
+            var notificationRepo = CreateNotificationRepo();
+                
+            var notificationService = CreateNotificationService(notificationRepo, sendOwnNotifications, participantRepo);
+
+            // Act
+            await notificationService.NotifyForChangedParticipationAsync(participant);
+            
+            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._))
+                .MustHaveHappened(Repeated.Exactly.Times(expectedNotificationInsertsPhase));
+        }
 
         private INotificationRepository CreateNotificationRepo() => A.Fake<INotificationRepository>();
 
-        private NotificationService CreateNotificationService(INotificationRepository notificationRepo, bool sendOwnNotifications = false)
+        private NotificationService CreateNotificationService(
+            INotificationRepository notificationRepo,
+            bool sendOwnNotifications = false,
+            IParticipantRepository participantRepo = null)
         {
             var diverRepo = CreateDiverRepoFakeWithTauchbolde(sendOwnNotifications);
-            var participantRepo = A.Fake<IParticipantRepository>();
 
             return new NotificationService(
                 notificationRepo,
                 diverRepo,
-                participantRepo
+                participantRepo ?? CreateParticipantRepo()
             );
         }
+
+        private IParticipantRepository CreateParticipantRepo() => A.Fake<IParticipantRepository>();
 
         private IDiverRepository CreateDiverRepoFakeWithTauchbolde(bool sendOwnNotifications = false)
         {
