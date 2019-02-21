@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DomainServices;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {
     /// <summary>
     /// Formats notification for a given recipient as HTML.
     /// </summary>
-    public class HtmlNotificationFormatter : INotificationFormatter
+    internal class HtmlNotificationFormatter : INotificationFormatter
     {
         private readonly IUrlGenerator urlGenerator;
 

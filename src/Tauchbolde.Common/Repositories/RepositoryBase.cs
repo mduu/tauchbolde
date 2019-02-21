@@ -12,16 +12,14 @@ namespace Tauchbolde.Common.Repositories
     /// Implementation of the repository base class.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public abstract class RepositoryBase<TEntity> : IRepository<TEntity>
+    internal abstract class RepositoryBase<TEntity> : IRepository<TEntity>
         where TEntity: class, new()
     {
         protected readonly ApplicationDbContext Context;
 
         public RepositoryBase(ApplicationDbContext context)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
-
-            Context = context;
+            Context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public virtual async Task<TEntity> FindByIdAsync(Guid id)

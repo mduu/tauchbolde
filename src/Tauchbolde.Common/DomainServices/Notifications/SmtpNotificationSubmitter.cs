@@ -5,7 +5,7 @@ using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {
-    public class SmtpNotificationSubmitter : INotificationSubmitter
+    internal class SmtpNotificationSubmitter : INotificationSubmitter
     {
         private readonly IAppEmailSender emailSender;
 

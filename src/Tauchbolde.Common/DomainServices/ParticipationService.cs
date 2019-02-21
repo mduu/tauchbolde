@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Tauchbolde.Common.DomainServices
 {
-    public class ParticipationService : IParticipationService
+    internal class ParticipationService : IParticipationService
     {
         private readonly ApplicationDbContext context;
         private readonly IParticipantRepository participantRepository;

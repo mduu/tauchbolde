@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Tauchbolde.Common.DomainServices.SMTPSender
 {
-    public class SmtpSender : IAppEmailSender
+    internal class SmtpSender : IAppEmailSender
     {
         private readonly SmtpSenderConfiguration options;
         private readonly ITelemetryService telemetryService;

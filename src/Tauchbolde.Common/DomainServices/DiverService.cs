@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Tauchbolde.Common.DomainServices
 {
-    public class DiversService : IDiverService
+    internal class DiversService : IDiverService
     {
         private readonly ApplicationDbContext context;
         private readonly RoleManager<IdentityRole> roleManager;

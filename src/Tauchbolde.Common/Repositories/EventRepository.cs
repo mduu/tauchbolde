@@ -7,7 +7,7 @@ using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.Repositories
 {
-    public class EventRepository : RepositoryBase<Event>, IEventRepository
+    internal class EventRepository : RepositoryBase<Event>, IEventRepository
     {
         public EventRepository(ApplicationDbContext context)
             : base(context)

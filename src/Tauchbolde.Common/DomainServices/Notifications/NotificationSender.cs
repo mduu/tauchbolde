@@ -6,7 +6,7 @@ using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {
-    public class NotificationSender : INotificationSender
+    internal class NotificationSender : INotificationSender
     {
         private readonly ILogger logger;
         private readonly ApplicationDbContext databaseContext;

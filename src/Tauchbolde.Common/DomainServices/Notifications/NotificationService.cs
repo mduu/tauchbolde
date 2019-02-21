@@ -11,7 +11,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     /// <summary>
     /// The notification service allows the app to register notifications to be send somewhen later on.
     /// </summary>
-    public class NotificationService : INotificationService
+    internal class NotificationService : INotificationService
     {
         private readonly INotificationRepository notificationRepository;
         private readonly IDiverRepository diverRepository;

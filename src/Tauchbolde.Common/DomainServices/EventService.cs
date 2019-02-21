@@ -10,7 +10,7 @@ using Tauchbolde.Common.Telemetry;
 
 namespace Tauchbolde.Common.DomainServices
 {
-    public class EventService : IEventService
+    internal class EventService : IEventService
     {
         private readonly ApplicationDbContext applicationDbContext;
         private readonly INotificationService notificationService;
