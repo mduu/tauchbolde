@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Common.DomainServices.Notifications;
+using Tauchbolde.Common.Telemetry;
+using System.Collections.Generic;
 
 namespace Tauchbolde.Common.DomainServices
 {
@@ -11,15 +13,18 @@ namespace Tauchbolde.Common.DomainServices
         private readonly ApplicationDbContext _context;
         private readonly IParticipantRepository _participantRepository;
         private readonly INotificationService notificationService;
+        private readonly ITelemetryService telemetryService;
 
         public ParticipationService(
             ApplicationDbContext context,
             IParticipantRepository participantRepository,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            ITelemetryService telemetryService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
             this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+            this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
         }
 
         /// <inheritdoc />
@@ -66,8 +71,26 @@ namespace Tauchbolde.Common.DomainServices
             var reReadParticipant = await _participantRepository.FindByIdAsync(participant.Id);
             await notificationService.NotifyForChangedParticipationAsync(reReadParticipant);
             await _context.SaveChangesAsync();
+            TrackEvent("CHANGE-PARTICIPATION", participant);
 
             return participant;
+        }
+        
+        private void TrackEvent(string name, Participant participantToTrack)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+            if (participantToTrack == null) throw new ArgumentNullException(nameof(participantToTrack));
+
+            telemetryService.TrackEvent(
+                name,
+                new Dictionary<string, string>
+                {
+                    { "ParticipantId", participantToTrack.Id.ToString("B") },
+                    { "ParticipatingDiverId", participantToTrack.ParticipatingDiver.Id.ToString("B")},
+                    { "Status", participantToTrack.Status.ToString() },
+                    { "CountPeople", participantToTrack.CountPeople.ToString() },
+                    { "Note", participantToTrack.Note },
+                });
         }
     }
 }

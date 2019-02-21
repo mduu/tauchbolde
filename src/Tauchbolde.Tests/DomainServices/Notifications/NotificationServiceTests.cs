@@ -7,6 +7,7 @@ using Tauchbolde.Common.Model;
 using Xunit;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using Tauchbolde.Common.Telemetry;
 
 namespace Tauchbolde.Tests.DomainServices.Notifications
 {
@@ -192,7 +193,8 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             return new NotificationService(
                 notificationRepo,
                 diverRepo,
-                participantRepo ?? CreateParticipantRepo()
+                participantRepo ?? CreateParticipantRepo(),
+                A.Fake<ITelemetryService>()
             );
         }
 

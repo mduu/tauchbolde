@@ -13,6 +13,7 @@ using Tauchbolde.Common.DomainServices.Notifications;
 using System.Globalization;
 using System.Threading;
 using FluentAssertions;
+using Tauchbolde.Common.Telemetry;
 
 namespace Tauchbolde.Tests.DomainServices
 {
@@ -113,7 +114,8 @@ namespace Tauchbolde.Tests.DomainServices
                 A.Fake<ApplicationDbContext>(),
                 CreateNotificationService(),
                 CreateEventRepositoryFake(evt),
-                A.Fake<ICommentRepository>());
+                A.Fake<ICommentRepository>(),
+                A.Fake<ITelemetryService>());
         }
 
         private Event CreateEvent(DateTimeOffset start, DateTimeOffset? end, Guid? id = null)
