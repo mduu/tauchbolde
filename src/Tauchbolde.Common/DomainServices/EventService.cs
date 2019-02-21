@@ -12,11 +12,11 @@ namespace Tauchbolde.Common.DomainServices
 {
     public class EventService : IEventService
     {
-        private readonly ApplicationDbContext _applicationDbContext;
-        private readonly INotificationService _notificationService;
-        private readonly IEventRepository _eventRepository;
-        private readonly ICommentRepository _commentRepository;
-        private readonly ITelemetryService _telemetryService;
+        private readonly ApplicationDbContext applicationDbContext;
+        private readonly INotificationService notificationService;
+        private readonly IEventRepository eventRepository;
+        private readonly ICommentRepository commentRepository;
+        private readonly ITelemetryService telemetryService;
 
         public EventService(
             ApplicationDbContext applicationDbContext,
@@ -25,18 +25,18 @@ namespace Tauchbolde.Common.DomainServices
             ICommentRepository commentRepository,
             ITelemetryService telemetryService)
         {
-            _applicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
-            _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
-            _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
-            _commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
-            _telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
+            this.applicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
+            this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+            this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
+            this.commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
+            this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
 
         }
 
         /// <inheritdoc />
         public async Task<Stream> CreateIcalForEventAsync(Guid eventId, DateTime? createTime = null)
         {
-            var evt = await _eventRepository.FindByIdAsync(eventId);
+            var evt = await eventRepository.FindByIdAsync(eventId);
             if (evt == null)
             {
                 throw new InvalidOperationException($"Event with ID [{eventId}] not found!");
@@ -54,7 +54,7 @@ namespace Tauchbolde.Common.DomainServices
             bool isNew = eventToUpsert.Id == Guid.Empty;
             if (!isNew)
             {
-                eventToStore = await _eventRepository.FindByIdAsync(eventToUpsert.Id);
+                eventToStore = await eventRepository.FindByIdAsync(eventToUpsert.Id);
 
                 if (eventToStore == null)
                 {
@@ -76,14 +76,14 @@ namespace Tauchbolde.Common.DomainServices
 
             if (isNew)
             {
-                await _eventRepository.InsertAsync(eventToStore);
-                await _notificationService.NotifyForNewEventAsync(eventToStore, currentUser);
+                await eventRepository.InsertAsync(eventToStore);
+                await notificationService.NotifyForNewEventAsync(eventToStore, currentUser);
                 TrackEvent("EVENT-INSERT", eventToStore);
             }
             else
             {
-                _eventRepository.Update(eventToStore);
-                await _notificationService.NotifyForChangedEventAsync(eventToStore, currentUser);
+                eventRepository.Update(eventToStore);
+                await notificationService.NotifyForChangedEventAsync(eventToStore, currentUser);
                 TrackEvent("EVENT-UPDATE", eventToStore);
             }
 
@@ -107,8 +107,8 @@ namespace Tauchbolde.Common.DomainServices
                     Text = commentToAdd,
                 };
 
-                await _commentRepository.InsertAsync(comment);
-                await _notificationService.NotifyForEventCommentAsync(comment, authorDiver);
+                await commentRepository.InsertAsync(comment);
+                await notificationService.NotifyForEventCommentAsync(comment, authorDiver);
                 TrackEvent("COMMENT-INSERT", comment);
 
                 return comment;
@@ -123,7 +123,7 @@ namespace Tauchbolde.Common.DomainServices
             if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
             if (currentUser == null) { throw new ArgumentNullException(nameof(currentUser)); }
 
-            var comment = await _commentRepository.FindByIdAsync(commentId);
+            var comment = await commentRepository.FindByIdAsync(commentId);
             if (comment != null)
             {
                 if (comment.AuthorId != currentUser.Id)
@@ -134,7 +134,7 @@ namespace Tauchbolde.Common.DomainServices
                 comment.Text = commentText;
             }
 
-            await _notificationService.NotifyForEventCommentAsync(comment, currentUser);
+            await notificationService.NotifyForEventCommentAsync(comment, currentUser);
             TrackEvent("COMMENT-UPDATE", comment);
 
             return comment;
@@ -145,7 +145,7 @@ namespace Tauchbolde.Common.DomainServices
             if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
             if (currentUser == null) throw new ArgumentNullException(nameof(currentUser));
 
-            var comment = await _commentRepository.FindByIdAsync(commentId);
+            var comment = await commentRepository.FindByIdAsync(commentId);
             if (comment != null)
             {
                 if (comment.AuthorId != currentUser.Id)
@@ -154,7 +154,7 @@ namespace Tauchbolde.Common.DomainServices
                 }
 
                 TrackEvent("COMMENT-DELETE", comment);
-                _commentRepository.Delete(comment);
+                commentRepository.Delete(comment);
             }
         }
 
@@ -205,7 +205,7 @@ namespace Tauchbolde.Common.DomainServices
         {
             if (eventToTrack == null) { throw new ArgumentNullException(nameof(eventToTrack)); }
 
-            _telemetryService.TrackEvent(
+            telemetryService.TrackEvent(
                 name,
                 new Dictionary<string, string>
                 {
@@ -220,7 +220,7 @@ namespace Tauchbolde.Common.DomainServices
         {
             if (commentToTrack == null) { throw new ArgumentNullException(nameof(commentToTrack)); }
 
-            _telemetryService.TrackEvent(
+            telemetryService.TrackEvent(
                 name,
                 new Dictionary<string, string>
                 {

@@ -12,7 +12,7 @@ namespace Tauchbolde.Web.Core
     /// <seealso cref="IAvatarStore"/>
     public class AvatarPathProvider : AvatarPathProviderBase
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IHostingEnvironment hostingEnvironment;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Tauchbolde.Web.Core.AvatarPathProvider"/> class.
@@ -20,12 +20,12 @@ namespace Tauchbolde.Web.Core
         /// <param name="environment">Environment.</param>
         public AvatarPathProvider(IHostingEnvironment environment)
         {
-            _hostingEnvironment = environment;
+            hostingEnvironment = environment;
         }
 
         protected override string GetRootPath()
             => Path.Combine(
-                _hostingEnvironment.ContentRootPath,
+                hostingEnvironment.ContentRootPath,
                 "wwwroot");
     }
 }

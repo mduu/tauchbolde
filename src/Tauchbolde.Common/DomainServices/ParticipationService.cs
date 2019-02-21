@@ -10,8 +10,8 @@ namespace Tauchbolde.Common.DomainServices
 {
     public class ParticipationService : IParticipationService
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IParticipantRepository _participantRepository;
+        private readonly ApplicationDbContext context;
+        private readonly IParticipantRepository participantRepository;
         private readonly INotificationService notificationService;
         private readonly ITelemetryService telemetryService;
 
@@ -21,8 +21,8 @@ namespace Tauchbolde.Common.DomainServices
             INotificationService notificationService,
             ITelemetryService telemetryService)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
             this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
         }
@@ -33,7 +33,7 @@ namespace Tauchbolde.Common.DomainServices
             if (user == null) throw new ArgumentNullException(nameof(user));
             if (eventId == Guid.Empty) throw new ArgumentNullException(nameof(eventId));
 
-            return await _participantRepository.GetParticipationForEventAndUserAsync(user, eventId);
+            return await participantRepository.GetParticipationForEventAndUserAsync(user, eventId);
         }
 
         /// <inheritdoc />
@@ -49,7 +49,7 @@ namespace Tauchbolde.Common.DomainServices
             if (eventId == Guid.Empty) { throw new ArgumentNullException(nameof(eventId)); }
             if (numberOfPeople < 0) { throw new ArgumentOutOfRangeException(nameof(numberOfPeople)); }
 
-            var participant = await _participantRepository.GetParticipationForEventAndUserAsync(user, eventId);
+            var participant = await participantRepository.GetParticipationForEventAndUserAsync(user, eventId);
             if (participant == null)
             {
                 participant = new Participant
@@ -58,7 +58,7 @@ namespace Tauchbolde.Common.DomainServices
                     EventId = eventId,
                 };
 
-                await _context.Participants.AddAsync(participant);
+                await context.Participants.AddAsync(participant);
             }
 
             participant.Status = status;
@@ -66,11 +66,11 @@ namespace Tauchbolde.Common.DomainServices
             participant.BuddyTeamName = buddyTeamName;
             participant.Note = note;
             participant.CountPeople = numberOfPeople;
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
-            var reReadParticipant = await _participantRepository.FindByIdAsync(participant.Id);
+            var reReadParticipant = await participantRepository.FindByIdAsync(participant.Id);
             await notificationService.NotifyForChangedParticipationAsync(reReadParticipant);
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             TrackEvent("CHANGE-PARTICIPATION", participant);
 
             return participant;

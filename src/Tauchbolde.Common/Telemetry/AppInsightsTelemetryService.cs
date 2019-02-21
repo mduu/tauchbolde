@@ -9,7 +9,7 @@ namespace Tauchbolde.Common.Telemetry
     /// </summary>
     public class AppInsightsTelemetryService : ITelemetryService
     {
-        private readonly TelemetryClient _telemetryClient;
+        private readonly TelemetryClient telemetryClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Tauchbolde.Common.Telemetry.AppInsightsTelemetryService"/> class.
@@ -17,7 +17,7 @@ namespace Tauchbolde.Common.Telemetry
         /// <param name="telemetryClient">Telemetry client.</param>
         public AppInsightsTelemetryService(TelemetryClient telemetryClient)
         {
-            this._telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
+            this.telemetryClient = telemetryClient ?? throw new ArgumentNullException(nameof(telemetryClient));
         }
 
         /// <inheritdoc/>
