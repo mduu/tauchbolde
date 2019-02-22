@@ -8,7 +8,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Xunit;
 
 namespace Tauchbolde.Tests.DomainServices.Notifications

@@ -5,7 +5,7 @@ using Xunit;
 using Microsoft.AspNetCore.Identity;
 using FakeItEasy;
 using Tauchbolde.Common.DomainServices.Notifications;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 

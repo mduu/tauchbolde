@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
 
-namespace Tauchbolde.Common.DomainServices
+namespace Tauchbolde.Common.DomainServices.Events
 {
     public interface IEventService
     {

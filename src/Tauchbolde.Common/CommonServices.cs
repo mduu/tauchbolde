@@ -7,8 +7,10 @@ using Tauchbolde.Common.DomainServices.Avatar;
 using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.DomainServices.SMTPSender;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common.Infrastructure.Telemetry;
+using Tauchbolde.Common.DomainServices.Events;
+using Tauchbolde.Common.DomainServices.Users;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 

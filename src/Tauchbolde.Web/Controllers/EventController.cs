@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Common;
-using Tauchbolde.Common.DomainServices;
+using Tauchbolde.Common.DomainServices.Events;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Web.Models.EventViewModels;
 using Tauchbolde.Web.Services;
 

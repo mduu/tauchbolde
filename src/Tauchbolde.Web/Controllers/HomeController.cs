@@ -2,10 +2,10 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Common.DomainServices;
+using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Web.Models;
 using Tauchbolde.Web.Models.AboutViewModels;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common;
 using Tauchbolde.Web.Models.HomeViewModels;

@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Tauchbolde.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using System.Collections.Generic;
 using Tauchbolde.Web.Models.AdminViewModels;
-using Tauchbolde.Common.DomainServices;
+using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Web.Core;
 
 namespace Tauchbolde.Web.Controllers

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
-using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using Tauchbolde.Common.Model;
+using Tauchbolde.Common.DataAccess;
 
-namespace Tauchbolde.Common.DomainServices
+namespace Tauchbolde.Common.DomainServices.Users
 {
     internal class DiversService : IDiverService
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using Tauchbolde.Common.Model;
-namespace Tauchbolde.Common.Repositories
+namespace Tauchbolde.Common.DataAccess
 {
     internal class CommentRepository : RepositoryBase<Comment>, ICommentRepository
     {

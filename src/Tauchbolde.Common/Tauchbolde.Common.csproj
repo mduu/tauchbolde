@@ -30,5 +30,7 @@
     <Folder Include="DomainServices\Avatar\" />
     <Folder Include="Migrations\" />
     <Folder Include="Infrastructure\Telemetry\" />
+    <Folder Include="DomainServices\Events\" />
+    <Folder Include="DomainServices\Users\" />
   </ItemGroup>
 </Project>

@@ -3,12 +3,12 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common.DomainServices.Notifications;
 using System.Collections.Generic;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 
-namespace Tauchbolde.Common.DomainServices
+namespace Tauchbolde.Common.DomainServices.Events
 {
     internal class EventService : IEventService
     {

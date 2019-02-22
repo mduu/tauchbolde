@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Common.Model;
 using Microsoft.AspNetCore.Identity;
 
-namespace Tauchbolde.Common.Repositories
+namespace Tauchbolde.Common.DataAccess
 {
     internal class DiverRepository : RepositoryBase<Diver>, IDiverRepository
     {

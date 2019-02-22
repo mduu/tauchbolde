@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Tauchbolde.Web.Core
 {

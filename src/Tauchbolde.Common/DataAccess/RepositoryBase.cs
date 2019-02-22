@@ -2,11 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repository;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Tauchbolde.Common.Repositories
+namespace Tauchbolde.Common.DataAccess
 {
     /// <summary>
     /// Implementation of the repository base class.
