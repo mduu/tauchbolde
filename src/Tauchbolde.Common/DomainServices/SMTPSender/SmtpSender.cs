@@ -5,7 +5,7 @@ using MimeKit;
 using MimeKit.Text;
 using MailKit.Net.Smtp;
 using MailKit.Security;
-using Tauchbolde.Common.Telemetry;
+using Tauchbolde.Common.Infrastructure.Telemetry;
 using System.Collections.Generic;
 
 namespace Tauchbolde.Common.DomainServices.SMTPSender

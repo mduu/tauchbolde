@@ -13,7 +13,7 @@ using Tauchbolde.Common.DomainServices.Notifications;
 using System.Globalization;
 using System.Threading;
 using FluentAssertions;
-using Tauchbolde.Common.Telemetry;
+using Tauchbolde.Common.Infrastructure.Telemetry;
 
 namespace Tauchbolde.Tests.DomainServices
 {

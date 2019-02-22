@@ -6,7 +6,7 @@ using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Common.DomainServices.Notifications;
 using System.Collections.Generic;
-using Tauchbolde.Common.Telemetry;
+using Tauchbolde.Common.Infrastructure.Telemetry;
 
 namespace Tauchbolde.Common.DomainServices
 {

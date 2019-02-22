@@ -29,6 +29,6 @@
     <Folder Include="Infrastructure\" />
     <Folder Include="DomainServices\Avatar\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Telemetry\" />
+    <Folder Include="Infrastructure\Telemetry\" />
   </ItemGroup>
 </Project>

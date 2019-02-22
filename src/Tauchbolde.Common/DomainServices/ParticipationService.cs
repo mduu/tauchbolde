@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Common.DomainServices.Notifications;
-using Tauchbolde.Common.Telemetry;
+using Tauchbolde.Common.Infrastructure.Telemetry;
 using System.Collections.Generic;
 
 namespace Tauchbolde.Common.DomainServices

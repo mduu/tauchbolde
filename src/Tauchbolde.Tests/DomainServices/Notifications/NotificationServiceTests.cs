@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Xunit;
+using Microsoft.AspNetCore.Identity;
 using FakeItEasy;
 using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.Repositories;
 using Tauchbolde.Common.Model;
-using Xunit;
-using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
-using Tauchbolde.Common.Telemetry;
+using Tauchbolde.Common.Infrastructure.Telemetry;
 
 namespace Tauchbolde.Tests.DomainServices.Notifications
 {
