@@ -23,7 +23,7 @@ namespace Tauchbolde.Common.Infrastructure.Telemetry
         /// <inheritdoc/>
         public void TrackEvent(string name, IDictionary<string, string> data = null)
         {
-            throw new NotImplementedException();
+            telemetryClient.TrackEvent(name, data);
         }
     }
 }
