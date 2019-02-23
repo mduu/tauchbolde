@@ -101,23 +101,28 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             switch (participant.Status)
             {
                 case ParticipantStatus.None:
-                    message = $"Teilnahme: {participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} weiss nicht ob Er/Sie an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil nimmt.";
+                    message = $"{participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} weiss nicht ob Er/Sie an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil nimmt.";
                     notificationType = NotificationType.Neutral;
                     break;
                 case ParticipantStatus.Accepted:
-                    message = $"Teilnahme: {participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} nimmt an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
+                    message = $"{participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} nimmt an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Accepted;
                     break;
                 case ParticipantStatus.Declined:
-                    message = $"Teilnahme: {participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} hat für die Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) abgesagt.";
+                    message = $"{participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} hat für die Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) abgesagt.";
                     notificationType = NotificationType.Declined;
                     break;
                 case ParticipantStatus.Tentative:
-                    message = $"Teilnahme: {participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} nimmt eventuell an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
+                    message = $"{participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} nimmt eventuell an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Tentative;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+            
+            if (!string.IsNullOrWhiteSpace(participant.Note))
+            {
+                message = $"{message}: {participant.Note}";
             }
 
             await InsertNotification(
