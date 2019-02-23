@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
-using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using Tauchbolde.Common.Model;
+using Tauchbolde.Common.DataAccess;
 
-namespace Tauchbolde.Common.DomainServices
+namespace Tauchbolde.Common.DomainServices.Users
 {
-    public class DiversService : IDiverService
+    internal class DiversService : IDiverService
     {
         private readonly ApplicationDbContext context;
         private readonly RoleManager<IdentityRole> roleManager;

@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Common.Model;
 using Microsoft.AspNetCore.Identity;
 
-namespace Tauchbolde.Common.Repositories
+namespace Tauchbolde.Common.DataAccess
 {
-    public class DiverRepository : RepositoryBase<Diver>, IDiverRepository
+    internal class DiverRepository : RepositoryBase<Diver>, IDiverRepository
     {
         private readonly UserManager<IdentityUser> userManager;
 

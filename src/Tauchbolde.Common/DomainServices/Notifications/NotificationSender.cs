@@ -2,14 +2,14 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {
-    public class NotificationSender : INotificationSender
+    internal class NotificationSender : INotificationSender
     {
-        private readonly ILogger _logger;
-        private readonly ApplicationDbContext _databaseContext;
+        private readonly ILogger logger;
+        private readonly ApplicationDbContext databaseContext;
 
         public NotificationSender(
             ILoggerFactory loggerFactory,
@@ -20,8 +20,8 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                 throw new ArgumentNullException(nameof(loggerFactory));
             }
 
-            _logger = loggerFactory.CreateLogger<NotificationSender>();
-            _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
+            logger = loggerFactory.CreateLogger<NotificationSender>();
+            this.databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
         }
 
         public async Task SendAsync(
@@ -31,7 +31,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
 
-            using (_logger.BeginScope("SendAsync"))
+            using (logger.BeginScope("SendAsync"))
             {
                 var pendingNotifications = await notificationRepository.GetPendingNotificationByUserAsync();
                 foreach (var pendingNotificationsForRecipient in pendingNotifications)
@@ -41,7 +41,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                         recipient.LastNotificationCheckAt.Value.AddHours(
                             recipient.NotificationIntervalInHours) < DateTime.Now)
                     {
-                        using (_logger.BeginScope($"Send notification to {pendingNotificationsForRecipient.Key}"))
+                        using (logger.BeginScope($"Send notification to {pendingNotificationsForRecipient.Key}"))
                         {
                             var content = notificationFormatter.Format(recipient, pendingNotificationsForRecipient);
                             if (!string.IsNullOrWhiteSpace(content))
@@ -78,7 +78,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error submitting notification to {recipient.Fullname}");
+                logger.LogError(ex, $"Error submitting notification to {recipient.Fullname}");
             }
             finally
             {
@@ -96,16 +96,16 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 
             try
             {
-                _logger.LogTrace($"Updating database records for {pendingNotificationsForRecipient.Key} ...");
+                logger.LogTrace($"Updating database records for {pendingNotificationsForRecipient.Key} ...");
 
                 recipient.LastNotificationCheckAt = DateTime.Now;
-                await _databaseContext.SaveChangesAsync();
+                await databaseContext.SaveChangesAsync();
 
-                _logger.LogTrace($"Database updated for {pendingNotificationsForRecipient.Key}");
+                logger.LogTrace($"Database updated for {pendingNotificationsForRecipient.Key}");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating database for {pendingNotificationsForRecipient.Key}");
+                logger.LogError(ex, $"Error updating database for {pendingNotificationsForRecipient.Key}");
             }
         }
     }

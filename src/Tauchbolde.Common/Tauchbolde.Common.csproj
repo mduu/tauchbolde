@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
+    <PackageReference Include="Glimpse.ApplicationInsights" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Model\BuddyTeamNames.d.ts">
@@ -25,8 +26,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DomainServices\SMTPSender\" />
-    <Folder Include="Misc\" />
+    <Folder Include="Infrastructure\" />
     <Folder Include="DomainServices\Avatar\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Infrastructure\Telemetry\" />
+    <Folder Include="DomainServices\Events\" />
+    <Folder Include="DomainServices\Users\" />
   </ItemGroup>
 </Project>

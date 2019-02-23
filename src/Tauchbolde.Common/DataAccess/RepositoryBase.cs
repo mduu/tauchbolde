@@ -2,26 +2,23 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repository;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Tauchbolde.Common.Repositories
+namespace Tauchbolde.Common.DataAccess
 {
     /// <summary>
     /// Implementation of the repository base class.
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public abstract class RepositoryBase<TEntity> : IRepository<TEntity>
+    internal abstract class RepositoryBase<TEntity> : IRepository<TEntity>
         where TEntity: class, new()
     {
         protected readonly ApplicationDbContext Context;
 
         public RepositoryBase(ApplicationDbContext context)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
-
-            Context = context;
+            Context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public virtual async Task<TEntity> FindByIdAsync(Guid id)

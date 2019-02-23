@@ -4,7 +4,7 @@ using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {
-    public class ConsoleNotificationSubmitter : INotificationSubmitter
+    internal class ConsoleNotificationSubmitter : INotificationSubmitter
     {
         /// <inheritdoc />
         public async Task SubmitAsync(Diver recipient, string content)

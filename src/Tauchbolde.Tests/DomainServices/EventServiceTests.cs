@@ -7,12 +7,13 @@ using ApprovalTests.Reporters;
 using ApprovalTests.Namers;
 using FakeItEasy;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DomainServices;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DomainServices.Events;
+using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common.DomainServices.Notifications;
 using System.Globalization;
 using System.Threading;
 using FluentAssertions;
+using Tauchbolde.Common.Infrastructure.Telemetry;
 
 namespace Tauchbolde.Tests.DomainServices
 {
@@ -20,7 +21,7 @@ namespace Tauchbolde.Tests.DomainServices
     {
         private Guid eventId = new Guid("e6a5f186-31f0-4424-9fd3-89d6935e19eb");
         private Guid currentDiverId = new Guid("09a578b2-0bc9-4bc5-90bc-ee63cda48cc6");
-        private INotificationService _notitifacationService;
+        private INotificationService notitifacationService;
         private readonly Diver currentDiver;
 
         public EventServiceTests()
@@ -81,8 +82,8 @@ namespace Tauchbolde.Tests.DomainServices
 
             // ASSERT
             createdEvent.Should().BeEquivalentTo(newEvt);
-            A.CallTo(() => _notitifacationService.NotifyForNewEventAsync(createdEvent, currentDiver)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _notitifacationService.NotifyForChangedEventAsync(A<Event>._, currentDiver)).MustNotHaveHappened();
+            A.CallTo(() => notitifacationService.NotifyForNewEventAsync(createdEvent, currentDiver)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => notitifacationService.NotifyForChangedEventAsync(A<Event>._, currentDiver)).MustNotHaveHappened();
         }
         
         [Fact]
@@ -103,8 +104,8 @@ namespace Tauchbolde.Tests.DomainServices
 
             // ASSERT
             updatedEvent.Should().BeEquivalentTo(updateEvt);
-            A.CallTo(() => _notitifacationService.NotifyForChangedEventAsync(updatedEvent, currentDiver)).MustHaveHappenedOnceExactly();
-            A.CallTo(() => _notitifacationService.NotifyForNewEventAsync(A<Event>._, currentDiver)).MustNotHaveHappened();
+            A.CallTo(() => notitifacationService.NotifyForChangedEventAsync(updatedEvent, currentDiver)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => notitifacationService.NotifyForNewEventAsync(A<Event>._, currentDiver)).MustNotHaveHappened();
         }
 
         private EventService CreateEventService(Event evt)
@@ -113,7 +114,8 @@ namespace Tauchbolde.Tests.DomainServices
                 A.Fake<ApplicationDbContext>(),
                 CreateNotificationService(),
                 CreateEventRepositoryFake(evt),
-                A.Fake<ICommentRepository>());
+                A.Fake<ICommentRepository>(),
+                A.Fake<ITelemetryService>());
         }
 
         private Event CreateEvent(DateTimeOffset start, DateTimeOffset? end, Guid? id = null)
@@ -141,9 +143,9 @@ namespace Tauchbolde.Tests.DomainServices
 
         private INotificationService CreateNotificationService()
         {
-            _notitifacationService = A.Fake<INotificationService>();
+            notitifacationService = A.Fake<INotificationService>();
 
-            return _notitifacationService;
+            return notitifacationService;
         }
     }
 }

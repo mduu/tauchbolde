@@ -3,39 +3,45 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common.DomainServices.Notifications;
+using System.Collections.Generic;
+using Tauchbolde.Common.Infrastructure.Telemetry;
 
-namespace Tauchbolde.Common.DomainServices
+namespace Tauchbolde.Common.DomainServices.Events
 {
-    public class EventService : IEventService
+    internal class EventService : IEventService
     {
-        private readonly ApplicationDbContext _applicationDbContext;
-        private readonly INotificationService _notificationService;
-        private readonly IEventRepository _eventRepository;
-        private readonly ICommentRepository _commentRepository;
+        private readonly ApplicationDbContext applicationDbContext;
+        private readonly INotificationService notificationService;
+        private readonly IEventRepository eventRepository;
+        private readonly ICommentRepository commentRepository;
+        private readonly ITelemetryService telemetryService;
 
         public EventService(
             ApplicationDbContext applicationDbContext,
             INotificationService notificationService,
             IEventRepository eventRepository,
-            ICommentRepository commentRepository)
+            ICommentRepository commentRepository,
+            ITelemetryService telemetryService)
         {
-            _applicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
-            _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
-            _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
-            _commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
+            this.applicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
+            this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+            this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
+            this.commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
+            this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
+
         }
 
         /// <inheritdoc />
         public async Task<Stream> CreateIcalForEventAsync(Guid eventId, DateTime? createTime = null)
         {
-            var evt = await _eventRepository.FindByIdAsync(eventId);
+            var evt = await eventRepository.FindByIdAsync(eventId);
             if (evt == null)
             {
                 throw new InvalidOperationException($"Event with ID [{eventId}] not found!");
             }
-            
+
             return CreateIcalStream(evt, createTime);
         }
 
@@ -48,7 +54,7 @@ namespace Tauchbolde.Common.DomainServices
             bool isNew = eventToUpsert.Id == Guid.Empty;
             if (!isNew)
             {
-                eventToStore = await _eventRepository.FindByIdAsync(eventToUpsert.Id);
+                eventToStore = await eventRepository.FindByIdAsync(eventToUpsert.Id);
 
                 if (eventToStore == null)
                 {
@@ -70,13 +76,15 @@ namespace Tauchbolde.Common.DomainServices
 
             if (isNew)
             {
-                await _eventRepository.InsertAsync(eventToStore);
-                await _notificationService.NotifyForNewEventAsync(eventToStore, currentUser);
+                await eventRepository.InsertAsync(eventToStore);
+                await notificationService.NotifyForNewEventAsync(eventToStore, currentUser);
+                TrackEvent("EVENT-INSERT", eventToStore);
             }
             else
             {
-                _eventRepository.Update(eventToStore);
-                await _notificationService.NotifyForChangedEventAsync(eventToStore, currentUser);
+                eventRepository.Update(eventToStore);
+                await notificationService.NotifyForChangedEventAsync(eventToStore, currentUser);
+                TrackEvent("EVENT-UPDATE", eventToStore);
             }
 
             return eventToStore;
@@ -99,8 +107,9 @@ namespace Tauchbolde.Common.DomainServices
                     Text = commentToAdd,
                 };
 
-                await _commentRepository.InsertAsync(comment);
-                await _notificationService.NotifyForEventCommentAsync(comment, authorDiver);
+                await commentRepository.InsertAsync(comment);
+                await notificationService.NotifyForEventCommentAsync(comment, authorDiver);
+                TrackEvent("COMMENT-INSERT", comment);
 
                 return comment;
             }
@@ -114,8 +123,9 @@ namespace Tauchbolde.Common.DomainServices
             if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
             if (currentUser == null) { throw new ArgumentNullException(nameof(currentUser)); }
 
-            var comment = await _commentRepository.FindByIdAsync(commentId);
-            if (comment != null) {
+            var comment = await commentRepository.FindByIdAsync(commentId);
+            if (comment != null)
+            {
                 if (comment.AuthorId != currentUser.Id)
                 {
                     throw new UnauthorizedAccessException();
@@ -124,7 +134,8 @@ namespace Tauchbolde.Common.DomainServices
                 comment.Text = commentText;
             }
 
-            await _notificationService.NotifyForEventCommentAsync(comment, currentUser);
+            await notificationService.NotifyForEventCommentAsync(comment, currentUser);
+            TrackEvent("COMMENT-UPDATE", comment);
 
             return comment;
         }
@@ -134,7 +145,7 @@ namespace Tauchbolde.Common.DomainServices
             if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
             if (currentUser == null) throw new ArgumentNullException(nameof(currentUser));
 
-            var comment = await _commentRepository.FindByIdAsync(commentId);
+            var comment = await commentRepository.FindByIdAsync(commentId);
             if (comment != null)
             {
                 if (comment.AuthorId != currentUser.Id)
@@ -142,11 +153,12 @@ namespace Tauchbolde.Common.DomainServices
                     throw new UnauthorizedAccessException();
                 }
 
-                _commentRepository.Delete(comment);
+                TrackEvent("COMMENT-DELETE", comment);
+                commentRepository.Delete(comment);
             }
         }
 
-        private static Stream CreateIcalStream(Event evt, DateTimeOffset? createTime = null)
+        private Stream CreateIcalStream(Event evt, DateTimeOffset? createTime = null)
         {
             var sb = new StringBuilder();
             const string dateFormat = "yyyyMMddTHHmmssZ";
@@ -180,13 +192,45 @@ namespace Tauchbolde.Common.DomainServices
             sb.AppendLine("SUMMARY:" + evt.Name);
             sb.AppendLine("TRANSP:OPAQUE");
             sb.AppendLine("END:VEVENT");
-            //}
-
             sb.AppendLine("END:VCALENDAR");
 
             var calendarBytes = Encoding.UTF8.GetBytes(sb.ToString());
 
+            TrackEvent("EVENT-ICAL", evt);
+
             return new MemoryStream(calendarBytes);
+        }
+
+        private void TrackEvent(string name, Event eventToTrack)
+        {
+            if (eventToTrack == null) { throw new ArgumentNullException(nameof(eventToTrack)); }
+
+            telemetryService.TrackEvent(
+                name,
+                new Dictionary<string, string>
+                {
+                    {"EventId", eventToTrack.Id.ToString("B")},
+                    {"EventName", eventToTrack.Name},
+                    {"StartEnd", eventToTrack.StartEndTimeAsString},
+                    {"OrganisatorId", eventToTrack.OrganisatorId.ToString("B")}
+                });
+        }
+
+        private void TrackEvent(string name, Comment commentToTrack)
+        {
+            if (commentToTrack == null) { throw new ArgumentNullException(nameof(commentToTrack)); }
+
+            telemetryService.TrackEvent(
+                name,
+                new Dictionary<string, string>
+                {
+                    {"EventId", commentToTrack.EventId.ToString("B")},
+                    {"CommentId", commentToTrack.Id.ToString("B")},
+                    {"AuthorId", commentToTrack.AuthorId.ToString("B")},
+                    {"Text", commentToTrack.Text},
+                    {"CreateDate", commentToTrack.CreateDate.ToString("O")},
+                    {"ModifiedDate", commentToTrack.ModifiedDate?.ToString("O") ?? ""}
+                });
         }
     }
 }

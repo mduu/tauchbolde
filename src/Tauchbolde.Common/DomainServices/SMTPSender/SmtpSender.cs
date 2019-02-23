@@ -5,20 +5,26 @@ using MimeKit;
 using MimeKit.Text;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Tauchbolde.Common.Infrastructure.Telemetry;
+using System.Collections.Generic;
 
 namespace Tauchbolde.Common.DomainServices.SMTPSender
 {
-    public class SmtpSender : IAppEmailSender
+    internal class SmtpSender : IAppEmailSender
     {
         private readonly SmtpSenderConfiguration options;
+        private readonly ITelemetryService telemetryService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmtpSender"/> class.
         /// </summary>
         /// <param name="options">SMTP Configuration options to use.</param>
-        public SmtpSender(IOptions<SmtpSenderConfiguration> options)
+        public SmtpSender(
+            IOptions<SmtpSenderConfiguration> options,
+            ITelemetryService telemetryService)
         {
             this.options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+            this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
         }
 
         /// <inheritdoc/>
@@ -54,7 +60,24 @@ namespace Tauchbolde.Common.DomainServices.SMTPSender
                     await smtp.AuthenticateAsync(options.AuthUsername, options.AuthPassword);
                 }
                 await smtp.SendAsync(msg);
+                TrackEvent("SMTPSENDER-SENT", msg);
             }
+        }
+        
+        private void TrackEvent(string name, MimeMessage message)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+            if (message == null) throw new ArgumentNullException(nameof(message));
+
+            telemetryService.TrackEvent(
+                name,
+                new Dictionary<string, string>
+                {
+                    { "To", message.To?.ToString() ?? "" },
+                    { "From", message.From?.ToString() ?? "" },
+                    { "Subject", message.Subject ?? "" },
+                    { "HtmlBody", message.HtmlBody ?? "" },
+                });
         }
     }
 }

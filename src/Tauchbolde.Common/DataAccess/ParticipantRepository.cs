@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Common.Model;
 
-namespace Tauchbolde.Common.Repositories
+namespace Tauchbolde.Common.DataAccess
 {
-    public class ParticipantRepository : RepositoryBase<Participant>, IParticipantRepository
+    internal class ParticipantRepository : RepositoryBase<Participant>, IParticipantRepository
     {
         public ParticipantRepository(ApplicationDbContext context) : base(context)
         {

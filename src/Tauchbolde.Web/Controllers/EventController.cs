@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Common;
-using Tauchbolde.Common.DomainServices;
+using Tauchbolde.Common.DomainServices.Events;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Web.Models.EventViewModels;
 using Tauchbolde.Web.Services;
 
@@ -18,11 +18,11 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class EventController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IDiverRepository _diverRepository;
-        private readonly IEventRepository _eventRepository;
-        private readonly IParticipationService _participationService;
-        private readonly IEventService _eventService;
+        private readonly ApplicationDbContext context;
+        private readonly IDiverRepository diverRepository;
+        private readonly IEventRepository eventRepository;
+        private readonly IParticipationService participationService;
+        private readonly IEventService eventService;
 
         public EventController(
             ApplicationDbContext context,
@@ -32,11 +32,11 @@ namespace Tauchbolde.Web.Controllers
             IEventService eventService,
             ICommentRepository commentRepository)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
-            _eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
-            _participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
-            _eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
+            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
+            this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
+            this.participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
+            this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
         }
 
         // GET: Event
@@ -44,7 +44,7 @@ namespace Tauchbolde.Web.Controllers
         {
             var model = new EventListViewModel
             {
-                UpcommingEvents = await _eventRepository.GetUpcommingEventsAsync(),
+                UpcommingEvents = await eventRepository.GetUpcommingEventsAsync(),
             };
 
             return View(model);
@@ -53,19 +53,19 @@ namespace Tauchbolde.Web.Controllers
         // GET: Event/Details/5
         public async Task<ActionResult> Details(Guid id)
         {
-            var detailsForEvent = await _eventRepository.FindByIdAsync(id);
+            var detailsForEvent = await eventRepository.FindByIdAsync(id);
             if (detailsForEvent == null)
             {
                 return BadRequest("Event does not exists!");
             }
 
-            var currentDiver = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
+            var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
             if (currentDiver == null)
             {
                 return StatusCode(400, "No curren user would be found!");
             }
 
-            var existingParticipation = await _participationService.GetExistingParticipationAsync(currentDiver, id);
+            var existingParticipation = await participationService.GetExistingParticipationAsync(currentDiver, id);
             var allowEdit = detailsForEvent == null || detailsForEvent?.OrganisatorId == currentDiver.Id;
             var model = new EventViewModel
             {
@@ -93,14 +93,14 @@ namespace Tauchbolde.Web.Controllers
             Event detailsForEvent = null;
             if (id.HasValue)
             {
-                detailsForEvent = await _eventRepository.FindByIdAsync(id.Value);
+                detailsForEvent = await eventRepository.FindByIdAsync(id.Value);
                 if (detailsForEvent == null)
                 {
                     return BadRequest("Event does not exists!");
                 }
             }
 
-            var currentUser = await this.GetCurrentUserAsync(_diverRepository);
+            var currentUser = await this.GetCurrentUserAsync(diverRepository);
             if (currentUser == null)
             {
                 return BadRequest();
@@ -133,7 +133,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 try
                 {
-                    var currentDiver = await this.GetCurrentUserAsync(_diverRepository);
+                    var currentDiver = await this.GetCurrentUserAsync(diverRepository);
                     var evt = new Event
                     {
                         Id = model.Id,
@@ -146,8 +146,8 @@ namespace Tauchbolde.Web.Controllers
                         OrganisatorId = currentDiver.Id,
                     };
 
-                    var persistedEvent = await _eventService.UpsertEventAsync(evt, currentDiver);
-                    await _context.SaveChangesAsync();
+                    var persistedEvent = await eventService.UpsertEventAsync(evt, currentDiver);
+                    await context.SaveChangesAsync();
 
                     return RedirectToAction("Details", new { persistedEvent.Id });
                 }
@@ -164,7 +164,7 @@ namespace Tauchbolde.Web.Controllers
             EventEditViewModel viewModel;
             if (id != Guid.Empty)
             {
-                var detailsForEvent = await _eventRepository.FindByIdAsync(id);
+                var detailsForEvent = await eventRepository.FindByIdAsync(id);
                 if (detailsForEvent == null)
                 {
                     return NotFound("Event does not exists!");
@@ -218,13 +218,13 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
+                var currentUser = await diverRepository.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
                     return StatusCode(400, "No curren user would be found!");
                 }
 
-                await _participationService.ChangeParticipationAsync(currentUser, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
+                await participationService.ChangeParticipationAsync(currentUser, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
 
                 return RedirectToAction("Details", new { id = model.EventId });
             }
@@ -242,7 +242,7 @@ namespace Tauchbolde.Web.Controllers
                 return BadRequest("Invalid Event!");
             }
 
-            var stream = await _eventService.CreateIcalForEventAsync(id);
+            var stream = await eventService.CreateIcalForEventAsync(id);
 
             return File(stream, "text/calendar");
         }
@@ -256,16 +256,16 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
+                var currentUser = await diverRepository.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
                     return StatusCode(400, "No curren user would be found!");
                 }
 
-                var comment = await _eventService.AddCommentAsync(eventId, newCommentText, currentUser);
+                var comment = await eventService.AddCommentAsync(eventId, newCommentText, currentUser);
                 if (comment != null)
                 {
-                    await _context.SaveChangesAsync();
+                    await context.SaveChangesAsync();
                 }
                 else
                 {
@@ -282,16 +282,16 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
+                var currentUser = await diverRepository.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
                     return StatusCode(400, "No curren user would be found!");
                 }
 
-                var comment = await _eventService.EditCommentAsync(commentId, commentText, currentUser);
+                var comment = await eventService.EditCommentAsync(commentId, commentText, currentUser);
                 if (comment != null)
                 {
-                    await _context.SaveChangesAsync();
+                    await context.SaveChangesAsync();
                 }
                 else
                 {
@@ -308,14 +308,14 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = await _diverRepository.FindByUserNameAsync(User.Identity.Name);
+                var currentUser = await diverRepository.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
                     return StatusCode(400, "No curren user would be found!");
                 }
 
-                await _eventService.DeleteCommentAsync(deleteCommentId, currentUser);
-                await _context.SaveChangesAsync();
+                await eventService.DeleteCommentAsync(deleteCommentId, currentUser);
+                await context.SaveChangesAsync();
             }
 
             return RedirectToAction("Details", new { id = deleteEventId });

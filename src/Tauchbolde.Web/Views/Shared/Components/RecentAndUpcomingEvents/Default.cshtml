@@ -2,7 +2,7 @@
 @model RecentAndUpcomingEventsViewModel
 @{
     var upcomingEvents = Model.RecentEvents.Where(e => e.StartTime > DateTime.Now).ToList();
-    var recentEvents = Model.RecentEvents.Where(e => e.StartTime < DateTime.Now).ToList();
+    var recentEvents = Model.RecentEvents.OrderByDescending(e => e.StartTime).Where(e => e.StartTime < DateTime.Now).ToList();
 }
 <section>
     <div class="panel panel-default">

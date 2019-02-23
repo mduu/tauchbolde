@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Common;
 using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Web.Models.MassMail;
 using Tauchbolde.Common.DomainServices;
 using Microsoft.AspNetCore.Identity;

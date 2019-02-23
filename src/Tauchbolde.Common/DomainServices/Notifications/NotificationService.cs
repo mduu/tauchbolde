@@ -3,27 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.Infrastructure.Telemetry;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {
     /// <summary>
     /// The notification service allows the app to register notifications to be send somewhen later on.
     /// </summary>
-    public class NotificationService : INotificationService
+    internal class NotificationService : INotificationService
     {
         private readonly INotificationRepository notificationRepository;
         private readonly IDiverRepository diverRepository;
         private readonly IParticipantRepository participantRepository;
+        private readonly ITelemetryService telemetryService;
 
         public NotificationService(
             INotificationRepository notificationRepository,
             IDiverRepository diverRepository,
-            IParticipantRepository participantRepository)
+            IParticipantRepository participantRepository,
+            ITelemetryService telemetryService)
         {
             this.notificationRepository = notificationRepository ?? throw new ArgumentNullException(nameof(notificationRepository));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
+            this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
         }
 
         /// <inheritdoc />
@@ -180,8 +184,26 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                     };
 
                     await notificationRepository.InsertAsync(notification);
+
+                    TrackEvent("NOTIFICATION-INSERT", notification);
                 }
             }
+        }
+
+        private void TrackEvent(string name, Notification notification)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+            if (notification == null) throw new ArgumentNullException(nameof(notification));
+
+            telemetryService.TrackEvent(
+                name,
+                new Dictionary<string, string>
+                {
+                    { "NotificationId", notification.Id.ToString("B") },
+                    { "RecipientId", notification.Recipient?.Id.ToString("B") ?? "" },
+                    { "Type", notification.Type.ToString() },
+                    { "Message", notification.Message },
+                });
         }
     }
 }

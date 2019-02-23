@@ -2,21 +2,18 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Web.Models.ViewComponentModels;
 
 namespace Tauchbolde.Web.ViewComponents
 {
     public class RecentAndUpcomingEventsViewComponent : ViewComponent
     {
-        private readonly IEventRepository _eventRepository;
+        private readonly IEventRepository eventRepository;
 
-        public RecentAndUpcomingEventsViewComponent(
-            IEventRepository eventRepository)
+        public RecentAndUpcomingEventsViewComponent(IEventRepository eventRepository)
         {
-            if (eventRepository == null) throw new ArgumentNullException(nameof(eventRepository));
-
-            _eventRepository = eventRepository;
+            this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
@@ -24,7 +21,7 @@ namespace Tauchbolde.Web.ViewComponents
             var model = new RecentAndUpcomingEventsViewModel
             {
                 RecentEvents =
-                    (await _eventRepository.GetUpcomingAndRecentEventsAsync())
+                    (await eventRepository.GetUpcomingAndRecentEventsAsync())
                     .ToList()
             };
 

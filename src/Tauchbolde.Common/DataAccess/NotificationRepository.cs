@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Common.Model;
 
-namespace Tauchbolde.Common.Repositories
+namespace Tauchbolde.Common.DataAccess
 {
     /// <summary>
     /// Repository for accessing <see cref="Notification"/> entities.
     /// </summary>
-    public class NotificationRepository : RepositoryBase<Notification>, INotificationRepository
+    internal class NotificationRepository : RepositoryBase<Notification>, INotificationRepository
     {
         public NotificationRepository(ApplicationDbContext context) : base(context)
         {

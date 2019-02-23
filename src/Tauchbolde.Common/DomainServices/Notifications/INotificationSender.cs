@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Tauchbolde.Common.Repositories;
+using Tauchbolde.Common.DataAccess;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {

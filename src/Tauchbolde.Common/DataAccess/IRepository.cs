@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Tauchbolde.Common.Repository
+namespace Tauchbolde.Common.DataAccess
 {
     public interface IRepository<TEntity>
         where TEntity: class, new()

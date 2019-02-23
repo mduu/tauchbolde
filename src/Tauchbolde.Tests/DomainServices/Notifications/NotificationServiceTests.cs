@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FakeItEasy;
-using Tauchbolde.Common.DomainServices.Notifications;
-using Tauchbolde.Common.Repositories;
-using Tauchbolde.Common.Model;
+using System.Collections.Generic;
 using Xunit;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
+using FakeItEasy;
+using Tauchbolde.Common.DomainServices.Notifications;
+using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.Model;
+using Tauchbolde.Common.Infrastructure.Telemetry;
 
 namespace Tauchbolde.Tests.DomainServices.Notifications
 {
@@ -192,7 +193,8 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             return new NotificationService(
                 notificationRepo,
                 diverRepo,
-                participantRepo ?? CreateParticipantRepo()
+                participantRepo ?? CreateParticipantRepo(),
+                A.Fake<ITelemetryService>()
             );
         }
 

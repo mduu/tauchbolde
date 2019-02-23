@@ -4,7 +4,7 @@ using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.DomainServices
 {
-    public class MassMailService : IMassMailService
+    internal class MassMailService : IMassMailService
     {
         /// <inheritdoc/>
         public string CreateReceiverString(ICollection<Diver> divers)

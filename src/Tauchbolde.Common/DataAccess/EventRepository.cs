@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Common.Model;
 
-namespace Tauchbolde.Common.Repositories
+namespace Tauchbolde.Common.DataAccess
 {
-    public class EventRepository : RepositoryBase<Event>, IEventRepository
+    internal class EventRepository : RepositoryBase<Event>, IEventRepository
     {
         public EventRepository(ApplicationDbContext context)
             : base(context)
