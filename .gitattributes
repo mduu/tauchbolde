@@ -1,4 +1,4 @@
-src/Tauchbolde.Web/wwwroot/ linguist-vendored
+src/Tauchbolde.Web/wwwroot/* linguist-vendored
 docs/* linguist-documentation
 
 ###############################################################################
