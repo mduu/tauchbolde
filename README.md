@@ -10,11 +10,11 @@ This is the code for the upcoming Tauchbolde Website. The current website is bui
 
 ## Primary goals
 
-* Back to basics
+* Back to basics regarding features
+* Working well on mobile devices and small screens
 * Easy maintainance
 * No permanent security updates (unlike the current Drupal based website)
-* Adding the exacly the functionality needed - not more not less
-* Playing with new tech like .Net Core / ASP.Net Core and later on Mobile Apps, Web-Tech like React etc.
+* Playing with new tech like .Net Core, ASP.Net Core, Azure and later on Mobile Apps
 
 ## Current state
 
