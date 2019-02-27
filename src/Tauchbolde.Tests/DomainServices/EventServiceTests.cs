@@ -8,7 +8,7 @@ using ApprovalTests.Namers;
 using FakeItEasy;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DomainServices.Events;
-using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Common.DomainServices.Notifications;
 using System.Globalization;
 using System.Threading;

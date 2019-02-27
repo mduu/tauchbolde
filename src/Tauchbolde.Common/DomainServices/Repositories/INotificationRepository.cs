@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DataAccess;
 
-namespace Tauchbolde.Common.DataAccess
+namespace Tauchbolde.Common.DomainServices.Repositories
 {
     /// <summary>
     /// Data-access for <see cref="Notification"/> entities.

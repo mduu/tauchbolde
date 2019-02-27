@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.DomainServices.Repositories;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
 {

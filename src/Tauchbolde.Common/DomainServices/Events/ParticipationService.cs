@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 using System.Collections.Generic;

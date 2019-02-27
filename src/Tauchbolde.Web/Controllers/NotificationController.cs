@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.DomainServices.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace Tauchbolde.Web.Controllers

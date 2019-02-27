@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.DomainServices.Repositories;
 
 namespace Tauchbolde.Common.DomainServices.Users
 {

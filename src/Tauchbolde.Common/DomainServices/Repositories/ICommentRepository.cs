@@ -1,8 +1,7 @@
-﻿using System;
-using Tauchbolde.Common.DataAccess;
+﻿using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common.Model;
 
-namespace Tauchbolde.Common.DataAccess
+namespace Tauchbolde.Common.DomainServices.Repositories
 {
     public interface ICommentRepository : IRepository<Comment>
     {

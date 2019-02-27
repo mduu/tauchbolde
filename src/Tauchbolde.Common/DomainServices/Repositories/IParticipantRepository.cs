@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
 
-namespace Tauchbolde.Common.DataAccess
+namespace Tauchbolde.Common.DomainServices.Repositories
 {
     public interface IParticipantRepository : IRepository<Participant>
     {

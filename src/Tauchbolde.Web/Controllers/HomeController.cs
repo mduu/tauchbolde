@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Web.Models;
 using Tauchbolde.Web.Models.AboutViewModels;
-using Tauchbolde.Common.DataAccess;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common;
 using Tauchbolde.Web.Models.HomeViewModels;
@@ -13,6 +12,7 @@ using Tauchbolde.Web.Core;
 using Tauchbolde.Common.DomainServices.SMTPSender;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using Tauchbolde.Common.DomainServices.Repositories;
 
 namespace Tauchbolde.Web.Controllers
 {

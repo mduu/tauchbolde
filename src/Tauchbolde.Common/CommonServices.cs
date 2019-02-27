@@ -11,6 +11,7 @@ using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 using Tauchbolde.Common.DomainServices.Events;
 using Tauchbolde.Common.DomainServices.Users;
+using Tauchbolde.Common.DomainServices.Repositories;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 
