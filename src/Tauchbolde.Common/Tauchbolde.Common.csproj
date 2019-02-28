@@ -32,5 +32,6 @@
     <Folder Include="Infrastructure\Telemetry\" />
     <Folder Include="DomainServices\Events\" />
     <Folder Include="DomainServices\Users\" />
+    <Folder Include="DomainServices\Repositories\" />
   </ItemGroup>
 </Project>

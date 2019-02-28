@@ -6,15 +6,15 @@
 # tauchbolde
 Next generation website fro http://tauchbolde.ch
 
-This is the code for the upcoming Tauchbolde Website. The current website is built using Drupal 7. Its not bad it has several downsides. So the new website is a complete rewrite in C# / ASP.Net Core - a custom development.
+This is the code for the http://tauchbolde.ch Website. The  website was a complete rewrite in C# / ASP.Net Core or in other words: a custom development. The previous website was a Drupal site with way to many security patches needed for the Drupal Core as well as for the plugins. Advanved functionallity was tricky to implement und migrate when software updates where needed. So this new site is "back to basics" and as I know how to code I do it myself instead of re-using systems like Drupal.
 
 ## Primary goals
 
-* Back to basics
+* Back to basics regarding features
+* Working well on mobile devices and small screens
 * Easy maintainance
 * No permanent security updates (unlike the current Drupal based website)
-* Adding the exacly the functionality needed - not more not less
-* Playing with new tech like .Net Core / ASP.Net Core and later on Mobile Apps, Web-Tech like React etc.
+* Playing with new tech like .Net Core, ASP.Net Core, Azure and later on Mobile Apps
 
 ## Current state
 

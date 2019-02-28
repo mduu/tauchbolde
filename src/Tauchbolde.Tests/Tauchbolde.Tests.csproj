@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tauchbolde.Common\Tauchbolde.Common.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Web\Tauchbolde.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,7 +38,6 @@
     <Folder Include="Models\" />
     <Folder Include="DomainServices\Notifications\" />
     <Folder Include="Web\" />
-    <Folder Include="Web\Core\" />
     <Folder Include="DomainServices\Avatar\" />
   </ItemGroup>
 

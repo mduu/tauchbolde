@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Common;
-using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Web.Models.UserProfileModels;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Web.Core;

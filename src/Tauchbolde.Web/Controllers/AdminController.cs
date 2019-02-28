@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using Tauchbolde.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.DomainServices.Repositories;
 using System.Collections.Generic;
 using Tauchbolde.Web.Models.AdminViewModels;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Web.Core;
 
-namespace Tauchbolde.Web.Controllers
+namespace Tauchbolde.Web.ControllersB
 {
     [Authorize(Policy = PolicyNames.RequireAdministrator)]
     public class AdminController : AppControllerBase

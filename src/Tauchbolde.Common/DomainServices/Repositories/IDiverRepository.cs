@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DataAccess;
 
-namespace Tauchbolde.Common.DataAccess
+namespace Tauchbolde.Common.DomainServices.Repositories
 {
     public interface IDiverRepository: IRepository<Diver>
     {
