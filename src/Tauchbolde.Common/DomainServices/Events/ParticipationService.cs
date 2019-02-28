@@ -68,7 +68,7 @@ namespace Tauchbolde.Common.DomainServices.Events
             participant.CountPeople = numberOfPeople;
             await context.SaveChangesAsync();
 
-            var reReadParticipant = await participantRepository.FindByIdAsync(participant.Id);
+            var reReadParticipant = await participantRepository.GetParticipantByIdAsync(participant.Id);
             await notificationService.NotifyForChangedParticipationAsync(reReadParticipant);
             await context.SaveChangesAsync();
             TrackEvent("CHANGE-PARTICIPATION", participant);

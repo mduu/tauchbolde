@@ -13,6 +13,15 @@ namespace Tauchbolde.Common.DataAccess
         public ParticipantRepository(ApplicationDbContext context) : base(context)
         {
         }
+        
+        public async Task<Participant> GetParticipantByIdAsync(Guid participationId)
+        {
+            return await Context.Participants
+                .Include(p => p.Event)
+                .Include(p => p.ParticipatingDiver)
+                .FirstOrDefaultAsync(p => p.Id == participationId);
+        }
+
 
         public async Task<Participant> GetParticipationForEventAndUserAsync(Diver user, Guid eventId)
         {
