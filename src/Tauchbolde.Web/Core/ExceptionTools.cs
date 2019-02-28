@@ -18,15 +18,15 @@ namespace Tauchbolde.Web.Core
             var isFirst = true;
             while (ex != null)
             {
-                if (isFirst)
+                if (!isFirst)
                 {
                     messageBuilder.Append(" ");
-                    isFirst = false;
                 }
 
                 messageBuilder.Append(ex.Message);
 
                 ex = ex.InnerException;
+                isFirst = false;
             }
 
             return messageBuilder.ToString();
