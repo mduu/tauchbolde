@@ -111,7 +111,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             var notificationService = CreateNotificationService(notificationRepo, sendOwnNotifications);
             
             // Act
-            await notificationService.NotifyForEventCommentAsync(comment, author);
+            await notificationService.NotifyForEventCommentAsync(comment, comment.Event, author);
 
             // Assert
             A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(Repeated.Exactly.Times(expectedNotificationInserts));

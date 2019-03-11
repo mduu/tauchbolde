@@ -98,17 +98,23 @@ namespace Tauchbolde.Common.DomainServices.Events
 
             if (!string.IsNullOrWhiteSpace(commentToAdd))
             {
+                var evt = await eventRepository.FindByIdAsync(eventId);
+                if (evt == null)
+                {
+                    throw new InvalidOperationException($"Event with Id [{eventId.ToString("G")}] not found!");
+                }
+
                 var comment = new Comment
                 {
                     Id = Guid.NewGuid(),
                     AuthorId = authorDiver.Id,
                     CreateDate = DateTime.Now,
-                    EventId = eventId,
+                    EventId = evt.Id,
                     Text = commentToAdd,
                 };
 
                 await commentRepository.InsertAsync(comment);
-                await notificationService.NotifyForEventCommentAsync(comment, authorDiver);
+                await notificationService.NotifyForEventCommentAsync(comment, evt, authorDiver);
                 TrackEvent("COMMENT-INSERT", comment);
 
                 return comment;
@@ -134,7 +140,7 @@ namespace Tauchbolde.Common.DomainServices.Events
                 comment.Text = commentText;
             }
 
-            await notificationService.NotifyForEventCommentAsync(comment, currentUser);
+            await notificationService.NotifyForEventCommentAsync(comment, comment.Event, currentUser);
             TrackEvent("COMMENT-UPDATE", comment);
 
             return comment;
