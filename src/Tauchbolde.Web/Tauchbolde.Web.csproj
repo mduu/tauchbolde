@@ -18,6 +18,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Markdig" Version="0.16.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +40,8 @@
     <Folder Include="wwwroot\avatar\" />
     <Folder Include="appdata\" />
     <Folder Include="Views\Shared\Components\ParticipantComponent\" />
+    <Folder Include="Core\Markdown\" />
+    <Folder Include="Views\Shared\Components\MarkdownHelpLink\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Migrations\20170205143205_InitialCreate.cs" />
