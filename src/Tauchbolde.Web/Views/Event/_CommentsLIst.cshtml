@@ -1,5 +1,4 @@
-﻿@using Tauchbolde.Common.Model
-@using Tauchbolde.Web.Models.EventViewModels
+﻿@using Tauchbolde.Web.Models.EventViewModels
 @model EventViewModel
 
 @foreach (var comment in Model.Event.Comments.OrderBy(c => c.CreateDate))
@@ -11,6 +10,7 @@
                 <div>
                     <strong>@comment.Author.Fullname</strong>
                     <small> &mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm") @(comment.ModifiedDate.HasValue ? ("Geändert: " + comment.ModifiedDate.Value.ToString("dd.MM.yyyy HH:mm")) : "")</small>
+                    @* ReSharper disable twice UnknownCssClass *@
                     @if (comment.AuthorId == Model.CurrentDiver.Id)
                     {
                         <button class="btn btn-default btn-xs editCommentBtn"
@@ -40,29 +40,29 @@
 <script>
     $(function() {
         $('.editCommentBtn').click(function() {
-            let button = $(event.target);
-            let commentId = button.data('commentid');
-            let commentText = button.data('commenttext');
-            let modal = $('#commentEditModal')
+            const button = $(event.target);
+            const commentId = button.data('commentid');
+            const commentText = button.data('commenttext');
+            const modal = $('#commentEditModal');
     
             modal.find('#commentId').val(commentId);
             modal.find('#commentText').val(commentText);
-            modal.find('#eventId').val('@Model.Event.Id')
+            modal.find('#eventId').val('@Model.Event.Id');
     
             modal.modal('show');
         });
     
         $('.deleteCommentBtn').click(function() {
-            let button = $(event.target);
+            const button = $(event.target);
             console.log(button);
-            let commentId = button.data('commentid');
-            let commentText = button.data('commenttext');
+            const commentId = button.data('commentid');
+            const commentText = button.data('commenttext');
             console.log(commentId);
             console.log(commentText);
-            let modal = $('#commentDeleteModal')
+            const modal = $('#commentDeleteModal');
     
             modal.find('#deleteCommentId').val(commentId);
-            modal.find('#deleteEventId').val('@Model.Event.Id')
+            modal.find('#deleteEventId').val('@Model.Event.Id');
             modal.find('#deleteCommentText').text(commentText);
     
             modal.modal('show');

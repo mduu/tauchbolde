@@ -1,6 +1,6 @@
 ﻿<form class="form-horizontal">
     <div class="form-group">
-        <label for="BMdepth" class="col-sm-2 control-label">Max. Tiefe</label>
+        <label for="RBmaxdeep" class="col-sm-2 control-label">Max. Tiefe</label>
         <div class="col-sm-10">
             <div class="input-group">
                 <div class="input-group-addon">Meter</div>
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="RBsolvingtimeRBgasusage" class="col-sm-2 control-label">Gasverbrauch pro Taucher (Stress)</label>
+        <label for="RBgasusage" class="col-sm-2 control-label">Gasverbrauch pro Taucher (Stress)</label>
         <div class="col-sm-10">
             <div class="input-group">
                 <div class="input-group-addon">L/Min.</div>
@@ -80,7 +80,7 @@
     </div>
 
     <div class="form-group">
-        <label for="MODresult" class="col-sm-2 control-label">Umkehrdruck</label>
+        <label for="RBresult" class="col-sm-2 control-label">Umkehrdruck</label>
         <div class="col-sm-10">
             <div class="input-group">
                 <div class="input-group-addon">Bar</div>
@@ -94,36 +94,35 @@
 
     $(function () {
         $("#RBcalc").click(function () {
-            const maxPressure = 300;
-
-            let tanksize = parseFloat($("#RBtanksize").val());
-            let maxdeep = parseFloat($("#RBmaxdeep").val());
-            let decodeep = parseFloat($("#RBdecodeep").val());
-            let solvetime = parseFloat($("#RBsolvingtime").val());
-            let gasusage = parseFloat($("#RBgasusage").val());
-            let speedToDeepstop = parseFloat($("#RBspeedToDeepstop").val());
-            let speedToDecostop = parseFloat($("#RBspeedToDecostop").val());
-            let decostopAt = parseFloat($("#RBdeepstop").val());
+            const tanksize = parseFloat($("#RBtanksize").val());
+            const maxdeep = parseFloat($("#RBmaxdeep").val());
+            const decodeep = parseFloat($("#RBdecodeep").val());
+            const solvetime = parseFloat($("#RBsolvingtime").val());
+            const gasusage = parseFloat($("#RBgasusage").val());
+            const speedToDeepstop = parseFloat($("#RBspeedToDeepstop").val());
+            const speedToDecostop = parseFloat($("#RBspeedToDecostop").val());
+            const decostopAt = parseFloat($("#RBdeepstop").val());
 
             if (!isNaN(tanksize) && !isNaN(maxdeep) && !isNaN(decodeep) &&
                 !isNaN(solvetime) && !isNaN(gasusage) && !isNaN(speedToDeepstop &&
                     !isNaN(speedToDecostop))) {
-                let middeep = maxdeep * decostopAt / 100;
-                let timeToDeco = 0;
+                const middeep = maxdeep * decostopAt / 100;
+                let timeToDeco;
                 if (decodeep < middeep) {
-                    let bottomAsc = (maxdeep - middeep) / speedToDeepstop;
-                    let decoAsc = (middeep - decodeep) / speedToDecostop;
+                    const bottomAsc = (maxdeep - middeep) / speedToDeepstop;
+                    const decoAsc = (middeep - decodeep) / speedToDecostop;
                     timeToDeco = bottomAsc + decoAsc;
                 } else {
                     timeToDeco = (maxdeep - decodeep) / speedToDeepstop;
                 }
 
                 timeToDeco = timeToDeco + solvetime;
-                let avgDeep = (maxdeep + decodeep) / 2;
-                let avgDeepPressure = avgDeep / 10 + 1;
-                let totalLiterUsed = timeToDeco * avgDeepPressure * (gasusage * 2);
-                let totalBarUsed = totalLiterUsed / tanksize;
+                const avgDeep = (maxdeep + decodeep) / 2;
+                const avgDeepPressure = avgDeep / 10 + 1;
+                const totalLiterUsed = timeToDeco * avgDeepPressure * (gasusage * 2);
+                const totalBarUsed = totalLiterUsed / tanksize;
 
+                const maxPressure = 300;
                 if (totalBarUsed > maxPressure) {
                     $("#RBresult").val(">" + maxPressure.toFixed(0).toString());
                 } else if (totalBarUsed < 0) {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Common;
@@ -29,8 +28,7 @@ namespace Tauchbolde.Web.Controllers
             IDiverRepository diverRepository,
             IEventRepository eventRepository,
             IParticipationService participationService,
-            IEventService eventService,
-            ICommentRepository commentRepository)
+            IEventService eventService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
@@ -62,11 +60,11 @@ namespace Tauchbolde.Web.Controllers
             var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
             if (currentDiver == null)
             {
-                return StatusCode(400, "No curren user would be found!");
+                return StatusCode(400, "No current user would be found!");
             }
 
             var existingParticipation = await participationService.GetExistingParticipationAsync(currentDiver, id);
-            var allowEdit = detailsForEvent == null || detailsForEvent?.OrganisatorId == currentDiver.Id;
+            var allowEdit = detailsForEvent.OrganisatorId == currentDiver.Id;
             var model = new EventViewModel
             {
                 Event = detailsForEvent,
@@ -180,31 +178,6 @@ namespace Tauchbolde.Web.Controllers
             viewModel.BuddyTeamNames = GetBuddyTeamNames();
 
             return View(viewModel);
-        }
-
-        // GET: Event/Delete/5
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Event/Delete/5
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         /// <summary>
