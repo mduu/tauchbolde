@@ -15,13 +15,16 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
     {
         [NotNull] private readonly IHtmlHeaderFormatter headerFormatter;
         [NotNull] private readonly IHtmlNotificationListFormatter notificationListFormatter;
+        [NotNull] private readonly IHtmlFooterFormatter footerFormatter;
 
         public HtmlNotificationFormatter(
             [NotNull] IHtmlHeaderFormatter headerFormatter,
-            [NotNull] IHtmlNotificationListFormatter notificationListFormatter)
+            [NotNull] IHtmlNotificationListFormatter notificationListFormatter,
+            [NotNull] IHtmlFooterFormatter footerFormatter)
         {
             this.headerFormatter = headerFormatter ?? throw new ArgumentNullException(nameof(headerFormatter));
             this.notificationListFormatter = notificationListFormatter ?? throw new ArgumentNullException(nameof(notificationListFormatter));
+            this.footerFormatter = footerFormatter ?? throw new ArgumentNullException(nameof(footerFormatter));
         }
 
         /// <inheritdoc />
@@ -30,20 +33,13 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             if (recipient == null) throw new ArgumentNullException(nameof(recipient));
             if (notifications == null) throw new ArgumentNullException(nameof(notifications));
 
-            var sb = new StringBuilder();
+            var htmlBuilder = new StringBuilder();
 
-            headerFormatter.Format(recipient, notifications.Count(), sb);
-            notificationListFormatter.Format(notifications, sb);
-            FormatFooter(sb);
+            headerFormatter.Format(recipient, notifications.Count(), htmlBuilder);
+            notificationListFormatter.Format(notifications, htmlBuilder);
+            footerFormatter.Format(htmlBuilder);
 
-            return sb.ToString();
-        }
-
-        private static void FormatFooter(StringBuilder sb)
-        {
-            sb.AppendLine("<p>");
-            sb.AppendLine("Guet Gas!");
-            sb.AppendLine("</p>");
+            return htmlBuilder.ToString();
         }
     }
 }
