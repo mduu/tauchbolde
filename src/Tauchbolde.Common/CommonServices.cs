@@ -10,6 +10,7 @@ using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 using Tauchbolde.Common.DomainServices.Events;
+using Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Common.DomainServices.Repositories;
 
@@ -45,7 +46,10 @@ namespace Tauchbolde.Common
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<INotificationSender, NotificationSender>();
-            services.AddTransient<INotificationFormatter, HtmlNotificationFormatter>();
+            services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
+            services.AddTransient<INotificationFormatter, HtmlFormatter>();
+            services.AddTransient<IHtmlListFormatter, HtmlListFormatter>();
+            services.AddTransient<IHtmlHeaderFormatter, HtmlHeaderFormatter>();
             services.AddTransient<IDiverService, DiversService>();
             services.AddTransient<IMassMailService, MassMailService>();
         }

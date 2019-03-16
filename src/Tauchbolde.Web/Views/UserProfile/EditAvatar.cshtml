@@ -71,14 +71,14 @@
 <script>
     $(document).ready( function() {
         $(document).on('change', '.btn-file :file', function() {
-            let input = $(this);
-            let label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            const input = $(this);
+            const label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
             input.trigger('fileselect', [label]);
         });
 
         $('.btn-file :file').on('fileselect', function(event, label) {
-            let input = $(this).parents('.input-group').find(':text');
-            let log = label;
+            const input = $(this).parents('.input-group').find(':text');
+            const log = label;
 
             if (input.length) {
                 input.val(log);
@@ -91,7 +91,7 @@
         
         function readURL(input) {
             if (input.files && input.files[0]) {
-                let reader = new FileReader();
+                const reader = new FileReader();
 
                 reader.onload = function (e) {
                     $('#img-upload').attr('src', e.target.result);
