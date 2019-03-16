@@ -7,6 +7,22 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
 {
     public class HtmlListFormatter : IHtmlListFormatter
     {
+        private const string TheRedColor = "#cc0000";
+        private const string TheGreenColor = "#006600";
+        private const string TheBlueColor = "#003399";
+        
+        private static readonly IDictionary<NotificationType, NotificationInfo> NotificationTypeInfos = 
+            new Dictionary<NotificationType, NotificationInfo> {
+                { NotificationType.NewEvent, new NotificationInfo { Color = TheGreenColor, Caption = "Neue Aktivität" }},
+                { NotificationType.CancelEvent, new NotificationInfo { Color = TheRedColor, Caption = "Aktivität abgesagt" }},
+                { NotificationType.EditEvent, new NotificationInfo { Color = TheBlueColor, Caption = "Aktivität geändert" }},
+                { NotificationType.Commented, new NotificationInfo { Color = TheGreenColor, Caption = "Neuer Kommentar" }},
+                { NotificationType.Accepted, new NotificationInfo { Color = TheGreenColor, Caption = "Zusage" }},
+                { NotificationType.Declined, new NotificationInfo { Color = TheRedColor, Caption = "Absage" }},
+                { NotificationType.Tentative, new NotificationInfo { Color = TheBlueColor, Caption = "Vorbehalt" }},
+                { NotificationType.Neutral, new NotificationInfo { Color = TheBlueColor, Caption = "Unklar" }},
+            };
+
         private readonly IUrlGenerator urlGenerator;
 
         public HtmlListFormatter(IUrlGenerator urlGenerator)
@@ -46,37 +62,21 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             htmlBuilder.AppendLine("</li>");
         }
 
-        private const string TheRedColor = "#cc0000";
-        private const string TheGreenColor = "#006600";
-        private const string TheBlueColor = "#003399";
-        
-        private string NotificationTypeToString(NotificationType notificationType)
+        private static string NotificationTypeToString(NotificationType notificationType)
         {
-            switch (notificationType)
+            var notificationInfo = NotificationTypeInfos[notificationType];
+            if (notificationInfo == null)
             {
-                case NotificationType.NewEvent:
-                    return GenerateColorText("Neue Aktivität", TheGreenColor);
-                case NotificationType.CancelEvent:
-                    return GenerateColorText("Aktivität abgesagt", TheRedColor);
-                case NotificationType.EditEvent:
-                    return GenerateColorText("Aktivität geändert", TheBlueColor);
-                case NotificationType.Commented:
-                    return GenerateColorText("Neuer Kommentar", TheGreenColor);
-                case NotificationType.Accepted:
-                    return GenerateColorText("Zusage", TheGreenColor);
-                case NotificationType.Declined:
-                    return GenerateColorText("Absage", TheRedColor);
-                case NotificationType.Tentative:
-                    return GenerateColorText("Vorbehalt", TheBlueColor);
-                case NotificationType.Neutral:
-                    return GenerateColorText("Unklar", TheBlueColor);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(notificationType));
+                throw new InvalidOperationException($"No mapping for notificationType [{notificationType.ToString()}] !");
             }
+            
+            return $"<span style='color: {notificationInfo.Color}'>{notificationInfo.Caption}</span>";
         }
 
-        private static string GenerateColorText(string text, string color) =>
-            $"<span style='color: {color}'>{text}</span>";
-
+        private class NotificationInfo
+        {
+            public string Caption { get; set; }
+            public string Color { get; set; }
+        }
     }
 }
