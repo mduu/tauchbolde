@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
@@ -12,16 +13,11 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
     /// <inheritdoc />
     internal class HtmlNotificationFormatter : INotificationFormatter
     {
-        private readonly IUrlGenerator urlGenerator;
+        [NotNull] private readonly IHtmlNotificationListFormatter notificationListFormatter;
 
-        /// <summary>
-        /// Initializes a new instance of the
-        /// <see cref="T:Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting.HtmlNotificationFormatter"/> class.
-        /// </summary>
-        /// <param name="urlGenerator">URL generator.</param>
-        public HtmlNotificationFormatter(IUrlGenerator urlGenerator)
+        public HtmlNotificationFormatter([NotNull] IHtmlNotificationListFormatter notificationListFormatter)
         {
-            this.urlGenerator = urlGenerator ?? throw new ArgumentNullException(nameof(urlGenerator));
+            this.notificationListFormatter = notificationListFormatter ?? throw new ArgumentNullException(nameof(notificationListFormatter));
         }
 
         /// <inheritdoc />
@@ -33,7 +29,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             var sb = new StringBuilder();
 
             FormatHeader(sb, recipient, notifications.Count());
-            FormatNotificationList(sb, notifications);
+            notificationListFormatter.Format(notifications, sb);
             FormatFooter(sb);
 
             return sb.ToString();
@@ -48,72 +44,11 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             sb.AppendLine("</p>");
         }
 
-        private void FormatNotificationList(StringBuilder sb, IEnumerable<Notification> notifications)
-        {
-            sb.AppendLine("<ul>");
-
-            foreach (var notification in notifications)
-            {
-                sb.AppendLine("<li>");
-
-                sb.Append("<span style='font-size: small; color: grey;'>");
-                sb.Append(notification.OccuredAt.ToString("dd.MM.yyyy HH.mm "));
-                sb.Append("</span>");
-                sb.Append(NotificationTypeToString(notification.Type));
-                sb.Append(": ");
-                sb.Append(notification.Message);
-
-                if (notification.EventId != Guid.Empty)
-                {
-                    var eventUrl = urlGenerator.GenerateEventUrl(notification.EventId);
-                    sb.Append($" <a href='{eventUrl}'>Mehr...</a>");
-                }
-                                
-                sb.AppendLine();
-
-                sb.AppendLine("</li>");
-            }
-
-            sb.AppendLine("</ul>");
-        }
-
         private static void FormatFooter(StringBuilder sb)
         {
             sb.AppendLine("<p>");
             sb.AppendLine("Guet Gas!");
             sb.AppendLine("</p>");
         }
-
-        private const string TheRedColor = "#cc0000";
-        private const string TheGreenColor = "#006600";
-        private const string TheBlueColor = "#003399";
-        
-        private string NotificationTypeToString(NotificationType notificationType)
-        {
-            switch (notificationType)
-            {
-                case NotificationType.NewEvent:
-                    return GenerateColorText("Neue Aktivität", TheGreenColor);
-                case NotificationType.CancelEvent:
-                    return GenerateColorText("Aktivität abgesagt", TheRedColor);
-                case NotificationType.EditEvent:
-                    return GenerateColorText("Aktivität geändert", TheBlueColor);
-                case NotificationType.Commented:
-                    return GenerateColorText("Neuer Kommentar", TheGreenColor);
-                case NotificationType.Accepted:
-                    return GenerateColorText("Zusage", TheGreenColor);
-                case NotificationType.Declined:
-                    return GenerateColorText("Absage", TheRedColor);
-                case NotificationType.Tentative:
-                    return GenerateColorText("Vorbehalt", TheBlueColor);
-                case NotificationType.Neutral:
-                    return GenerateColorText("Unklar", TheBlueColor);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(notificationType));
-            }
-        }
-
-        private static string GenerateColorText(string text, string color) =>
-            $"<span style='color: {color}'>{text}</span>";
     }
 }
