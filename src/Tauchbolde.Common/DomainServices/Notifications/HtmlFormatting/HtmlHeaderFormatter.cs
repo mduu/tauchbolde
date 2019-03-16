@@ -5,13 +5,13 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
 {
     public class HtmlHeaderFormatter : IHtmlHeaderFormatter
     {
-        public void Format(Diver recipient, int notificationCount, StringBuilder htmlString)
+        public void Format(Diver recipient, int notificationCount, StringBuilder htmlBuilder)
         {
-            htmlString.AppendLine($"<h2>Hallo {recipient.Firstname},</h2>");
+            htmlBuilder.AppendLine($"<h2>Hallo {recipient.Firstname},</h2>");
 
-            htmlString.AppendLine("<p>");
-            htmlString.AppendLine($"Auf der Tauchbolde-Webseite gibt es {notificationCount} News.");
-            htmlString.AppendLine("</p>");
+            htmlBuilder.AppendLine("<p>");
+            htmlBuilder.AppendLine($"Auf der Tauchbolde-Webseite gibt es {notificationCount} News.");
+            htmlBuilder.AppendLine("</p>");
         }
 
     }

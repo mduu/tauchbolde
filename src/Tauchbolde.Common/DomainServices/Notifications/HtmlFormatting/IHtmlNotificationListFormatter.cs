@@ -13,8 +13,8 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
         /// Format the <paramref name="notifications"/> as HTML and write the
         /// HTML into <paramref name="htmlBuilder"/>.
         /// </summary>
-        /// <param name="notifications"></param>
-        /// <param name="htmlBuilder"></param>
+        /// <param name="notifications">The list of notifications to format.</param>
+        /// <param name="htmlBuilder">The <see cref="StringBuilder"/> to write the HTML into.</param>
         void Format(IEnumerable<Notification> notifications, StringBuilder htmlBuilder);
     }
 }
