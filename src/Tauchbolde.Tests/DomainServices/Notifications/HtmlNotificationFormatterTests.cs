@@ -34,7 +34,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
                 var headerFormatter = new HtmlHeaderFormatter();
                 var notificationListFormatter = new HtmlNotificationListFormatter(urlGenerator);
                 var footerFormatter = new HtmlFooterFormatter();
-                var formatter = new HtmlNotificationFormatter(headerFormatter, notificationListFormatter, footerFormatter);
+                var formatter = new HtmlFormatter(headerFormatter, notificationListFormatter, footerFormatter);
                 var receiver = new Diver
                 {
                     Id = new Guid("4c3b714e-522f-4ef8-85f4-db74f0ccdd76"),

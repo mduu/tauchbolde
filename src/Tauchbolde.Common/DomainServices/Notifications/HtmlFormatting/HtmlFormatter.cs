@@ -11,13 +11,13 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
     /// Formats notification for a given recipient as HTML.
     /// </summary>
     /// <inheritdoc />
-    internal class HtmlNotificationFormatter : INotificationFormatter
+    internal class HtmlFormatter : INotificationFormatter
     {
         [NotNull] private readonly IHtmlHeaderFormatter headerFormatter;
         [NotNull] private readonly IHtmlNotificationListFormatter notificationListFormatter;
         [NotNull] private readonly IHtmlFooterFormatter footerFormatter;
 
-        public HtmlNotificationFormatter(
+        public HtmlFormatter(
             [NotNull] IHtmlHeaderFormatter headerFormatter,
             [NotNull] IHtmlNotificationListFormatter notificationListFormatter,
             [NotNull] IHtmlFooterFormatter footerFormatter)
