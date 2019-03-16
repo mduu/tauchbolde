@@ -31,19 +31,19 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 
             var sb = new StringBuilder();
 
-            FormatHeader(sb, recipient, notifications);
+            FormatHeader(sb, recipient, notifications.Count());
             FormatNotification(sb, recipient, notifications);
             FormatFooter(sb);
 
             return sb.ToString();
         }
 
-        private void FormatHeader(StringBuilder sb, Diver recipient, IEnumerable<Notification> notifications)
+        private void FormatHeader(StringBuilder sb, Diver recipient, int notificationCount)
         {
             sb.AppendLine($"<h2>Hallo {recipient.Firstname},</h2>");
 
             sb.AppendLine("<p>");
-            sb.AppendLine($"Auf der Tauchbolde-Webseite gibt es {notifications.Count()} News.");
+            sb.AppendLine($"Auf der Tauchbolde-Webseite gibt es {notificationCount} News.");
             sb.AppendLine("</p>");
         }
 
@@ -76,16 +76,16 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             sb.AppendLine("</ul>");
         }
 
-        private void FormatFooter(StringBuilder sb)
+        private static void FormatFooter(StringBuilder sb)
         {
             sb.AppendLine("<p>");
             sb.AppendLine("Guet Gas!");
             sb.AppendLine("</p>");
         }
 
-        const string TheRedColor = "#cc0000";
-        const string TheGreenColor = "#006600";
-        const string TheBlueColor = "#003399";
+        private const string TheRedColor = "#cc0000";
+        private const string TheGreenColor = "#006600";
+        private const string TheBlueColor = "#003399";
         
         private string NotificationTypeToString(NotificationType notificationType)
         {
@@ -112,6 +112,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             }
         }
 
-        private string GenerateColorText(string text, string color) => $"<span style='color: {color}'>{text}</span>";
+        private static string GenerateColorText(string text, string color) =>
+            $"<span style='color: {color}'>{text}</span>";
     }
 }
