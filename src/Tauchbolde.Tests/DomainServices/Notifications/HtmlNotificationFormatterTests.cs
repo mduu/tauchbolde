@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using ApprovalTests.Namers;
 using FakeItEasy;
 using Tauchbolde.Common.DomainServices.Notifications;
+using Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting;
 
 namespace Tauchbolde.Tests.DomainServices.Notifications
 {

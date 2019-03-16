@@ -4,18 +4,19 @@ using System.Linq;
 using System.Text;
 using Tauchbolde.Common.Model;
 
-namespace Tauchbolde.Common.DomainServices.Notifications
+namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
 {
     /// <summary>
     /// Formats notification for a given recipient as HTML.
     /// </summary>
+    /// <inheritdoc />
     internal class HtmlNotificationFormatter : INotificationFormatter
     {
         private readonly IUrlGenerator urlGenerator;
 
         /// <summary>
         /// Initializes a new instance of the
-        /// <see cref="T:Tauchbolde.Common.DomainServices.Notifications.HtmlNotificationFormatter"/> class.
+        /// <see cref="T:Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting.HtmlNotificationFormatter"/> class.
         /// </summary>
         /// <param name="urlGenerator">URL generator.</param>
         public HtmlNotificationFormatter(IUrlGenerator urlGenerator)
@@ -38,7 +39,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             return sb.ToString();
         }
 
-        private void FormatHeader(StringBuilder sb, Diver recipient, int notificationCount)
+        private static void FormatHeader(StringBuilder sb, Diver recipient, int notificationCount)
         {
             sb.AppendLine($"<h2>Hallo {recipient.Firstname},</h2>");
 
