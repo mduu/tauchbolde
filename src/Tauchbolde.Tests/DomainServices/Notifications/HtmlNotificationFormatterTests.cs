@@ -7,6 +7,7 @@ using Tauchbolde.Common.Model;
 using System.Collections.Generic;
 using ApprovalTests.Namers;
 using FakeItEasy;
+using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting;
 
 namespace Tauchbolde.Tests.DomainServices.Notifications
@@ -32,7 +33,8 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
                 A.CallTo(() => urlGenerator.GenerateEventUrl(A<Guid>._)).Returns("http://test/event/1");
                 
                 var headerFormatter = new HtmlHeaderFormatter();
-                var notificationListFormatter = new HtmlListFormatter(urlGenerator);
+                var notificationTypeInfo = new NotificationTypeInfos();
+                var notificationListFormatter = new HtmlListFormatter(urlGenerator, notificationTypeInfo);
                 var footerFormatter = new HtmlFooterFormatter();
                 var formatter = new HtmlFormatter(headerFormatter, notificationListFormatter, footerFormatter);
                 var receiver = new Diver

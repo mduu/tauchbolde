@@ -1,33 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using JetBrains.Annotations;
 using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
 {
     public class HtmlListFormatter : IHtmlListFormatter
     {
-        private const string TheRedColor = "#cc0000";
-        private const string TheGreenColor = "#006600";
-        private const string TheBlueColor = "#003399";
-        
-        private static readonly IDictionary<NotificationType, NotificationInfo> NotificationTypeInfos = 
-            new Dictionary<NotificationType, NotificationInfo> {
-                { NotificationType.NewEvent, new NotificationInfo { Color = TheGreenColor, Caption = "Neue Aktivität" }},
-                { NotificationType.CancelEvent, new NotificationInfo { Color = TheRedColor, Caption = "Aktivität abgesagt" }},
-                { NotificationType.EditEvent, new NotificationInfo { Color = TheBlueColor, Caption = "Aktivität geändert" }},
-                { NotificationType.Commented, new NotificationInfo { Color = TheGreenColor, Caption = "Neuer Kommentar" }},
-                { NotificationType.Accepted, new NotificationInfo { Color = TheGreenColor, Caption = "Zusage" }},
-                { NotificationType.Declined, new NotificationInfo { Color = TheRedColor, Caption = "Absage" }},
-                { NotificationType.Tentative, new NotificationInfo { Color = TheBlueColor, Caption = "Vorbehalt" }},
-                { NotificationType.Neutral, new NotificationInfo { Color = TheBlueColor, Caption = "Unklar" }},
-            };
+        [NotNull] private readonly IUrlGenerator urlGenerator;
+        [NotNull] private readonly INotificationTypeInfos notificationTypeInfos;
 
-        private readonly IUrlGenerator urlGenerator;
-
-        public HtmlListFormatter(IUrlGenerator urlGenerator)
+        public HtmlListFormatter(
+            [NotNull] IUrlGenerator urlGenerator,
+            [NotNull] INotificationTypeInfos notificationTypeInfos)
         {
             this.urlGenerator = urlGenerator ?? throw new ArgumentNullException(nameof(urlGenerator));
+            this.notificationTypeInfos = notificationTypeInfos ?? throw new ArgumentNullException(nameof(notificationTypeInfos));
         }
 
         public void Format(IEnumerable<Notification> notifications, StringBuilder htmlBuilder)
@@ -62,9 +51,9 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             htmlBuilder.AppendLine("</li>");
         }
 
-        private static string NotificationTypeToString(NotificationType notificationType)
+        private string NotificationTypeToString(NotificationType notificationType)
         {
-            var notificationInfo = NotificationTypeInfos[notificationType];
+            var notificationInfo = notificationTypeInfos.GetInfo(notificationType);
             if (notificationInfo == null)
             {
                 throw new InvalidOperationException($"No mapping for notificationType [{notificationType.ToString()}] !");
@@ -73,10 +62,5 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             return $"<span style='color: {notificationInfo.Color}'>{notificationInfo.Caption}</span>";
         }
 
-        private class NotificationInfo
-        {
-            public string Caption { get; set; }
-            public string Color { get; set; }
-        }
     }
 }

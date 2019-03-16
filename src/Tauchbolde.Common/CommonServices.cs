@@ -46,6 +46,7 @@ namespace Tauchbolde.Common
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<INotificationSender, NotificationSender>();
+            services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
             services.AddTransient<INotificationFormatter, HtmlFormatter>();
             services.AddTransient<IHtmlListFormatter, HtmlListFormatter>();
             services.AddTransient<IHtmlHeaderFormatter, HtmlHeaderFormatter>();
