@@ -33,7 +33,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             var sb = new StringBuilder();
 
             FormatHeader(sb, recipient, notifications.Count());
-            FormatNotification(sb, recipient, notifications);
+            FormatNotificationList(sb, notifications);
             FormatFooter(sb);
 
             return sb.ToString();
@@ -48,7 +48,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             sb.AppendLine("</p>");
         }
 
-        private void FormatNotification(StringBuilder sb, Diver recipient, IEnumerable<Notification> notifications)
+        private void FormatNotificationList(StringBuilder sb, IEnumerable<Notification> notifications)
         {
             sb.AppendLine("<ul>");
 
