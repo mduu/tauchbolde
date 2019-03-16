@@ -14,16 +14,16 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
     internal class HtmlFormatter : INotificationFormatter
     {
         [NotNull] private readonly IHtmlHeaderFormatter headerFormatter;
-        [NotNull] private readonly IHtmlNotificationListFormatter notificationListFormatter;
+        [NotNull] private readonly IHtmlListFormatter listFormatter;
         [NotNull] private readonly IHtmlFooterFormatter footerFormatter;
 
         public HtmlFormatter(
             [NotNull] IHtmlHeaderFormatter headerFormatter,
-            [NotNull] IHtmlNotificationListFormatter notificationListFormatter,
+            [NotNull] IHtmlListFormatter listFormatter,
             [NotNull] IHtmlFooterFormatter footerFormatter)
         {
             this.headerFormatter = headerFormatter ?? throw new ArgumentNullException(nameof(headerFormatter));
-            this.notificationListFormatter = notificationListFormatter ?? throw new ArgumentNullException(nameof(notificationListFormatter));
+            this.listFormatter = listFormatter ?? throw new ArgumentNullException(nameof(listFormatter));
             this.footerFormatter = footerFormatter ?? throw new ArgumentNullException(nameof(footerFormatter));
         }
 
@@ -36,7 +36,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             var htmlBuilder = new StringBuilder();
 
             headerFormatter.Format(recipient, notifications.Count(), htmlBuilder);
-            notificationListFormatter.Format(notifications, htmlBuilder);
+            listFormatter.Format(notifications, htmlBuilder);
             footerFormatter.Format(htmlBuilder);
 
             return htmlBuilder.ToString();

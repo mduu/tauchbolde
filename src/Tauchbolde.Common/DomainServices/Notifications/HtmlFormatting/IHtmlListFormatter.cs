@@ -7,7 +7,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
     /// <summary>
     /// Formats a series of <see cref="Notification"/>.
     /// </summary>
-    public interface IHtmlNotificationListFormatter
+    public interface IHtmlListFormatter
     {
         /// <summary>
         /// Format the <paramref name="notifications"/> as HTML and write the

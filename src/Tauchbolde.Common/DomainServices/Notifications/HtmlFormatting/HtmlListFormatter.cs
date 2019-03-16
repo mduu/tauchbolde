@@ -5,11 +5,11 @@ using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
 {
-    public class HtmlNotificationListFormatter : IHtmlNotificationListFormatter
+    public class HtmlListFormatter : IHtmlListFormatter
     {
         private readonly IUrlGenerator urlGenerator;
 
-        public HtmlNotificationListFormatter(IUrlGenerator urlGenerator)
+        public HtmlListFormatter(IUrlGenerator urlGenerator)
         {
             this.urlGenerator = urlGenerator ?? throw new ArgumentNullException(nameof(urlGenerator));
         }

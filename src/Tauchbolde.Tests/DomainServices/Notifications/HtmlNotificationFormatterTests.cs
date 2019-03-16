@@ -32,7 +32,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
                 A.CallTo(() => urlGenerator.GenerateEventUrl(A<Guid>._)).Returns("http://test/event/1");
                 
                 var headerFormatter = new HtmlHeaderFormatter();
-                var notificationListFormatter = new HtmlNotificationListFormatter(urlGenerator);
+                var notificationListFormatter = new HtmlListFormatter(urlGenerator);
                 var footerFormatter = new HtmlFooterFormatter();
                 var formatter = new HtmlFormatter(headerFormatter, notificationListFormatter, footerFormatter);
                 var receiver = new Diver
