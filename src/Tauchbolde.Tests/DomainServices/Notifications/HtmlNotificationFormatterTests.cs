@@ -58,21 +58,17 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             }
         }
 
-        private static Diver CreateDefaultReceiver()
-        {
-            var receiver = new Diver
+        private static Diver CreateDefaultReceiver() =>
+            new Diver
             {
                 Id = new Guid("4c3b714e-522f-4ef8-85f4-db74f0ccdd76"),
                 Fullname = "John Doe",
                 Firstname = "John",
                 Lastname = "Doe",
             };
-            return receiver;
-        }
 
-        private static List<Notification> CreateDefaultNotifications(NotificationType notificationType)
-        {
-            var notifications = new List<Notification>()
+        private static IEnumerable<Notification> CreateDefaultNotifications(NotificationType notificationType) =>
+            new List<Notification>()
             {
                 new Notification
                 {
@@ -82,7 +78,5 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
                     Type = notificationType,
                 }
             };
-            return notifications;
-        }
     }
 }
