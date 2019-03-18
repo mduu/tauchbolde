@@ -10,6 +10,7 @@ using ApprovalTests.Namers;
 using FakeItEasy;
 using Tauchbolde.Common.DomainServices.Notifications;
 using Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting;
+using Tauchbolde.Common.DomainServices.TextFormatting;
 
 namespace Tauchbolde.Tests.DomainServices.Notifications
 {
@@ -25,7 +26,8 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
 
             var notificationListFormatter = new HtmlListFormatter(
                 urlGenerator1,
-                new NotificationTypeInfos());
+                new NotificationTypeInfos(),
+                new MarkdownDigFormatter());
 
             formatter = new HtmlFormatter(
                 new CssStyleFormatter(),
