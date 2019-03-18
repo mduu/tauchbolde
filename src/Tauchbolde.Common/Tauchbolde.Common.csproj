@@ -35,4 +35,8 @@
     <Folder Include="DomainServices\Users\" />
     <Folder Include="DomainServices\Repositories\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="DomainServices\Notifications\HtmlFormatting\EmbeddedStyles.css" />
+    <EmbeddedResource Include="DomainServices\Notifications\HtmlFormatting\EmbeddedStyles.css" />
+  </ItemGroup>
 </Project>

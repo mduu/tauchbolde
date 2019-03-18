@@ -5,6 +5,7 @@ using Tauchbolde.Common.DomainServices;
 using Xunit;
 using Tauchbolde.Common.Model;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ApprovalTests.Namers;
 using FakeItEasy;
 using Tauchbolde.Common.DomainServices.Notifications;
@@ -27,6 +28,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
                 new NotificationTypeInfos());
 
             formatter = new HtmlFormatter(
+                new CssStyleFormatter(),
                 new HtmlHeaderFormatter(),
                 notificationListFormatter,
                 new HtmlFooterFormatter());
@@ -42,7 +44,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
         [InlineData(NotificationType.Neutral)]
         [InlineData(NotificationType.Tentative)]
         [UseReporter(typeof(DiffReporter))]
-        public void Format(NotificationType notificationType)
+        public async Task Format(NotificationType notificationType)
         {
             using (ApprovalResults.ForScenario(notificationType.ToString()))
             {
@@ -51,7 +53,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
                 var notifications = CreateDefaultNotifications(notificationType);
 
                 // Act
-                var result = formatter.Format(receiver, notifications);
+                var result = await formatter.FormatAsync(receiver, notifications);
 
                 // Assert
                 Approvals.VerifyHtml(result);
