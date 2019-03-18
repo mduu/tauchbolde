@@ -1,7 +1,8 @@
-﻿@using Tauchbolde.Common.Model
-@using Tauchbolde.Web.Models.EventViewModels
+﻿@using Tauchbolde.Web.Models.EventViewModels
+@inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
 @model EventViewModel
 @{
+    // ReSharper disable once StringLiteralTypo
     ViewBag.Title = $"Aktivität - {Model.Event.Name}";
     Layout = "_Layout";
 }
@@ -57,7 +58,7 @@
                 <div class="row">
                     <hr />
                     <label class="col-xs-12">Beschreibung:</label>
-                    <span class="col-md-12 form-control-static">@Html.Markdown(Model.Event.Description)</span>
+                    <span class="col-md-12 form-control-static">@TextFormatting.FormatText(Model.Event.Description)</span>
                 </div>
             }
             <div class="row">

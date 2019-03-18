@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using JetBrains.Annotations;
+using Tauchbolde.Common.DomainServices.TextFormatting;
 using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
@@ -10,13 +11,16 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
     {
         [NotNull] private readonly IUrlGenerator urlGenerator;
         [NotNull] private readonly INotificationTypeInfos notificationTypeInfos;
+        [NotNull] private readonly ITextFormatter textFormatter;
 
         public HtmlListFormatter(
             [NotNull] IUrlGenerator urlGenerator,
-            [NotNull] INotificationTypeInfos notificationTypeInfos)
+            [NotNull] INotificationTypeInfos notificationTypeInfos,
+            [NotNull] ITextFormatter textFormatter)
         {
             this.urlGenerator = urlGenerator ?? throw new ArgumentNullException(nameof(urlGenerator));
             this.notificationTypeInfos = notificationTypeInfos ?? throw new ArgumentNullException(nameof(notificationTypeInfos));
+            this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
         }
 
         public void Format(IEnumerable<Notification> notifications, StringBuilder htmlBuilder)
@@ -43,7 +47,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             htmlBuilder.AppendLine("</div>");
 
             htmlBuilder.AppendLine("<div class='message'>");
-            htmlBuilder.Append(notification.Message);
+            htmlBuilder.Append(textFormatter.GetHtmlText(notification.Message));
             if (notification.EventId != Guid.Empty)
             {
                 var eventUrl = urlGenerator.GenerateEventUrl(notification.EventId);
