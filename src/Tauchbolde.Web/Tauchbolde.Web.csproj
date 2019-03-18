@@ -40,7 +40,6 @@
     <Folder Include="wwwroot\avatar\" />
     <Folder Include="appdata\" />
     <Folder Include="Views\Shared\Components\ParticipantComponent\" />
-    <Folder Include="Core\Markdown\" />
     <Folder Include="Views\Shared\Components\MarkdownHelpLink\" />
   </ItemGroup>
   <ItemGroup>

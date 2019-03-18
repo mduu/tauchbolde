@@ -13,6 +13,7 @@ using Tauchbolde.Common.DomainServices.Events;
 using Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Common.DomainServices.Repositories;
+using Tauchbolde.Common.DomainServices.TextFormatting;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 
@@ -33,6 +34,7 @@ namespace Tauchbolde.Common
             services.AddSingleton<IAvatarStore, AvatarStore>();
             services.AddSingleton<IImageResizer, ImageResizer>();
             services.AddScoped<ITelemetryService, AppInsightsTelemetryService>();
+            services.AddScoped<ITextFormatter, MarkdownDigFormatter>();
 
             // Repos
             services.AddTransient<IDiverRepository, DiverRepository>();

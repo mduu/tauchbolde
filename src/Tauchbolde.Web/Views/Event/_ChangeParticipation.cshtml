@@ -2,31 +2,27 @@
 @using Tauchbolde.Web.Models.EventViewModels
 @model EventViewModel
 
-            <div class="collapse" id="collapseExample" style="        margin-top: 5px;">
-                <form id="ChangeParticipantForm" asp-action="ChangeParticipation" asp-antiforgery="true">
-                    <input type="hidden" asp-for="ChangeParticipantViewModel.EventId" Value="@Model.Event.Id" />
-                    <div class="well">
-                        @* Status *@
-                        <div class="form-group">
-                            <label asp-for="ChangeParticipantViewModel.Status"></label>
-                            <select class="form-control" asp-for="ChangeParticipantViewModel.Status" asp-items="Html.GetEnumSelectList<ParticipantStatus>()"></select>
-                        </div>
-                        @* Buddyteam *@
-                        <div class="form-group">
-                            <label asp-for="ChangeParticipantViewModel.BuddyTeamName">Buddy-Team</label>
-                            <select class="form-control" asp-for="ChangeParticipantViewModel.BuddyTeamName" asp-items="@Model.BuddyTeamNames"></select>
-                        </div>
-                        @* Notiz *@
-                        <div class="form-group">
-                            <label asp-for="ChangeParticipantViewModel.Note">Notiz</label>
-                            <input type="text" class="form-control" placeholder="Notiz" asp-for="ChangeParticipantViewModel.Note">
-                        </div>
-                        @* Anzahl *@
-                        <div class="form-group">
-                            <label asp-for="ChangeParticipantViewModel.CountPeople">Anzahl Personen</label>
-                            <input type="number" class="form-control" step="1" min="1" asp-for="ChangeParticipantViewModel.CountPeople">
-                        </div>
-                        <input class="btn btn-success" type="submit" value="Speichern" />
-                    </div>
-                </form>
+<div class="collapse" id="collapseExample" style="margin-top: 5px;">
+    <form id="ChangeParticipantForm" asp-action="ChangeParticipation" asp-antiforgery="true">
+        <input type="hidden" asp-for="ChangeParticipantViewModel.EventId" Value="@Model.Event.Id"/>
+        <div class="well">
+            <div class="form-group">
+                <label asp-for="ChangeParticipantViewModel.Status"></label>
+                <select class="form-control" asp-for="ChangeParticipantViewModel.Status" asp-items="Html.GetEnumSelectList<ParticipantStatus>()"></select>
             </div>
+            <div class="form-group">
+                <label asp-for="ChangeParticipantViewModel.BuddyTeamName">Buddy-Team</label>
+                <select class="form-control" asp-for="ChangeParticipantViewModel.BuddyTeamName" asp-items="@Model.BuddyTeamNames"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangeParticipantViewModel.Note">Notiz</label>
+                <input type="text" class="form-control" placeholder="Notiz" asp-for="ChangeParticipantViewModel.Note">
+            </div>
+            <div class="form-group">
+                <label asp-for="ChangeParticipantViewModel.CountPeople">Anzahl Personen</label>
+                <input type="number" class="form-control" step="1" min="1" asp-for="ChangeParticipantViewModel.CountPeople">
+            </div>
+            <input class="btn btn-success" type="submit" value="Speichern"/>
+        </div>
+    </form>
+</div>

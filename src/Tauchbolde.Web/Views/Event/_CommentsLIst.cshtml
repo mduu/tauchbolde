@@ -1,4 +1,5 @@
 ﻿@using Tauchbolde.Web.Models.EventViewModels
+@inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
 @model EventViewModel
 
 @foreach (var comment in Model.Event.Comments.OrderBy(c => c.CreateDate))
@@ -31,7 +32,7 @@
                         </button>
                     }
                 </div>
-                <p>@Html.Markdown(comment.Text)</p>
+                <p>@TextFormatting.FormatText(comment.Text)</p>
             </div>
         </div>
     </div>
