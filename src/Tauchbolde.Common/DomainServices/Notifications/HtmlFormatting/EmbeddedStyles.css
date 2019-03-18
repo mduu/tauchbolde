@@ -21,11 +21,11 @@ body {
     background-color: white;
 }
 
-.list li.declined {
+.list li.Declined {
     border-color: #e51c23;
 }
 
-.list li.accepted {
+.list li.Accepted {
     border-color: #4caf50;
 }
 

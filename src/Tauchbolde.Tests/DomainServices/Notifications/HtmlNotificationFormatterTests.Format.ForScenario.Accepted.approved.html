@@ -24,11 +24,11 @@ body {
     background-color: white;
 }
 
-.list li.declined {
+.list li.Declined {
     border-color: #e51c23;
 }
 
-.list li.accepted {
+.list li.Accepted {
     border-color: #4caf50;
 }
 
@@ -41,10 +41,14 @@ body {
 <p>
 Auf der Tauchbolde-Webseite gibt es 1 News.
 </p>
-<ul>
-<li>
-<span style='font-size: small; color: grey;'>01.10.2018 14.00 </span><span style='color: #006600'>Zusage</span>: Notification 1
+<ul class='list'>
+<li class='Accepted'>
+<div>
+<span class='timestamp'>01.10.2018 14.00 </span><span class='message-type'>Zusage</span></div>
+<div class='message'>
+Notification 1</div>
 </li>
+
 </ul>
 <p>
 Guet Gas!
