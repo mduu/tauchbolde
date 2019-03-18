@@ -21,7 +21,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
 
         public void Format(IEnumerable<Notification> notifications, StringBuilder htmlBuilder)
         {
-            htmlBuilder.AppendLine("<ul>");
+            htmlBuilder.AppendLine("<ul class='list'>");
             foreach (var notification in notifications)
             {
                 FormatNotification(htmlBuilder, notification);
@@ -31,36 +31,29 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
 
         private void FormatNotification(StringBuilder htmlBuilder, Notification notification)
         {
-            htmlBuilder.AppendLine("<li>");
-
-            htmlBuilder.Append("<span style='font-size: small; color: grey;'>");
+            htmlBuilder.AppendLine($"<li class='{notification.Type.ToString()}'>");
+            
+            htmlBuilder.AppendLine("<div>");
+            htmlBuilder.Append("<span class='timestamp'>");
             htmlBuilder.Append(notification.OccuredAt.ToString("dd.MM.yyyy HH.mm "));
             htmlBuilder.Append("</span>");
-            htmlBuilder.Append(NotificationTypeToString(notification.Type));
-            htmlBuilder.Append(": ");
-            htmlBuilder.Append(notification.Message);
+            htmlBuilder.Append("<span class='message-type'>");
+            htmlBuilder.Append(notificationTypeInfos.GetCaption(notification.Type));
+            htmlBuilder.Append("</span>");
+            htmlBuilder.AppendLine("</div>");
 
+            htmlBuilder.AppendLine("<div class='message'>");
+            htmlBuilder.Append(notification.Message);
             if (notification.EventId != Guid.Empty)
             {
                 var eventUrl = urlGenerator.GenerateEventUrl(notification.EventId);
+                // ReSharper disable once StringLiteralTypo
                 htmlBuilder.Append($" <a href='{eventUrl}'>Mehr...</a>");
             }
-
-            htmlBuilder.AppendLine();
-
-            htmlBuilder.AppendLine("</li>");
-        }
-
-        private string NotificationTypeToString(NotificationType notificationType)
-        {
-            var notificationInfo = notificationTypeInfos.GetInfo(notificationType);
-            if (notificationInfo == null)
-            {
-                throw new InvalidOperationException($"No mapping for notificationType [{notificationType.ToString()}] !");
-            }
+            htmlBuilder.AppendLine("</div>");
             
-            return $"<span style='color: {notificationInfo.Color}'>{notificationInfo.Caption}</span>";
+            htmlBuilder.AppendLine("</li>");
+            htmlBuilder.AppendLine();
         }
-
     }
 }

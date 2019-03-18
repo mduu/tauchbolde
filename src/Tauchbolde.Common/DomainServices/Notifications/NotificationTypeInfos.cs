@@ -5,26 +5,27 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 {
     public class NotificationTypeInfos : INotificationTypeInfos
     {
-        private const string TheRedColor = "#cc0000";
-        private const string TheGreenColor = "#006600";
-        private const string TheBlueColor = "#003399";
-
         private static readonly IDictionary<NotificationType, NotificationTypeInfo> Infos = 
             new Dictionary<NotificationType, NotificationTypeInfo> {
-                { NotificationType.NewEvent, new NotificationTypeInfo { Color = TheGreenColor, Caption = "Neue Aktivität" }},
-                { NotificationType.CancelEvent, new NotificationTypeInfo { Color = TheRedColor, Caption = "Aktivität abgesagt" }},
-                { NotificationType.EditEvent, new NotificationTypeInfo { Color = TheBlueColor, Caption = "Aktivität geändert" }},
-                { NotificationType.Commented, new NotificationTypeInfo { Color = TheGreenColor, Caption = "Neuer Kommentar" }},
-                { NotificationType.Accepted, new NotificationTypeInfo { Color = TheGreenColor, Caption = "Zusage" }},
-                { NotificationType.Declined, new NotificationTypeInfo { Color = TheRedColor, Caption = "Absage" }},
-                { NotificationType.Tentative, new NotificationTypeInfo { Color = TheBlueColor, Caption = "Vorbehalt" }},
-                { NotificationType.Neutral, new NotificationTypeInfo { Color = TheBlueColor, Caption = "Unklar" }},
+                // ReSharper disable StringLiteralTypo
+                { NotificationType.NewEvent, new NotificationTypeInfo { Caption = "Neue Aktivität" }},
+                { NotificationType.CancelEvent, new NotificationTypeInfo { Caption = "Aktivität abgesagt" }},
+                { NotificationType.EditEvent, new NotificationTypeInfo { Caption = "Aktivität geändert" }},
+                { NotificationType.Commented, new NotificationTypeInfo { Caption = "Neuer Kommentar" }},
+                { NotificationType.Accepted, new NotificationTypeInfo { Caption = "Zusage" }},
+                { NotificationType.Declined, new NotificationTypeInfo { Caption = "Absage" }},
+                { NotificationType.Tentative, new NotificationTypeInfo {Caption = "Vorbehalt" }},
+                { NotificationType.Neutral, new NotificationTypeInfo { Caption = "Unklar" }},
+                // ReSharper restore StringLiteralTypo
             };
 
         /// <inheritdoc />
-        public NotificationTypeInfo GetInfo(NotificationType notificationType)
+        public string GetCaption(NotificationType notificationType)
         {
-            return Infos[notificationType];
+            return Infos.ContainsKey(notificationType)
+                ? Infos[notificationType].Caption
+                // ReSharper disable once StringLiteralTypo
+                : "<unbekannt>";
         }
     }
 }

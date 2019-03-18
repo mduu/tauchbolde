@@ -7,6 +7,6 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     /// </summary>
     public interface INotificationTypeInfos
     {
-        NotificationTypeInfo GetInfo(NotificationType notificationType);
+        string GetCaption(NotificationType notificationType);
     }
 }
