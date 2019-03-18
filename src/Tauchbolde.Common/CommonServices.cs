@@ -51,6 +51,7 @@ namespace Tauchbolde.Common
             services.AddTransient<ICssStyleFormatter, CssStyleFormatter>();
             services.AddTransient<IHtmlListFormatter, HtmlListFormatter>();
             services.AddTransient<IHtmlHeaderFormatter, HtmlHeaderFormatter>();
+            services.AddTransient<IHtmlFooterFormatter, HtmlFooterFormatter>();
             services.AddTransient<IDiverService, DiversService>();
             services.AddTransient<IMassMailService, MassMailService>();
         }
