@@ -43,7 +43,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                     {
                         using (logger.BeginScope($"Send notification to {pendingNotificationsForRecipient.Key}"))
                         {
-                            var content = notificationFormatter.Format(recipient, pendingNotificationsForRecipient);
+                            var content = await notificationFormatter.FormatAsync(recipient, pendingNotificationsForRecipient);
                             if (!string.IsNullOrWhiteSpace(content))
                             {
                                 await SubmitToRecipient(

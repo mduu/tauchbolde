@@ -1,5 +1,3 @@
-﻿<html>
-<head>
 body {
     font-family: Helvetica, sans-serif;
 }
@@ -33,19 +31,4 @@ body {
 
 .message-type {
     font-weight: bold;
-}</head>
-<body>
-<h2>Hallo John,</h2>
-<p>
-Auf der Tauchbolde-Webseite gibt es 1 News.
-</p>
-<ul>
-<li>
-<span style='font-size: small; color: grey;'>01.10.2018 14.00 </span><span style='color: #cc0000'>Aktivität abgesagt</span>: Notification 1
-</li>
-</ul>
-<p>
-Guet Gas!
-</p>
-</html>
-</body>
+}

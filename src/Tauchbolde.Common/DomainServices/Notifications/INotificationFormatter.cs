@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.DomainServices.Notifications
@@ -14,6 +15,6 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         /// <param name="recipient">The recipient to address.</param>
         /// <param name="notifications">The notifications to format.</param>
         /// <returns>A formated text of the list of notifications.</returns>
-        string Format(Diver recipient, IEnumerable<Notification> notifications);
+        Task<string> FormatAsync(Diver recipient, IEnumerable<Notification> notifications);
     }
 }
