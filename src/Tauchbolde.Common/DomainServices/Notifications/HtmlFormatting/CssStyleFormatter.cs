@@ -18,8 +18,10 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
                     cssSource = await reader.ReadToEndAsync();
                 }
             }
-            
+
+            htmlBuilder.AppendLine("<style>");
             htmlBuilder.Append(cssSource);
+            htmlBuilder.AppendLine("</style>");
         }
     }
 }
