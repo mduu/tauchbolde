@@ -1,35 +1,9 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using Tauchbolde.Common.Model
-@using Tauchbolde.Web.ViewComponents
-@using Tauchbolde.Web.Models.ViewComponentModels
+﻿@using Tauchbolde.Web.Models.ViewComponentModels
 @model ParticipantViewModel
-@{
-    var statusLabelClass = "";
-    var statusIconName = "";
-
-    switch (Model.Status)
-    {
-        case ParticipantStatus.Accepted:
-            statusLabelClass = "label-success";
-            statusIconName = "glyphicon-thumbs-up";
-            break;
-        case ParticipantStatus.Declined:
-            statusLabelClass = "label-danger";
-            statusIconName = "glyphicon-thumbs-down";
-            break;
-        case ParticipantStatus.Tentative:
-            statusLabelClass = "label-default";
-            statusIconName = "glyphicon-question-sign";
-            break;
-    }
-}
 
 <div style="margin: 3px 0;">
     <span style="margin-left: 18px"></span>
 
-    <span class="label @statusLabelClass" style="margin-right: 5px;">
-        <span class="glyphicon @statusIconName" aria-hidden="true"></span>
-    </span>
     <span title="@Model.Name">
         <vc:avatar diver="Model.Diver" avatar-size="Small" />
     </span>

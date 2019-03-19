@@ -2,40 +2,71 @@
 @using Tauchbolde.Web.Models.EventViewModels
 @model EventViewModel
 
+<style>
+    .event-participationlist {
+        padding-left: 10px;
+    }
+    .participation-subheader {
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .event-participationlist-accepted {
+        background-color: #edffed;
+    }
+
+    .event-participationlist-tentative {
+        background-color: #ffffe4;
+    }
+
+    .event-participationlist-declined {
+        background-color: #ffefef;
+    }
+    
+    .event-participationlist-accepted .participation-subheader {
+        color: #090;
+    }
+    
+    .event-participationlist-declined .participation-subheader {
+        color: #900;
+    }
+    
+    .event-participationlist-tentative .participation-subheader {
+        color: #770;
+    }
+</style>
+
 @if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Accepted))
 {
-    <section class="event-participationlist event-participationlist-accepted">
-        <div class="row">
-            <h5>Angemeldet:</h5>
-        </div>
+    <section class="event-participationlist event-participationlist-accepted row">
+        <h5 class="participation-subheader">Angemeldet:</h5>
         @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
         {
             <div class="row">
-                <vc:participant-component participant="participant" />
+                <vc:participant-component participant="participant"/>
             </div>
         }
     </section>
 }
 @if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Tentative))
 {
-    <section class="event-participationlist event-participationlist-tentative">
-        <h4>Weiss noch nicht:</h4>
+    <section class="event-participationlist event-participationlist-tentative row">
+        <h4 class="participation-subheader">Weiss noch nicht:</h4>
         @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Tentative))
         {
             <div class="row">
-                <vc:participant-component participant="participant" />
+                <vc:participant-component participant="participant"/>
             </div>
         }
     </section>
 }
 @if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Declined))
 {
-    <section class="event-participationlist event-participationlist-declined">
-        <h4>Kann leider nicht:</h4>
+    <section class="event-participationlist event-participationlist-declined row">
+        <h5 class="participation-subheader">Kann leider nicht:</h5>
         @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Declined))
         {
             <div class="row">
-                <vc:participant-component participant="participant" />
+                <vc:participant-component participant="participant"/>
             </div>
         }
     </section>
