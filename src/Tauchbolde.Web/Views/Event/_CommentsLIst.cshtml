@@ -9,6 +9,7 @@
 
             <div class="panel-body">
                 <div>
+                    <vc:avatar diver="@comment.Author" avatar-size="Small" />
                     <strong>@comment.Author.Fullname</strong>
                     <small> &mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm") @(comment.ModifiedDate.HasValue ? ("Geändert: " + comment.ModifiedDate.Value.ToString("dd.MM.yyyy HH:mm")) : "")</small>
                     @* ReSharper disable twice UnknownCssClass *@
