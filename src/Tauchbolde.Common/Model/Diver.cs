@@ -77,6 +77,10 @@ namespace Tauchbolde.Common.Model
         public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
 
+        public virtual ICollection<LogbookEntry> OriginalAuthorOfLogbookEntries { get; set; }
+        
+        public virtual ICollection<LogbookEntry> EditorAuthorOfLogbookEntries { get; set; }
+
         public string GetTwitterUrl()
         {
             if (string.IsNullOrWhiteSpace(TwitterHandle))
