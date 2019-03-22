@@ -21,7 +21,7 @@ namespace Tauchbolde.Web.Core
         /// </summary>
         /// <param name="userManager">User manager.</param>
         /// <param name="diverRepository">Diver repository.</param>
-        public AppControllerBase(
+        protected AppControllerBase(
             UserManager<IdentityUser> userManager,
             IDiverRepository diverRepository)
         {
@@ -60,7 +60,7 @@ namespace Tauchbolde.Web.Core
         /// Gets the diver for the currently logged in user.
         /// </summary>
         /// <returns>The diver for current user.</returns>
-        protected async Task<Diver> GetDiverForCurrentUser()
+        protected async Task<Diver> GetDiverForCurrentUserAsync()
         {
             return await diverRepository.FindByUserNameAsync(User.Identity.Name);
         }
@@ -74,6 +74,16 @@ namespace Tauchbolde.Web.Core
         protected async Task<bool> GetIsAdmin(Diver diver)
         {
             return await userManager.IsInRoleAsync(diver.User, Rolenames.Administrator);
+        }
+        
+        /// <summary>
+        /// Returns <c>true</c> if the <paramref name="diver"/> id s Tauchbold member.
+        /// </summary>
+        /// <param name="diver"></param>
+        /// <returns><c>True</c> if the <paramref name="diver"/> id s Tauchbold member; otherwise <c>False</c> is returned.</returns>
+        protected async Task<bool> GetIsTauchbold(Diver diver)
+        {
+            return await userManager.IsInRoleAsync(diver.User, Rolenames.Tauchbold);
         }
     }
 }

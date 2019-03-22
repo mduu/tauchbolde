@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DomainServices.Repositories;
@@ -10,24 +11,29 @@ namespace Tauchbolde.Common.DomainServices.Users
 {
     internal class DiversService : IDiverService
     {
-        private readonly ApplicationDbContext context;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> userManager;
+        [NotNull] private readonly IDiverRepository diverRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:DiversService"/> class.
         /// </summary>
-        /// <param name="applicationDbContext">Application db context.</param>
+        /// <param name="roleManager">The role manager.</param>
         /// <param name="userManager">The Identity UserManager to use.</param>
+        /// <param name="diverRepository">The <see cref="IDiverRepository"/> to use.</param>
         public DiversService(
-            ApplicationDbContext applicationDbContext,
-            RoleManager<IdentityRole> roleManager,
-            UserManager<IdentityUser> userManager)
+            [NotNull] RoleManager<IdentityRole> roleManager,
+            [NotNull] UserManager<IdentityUser> userManager,
+            [NotNull] IDiverRepository diverRepository)
         {
-            context = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
             this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
+
+        /// <inheritdoc />
+        public async Task<Diver> FindByUserNameAsync(string username) => 
+            await diverRepository.FindByUserNameAsync(username);
 
         /// <inheritdoc/>
         public async Task<ICollection<Diver>> GetMembersAsync(IDiverRepository diverRepository)

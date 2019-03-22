@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,6 +10,7 @@ using Tauchbolde.Common;
 using Tauchbolde.Common.DomainServices.Events;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DomainServices.Repositories;
+using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Web.Models.EventViewModels;
 using Tauchbolde.Web.Services;
 
@@ -22,19 +24,22 @@ namespace Tauchbolde.Web.Controllers
         private readonly IEventRepository eventRepository;
         private readonly IParticipationService participationService;
         private readonly IEventService eventService;
+        [NotNull] private readonly IDiverService diverService;
 
         public EventController(
-            ApplicationDbContext context,
-            IDiverRepository diverRepository,
-            IEventRepository eventRepository,
-            IParticipationService participationService,
-            IEventService eventService)
+            [NotNull] ApplicationDbContext context,
+            [NotNull] IDiverRepository diverRepository,
+            [NotNull] IEventRepository eventRepository,
+            [NotNull] IParticipationService participationService,
+            [NotNull] IEventService eventService,
+            [NotNull] IDiverService diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             this.participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
             this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
+            this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
         }
 
         // GET: Event
@@ -57,7 +62,7 @@ namespace Tauchbolde.Web.Controllers
                 return BadRequest("Event does not exists!");
             }
 
-            var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
+            var currentDiver = await diverService.FindByUserNameAsync(User.Identity.Name);
             if (currentDiver == null)
             {
                 return StatusCode(400, "No current user would be found!");
