@@ -18,6 +18,7 @@ namespace Tauchbolde.Common.Model
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Diver> Diver { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<LogbookEntry> LogbookEntries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
