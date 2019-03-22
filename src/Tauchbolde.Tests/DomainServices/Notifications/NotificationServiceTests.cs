@@ -37,7 +37,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             await notificationService.NotifyForNewEventAsync(evt, currentUser);
 
             // Assert
-            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(Repeated.Exactly.Times(expectedNotificationInserts));
+            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(expectedNotificationInserts, Times.Exactly);
         }
         
         [Theory]
@@ -61,7 +61,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             await notificationService.NotifyForChangedEventAsync(evt, currentUser);
 
             // Assert
-            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(Repeated.Exactly.Times(expectedNotificationInserts));
+            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(expectedNotificationInserts, Times.Exactly);
         }
         
         [Theory]
@@ -85,7 +85,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             await notificationService.NotifyForCanceledEventAsync(evt, currentUser);
 
             // Assert
-            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(Repeated.Exactly.Times(expectedNotificationInserts));
+            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(expectedNotificationInserts, Times.Exactly);
         }
         
         [Theory]
@@ -114,7 +114,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             await notificationService.NotifyForEventCommentAsync(comment, comment.Event, author);
 
             // Assert
-            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(Repeated.Exactly.Times(expectedNotificationInserts));
+            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(expectedNotificationInserts, Times.Exactly);
         }
         
         [Theory]
@@ -143,7 +143,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             await notificationService.NotifyForChangedParticipationAsync(participant);
 
             // Assert
-            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(Repeated.Exactly.Times(expectedNotificationInserts));
+            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(expectedNotificationInserts, Times.Exactly);
         }
         
         [Theory]
@@ -178,10 +178,10 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             await notificationService.NotifyForChangedParticipationAsync(participant);
             
             A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._))
-                .MustHaveHappened(Repeated.Exactly.Times(expectedNotificationInsertsPhase));
+                .MustHaveHappened(expectedNotificationInsertsPhase, Times.Exactly);
         }
 
-        private INotificationRepository CreateNotificationRepo() => A.Fake<INotificationRepository>();
+        private static INotificationRepository CreateNotificationRepo() => A.Fake<INotificationRepository>();
 
         private NotificationService CreateNotificationService(
             INotificationRepository notificationRepo,
