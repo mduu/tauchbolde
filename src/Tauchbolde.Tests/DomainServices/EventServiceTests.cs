@@ -110,9 +110,7 @@ namespace Tauchbolde.Tests.DomainServices
 
         private EventService CreateEventService(Event evt)
         {
-            return new EventService(
-                A.Fake<ApplicationDbContext>(),
-                CreateNotificationService(),
+            return new EventService(CreateNotificationService(),
                 CreateEventRepositoryFake(evt),
                 A.Fake<ICommentRepository>(),
                 A.Fake<ITelemetryService>());
