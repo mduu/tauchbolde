@@ -10,6 +10,7 @@ using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 using Tauchbolde.Common.DomainServices.Events;
+using Tauchbolde.Common.DomainServices.Logbook;
 using Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Common.DomainServices.Repositories;
@@ -42,6 +43,7 @@ namespace Tauchbolde.Common
             services.AddTransient<IParticipantRepository, ParticipantRepository>();
             services.AddTransient<INotificationRepository, NotificationRepository>();
             services.AddTransient<ICommentRepository, CommentRepository>();
+            services.AddTransient<ILogbookEntryRepository, LogbookEntryRepository>();
 
             // DomainServices
             services.AddTransient<IParticipationService, ParticipationService>();
@@ -56,6 +58,7 @@ namespace Tauchbolde.Common
             services.AddTransient<IHtmlFooterFormatter, HtmlFooterFormatter>();
             services.AddTransient<IDiverService, DiversService>();
             services.AddTransient<IMassMailService, MassMailService>();
+            services.AddTransient<ILogbookService, LogbookService>();
         }
 
         public static void RegisterDevelopment(IServiceCollection services)
