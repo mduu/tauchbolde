@@ -24,7 +24,6 @@
   <ItemGroup>
     <Compile Remove="Model\ApplicationUser.cs" />
     <Compile Remove="Repositories\ApplicationUserRepository.cs" />
-    <Compile Remove="Migrations\ApplicationDbContextModelSnapshot.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DomainServices\SMTPSender\" />
@@ -39,5 +38,10 @@
   <ItemGroup>
     <None Remove="DomainServices\Notifications\HtmlFormatting\EmbeddedStyles.css" />
     <EmbeddedResource Include="DomainServices\Notifications\HtmlFormatting\EmbeddedStyles.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.EntityFrameworkCore.SqlServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\..\..\..\..\..\..\..\usr\local\share\dotnet\sdk\NuGetFallbackFolder\microsoft.entityframeworkcore.sqlserver\2.2.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
