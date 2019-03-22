@@ -385,7 +385,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181002051420_initial')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181002051420_initial', N'2.1.4-rtm-31024');
+    VALUES (N'20181002051420_initial', N'2.2.3-servicing-35854');
 END;
 
 GO
@@ -407,7 +407,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181015191233_RemovePosts')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181015191233_RemovePosts', N'2.1.4-rtm-31024');
+    VALUES (N'20181015191233_RemovePosts', N'2.2.3-servicing-35854');
 END;
 
 GO
@@ -422,7 +422,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181015192404_AddFacebookId')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181015192404_AddFacebookId', N'2.1.4-rtm-31024');
+    VALUES (N'20181015192404_AddFacebookId', N'2.2.3-servicing-35854');
 END;
 
 GO
@@ -437,7 +437,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181016143224_AddAvatarId')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181016143224_AddAvatarId', N'2.1.4-rtm-31024');
+    VALUES (N'20181016143224_AddAvatarId', N'2.2.3-servicing-35854');
 END;
 
 GO
@@ -445,7 +445,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181127061632_Update_AspNetIdentity')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181127061632_Update_AspNetIdentity', N'2.1.4-rtm-31024');
+    VALUES (N'20181127061632_Update_AspNetIdentity', N'2.2.3-servicing-35854');
 END;
 
 GO
@@ -460,7 +460,68 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181127063336_Add_Diver_OwnNotifications')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181127063336_Add_Diver_OwnNotifications', N'2.1.4-rtm-31024');
+    VALUES (N'20181127063336_Add_Diver_OwnNotifications', N'2.2.3-servicing-35854');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190322161054_Add_LogbookEntry')
+BEGIN
+    CREATE TABLE [LogbookEntries] (
+        [Id] uniqueidentifier NOT NULL,
+        [Title] nvarchar(max) NULL,
+        [Text] nvarchar(max) NULL,
+        [TeaserText] nvarchar(max) NULL,
+        [IsFavorite] bit NOT NULL,
+        [TeaserImage] nvarchar(max) NULL,
+        [TeaserImageThumb] nvarchar(max) NULL,
+        [ExternalPhotoAlbumUrl] nvarchar(max) NULL,
+        [CreatedAt] datetime2 NOT NULL,
+        [ModifiedAt] datetime2 NOT NULL,
+        [EditorAuthorId] uniqueidentifier NOT NULL,
+        [OriginalAuthorId] uniqueidentifier NOT NULL,
+        [EventId] uniqueidentifier NULL,
+        CONSTRAINT [PK_LogbookEntries] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_LogbookEntries_Diver_EditorAuthorId] FOREIGN KEY ([EditorAuthorId]) REFERENCES [Diver] ([Id]) ON DELETE NO ACTION,
+        CONSTRAINT [FK_LogbookEntries_Events_EventId] FOREIGN KEY ([EventId]) REFERENCES [Events] ([Id]) ON DELETE NO ACTION,
+        CONSTRAINT [FK_LogbookEntries_Diver_OriginalAuthorId] FOREIGN KEY ([OriginalAuthorId]) REFERENCES [Diver] ([Id]) ON DELETE NO ACTION
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190322161054_Add_LogbookEntry')
+BEGIN
+    CREATE INDEX [IX_LogbookEntries_EditorAuthorId] ON [LogbookEntries] ([EditorAuthorId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190322161054_Add_LogbookEntry')
+BEGIN
+    CREATE INDEX [IX_LogbookEntries_EventId] ON [LogbookEntries] ([EventId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190322161054_Add_LogbookEntry')
+BEGIN
+    CREATE INDEX [IX_LogbookEntries_OriginalAuthorId] ON [LogbookEntries] ([OriginalAuthorId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190322161054_Add_LogbookEntry')
+BEGIN
+    CREATE INDEX [IX_LogbookEntries_IsFavorite_CreatedAt] ON [LogbookEntries] ([IsFavorite], [CreatedAt]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190322161054_Add_LogbookEntry')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190322161054_Add_LogbookEntry', N'2.2.3-servicing-35854');
 END;
 
 GO
