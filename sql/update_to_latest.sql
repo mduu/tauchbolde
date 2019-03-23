@@ -526,3 +526,63 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190323082907_Change_Nullables_In_LogbookEntry')
+BEGIN
+    DECLARE @var0 sysname;
+    SELECT @var0 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[LogbookEntries]') AND [c].[name] = N'Title');
+    IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [LogbookEntries] DROP CONSTRAINT [' + @var0 + '];');
+    ALTER TABLE [LogbookEntries] ALTER COLUMN [Title] nvarchar(max) NOT NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190323082907_Change_Nullables_In_LogbookEntry')
+BEGIN
+    DECLARE @var1 sysname;
+    SELECT @var1 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[LogbookEntries]') AND [c].[name] = N'Text');
+    IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [LogbookEntries] DROP CONSTRAINT [' + @var1 + '];');
+    ALTER TABLE [LogbookEntries] ALTER COLUMN [Text] nvarchar(max) NOT NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190323082907_Change_Nullables_In_LogbookEntry')
+BEGIN
+    DECLARE @var2 sysname;
+    SELECT @var2 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[LogbookEntries]') AND [c].[name] = N'TeaserText');
+    IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [LogbookEntries] DROP CONSTRAINT [' + @var2 + '];');
+    ALTER TABLE [LogbookEntries] ALTER COLUMN [TeaserText] nvarchar(max) NOT NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190323082907_Change_Nullables_In_LogbookEntry')
+BEGIN
+    DECLARE @var3 sysname;
+    SELECT @var3 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[LogbookEntries]') AND [c].[name] = N'ModifiedAt');
+    IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [LogbookEntries] DROP CONSTRAINT [' + @var3 + '];');
+    ALTER TABLE [LogbookEntries] ALTER COLUMN [ModifiedAt] datetime2 NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190323082907_Change_Nullables_In_LogbookEntry')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190323082907_Change_Nullables_In_LogbookEntry', N'2.2.3-servicing-35854');
+END;
+
+GO
+

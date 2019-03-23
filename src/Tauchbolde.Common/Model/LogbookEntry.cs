@@ -2,13 +2,13 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Tauchbolde.Common.Model
 {
     /// <summary>
     /// Entity model for Entries in the Logbook.
     /// </summary>
+    [UsedImplicitly]
     public class LogbookEntry
     {
         [Key]
@@ -16,12 +16,15 @@ namespace Tauchbolde.Common.Model
         public Guid Id { get; set; }
 
         [DisplayName("Titel")]
+        [Required]
         [NotNull] public string Title { get; set; } = "";
 
         [DisplayName("Text/Beschreibung")]
+        [Required]
         [NotNull] public string Text { get; set; } = "";
 
         [DisplayName("Optionaler Teaser/Intro")]
+        [Required]
         [NotNull] public string TeaserText { get; set; } = "";
 
         [DisplayName("Favorisierter Eintrag")]
@@ -35,10 +38,11 @@ namespace Tauchbolde.Common.Model
         [CanBeNull] public string ExternalPhotoAlbumUrl { get; set; }
 
         [DisplayName("Erstellt am")]
+        [Required]
         public DateTime CreatedAt { get; set; }
         
         [DisplayName("Geändert am")]
-        public DateTime ModifiedAt { get; set; }
+        public DateTime? ModifiedAt { get; set; }
 
         /// <summary>
         /// ID of the Author that last modified this <see cref="LogbookEntry"/>.
@@ -52,6 +56,7 @@ namespace Tauchbolde.Common.Model
         /// <summary>
         /// ID of the Original author that initially created this <see cref="LogbookEntry"/>.
         /// </summary>
+        [Required]
         public Guid OriginalAuthorId { get; set; }
         /// <summary>
         /// Original author that initially created this <see cref="LogbookEntry"/>.
@@ -59,6 +64,6 @@ namespace Tauchbolde.Common.Model
         public Diver OriginalAuthor { get; set; }
 
         public Guid? EventId { get; set; }
-        public Event Event { get; set; }
+        [CanBeNull] public Event Event { get; set; }
     }
 }
