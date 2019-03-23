@@ -5,7 +5,7 @@ using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Web.Models.Logbook
 {
-    internal class LogbookListViewModel
+    public class LogbookListViewModel
     {
         public LogbookListViewModel([NotNull] ICollection<LogbookEntry> allEntries, bool allowEdit)
         {
@@ -13,7 +13,7 @@ namespace Tauchbolde.Web.Models.Logbook
             AllowEdit = allowEdit;
         }
         
-        internal ICollection<LogbookEntry> AllEntries { get; }
-        internal bool AllowEdit { get; }
+        public ICollection<LogbookEntry> AllEntries { get; }
+        public bool AllowEdit { get; }
     }
 }

@@ -1,0 +1,28 @@
+@model Tauchbolde.Web.Models.ViewComponentModels.LogbookCardViewModel
+@inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h4>@Model.LogbookEntry.Title</h4>
+        @if (string.IsNullOrWhiteSpace(Model.LogbookEntry.TeaserText))
+        {
+            <p>@TextFormatting.FormatText(Model.LogbookEntry.Text)</p>
+        }
+        else {
+            <p>@TextFormatting.FormatText(Model.LogbookEntry.TeaserText)</p>
+        }
+    </div>
+    
+    <ul class="list-group">
+        <li class="list-group-item">Author: 
+        @Model.LogbookEntry.OriginalAuthor.Realname / 
+        @Model.LogbookEntry.CreatedAt.ToStringSwissDateTime()<
+        /li>
+        @if (Model.LogbookEntry.ModifiedAt != null)
+        {
+            <li class="list-group-item">Author: 
+                @Model.LogbookEntry.OriginalAuthor.Realname / 
+                @Model.LogbookEntry.CreatedAt.ToStringSwissDateTime()
+            </li>
+        }
+    </ul>
+</div>
