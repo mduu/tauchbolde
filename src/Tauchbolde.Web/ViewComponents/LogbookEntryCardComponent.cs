@@ -4,7 +4,7 @@ using Tauchbolde.Web.Models.ViewComponentModels;
 
 namespace Tauchbolde.Web.ViewComponents
 {
-    public class LogbookEntryCard
+    public class LogbookEntryCard: ViewComponent
     {
         public IViewComponentResult Invoke(LogbookEntry logbookEntry, bool allowEdit)
         {
