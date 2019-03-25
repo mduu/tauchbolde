@@ -69,8 +69,12 @@ namespace Tauchbolde.Common.DomainServices.Events
             await context.SaveChangesAsync();
 
             var reReadParticipant = await participantRepository.GetParticipantByIdAsync(participant.Id);
-            await notificationService.NotifyForChangedParticipationAsync(reReadParticipant);
+            await notificationService.NotifyForChangedParticipationAsync(
+                reReadParticipant,
+                reReadParticipant.ParticipatingDiver,
+                reReadParticipant.Event);
             await context.SaveChangesAsync();
+            
             TrackEvent("CHANGE-PARTICIPATION", participant);
 
             return participant;

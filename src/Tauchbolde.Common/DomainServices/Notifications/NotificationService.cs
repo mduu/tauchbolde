@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Common.Infrastructure.Telemetry;
@@ -13,16 +14,16 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     /// </summary>
     internal class NotificationService : INotificationService
     {
-        private readonly INotificationRepository notificationRepository;
-        private readonly IDiverRepository diverRepository;
-        private readonly IParticipantRepository participantRepository;
-        private readonly ITelemetryService telemetryService;
+        [NotNull] private readonly INotificationRepository notificationRepository;
+        [NotNull] private readonly IDiverRepository diverRepository;
+        [NotNull] private readonly IParticipantRepository participantRepository;
+        [NotNull] private readonly ITelemetryService telemetryService;
 
         public NotificationService(
-            INotificationRepository notificationRepository,
-            IDiverRepository diverRepository,
-            IParticipantRepository participantRepository,
-            ITelemetryService telemetryService)
+            [NotNull] INotificationRepository notificationRepository,
+            [NotNull] IDiverRepository diverRepository,
+            [NotNull] IParticipantRepository participantRepository,
+            [NotNull] ITelemetryService telemetryService)
         {
             this.notificationRepository = notificationRepository ?? throw new ArgumentNullException(nameof(notificationRepository));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
@@ -32,8 +33,8 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 
         /// <inheritdoc />
         public async Task NotifyForNewEventAsync(
-            Event newEvent,
-            Diver currentUser)
+            [NotNull] Event newEvent,
+            [CanBeNull] Diver currentUser)
         {
             if (newEvent == null) throw new ArgumentNullException(nameof(newEvent));
 
@@ -50,8 +51,8 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 
         /// <inheritdoc />
         public async Task NotifyForChangedEventAsync(
-            Event changedEvent,
-            Diver currentUser)
+            [NotNull] Event changedEvent,
+            [CanBeNull] Diver currentUser)
         {
             if (changedEvent == null) throw new ArgumentNullException(nameof(changedEvent));
 
@@ -68,8 +69,8 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 
         /// <inheritdoc />
         public async Task NotifyForCanceledEventAsync(
-            Event canceledEvent,
-            Diver currentUser)
+            [NotNull] Event canceledEvent,
+            [CanBeNull] Diver currentUser)
         {
             if (canceledEvent == null) throw new ArgumentNullException(nameof(canceledEvent));
 
@@ -90,30 +91,35 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         }
 
         /// <inheritdoc />
-        public async Task NotifyForChangedParticipationAsync(Participant participant)
+        public async Task NotifyForChangedParticipationAsync(
+            [NotNull] Participant participant,
+            [NotNull] Diver participatingDiver,
+            [NotNull] Event participatingEvent)
         {
             if (participant == null) throw new ArgumentNullException(nameof(participant));
+            if (participatingDiver == null) throw new ArgumentNullException(nameof(participatingDiver));
+            if (participatingEvent == null) throw new ArgumentNullException(nameof(participatingEvent));
 
-            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(participant.ParticipatingDiver.Id, participant.EventId);
+            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(participatingDiver.Id, participant.EventId);
 
-            var message = "";
+            string message;
             NotificationType notificationType;
             switch (participant.Status)
             {
                 case ParticipantStatus.None:
-                    message = $"{participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} weiss nicht ob Er/Sie an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil nimmt.";
+                    message = $"{participatingDiver.Realname ?? "Unbekannt"} weiss nicht ob Er/Sie an der Aktivität '{participatingEvent.Name}' ({participatingEvent.StartEndTimeAsString}) teil nimmt.";
                     notificationType = NotificationType.Neutral;
                     break;
                 case ParticipantStatus.Accepted:
-                    message = $"{participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} nimmt an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
+                    message = $"{participatingDiver.Realname ?? "Unbekannt"} nimmt an der Aktivität '{participatingEvent.Name}' ({participatingEvent.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Accepted;
                     break;
                 case ParticipantStatus.Declined:
-                    message = $"{participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} hat für die Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) abgesagt.";
+                    message = $"{participatingDiver.Realname ?? "Unbekannt"} hat für die Aktivität '{participatingEvent.Name}' ({participatingEvent.StartEndTimeAsString}) abgesagt.";
                     notificationType = NotificationType.Declined;
                     break;
                 case ParticipantStatus.Tentative:
-                    message = $"{participant?.ParticipatingDiver?.Realname ?? "Unbekannt"} nimmt eventuell an der Aktivität '{participant.Event.Name}' ({participant.Event.StartEndTimeAsString}) teil.";
+                    message = $"{participatingDiver.Realname ?? "Unbekannt"} nimmt eventuell an der Aktivität '{participatingEvent.Name}' ({participatingEvent.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Tentative;
                     break;
                 default:
@@ -126,7 +132,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications
             }
 
             await InsertNotification(
-                participant.Event,
+                participatingEvent,
                 recipients,
                 notificationType,
                 message,
@@ -134,9 +140,14 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         }
 
         /// <inheritdoc />
-        public async Task NotifyForEventCommentAsync(Comment comment, Event evt, Diver author)
+        public async Task NotifyForEventCommentAsync(
+            [NotNull] Comment comment,
+            [NotNull] Event evt,
+            [NotNull] Diver author)
         {
             if (comment == null) throw new ArgumentNullException(nameof(comment));
+            if (evt == null) throw new ArgumentNullException(nameof(evt));
+            if (author == null) throw new ArgumentNullException(nameof(author));
 
             var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(author.Id, comment.EventId);
             var message = $"Neuer Kommentar von '{author.Realname}' für Event '{evt.Name}' ({evt.StartEndTimeAsString}): {comment.Text}";
@@ -149,7 +160,9 @@ namespace Tauchbolde.Common.DomainServices.Notifications
                 author);
         }
 
-        private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(Guid currentDiverId, Guid eventId)
+        private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(
+            Guid currentDiverId,
+            Guid eventId)
         {
             var declinedParticipants =
                 (await participantRepository.GetParticipantsForEventByStatusAsync(eventId, ParticipantStatus.Declined))
@@ -165,37 +178,39 @@ namespace Tauchbolde.Common.DomainServices.Notifications
         }
 
         private async Task InsertNotification(
-            Event relatedEvent,
-            ICollection<Diver> recipients,
+            [CanBeNull] Event relatedEvent,
+            [NotNull] IEnumerable<Diver> recipients,
             NotificationType notificationType,
             string message,
-            Diver currentDiver = null)
+            [CanBeNull] Diver currentDiver = null)
         {
+            if (recipients == null) throw new ArgumentNullException(nameof(recipients));
+            
             foreach (var recipient in recipients)
             {
-                if (
-                    currentDiver == null ||
-                    currentDiver.SendOwnNoticiations ||
-                    currentDiver.Id != recipient.Id)
+                if (currentDiver != null && !currentDiver.SendOwnNoticiations &&
+                    currentDiver.Id == recipient.Id)
                 {
-                    var notification = new Notification
-                    {
-                        Id = Guid.NewGuid(),
-                        Event = relatedEvent,
-                        OccuredAt = DateTime.Now,
-                        Recipient = recipient,
-                        Type = notificationType,
-                        Message = message,
-                    };
-
-                    await notificationRepository.InsertAsync(notification);
-
-                    TrackEvent("NOTIFICATION-INSERT", notification);
+                    continue;
                 }
+
+                var notification = new Notification
+                {
+                    Id = Guid.NewGuid(),
+                    Event = relatedEvent,
+                    OccuredAt = DateTime.Now,
+                    Recipient = recipient,
+                    Type = notificationType,
+                    Message = message,
+                };
+
+                await notificationRepository.InsertAsync(notification);
+
+                TrackEvent("NOTIFICATION-INSERT", notification);
             }
         }
 
-        private void TrackEvent(string name, Notification notification)
+        private void TrackEvent([NotNull] string name, [NotNull] Notification notification)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (notification == null) throw new ArgumentNullException(nameof(notification));

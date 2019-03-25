@@ -130,17 +130,25 @@ namespace Tauchbolde.Common.DomainServices.Events
             if (currentUser == null) { throw new ArgumentNullException(nameof(currentUser)); }
 
             var comment = await commentRepository.FindByIdAsync(commentId);
-            if (comment != null)
+            if (comment == null)
             {
-                if (comment.AuthorId != currentUser.Id)
-                {
-                    throw new UnauthorizedAccessException();
-                }
-
-                comment.Text = commentText;
+                throw new InvalidOperationException($"Could not find comment with ID [{commentId:D}]");
             }
 
-            await notificationService.NotifyForEventCommentAsync(comment, comment.Event, currentUser);
+            if (comment.AuthorId != currentUser.Id)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            comment.Text = commentText;
+
+            var parentEvent = await eventRepository.FindByIdAsync(comment.EventId);
+            if (parentEvent == null)
+            {
+                throw new InvalidOperationException($"Could not find event for comment with ID=[{comment.EventId:D}]");
+            }
+
+            await notificationService.NotifyForEventCommentAsync(comment, parentEvent, currentUser);
             TrackEvent("COMMENT-UPDATE", comment);
 
             return comment;
@@ -152,16 +160,18 @@ namespace Tauchbolde.Common.DomainServices.Events
             if (currentUser == null) throw new ArgumentNullException(nameof(currentUser));
 
             var comment = await commentRepository.FindByIdAsync(commentId);
-            if (comment != null)
+            if (comment == null)
             {
-                if (comment.AuthorId != currentUser.Id)
-                {
-                    throw new UnauthorizedAccessException();
-                }
-
-                TrackEvent("COMMENT-DELETE", comment);
-                commentRepository.Delete(comment);
+                throw new InvalidOperationException($"Could not find comment with ID [{commentId:D}] for deletion!");
             }
+
+            if (comment.AuthorId != currentUser.Id)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            TrackEvent("COMMENT-DELETE", comment);
+            commentRepository.Delete(comment);
         }
 
         private Stream CreateIcalStream(Event evt, DateTimeOffset? createTime = null)
