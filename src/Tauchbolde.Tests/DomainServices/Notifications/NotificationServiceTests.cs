@@ -140,7 +140,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             var notificationService = CreateNotificationService(notificationRepo, sendOwnNotifications);
             
             // Act
-            await notificationService.NotifyForChangedParticipationAsync(participant);
+            await notificationService.NotifyForChangedParticipationAsync(participant, participant?.ParticipatingDiver, participant.Event);
 
             // Assert
             A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(expectedNotificationInserts, Times.Exactly);
@@ -175,7 +175,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
             var notificationService = CreateNotificationService(notificationRepo, sendOwnNotifications, participantRepo);
 
             // Act
-            await notificationService.NotifyForChangedParticipationAsync(participant);
+            await notificationService.NotifyForChangedParticipationAsync(participant, participant?.ParticipatingDiver, participant.Event);
             
             A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._))
                 .MustHaveHappened(expectedNotificationInsertsPhase, Times.Exactly);
