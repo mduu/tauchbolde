@@ -4,11 +4,6 @@
     Layout = "_Layout";
 }
 
-@* HACK FOR FIREFOX AND RESPONSIVE TABLES *@
-<style>
-    @@-moz-document url-prefix() { fieldset { display: table-cell; } }
-</style>
-
 <h2>Logbuch</h2>
 
 @foreach (var logbookEntry in Model.AllEntries)
@@ -17,4 +12,7 @@
     </vc:logbook-entry-card>
 }
 
-@* <a href="@Url.Action("Edit")" id="create-event" class="btn btn-primary"><strong>Neue Aktivität</strong></a> *@
+@if (Model.AllowEdit)
+{
+    <a href="@Url.Action("New", "Logbook")" id="create-logbookentry" class="btn btn-primary">Neu</a>
+}

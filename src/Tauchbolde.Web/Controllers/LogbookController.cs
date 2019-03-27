@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Common;
@@ -44,6 +45,13 @@ namespace Tauchbolde.Web.Controllers
             }
 
             return View(model);
+        }
+
+        
+        [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
+        public async Task<IActionResult> New()
+        {
+            return View();
         }
 
         private async Task<LogbookDetailViewModel> CreateLogbookViewModelAsync(Guid logbookEntryId)
