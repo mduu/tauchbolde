@@ -586,3 +586,24 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327090609_LogbookEntry_EditorAuthorId_Nullable')
+BEGIN
+    DECLARE @var4 sysname;
+    SELECT @var4 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[LogbookEntries]') AND [c].[name] = N'EditorAuthorId');
+    IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [LogbookEntries] DROP CONSTRAINT [' + @var4 + '];');
+    ALTER TABLE [LogbookEntries] ALTER COLUMN [EditorAuthorId] uniqueidentifier NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327090609_LogbookEntry_EditorAuthorId_Nullable')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190327090609_LogbookEntry_EditorAuthorId_Nullable', N'2.2.3-servicing-35854');
+END;
+
+GO
+

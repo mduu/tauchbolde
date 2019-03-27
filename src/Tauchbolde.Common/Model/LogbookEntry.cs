@@ -47,7 +47,7 @@ namespace Tauchbolde.Common.Model
         /// <summary>
         /// ID of the Author that last modified this <see cref="LogbookEntry"/>.
         /// </summary>
-        public Guid EditorAuthorId { get; set; }
+        public Guid? EditorAuthorId { get; set; }
         /// <summary>
         /// Author that last modified this <see cref="LogbookEntry"/>.
         /// </summary>
@@ -57,6 +57,7 @@ namespace Tauchbolde.Common.Model
         /// ID of the Original author that initially created this <see cref="LogbookEntry"/>.
         /// </summary>
         [Required]
+        [UsedImplicitly]
         public Guid OriginalAuthorId { get; set; }
         /// <summary>
         /// Original author that initially created this <see cref="LogbookEntry"/>.
