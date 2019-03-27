@@ -40,7 +40,7 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
         }
 
         [Fact]
-        public async Task Test_Success_Insert()
+        public async Task TestInsertSuccess()
         {
             var id = await logbookService.UpsertAsync(validInsertModel);
 
@@ -49,7 +49,29 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
         }
 
         [Fact]
-        public async Task Test_Success_Update()
+        public async Task TestInsertWithoutTitle()
+        {
+            // ReSharper disable once AssignNullToNotNullAttribute
+            validInsertModel.Title = null;
+
+            Func<Task> act = async () => await logbookService.UpsertAsync(validInsertModel);
+
+            act.Should().Throw<InvalidOperationException>().WithMessage("Title must not be null or empty!");
+        }
+        
+        [Fact]
+        public async Task TestInsertWithoutText()
+        {
+            // ReSharper disable once AssignNullToNotNullAttribute
+            validInsertModel.Text = null;
+
+            Func<Task> act = async () => await logbookService.UpsertAsync(validInsertModel);
+
+            act.Should().Throw<InvalidOperationException>().WithMessage("Text must not be null or empty!");
+        }
+
+        [Fact]
+        public async Task TestUpdateSuccess()
         {
             A.CallTo(() => logbookEntryRepoFake.FindByIdAsync(A<Guid>._))
                 .ReturnsLazily(call =>
@@ -66,6 +88,28 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
 
             id.Should().NotBeEmpty();
             A.CallTo(() => logbookEntryRepoFake.Update(A<LogbookEntry>._)).MustHaveHappened();
+        }
+        
+        [Fact]
+        public async Task TestUpdateWithoutTitle()
+        {
+            // ReSharper disable once AssignNullToNotNullAttribute
+            validUpdateModel.Title = null;
+
+            Func<Task> act = async () => await logbookService.UpsertAsync(validUpdateModel);
+
+            act.Should().Throw<InvalidOperationException>().WithMessage("Title must not be null or empty!");
+        }
+        
+        [Fact]
+        public async Task TestUpdateWithoutText()
+        {
+            // ReSharper disable once AssignNullToNotNullAttribute
+            validUpdateModel.Text = null;
+
+            Func<Task> act = async () => await logbookService.UpsertAsync(validUpdateModel);
+
+            act.Should().Throw<InvalidOperationException>().WithMessage("Text must not be null or empty!");
         }
 
         private static LogbookUpsertModel CreateValidModel(Guid? id)
