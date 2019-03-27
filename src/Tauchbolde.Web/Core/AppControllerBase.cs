@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common.Model;
@@ -51,7 +52,7 @@ namespace Tauchbolde.Web.Core
         /// Shows a warning message on the next page rendering.
         /// </summary>
         /// <param name="message">The warning message to show.</param>
-        protected void ShowWarningMessage(string message)
+        protected void ShowWarningMessage([CanBeNull] string message)
         {
              TempData["warning_message"] = message;
         }
@@ -60,9 +61,12 @@ namespace Tauchbolde.Web.Core
         /// Gets the diver for the currently logged in user.
         /// </summary>
         /// <returns>The diver for current user.</returns>
+        [NotNull]
         protected async Task<Diver> GetDiverForCurrentUserAsync()
         {
-            return await diverRepository.FindByUserNameAsync(User.Identity.Name);
+            return User?.Identity?.Name != null
+                ? await diverRepository.FindByUserNameAsync(User.Identity.Name)
+                : null;
         }
 
         /// <summary>
@@ -71,9 +75,9 @@ namespace Tauchbolde.Web.Core
         /// </summary>
         /// <returns>The is admin.</returns>
         /// <param name="diver">Diver.</param>
-        protected async Task<bool> GetIsAdmin(Diver diver)
+        protected async Task<bool> GetIsAdmin([CanBeNull] Diver diver)
         {
-            return await userManager.IsInRoleAsync(diver.User, Rolenames.Administrator);
+            return diver != null && await userManager.IsInRoleAsync(diver.User, Rolenames.Administrator);
         }
         
         /// <summary>
@@ -81,9 +85,9 @@ namespace Tauchbolde.Web.Core
         /// </summary>
         /// <param name="diver"></param>
         /// <returns><c>True</c> if the <paramref name="diver"/> id s Tauchbold member; otherwise <c>False</c> is returned.</returns>
-        protected async Task<bool> GetIsTauchbold(Diver diver)
+        protected async Task<bool> GetIsTauchbold([CanBeNull] Diver diver)
         {
-            return await userManager.IsInRoleAsync(diver.User, Rolenames.Tauchbold);
+            return diver != null && await userManager.IsInRoleAsync(diver.User, Rolenames.Tauchbold);
         }
     }
 }

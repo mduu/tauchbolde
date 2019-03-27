@@ -1,28 +1,29 @@
 @model Tauchbolde.Web.Models.ViewComponentModels.LogbookCardViewModel
 @inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
+
 <div class="panel panel-default">
     <div class="panel-body">
-        <h4>@Model.LogbookEntry.Title</h4>
-        @if (string.IsNullOrWhiteSpace(Model.LogbookEntry.TeaserText))
-        {
-            <p>@TextFormatting.FormatText(Model.LogbookEntry.Text)</p>
-        }
-        else {
-            <p>@TextFormatting.FormatText(Model.LogbookEntry.TeaserText)</p>
-        }
+        <h4>@Model.Title</h4>
+        <p>@TextFormatting.FormatText(Model.TeaserText)</p>
+        <div>
+            <a asp-controller="Logbook" asp-action="Detail" asp-route-id="@Model.LogbookEntryId">Mehr ...</a>
+        </div>
     </div>
     
-    <ul class="list-group">
-        <li class="list-group-item">Author: 
-        @Model.LogbookEntry.OriginalAuthor.Realname / 
-        @Model.LogbookEntry.CreatedAt.ToStringSwissDateTime()<
-        /li>
-        @if (Model.LogbookEntry.ModifiedAt != null)
+    <div class="panel-footer">
+        Author:
+        @Model.OriginalAuthorName /
+        @Model.CreatedAt
+
+        @if (!string.IsNullOrWhiteSpace(Model.ModifiedAt) || !string.IsNullOrWhiteSpace(Model.EditorAuthorName))
         {
-            <li class="list-group-item">Author: 
-                @Model.LogbookEntry.OriginalAuthor.Realname / 
-                @Model.LogbookEntry.CreatedAt.ToStringSwissDateTime()
-            </li>
+            <text>
+                (
+                Bearbeitet:
+                @Model.EditorAuthorName
+                @Model.ModifiedAt
+                )
+            </text>
         }
-    </ul>
+    </div>
 </div>

@@ -55,8 +55,8 @@ namespace Tauchbolde.Common.Model
         [NotMapped]
         public string StartEndTimeAsString => EndTime != null
             ? StartTime.Date == EndTime.Value.Date
-                ? $"{StartTime.ToStringSwiss()} - {EndTime.Value.ToStringSwissTime()}"
-                : $"{StartTime.ToStringSwiss()} - {EndTime.ToStringSwiss()}"
+                ? $"{StartTime.ToStringSwissDate()} - {EndTime.Value.ToStringSwissTime()}"
+                : $"{StartTime.ToStringSwissDate()} - {EndTime.ToStringSwissDate()}"
             : $"{StartTime.ToStringSwissDateTime()}";
     }
 }

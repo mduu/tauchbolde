@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -17,10 +18,23 @@ namespace Tauchbolde.Common.DataAccess
         {
         }
 
+        public override async Task<LogbookEntry> FindByIdAsync(Guid id)
+        {
+            return await Context.LogbookEntries
+                .Include(l => l.OriginalAuthor)
+                .Include(l => l.EditorAuthor)
+                .Include(l => l.Event)
+                .FirstOrDefaultAsync(l => l.Id.Equals(id));
+        }
+
+
         /// <inheritdoc />
         public async Task<ICollection<LogbookEntry>> GetAllEntriesAsync()
         {
             return await Context.LogbookEntries
+                .Include(l => l.OriginalAuthor)
+                .Include(l => l.EditorAuthor)
+                .Include(l => l.Event)
                 .ToListAsync();        
         }
     }
