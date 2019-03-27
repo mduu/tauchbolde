@@ -12,20 +12,16 @@ namespace Tauchbolde.Common.DomainServices.Events
 {
     internal class EventService : IEventService
     {
-        private readonly ApplicationDbContext applicationDbContext;
         private readonly INotificationService notificationService;
         private readonly IEventRepository eventRepository;
         private readonly ICommentRepository commentRepository;
         private readonly ITelemetryService telemetryService;
 
-        public EventService(
-            ApplicationDbContext applicationDbContext,
-            INotificationService notificationService,
+        public EventService(INotificationService notificationService,
             IEventRepository eventRepository,
             ICommentRepository commentRepository,
             ITelemetryService telemetryService)
         {
-            this.applicationDbContext = applicationDbContext ?? throw new ArgumentNullException(nameof(applicationDbContext));
             this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             this.commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
@@ -50,8 +46,8 @@ namespace Tauchbolde.Common.DomainServices.Events
         {
             if (eventToUpsert == null) throw new ArgumentNullException(nameof(eventToUpsert));
 
-            Event eventToStore = null;
-            bool isNew = eventToUpsert.Id == Guid.Empty;
+            Event eventToStore;
+            var isNew = eventToUpsert.Id == Guid.Empty;
             if (!isNew)
             {
                 eventToStore = await eventRepository.FindByIdAsync(eventToUpsert.Id);

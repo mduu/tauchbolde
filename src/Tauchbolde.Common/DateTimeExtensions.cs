@@ -7,11 +7,11 @@ namespace Tauchbolde.Common
         public const string SwissTimeFormat = "HH:mm";
         public const string SwissDateTimeFormat = "dd.MM.yyyy HH:mm";
 
-        public static string ToStringSwiss(this DateTime dateTime)
+        public static string ToStringSwissDate(this DateTime dateTime)
             => dateTime.ToString(SwissDateFormat);
 
-        public static string ToStringSwiss(this DateTime? dateTime) 
-            => dateTime.HasValue ? dateTime.Value.ToStringSwiss() : "";
+        public static string ToStringSwissDate(this DateTime? dateTime) 
+            => dateTime.HasValue ? dateTime.Value.ToStringSwissDate() : "";
 
         public static string ToStringSwissTime(this DateTime dateTime)
             => dateTime.ToString(SwissTimeFormat);

@@ -1,0 +1,29 @@
+@model Tauchbolde.Web.Models.ViewComponentModels.LogbookCardViewModel
+@inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <h4>@Model.Title</h4>
+        <p>@TextFormatting.FormatText(Model.TeaserText)</p>
+        <div>
+            <a asp-controller="Logbook" asp-action="Detail" asp-route-id="@Model.LogbookEntryId">Mehr ...</a>
+        </div>
+    </div>
+    
+    <div class="panel-footer">
+        Author:
+        @Model.OriginalAuthorName /
+        @Model.CreatedAt
+
+        @if (!string.IsNullOrWhiteSpace(Model.ModifiedAt) || !string.IsNullOrWhiteSpace(Model.EditorAuthorName))
+        {
+            <text>
+                (
+                Bearbeitet:
+                @Model.EditorAuthorName
+                @Model.ModifiedAt
+                )
+            </text>
+        }
+    </div>
+</div>

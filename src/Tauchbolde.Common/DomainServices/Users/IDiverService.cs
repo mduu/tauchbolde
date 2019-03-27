@@ -8,6 +8,7 @@ namespace Tauchbolde.Common.DomainServices.Users
 {
     public interface IDiverService
     {
+        Task<Diver> FindByUserNameAsync(string username);
         Task<ICollection<Diver>> GetMembersAsync(IDiverRepository diverRepository);
         Task<Diver> GetMemberAsync(IDiverRepository diverRepository, string userName);
         Task<Diver> GetMemberAsync(IDiverRepository diverRepository, Guid diverId);

@@ -1,0 +1,20 @@
+﻿@model Tauchbolde.Web.Models.Logbook.LogbookListViewModel
+@{
+    ViewBag.Title = "Logbuch";
+    Layout = "_Layout";
+}
+
+@* HACK FOR FIREFOX AND RESPONSIVE TABLES *@
+<style>
+    @@-moz-document url-prefix() { fieldset { display: table-cell; } }
+</style>
+
+<h2>Logbuch</h2>
+
+@foreach (var logbookEntry in Model.AllEntries)
+{
+    <vc:logbook-entry-card logbook-entry="logbookEntry" allow-edit="Model.AllowEdit">
+    </vc:logbook-entry-card>
+}
+
+@* <a href="@Url.Action("Edit")" id="create-event" class="btn btn-primary"><strong>Neue Aktivität</strong></a> *@

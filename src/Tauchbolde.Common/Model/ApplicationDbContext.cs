@@ -18,6 +18,7 @@ namespace Tauchbolde.Common.Model
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Diver> Diver { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<LogbookEntry> LogbookEntries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -41,6 +42,14 @@ namespace Tauchbolde.Common.Model
                .HasDefaultValue(1);
             builder.Entity<Diver>()
                .HasOne(d => d.User);
+            builder.Entity<Diver>()
+                .HasMany(e => e.OriginalAuthorOfLogbookEntries)
+                .WithOne(e => e.OriginalAuthor)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Diver>()
+                .HasMany(e => e.EditorAuthorOfLogbookEntries)
+                .WithOne(e => e.EditorAuthor)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Comment
             builder.Entity<Comment>().HasOne(e => e.Event).WithMany(e => e.Comments).OnDelete(DeleteBehavior.Restrict);
@@ -59,7 +68,8 @@ namespace Tauchbolde.Common.Model
             builder.Entity<Participant>().HasOne(e => e.Event).WithMany(e => e.Participants).OnDelete(DeleteBehavior.Restrict);
             builder.Entity<Participant>().Property(e => e.CountPeople).HasDefaultValue(1);
 
-            // PostImage
+            // LogbookEntry
+            builder.Entity<LogbookEntry>().HasIndex(e => new { e.IsFavorite, e.CreatedAt});
         }
     }
 }
