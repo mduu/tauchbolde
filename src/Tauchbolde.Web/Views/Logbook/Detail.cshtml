@@ -3,7 +3,7 @@
 @inject ITextFormattingHelper textFormatting
 
 @{
-    ViewBag.Title = Model.Title;
+    ViewBag.Title = "Logbucheintrag - " + Model.Title;
     Layout = "_Layout";
 }
 
@@ -21,15 +21,17 @@
     <div class="row">
         @if (!string.IsNullOrWhiteSpace(Model.Text))
         {
-            @textFormatting.FormatText(Model.Text)
+            <article>
+                @textFormatting.FormatText(Model.Text)
+            </article>
         }
     </div>
-    
+
 </div>
 
 <div class="col-md-2">
     <ul class="list-group">
-        
+
         @if (Model.EventUrl != null && Model.EventTitel != null)
         {
             <li class="list-group-item">
@@ -37,14 +39,14 @@
                 <a href="@Model.EventUrl">@Model.EventTitel</a>
             </li>
         }
-        
+
         @if (Model.ExternalPhotoAlbumUrl != null)
         {
             <li class="list-group-item">
                 <a href="@Model.ExternalPhotoAlbumUrl" target="_blank" class="btn btn-primary">Weitere Bilder</a>
             </li>
         }
-        
+
         <li class="list-group-item">
             Author:<br/>
             <vc:avatar diver="Model.OriginalAuthor" avatarSize="AvatarSize.Small"></vc:avatar> @Model.OriginalAuthorName
@@ -58,7 +60,7 @@
         @if (Model.EditorAuthor != null || Model.EditedAt != null)
         {
             <li class="list-group-item">
-                Bearbeitet:<br />
+                Bearbeitet:<br/>
                 <vc:avatar diver="Model.EditorAuthor" avatarSize="AvatarSize.Small"></vc:avatar> @Model.EditorAuthorName <br/>
                 @Model.EditedAt
             </li>
