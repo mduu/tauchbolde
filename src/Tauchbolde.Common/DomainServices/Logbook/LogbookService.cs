@@ -127,7 +127,7 @@ namespace Tauchbolde.Common.DomainServices.Logbook
 
         private async Task<Diver> GetCurrentUserAsync(LogbookUpsertModel model)
         {
-            var currentUser = await diverService.GetMemberAsync(diverRepository, model.CurrentDiverId);
+            var currentUser = await diverService.GetMemberAsync(model.CurrentDiverId);
             if (currentUser == null)
             {
                 throw new InvalidOperationException($"No member with Diver-ID [{model.CurrentDiverId}] found!");

@@ -4,8 +4,8 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Common;
+using Tauchbolde.Common.DomainServices.Users;
 
 namespace Tauchbolde.Web.Core
 {
@@ -15,19 +15,18 @@ namespace Tauchbolde.Web.Core
     public abstract class AppControllerBase: Controller
     {
         private readonly UserManager<IdentityUser> userManager;
-        private readonly IDiverRepository diverRepository;
+        private readonly IDiverService diverService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Tauchbolde.Web.Core.AppControllerBase"/> class.
         /// </summary>
         /// <param name="userManager">User manager.</param>
-        /// <param name="diverRepository">Diver repository.</param>
-        protected AppControllerBase(
-            UserManager<IdentityUser> userManager,
-            IDiverRepository diverRepository)
+        /// <param name="diverService"></param>
+        protected AppControllerBase(UserManager<IdentityUser> userManager,
+            IDiverService diverService)
         {
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
+            this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace Tauchbolde.Web.Core
         protected async Task<Diver> GetDiverForCurrentUserAsync()
         {
             return User?.Identity?.Name != null
-                ? await diverRepository.FindByUserNameAsync(User.Identity.Name)
+                ? await diverService.FindByUserNameAsync(User.Identity.Name)
                 : null;
         }
 

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Common;
-using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Web.Models.UserProfileModels;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Web.Core;
@@ -23,28 +22,22 @@ namespace Tauchbolde.Web.Controllers
     public class UserProfileController : AppControllerBase
     {
         private readonly ApplicationDbContext context;
-        private readonly IDiverRepository diverRepository;
         private readonly IDiverService diverService;
         private readonly UserManager<IdentityUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IMimeMapping mimeMapping;
         private readonly IAvatarStore avatarStore;
 
         public UserProfileController(
             ApplicationDbContext context,
-            IDiverRepository diverRepository,
             IDiverService diverService,
             UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager,
             IMimeMapping mimeMapping,
             IAvatarStore avatarStore)
-            : base(userManager, diverRepository)
+            : base(userManager, diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.mimeMapping = mimeMapping ?? throw new ArgumentNullException(nameof(mimeMapping));
             this.avatarStore = avatarStore ?? throw new ArgumentNullException(nameof(avatarStore));
         }
@@ -62,7 +55,7 @@ namespace Tauchbolde.Web.Controllers
 
             return View(new ReadProfileModel
             {
-                AllowEdit = memberContext.Member.Id == memberContext.CurrentDiver.Id || memberContext.CurrentDiverIsAdmin,
+                AllowEdit = memberContext.CurrentDiver != null && (memberContext.Member.Id == memberContext.CurrentDiver.Id || memberContext.CurrentDiverIsAdmin),
                 Profile = memberContext.Member,
                 Roles = await userManager.GetRolesAsync(memberContext.Member.User),
             });
@@ -113,7 +106,7 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                await diverService.UpdateUserProfilAsync(diverRepository, model.Profile);
+                await diverService.UpdateUserProfileAsync(model.Profile);
                 await context.SaveChangesAsync();
 
                 ShowSuccessMessage("Profil wurde gespeichert.");
@@ -221,7 +214,7 @@ namespace Tauchbolde.Web.Controllers
         {
             var currentDiver = await GetDiverForCurrentUserAsync();
             var isAdmin = await GetIsAdmin(currentDiver);
-            var member = await diverService.GetMemberAsync(diverRepository, diverId);
+            var member = await diverService.GetMemberAsync(diverId);
 
             return new MemberContext(currentDiver, isAdmin, member);
         }

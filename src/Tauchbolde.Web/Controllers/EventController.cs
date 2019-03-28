@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Common;
@@ -11,31 +12,30 @@ using Tauchbolde.Common.DomainServices.Events;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Common.DomainServices.Users;
+using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
-using Tauchbolde.Web.Services;
 
 namespace Tauchbolde.Web.Controllers
 {
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
-    public class EventController : Controller
+    public class EventController : AppControllerBase
     {
         private readonly ApplicationDbContext context;
-        private readonly IDiverRepository diverRepository;
         private readonly IEventRepository eventRepository;
         private readonly IParticipationService participationService;
         private readonly IEventService eventService;
         [NotNull] private readonly IDiverService diverService;
 
         public EventController(
+            [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ApplicationDbContext context,
-            [NotNull] IDiverRepository diverRepository,
             [NotNull] IEventRepository eventRepository,
             [NotNull] IParticipationService participationService,
             [NotNull] IEventService eventService,
             [NotNull] IDiverService diverService)
+        :base(userManager, diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             this.participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
             this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
@@ -103,7 +103,7 @@ namespace Tauchbolde.Web.Controllers
                 }
             }
 
-            var currentUser = await this.GetCurrentUserAsync(diverRepository);
+            var currentUser = await GetDiverForCurrentUserAsync();
             if (currentUser == null)
             {
                 return BadRequest();
@@ -136,7 +136,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 try
                 {
-                    var currentDiver = await this.GetCurrentUserAsync(diverRepository);
+                    var currentDiver = await GetDiverForCurrentUserAsync();
                     var evt = new Event
                     {
                         Id = model.Id,
@@ -196,7 +196,7 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = await diverRepository.FindByUserNameAsync(User.Identity.Name);
+                var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
                     return StatusCode(400, "No curren user would be found!");
@@ -234,7 +234,7 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = await diverRepository.FindByUserNameAsync(User.Identity.Name);
+                var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
                     return StatusCode(400, "No curren user would be found!");
@@ -260,7 +260,7 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = await diverRepository.FindByUserNameAsync(User.Identity.Name);
+                var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
                     return StatusCode(400, "No curren user would be found!");
@@ -286,7 +286,7 @@ namespace Tauchbolde.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUser = await diverRepository.FindByUserNameAsync(User.Identity.Name);
+                var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
                     return StatusCode(400, "No curren user would be found!");

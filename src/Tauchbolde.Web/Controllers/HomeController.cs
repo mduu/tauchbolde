@@ -12,26 +12,22 @@ using Tauchbolde.Web.Core;
 using Tauchbolde.Common.DomainServices.SMTPSender;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
-using Tauchbolde.Common.DomainServices.Repositories;
 
 namespace Tauchbolde.Web.Controllers
 {
     public class HomeController : AppControllerBase
     {
         private readonly IDiverService diverService;
-        private readonly IDiverRepository diverRepository;
         private readonly UserManager<IdentityUser> userManager;
         private readonly IAppEmailSender emailSender;
 
         public HomeController(
             IDiverService diverService,
-            IDiverRepository diverRepository,
             UserManager<IdentityUser> userManager,
             IAppEmailSender emailSender
-        ) : base (userManager, diverRepository)
+        ) : base (userManager, diverService)
         {
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
@@ -56,7 +52,7 @@ namespace Tauchbolde.Web.Controllers
 
             if (User?.Identity != null && !string.IsNullOrWhiteSpace(User.Identity.Name))
             {
-                var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
+                var currentDiver = await diverService.FindByUserNameAsync(User.Identity.Name);
                 if (currentDiver != null)
                 {
                     isTauchbold = await userManager.IsInRoleAsync(currentDiver.User, Rolenames.Tauchbold);
@@ -65,7 +61,7 @@ namespace Tauchbolde.Web.Controllers
         
             var model = new AboutViewModel
             {
-                Members = await diverService.GetMembersAsync(diverRepository),
+                Members = await diverService.GetMembersAsync(),
                 IsTauchbold = isTauchbold,
             };
 

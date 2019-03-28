@@ -30,29 +30,25 @@ namespace Tauchbolde.Common.DomainServices.Users
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
+        
+        /// <inheritdoc />
+        public async Task<ICollection<Diver>> GetAllRegisteredDiversAsync()
+            => await diverRepository.GetAllDiversAsync();
 
         /// <inheritdoc />
         public async Task<Diver> FindByUserNameAsync(string username) => 
             await diverRepository.FindByUserNameAsync(username);
 
         /// <inheritdoc/>
-        public async Task<ICollection<Diver>> GetMembersAsync(IDiverRepository diverRepository)
-        {
-            if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
-
-            return await diverRepository.GetAllTauchboldeUsersAsync();
-        }
+        public async Task<ICollection<Diver>> GetMembersAsync() 
+            => await diverRepository.GetAllTauchboldeUsersAsync();
 
         /// <inheritdoc/>
-        public async Task<Diver> GetMemberAsync(IDiverRepository diverRepository, string userName)
-        {
-            if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
+        public async Task<Diver> GetMemberAsync(string userName)
+            => await diverRepository.FindByUserNameAsync(userName);
 
-            return await diverRepository.FindByUserNameAsync(userName);
-        }
-        
         /// <inheritdoc/>
-        public async Task<Diver> GetMemberAsync(IDiverRepository diverRepository, Guid diverId)
+        public async Task<Diver> GetMemberAsync(Guid diverId)
         {
             if (diverId == Guid.Empty) { throw new ArgumentException("Guid.Empty now allowed!", nameof(diverId)); }
         
@@ -60,9 +56,8 @@ namespace Tauchbolde.Common.DomainServices.Users
         }
 
         /// <inheritdoc/>
-        public async Task UpdateUserProfilAsync(IDiverRepository diverRepository, Diver profile)
+        public async Task UpdateUserProfileAsync(Diver profile)
         {
-            if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
             if (profile == null) { throw new ArgumentNullException(nameof(profile)); }
 
             var diver = await diverRepository.FindByUserNameAsync(profile.User.UserName);
@@ -113,17 +108,14 @@ namespace Tauchbolde.Common.DomainServices.Users
         }
 
         /// <inheritdoc/>
-        public async Task<string> AddMembersAsync(IDiverRepository diverRepository, string userName, string firstname, string lastname)
+        public async Task<string> AddMembersAsync(string userName, string firstname, string lastname)
         {
-            if (diverRepository == null) { throw new ArgumentNullException(nameof(diverRepository)); }
             if (string.IsNullOrWhiteSpace(userName)) throw new ArgumentNullException(nameof(userName));
             if (string.IsNullOrWhiteSpace(firstname)) throw new ArgumentNullException(nameof(firstname));
             if (string.IsNullOrWhiteSpace(lastname)) throw new ArgumentNullException(nameof(lastname));
 
-            string warningMessage = "";
-
+            var warningMessage = "";
             var user = await userManager.FindByNameAsync(userName);
-
             var diver = new Diver
             {
                 Id = Guid.NewGuid(),

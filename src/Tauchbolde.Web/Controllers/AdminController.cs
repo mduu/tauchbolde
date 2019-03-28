@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 using Tauchbolde.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Tauchbolde.Common.DomainServices.Repositories;
 using System.Collections.Generic;
 using Tauchbolde.Web.Models.AdminViewModels;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Web.Core;
 
-namespace Tauchbolde.Web.ControllersB
+namespace Tauchbolde.Web.Controllers
 {
     [Authorize(Policy = PolicyNames.RequireAdministrator)]
     public class AdminController : AppControllerBase
@@ -21,21 +20,17 @@ namespace Tauchbolde.Web.ControllersB
         private readonly ApplicationDbContext context;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<IdentityUser> userManager;
-        private readonly IDiverRepository diverRepository;
         private readonly IDiverService diverService;
 
-        public AdminController(
-            ApplicationDbContext context,
+        public AdminController(ApplicationDbContext context,
             RoleManager<IdentityRole> roleManager,
             UserManager<IdentityUser> userManager,
-            IDiverRepository diverRepository,
             IDiverService diverService)
-            : base(userManager, diverRepository)
+            : base(userManager, diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
         }
 
@@ -48,7 +43,7 @@ namespace Tauchbolde.Web.ControllersB
         [HttpGet]
         public async Task<IActionResult> MemberManagement()
         {
-            var profiles = (await diverRepository.GetAllDiversAsync()).ToArray();
+            var profiles = (await diverService.GetAllRegisteredDiversAsync()).ToArray();
 
             var members = new List<MemberViewModel>();
             foreach (var member in profiles)
@@ -56,7 +51,7 @@ namespace Tauchbolde.Web.ControllersB
                 members.Add(await CreateMemberViewModel(member));
             }
 
-            var allMembers = await diverRepository.GetAllAsync();
+            var allMembers = await diverService.GetMembersAsync();
             var allUsers = userManager.Users
                 .ToArray()
                 .Where(u => allMembers.All(d => d.UserId != u.Id));
@@ -83,7 +78,7 @@ namespace Tauchbolde.Web.ControllersB
             {
                 try
                 {
-                    await diverService.AddMembersAsync(diverRepository, userName, firstname, lastname);
+                    await diverService.AddMembersAsync(userName, firstname, lastname);
                     await context.SaveChangesAsync();
                     ShowSuccessMessage("Mitglied erfolgreich hinzugefügt!");
                 }
@@ -99,7 +94,7 @@ namespace Tauchbolde.Web.ControllersB
         [HttpGet]
         public async Task<IActionResult> EditRoles(string userName)
         {
-            var member = await diverService.GetMemberAsync(diverRepository, userName);
+            var member = await diverService.GetMemberAsync(userName);
             if (member == null)
             {
                 return BadRequest();
@@ -118,7 +113,7 @@ namespace Tauchbolde.Web.ControllersB
         [HttpPost]
         public async Task<IActionResult> EditRoles(string userName, string[] roles)
         {
-            var member = await diverService.GetMemberAsync(diverRepository, userName);
+            var member = await diverService.GetMemberAsync(userName);
             if (member == null)
             {
                 return BadRequest();

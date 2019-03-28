@@ -14,9 +14,6 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
     public class LogbookServiceTests
     {
         private readonly ILogbookEntryRepository logbookEntryRepoFake;
-        private readonly IDiverService diverServiceFake;
-        private readonly IDiverRepository diverRepoFake;
-        private readonly ITelemetryService telemetryServiceFake;
         private readonly LogbookService logbookService;
         private readonly LogbookUpsertModel validInsertModel;
         private readonly LogbookUpsertModel validUpdateModel;
@@ -24,9 +21,9 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
         public LogbookServiceTests()
         {
             logbookEntryRepoFake = A.Fake<ILogbookEntryRepository>();
-            diverServiceFake = A.Fake<IDiverService>();
-            diverRepoFake = A.Fake<IDiverRepository>();
-            telemetryServiceFake = A.Fake<ITelemetryService>();
+            var diverServiceFake = A.Fake<IDiverService>();
+            var diverRepoFake = A.Fake<IDiverRepository>();
+            var telemetryServiceFake = A.Fake<ITelemetryService>();
 
             logbookService = new LogbookService(
                 logbookEntryRepoFake,
@@ -49,7 +46,7 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
         }
 
         [Fact]
-        public async Task TestInsertWithoutTitle()
+        public void TestInsertWithoutTitle()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
             validInsertModel.Title = null;
@@ -60,7 +57,7 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
         }
         
         [Fact]
-        public async Task TestInsertWithoutText()
+        public void TestInsertWithoutText()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
             validInsertModel.Text = null;
@@ -91,7 +88,7 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
         }
         
         [Fact]
-        public async Task TestUpdateWithoutTitle()
+        public void TestUpdateWithoutTitle()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
             validUpdateModel.Title = null;
@@ -102,7 +99,7 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
         }
         
         [Fact]
-        public async Task TestUpdateWithoutText()
+        public void TestUpdateWithoutText()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
             validUpdateModel.Text = null;

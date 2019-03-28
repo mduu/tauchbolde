@@ -4,10 +4,9 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Tauchbolde.Common;
 using Tauchbolde.Common.DomainServices.Logbook;
-using Tauchbolde.Common.DomainServices.Repositories;
+using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
@@ -23,8 +22,8 @@ namespace Tauchbolde.Web.Controllers
             [NotNull] ApplicationDbContext context,
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ILogbookService logbookService,
-            [NotNull] IDiverRepository diverRepository)
-            : base(userManager, diverRepository)
+            [NotNull] IDiverService diverService)
+            : base(userManager, diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.logbookService = logbookService ?? throw new ArgumentNullException(nameof(logbookService));
@@ -54,12 +53,13 @@ namespace Tauchbolde.Web.Controllers
 
         [HttpGet]
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
-        public async Task<IActionResult> New()
+        public IActionResult New()
         {
             var model = new LogbookEditViewModel
             {
                 CreatedAt = DateTime.Now
             };
+            
             return View("Edit", model);
         }
 

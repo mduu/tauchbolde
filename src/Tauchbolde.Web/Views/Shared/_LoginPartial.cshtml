@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@inject Tauchbolde.Common.DomainServices.Repositories.IDiverRepository DiverRepository
+@inject Tauchbolde.Common.DomainServices.Users.IDiverService DiverService
 @{
     var isAdmin = false;
     var userName = "";
@@ -14,7 +14,7 @@
         userName = UserManager.GetUserName(User);
         if (!string.IsNullOrWhiteSpace(userName))
         {
-            diver = await DiverRepository.FindByUserNameAsync(userName);
+            diver = await DiverService.FindByUserNameAsync(userName);
         }
     }
 }
