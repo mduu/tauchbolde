@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Common;
 using Tauchbolde.Common.DomainServices.Events;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
@@ -21,7 +20,6 @@ namespace Tauchbolde.Web.Controllers
     public class EventController : AppControllerBase
     {
         private readonly ApplicationDbContext context;
-        private readonly IEventRepository eventRepository;
         private readonly IParticipationService participationService;
         private readonly IEventService eventService;
         [NotNull] private readonly IDiverService diverService;
@@ -29,14 +27,12 @@ namespace Tauchbolde.Web.Controllers
         public EventController(
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ApplicationDbContext context,
-            [NotNull] IEventRepository eventRepository,
             [NotNull] IParticipationService participationService,
             [NotNull] IEventService eventService,
             [NotNull] IDiverService diverService)
         :base(userManager, diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             this.participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
             this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
@@ -47,7 +43,7 @@ namespace Tauchbolde.Web.Controllers
         {
             var model = new EventListViewModel
             {
-                UpcommingEvents = await eventRepository.GetUpcommingEventsAsync(),
+                UpcommingEvents = await eventService.GetUpcomingEventsAsync(),
             };
 
             return View(model);
@@ -56,7 +52,7 @@ namespace Tauchbolde.Web.Controllers
         // GET: Event/Details/5
         public async Task<ActionResult> Details(Guid id)
         {
-            var detailsForEvent = await eventRepository.FindByIdAsync(id);
+            var detailsForEvent = await eventService.GetByIdAsync(id);
             if (detailsForEvent == null)
             {
                 return BadRequest("Event does not exists!");
@@ -96,7 +92,7 @@ namespace Tauchbolde.Web.Controllers
             Event detailsForEvent = null;
             if (id.HasValue)
             {
-                detailsForEvent = await eventRepository.FindByIdAsync(id.Value);
+                detailsForEvent = await eventService.GetByIdAsync(id.Value);
                 if (detailsForEvent == null)
                 {
                     return BadRequest("Event does not exists!");
@@ -167,7 +163,7 @@ namespace Tauchbolde.Web.Controllers
             EventEditViewModel viewModel;
             if (id != Guid.Empty)
             {
-                var detailsForEvent = await eventRepository.FindByIdAsync(id);
+                var detailsForEvent = await eventService.GetByIdAsync(id);
                 if (detailsForEvent == null)
                 {
                     return NotFound("Event does not exists!");
@@ -199,7 +195,7 @@ namespace Tauchbolde.Web.Controllers
                 var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
-                    return StatusCode(400, "No curren user would be found!");
+                    return StatusCode(400, "No current user would be found!");
                 }
 
                 await participationService.ChangeParticipationAsync(currentUser, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
@@ -237,7 +233,7 @@ namespace Tauchbolde.Web.Controllers
                 var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
-                    return StatusCode(400, "No curren user would be found!");
+                    return StatusCode(400, "No current user would be found!");
                 }
 
                 var comment = await eventService.AddCommentAsync(eventId, newCommentText, currentUser);
@@ -263,7 +259,7 @@ namespace Tauchbolde.Web.Controllers
                 var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
                 if (currentUser == null)
                 {
-                    return StatusCode(400, "No curren user would be found!");
+                    return StatusCode(400, "No current user would be found!");
                 }
 
                 var comment = await eventService.EditCommentAsync(commentId, commentText, currentUser);

@@ -150,6 +150,7 @@ namespace Tauchbolde.Common.DomainServices.Events
             return comment;
         }
 
+        /// <inheritdoc />
         public async Task DeleteCommentAsync(Guid commentId, Diver currentUser)
         {
             if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
@@ -169,6 +170,18 @@ namespace Tauchbolde.Common.DomainServices.Events
             TrackEvent("COMMENT-DELETE", comment);
             commentRepository.Delete(comment);
         }
+
+        /// <inheritdoc />
+        public async Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync()
+            => await eventRepository.GetUpcomingAndRecentEventsAsync();
+
+        /// <inheritdoc />
+        public async Task<ICollection<Event>> GetUpcomingEventsAsync()
+            => await eventRepository.GetUpcomingEventsAsync();
+
+        /// <inheritdoc />
+        public async Task<Event> GetByIdAsync(Guid eventId)
+            => await eventRepository.FindByIdAsync(eventId);
 
         private Stream CreateIcalStream(Event evt, DateTimeOffset? createTime = null)
         {

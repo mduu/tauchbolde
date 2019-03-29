@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Model;
@@ -44,7 +45,26 @@ namespace Tauchbolde.Common.DomainServices.Events
         /// Deletes a comment async.
         /// </summary>
         /// <param name="commentId">Id of the comment to delete.</param>
-        /// <param name="currentUser">uCrrent user.</param>
+        /// <param name="currentUser">Current user.</param>
         Task DeleteCommentAsync(Guid commentId, Diver currentUser);
+
+        /// <summary>
+        /// Gets upcoming and recent events.
+        /// </summary>
+        /// <returns>Upcoming and recent events.</returns>
+        Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync();
+
+        /// <summary>
+        /// Gets upcoming events.
+        /// </summary>
+        /// <returns>Upcoming events.</returns>
+        Task<ICollection<Event>> GetUpcomingEventsAsync();
+
+        /// <summary>
+        /// Get the event with all details by its ID.
+        /// </summary>
+        /// <param name="eventId">The <see cref="Event.Id"/> of the event </param>
+        /// <returns>The event with all details by its ID.</returns>
+        Task<Event> GetByIdAsync(Guid eventId);
     }
 }
