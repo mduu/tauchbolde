@@ -8,8 +8,10 @@
 
 @foreach (var logbookEntry in Model.AllEntries)
 {
-    <vc:logbook-entry-card logbook-entry="logbookEntry" allow-edit="Model.AllowEdit">
-    </vc:logbook-entry-card>
+    <div class="col-lg-3 col-md-4 col-sm-12">
+        <vc:logbook-entry-card logbook-entry="logbookEntry" allow-edit="Model.AllowEdit">
+        </vc:logbook-entry-card>
+    </div>
 }
 
 @if (Model.AllowEdit)
