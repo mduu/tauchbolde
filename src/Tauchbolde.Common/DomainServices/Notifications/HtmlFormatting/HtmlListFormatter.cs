@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
 using Tauchbolde.Common.DomainServices.TextFormatting;
@@ -26,7 +27,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
         public void Format(IEnumerable<Notification> notifications, StringBuilder htmlBuilder)
         {
             htmlBuilder.AppendLine("<ul class='list'>");
-            foreach (var notification in notifications)
+            foreach (var notification in notifications.OrderBy(n => n.OccuredAt))
             {
                 FormatNotification(htmlBuilder, notification);
             }
