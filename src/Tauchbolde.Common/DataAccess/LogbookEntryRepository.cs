@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ namespace Tauchbolde.Common.DataAccess
                 .Include(l => l.OriginalAuthor)
                 .Include(l => l.EditorAuthor)
                 .Include(l => l.Event)
+                .OrderByDescending(l => l.CreatedAt)
                 .ToListAsync();        
         }
     }

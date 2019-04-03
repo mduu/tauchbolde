@@ -1,11 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Common;
 using Tauchbolde.Common.DomainServices.Logbook;
-using Tauchbolde.Common.DomainServices.Repositories;
+using Tauchbolde.Common.DomainServices.Users;
+using Tauchbolde.Common.Model;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
 
@@ -13,14 +15,17 @@ namespace Tauchbolde.Web.Controllers
 {
     public class LogbookController : AppControllerBase
     {
+        [NotNull] private readonly ApplicationDbContext context;
         private readonly ILogbookService logbookService;
 
         public LogbookController(
+            [NotNull] ApplicationDbContext context,
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ILogbookService logbookService,
-            [NotNull] IDiverRepository diverRepository)
-            : base(userManager, diverRepository)
+            [NotNull] IDiverService diverService)
+            : base(userManager, diverService)
         {
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.logbookService = logbookService ?? throw new ArgumentNullException(nameof(logbookService));
         }
 
@@ -29,7 +34,7 @@ namespace Tauchbolde.Web.Controllers
         {
             var model = new LogbookListViewModel(
                 await logbookService.GetAllEntriesAsync(),
-                await GetAllowEditAsync());
+                await GetTauchboldOrAdmin());
 
             return View(model);
         }
@@ -46,16 +51,77 @@ namespace Tauchbolde.Web.Controllers
             return View(model);
         }
 
+        // GET /new
+        [HttpGet]
+        [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
+        public IActionResult New()
+        {
+            var model = new LogbookEditViewModel
+            {
+                CreatedAt = DateTime.Now
+            };
+            
+            return View("Edit", model);
+        }
+
+        // GET /edit/x
+        [HttpGet]
+        [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var model = await CreateLogbookEditViewModelAsync(id);
+            if (model == null)
+            {
+                return BadRequest();
+            }
+                
+            return View("Edit", model);
+        }
+
+        // POST
+        [HttpPost]
+        [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
+        public async Task<IActionResult> Edit(LogbookEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Edit", model);
+            }
+
+            var currentDiver = await GetDiverForCurrentUserAsync();
+            if (currentDiver == null)
+            {
+                return BadRequest();
+            }
+
+            var id = await logbookService.UpsertAsync(new LogbookUpsertModel
+            {
+                Id = model.Id,
+                Text = model.Text,
+                Title = model.Title,
+                Teaser = model.Teaser,
+                CreatedAt = model.CreatedAt,
+                IsFavorite = model.IsFavorite,
+                CurrentDiverId = currentDiver.Id,
+                ExternalPhotoAlbumUrl = model.ExternalPhotoAlbumUrl,
+            });
+            await context.SaveChangesAsync();
+            
+            ShowSuccessMessage($"Logbucheintrag '{model.Title}' erfolgreich gespeichert.");
+
+            return RedirectToAction("Index", "Logbook");
+        }
+
         private async Task<LogbookDetailViewModel> CreateLogbookViewModelAsync(Guid logbookEntryId)
         {
-            var allowEdit = await GetAllowEditAsync();
-
             var logbookEntry = await logbookService.FindByIdAsync(logbookEntryId);
             if (logbookEntry == null)
             {
                 return null;
             }
 
+            var allowEdit = await GetAllowEdit();
+            
             return new LogbookDetailViewModel
             {
                 AllowEdit = allowEdit,
@@ -79,13 +145,32 @@ namespace Tauchbolde.Web.Controllers
                     ? logbookEntry.EditorAuthor.Realname
                     : null,
                 EditedAt = logbookEntry.ModifiedAt.ToStringSwissDateTime(),
+                EditUrl = allowEdit
+                    ? Url.Action("Edit", new { id = logbookEntry.Id })
+                    : null,
+            };
+        }
+        
+        private async Task<LogbookEditViewModel> CreateLogbookEditViewModelAsync(Guid logbookEntryId)
+        {
+            var logbookEntry = await logbookService.FindByIdAsync(logbookEntryId);
+            if (logbookEntry == null)
+            {
+                return null;
+            }
+
+            return new LogbookEditViewModel
+            {
+                Id = logbookEntry.Id,
+                CreatedAt = logbookEntry.CreatedAt,
+                Text = logbookEntry.Text,
+                Title = logbookEntry.Title,
+                Teaser = logbookEntry.TeaserText,
+                IsFavorite = logbookEntry.IsFavorite,
+                ExternalPhotoAlbumUrl = logbookEntry.ExternalPhotoAlbumUrl,
             };
         }
 
-        private async Task<bool> GetAllowEditAsync()
-        {
-            var currentDiver = await GetDiverForCurrentUserAsync();
-            return await GetIsAdmin(currentDiver) || await GetIsTauchbold(currentDiver);
-        }
+        private async Task<bool> GetAllowEdit() => await GetTauchboldOrAdmin();
     }
 }

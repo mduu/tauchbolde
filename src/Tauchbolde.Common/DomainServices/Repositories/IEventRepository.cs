@@ -4,14 +4,14 @@ using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Common.DomainServices.Repositories
 {
-    public interface IEventRepository: IRepository<Event>
+    internal interface IEventRepository: IRepository<Event>
     {
         /// <summary>
-        /// Gets the list of upcomming event without the deleted
+        /// Gets the list of upcoming event without the deleted
         /// and canceled events.
         /// </summary>
-        /// <returns>All upcomming events</returns>
-        Task<List<Event>> GetUpcommingEventsAsync();
+        /// <returns>All upcoming events</returns>
+        Task<List<Event>> GetUpcomingEventsAsync();
 
         Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync();
     }

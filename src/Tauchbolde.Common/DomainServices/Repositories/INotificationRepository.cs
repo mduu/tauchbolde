@@ -8,7 +8,7 @@ namespace Tauchbolde.Common.DomainServices.Repositories
     /// <summary>
     /// Data-access for <see cref="Notification"/> entities.
     /// </summary>
-    public interface INotificationRepository : IRepository<Notification>
+    internal interface INotificationRepository : IRepository<Notification>
     {
         /// <summary>
         /// Gets all pending notification grouped by user asynchronous.

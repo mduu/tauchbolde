@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DomainServices.Repositories;
@@ -10,10 +11,12 @@ namespace Tauchbolde.Common.DomainServices.Notifications
     {
         private readonly ILogger logger;
         private readonly ApplicationDbContext databaseContext;
+        private readonly INotificationRepository notificationRepository;
 
         public NotificationSender(
             ILoggerFactory loggerFactory,
-            ApplicationDbContext databaseContext)
+            ApplicationDbContext databaseContext,
+            [NotNull] INotificationRepository notificationRepository)
         {
             if (loggerFactory == null)
             {
@@ -22,11 +25,11 @@ namespace Tauchbolde.Common.DomainServices.Notifications
 
             logger = loggerFactory.CreateLogger<NotificationSender>();
             this.databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
+            this.notificationRepository = notificationRepository ?? throw new ArgumentNullException(nameof(notificationRepository));
         }
 
-        public async Task SendAsync(
-            INotificationRepository notificationRepository,
-            INotificationFormatter notificationFormatter,
+        /// <inheritdoc />
+        public async Task SendAsync(INotificationFormatter notificationFormatter,
             INotificationSubmitter notificationSubmitter)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));

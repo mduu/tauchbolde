@@ -16,7 +16,7 @@ namespace Tauchbolde.Common.DataAccess
         }
 
         /// <inheritdoc />>
-        public async Task<List<Event>> GetUpcommingEventsAsync()
+        public async Task<List<Event>> GetUpcomingEventsAsync()
         {
             return await CreateQueryForStartingAt(DateTime.Now)
                 .Include(e => e.Comments)

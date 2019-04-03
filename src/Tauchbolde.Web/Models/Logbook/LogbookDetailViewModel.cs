@@ -17,7 +17,6 @@ namespace Tauchbolde.Web.Models.Logbook
         [CanBeNull] public string Text { get; set; }
         [CanBeNull] public string ExternalPhotoAlbumUrl { get; set; }
         [CanBeNull] public string EventTitel { get; set; }
-        [CanBeNull] public string EventUrl { get; set; }
         
         public string OriginalAuthorName { get; set; }
         [NotNull] public Diver OriginalAuthor { get; set; } = new Diver();
@@ -26,5 +25,8 @@ namespace Tauchbolde.Web.Models.Logbook
         [CanBeNull] public string EditorAuthorName { get; set; }
         [CanBeNull] public Diver EditorAuthor { get; set; }
         [CanBeNull] public string EditedAt { get; set; }
+
+        [CanBeNull] public string EditUrl { get; set; }
+        [CanBeNull] public string EventUrl { get; set; }
     }
 }

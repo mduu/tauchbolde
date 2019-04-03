@@ -17,6 +17,7 @@ using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Common.DomainServices.TextFormatting;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For FakeItEasy to use "internal" visibility
 
 namespace Tauchbolde.Common
 {
