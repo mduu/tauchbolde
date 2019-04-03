@@ -213,7 +213,7 @@ namespace Tauchbolde.Web.Controllers
         private async Task<MemberContext> GetMemberContextAsync(Guid diverId)
         {
             var currentDiver = await GetDiverForCurrentUserAsync();
-            var isAdmin = await GetIsAdmin(currentDiver);
+            var isAdmin = await GetIsAdmin();
             var member = await diverService.GetMemberAsync(diverId);
 
             return new MemberContext(currentDiver, isAdmin, member);

@@ -34,7 +34,7 @@ namespace Tauchbolde.Web.Controllers
         {
             var model = new LogbookListViewModel(
                 await logbookService.GetAllEntriesAsync(),
-                await GetAllowEditAsync());
+                await GetTauchboldOrAdmin());
 
             return View(model);
         }
@@ -98,8 +98,6 @@ namespace Tauchbolde.Web.Controllers
 
         private async Task<LogbookDetailViewModel> CreateLogbookViewModelAsync(Guid logbookEntryId)
         {
-            var allowEdit = await GetAllowEditAsync();
-
             var logbookEntry = await logbookService.FindByIdAsync(logbookEntryId);
             if (logbookEntry == null)
             {
@@ -108,7 +106,7 @@ namespace Tauchbolde.Web.Controllers
 
             return new LogbookDetailViewModel
             {
-                AllowEdit = allowEdit,
+                AllowEdit = await GetAllowEdit(),
                 Id = logbookEntry.Id,
                 Title = logbookEntry.Title,
                 Teaser = logbookEntry.TeaserText,
@@ -132,10 +130,6 @@ namespace Tauchbolde.Web.Controllers
             };
         }
 
-        private async Task<bool> GetAllowEditAsync()
-        {
-            var currentDiver = await GetDiverForCurrentUserAsync();
-            return await GetIsAdmin(currentDiver) || await GetIsTauchbold(currentDiver);
-        }
+        private async Task<bool> GetAllowEdit() => await GetTauchboldOrAdmin();
     }
 }

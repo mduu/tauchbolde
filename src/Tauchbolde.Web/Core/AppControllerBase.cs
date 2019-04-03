@@ -73,20 +73,23 @@ namespace Tauchbolde.Web.Core
         /// otherwise <c>false</c> is returned.
         /// </summary>
         /// <returns>The is admin.</returns>
-        /// <param name="diver">Diver.</param>
-        protected async Task<bool> GetIsAdmin([CanBeNull] Diver diver)
+        protected async Task<bool> GetIsAdmin()
         {
+            var diver = await GetDiverForCurrentUserAsync();
             return diver != null && await userManager.IsInRoleAsync(diver.User, Rolenames.Administrator);
         }
         
         /// <summary>
         /// Returns <c>true</c> if the <paramref name="diver"/> id s Tauchbold member.
         /// </summary>
-        /// <param name="diver"></param>
         /// <returns><c>True</c> if the <paramref name="diver"/> id s Tauchbold member; otherwise <c>False</c> is returned.</returns>
-        protected async Task<bool> GetIsTauchbold([CanBeNull] Diver diver)
+        protected async Task<bool> GetIsTauchbold()
         {
+            var diver = await GetDiverForCurrentUserAsync();
             return diver != null && await userManager.IsInRoleAsync(diver.User, Rolenames.Tauchbold);
         }
+
+        protected async Task<bool> GetTauchboldOrAdmin()
+            => await GetIsTauchbold() || await GetIsAdmin();
     }
 }
