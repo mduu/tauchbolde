@@ -7,6 +7,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Tauchbolde.Common.DomainServices.SMTPSender
 {
@@ -19,9 +20,10 @@ namespace Tauchbolde.Common.DomainServices.SMTPSender
         /// Initializes a new instance of the <see cref="SmtpSender"/> class.
         /// </summary>
         /// <param name="options">SMTP Configuration options to use.</param>
+        /// <param name="telemetryService">The telemetry service to use.</param>
         public SmtpSender(
-            IOptions<SmtpSenderConfiguration> options,
-            ITelemetryService telemetryService)
+            [NotNull] IOptions<SmtpSenderConfiguration> options,
+            [NotNull] ITelemetryService telemetryService)
         {
             this.options = options?.Value ?? throw new ArgumentNullException(nameof(options));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
@@ -64,7 +66,7 @@ namespace Tauchbolde.Common.DomainServices.SMTPSender
             }
         }
         
-        private void TrackEvent(string name, MimeMessage message)
+        private void TrackEvent(string name, [NotNull] MimeMessage message)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (message == null) throw new ArgumentNullException(nameof(message));
