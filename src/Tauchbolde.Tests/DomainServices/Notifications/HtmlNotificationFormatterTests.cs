@@ -77,7 +77,7 @@ namespace Tauchbolde.Tests.DomainServices.Notifications
                 new Notification
                 {
                     Id = new Guid("fc1beb5a-5ad0-4deb-b35a-595d81d575e0"),
-                    OccuredAt = new DateTime(2018, 10, 1, 14, 0, 0),
+                    OccuredAt = new DateTime(2018, 10, 1, 14, 0, 0, DateTimeKind.Local),
                     Message = "Notification 1",
                     Type = notificationType,
                 }
