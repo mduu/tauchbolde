@@ -66,6 +66,11 @@
             </li>
         }
 
+        @if (Model.AllowEdit)
+        {
+            <hr/>
+            <a href="@Model.EditUrl" class="btn bg-primary">Bearbeiten</a>
+        }
     </ul>
 
 </div>

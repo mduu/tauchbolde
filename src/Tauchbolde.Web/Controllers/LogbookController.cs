@@ -51,6 +51,7 @@ namespace Tauchbolde.Web.Controllers
             return View(model);
         }
 
+        // GET /new
         [HttpGet]
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public IActionResult New()
@@ -63,6 +64,21 @@ namespace Tauchbolde.Web.Controllers
             return View("Edit", model);
         }
 
+        // GET /edit/x
+        [HttpGet]
+        [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var model = await CreateLogbookEditViewModelAsync(id);
+            if (model == null)
+            {
+                return BadRequest();
+            }
+                
+            return View("Edit", model);
+        }
+
+        // POST
         [HttpPost]
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public async Task<IActionResult> Edit(LogbookEditViewModel model)
@@ -104,9 +120,11 @@ namespace Tauchbolde.Web.Controllers
                 return null;
             }
 
+            var allowEdit = await GetAllowEdit();
+            
             return new LogbookDetailViewModel
             {
-                AllowEdit = await GetAllowEdit(),
+                AllowEdit = allowEdit,
                 Id = logbookEntry.Id,
                 Title = logbookEntry.Title,
                 Teaser = logbookEntry.TeaserText,
@@ -127,6 +145,29 @@ namespace Tauchbolde.Web.Controllers
                     ? logbookEntry.EditorAuthor.Realname
                     : null,
                 EditedAt = logbookEntry.ModifiedAt.ToStringSwissDateTime(),
+                EditUrl = allowEdit
+                    ? Url.Action("Edit", new { id = logbookEntry.Id })
+                    : null,
+            };
+        }
+        
+        private async Task<LogbookEditViewModel> CreateLogbookEditViewModelAsync(Guid logbookEntryId)
+        {
+            var logbookEntry = await logbookService.FindByIdAsync(logbookEntryId);
+            if (logbookEntry == null)
+            {
+                return null;
+            }
+
+            return new LogbookEditViewModel
+            {
+                Id = logbookEntry.Id,
+                CreatedAt = logbookEntry.CreatedAt,
+                Text = logbookEntry.Text,
+                Title = logbookEntry.Title,
+                Teaser = logbookEntry.TeaserText,
+                IsFavorite = logbookEntry.IsFavorite,
+                ExternalPhotoAlbumUrl = logbookEntry.ExternalPhotoAlbumUrl,
             };
         }
 
