@@ -40,7 +40,7 @@ namespace Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting
             
             htmlBuilder.AppendLine("<div>");
             htmlBuilder.Append("<span class='timestamp'>");
-            htmlBuilder.Append(notification.OccuredAt.ToString("dd.MM.yyyy HH.mm "));
+            htmlBuilder.Append(notification.OccuredAt.ToLocalTime().ToStringSwissDateTime());
             htmlBuilder.Append("</span>");
             htmlBuilder.Append("<span class='message-type'>");
             htmlBuilder.Append(notificationTypeInfos.GetCaption(notification.Type));
