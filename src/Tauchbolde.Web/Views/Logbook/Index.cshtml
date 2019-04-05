@@ -16,5 +16,7 @@
 
 @if (Model.AllowEdit)
 {
-    <a href="@Url.Action("New", "Logbook")" id="create-logbookentry" class="btn btn-primary">Neu</a>
+    <div class="col-xs-12">
+        <a href="@Url.Action("New", "Logbook")" id="create-logbookentry" class="btn btn-primary">Neu</a>
+    </div>
 }
