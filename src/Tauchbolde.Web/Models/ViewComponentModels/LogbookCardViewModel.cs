@@ -13,9 +13,7 @@ namespace Tauchbolde.Web.Models.ViewComponentModels
             
             AllowEdit = allowEdit;
             Title = logbookEntry.Title;
-            TeaserText = !string.IsNullOrWhiteSpace(logbookEntry.TeaserText)
-                ? logbookEntry.TeaserText
-                : logbookEntry.Text.Substring(0, 250) + "...";
+            TeaserText = GetTeaserText(logbookEntry);
             OriginalAuthorName = logbookEntry.OriginalAuthor?.Realname ?? "";
             EditorAuthorName = logbookEntry.EditorAuthor?.Realname;
             CreatedAt = logbookEntry.CreatedAt.ToStringSwissDateTime();
@@ -31,5 +29,22 @@ namespace Tauchbolde.Web.Models.ViewComponentModels
         public string CreatedAt { get; set; }
         public string ModifiedAt { get; set; }
         public bool AllowEdit { get; }
+        
+        private static string GetTeaserText(LogbookEntry logbookEntry)
+        {
+            if (!string.IsNullOrWhiteSpace(logbookEntry.TeaserText))
+            {
+                return logbookEntry.TeaserText;
+            }
+
+            const int teaserLength = 250;
+            if (!string.IsNullOrWhiteSpace(logbookEntry.Text) &&
+                logbookEntry.Text.Length > teaserLength)
+            {
+                return logbookEntry.Text.Substring(0, teaserLength) + "...";
+            }
+
+            return logbookEntry.Text;
+        }
     }
 }
