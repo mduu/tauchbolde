@@ -51,6 +51,22 @@ namespace Tauchbolde.Common.DomainServices.Logbook
                 : await InsertNewLogbookEntryAsync(model);
         }
 
+        /// <inheritdoc />
+        public async Task DeleteAsync(Guid logbookEntryId)
+        {
+            if (logbookEntryId == Guid.Empty) { throw new ArgumentException("Must be not Guid.Empty!", nameof(logbookEntryId)); }
+
+            var logbookEntry = await logbookEntryRepository.FindByIdAsync(logbookEntryId);
+            if (logbookEntry == null)
+            {
+                throw new InvalidOperationException($"No {nameof(LogbookEntry)} with Id [{logbookEntryId}] found!");
+            }
+                        
+            logbookEntryRepository.Delete(logbookEntry);
+            
+            TrackLogbookEntry("LOGBOOK-DELETE", logbookEntry);
+        }
+
         private async Task<Guid> UpdateExistingLogbookEntryAsync([NotNull] LogbookUpsertModel upsertModel)
         {
             if (upsertModel == null) throw new ArgumentNullException(nameof(upsertModel));
@@ -93,7 +109,7 @@ namespace Tauchbolde.Common.DomainServices.Logbook
 
             await logbookEntryRepository.InsertAsync(newLogbookEntry);
             
-            TrackLogbookEntry("LOGBOOK-UPDATE", newLogbookEntry);
+            TrackLogbookEntry("LOGBOOK-INSERT", newLogbookEntry);
 
             return newLogbookEntry.Id;
         }

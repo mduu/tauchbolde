@@ -111,6 +111,19 @@ namespace Tauchbolde.Web.Controllers
 
             return RedirectToAction("Index", "Logbook");
         }
+        
+        
+        // GET /edit/x
+        [HttpGet]
+        [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await logbookService.DeleteAsync(id);
+            await context.SaveChangesAsync();
+            
+            return RedirectToAction("Index");
+        }
+
 
         private async Task<LogbookDetailViewModel> CreateLogbookViewModelAsync(Guid logbookEntryId)
         {
@@ -147,6 +160,9 @@ namespace Tauchbolde.Web.Controllers
                 EditedAt = logbookEntry.ModifiedAt.ToStringSwissDateTime(),
                 EditUrl = allowEdit
                     ? Url.Action("Edit", new { id = logbookEntry.Id })
+                    : null,
+                DeleteUrl = allowEdit
+                    ? Url.Action("Delete", new { id = logbookEntry.Id })
                     : null,
             };
         }
