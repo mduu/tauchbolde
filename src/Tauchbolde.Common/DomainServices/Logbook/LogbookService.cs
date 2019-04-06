@@ -82,9 +82,12 @@ namespace Tauchbolde.Common.DomainServices.Logbook
             {
                 throw new InvalidOperationException($"No existing LogbookEntry found with Id [{upsertModel.Id}]!");
             }
+            
+            // TODO Store teaser image using upcoming PhotoStorage
 
             MapUpsertModelToLogbookEntry(upsertModel, existingLogbookEntry);
             existingLogbookEntry.ModifiedAt = DateTime.Now;
+            // TODO Set teaserImage identifier 
             existingLogbookEntry.EditorAuthorId = currentUser.Id;
 
             logbookEntryRepository.Update(existingLogbookEntry);
@@ -104,8 +107,11 @@ namespace Tauchbolde.Common.DomainServices.Logbook
                 Id = Guid.NewGuid(),
                 OriginalAuthorId = currentUser.Id
             };
-            
+     
+            // TODO Store teaser image using upcoming PhotoStorage
+
             MapUpsertModelToLogbookEntry(upsertModel, newLogbookEntry);
+            // TODO Set teaserImage identifier 
 
             await logbookEntryRepository.InsertAsync(newLogbookEntry);
             

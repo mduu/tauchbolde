@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
@@ -88,6 +89,13 @@ namespace Tauchbolde.Web.Controllers
                 return View("Edit", model);
             }
 
+            Stream teaserImageStream = null;
+            if (model.TeaserImage != null && model.TeaserImage.Length > 0)
+            {
+                teaserImageStream = new MemoryStream();
+                await model.TeaserImage.CopyToAsync(teaserImageStream);
+            }
+
             var currentDiver = await GetDiverForCurrentUserAsync();
             if (currentDiver == null)
             {
@@ -99,6 +107,7 @@ namespace Tauchbolde.Web.Controllers
                 Id = model.Id,
                 Text = model.Text,
                 Title = model.Title,
+                TeaserImage = teaserImageStream,
                 Teaser = model.Teaser,
                 CreatedAt = model.CreatedAt,
                 IsFavorite = model.IsFavorite,
