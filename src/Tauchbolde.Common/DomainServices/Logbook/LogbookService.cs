@@ -16,18 +16,15 @@ namespace Tauchbolde.Common.DomainServices.Logbook
     {
         [NotNull] private readonly ILogbookEntryRepository logbookEntryRepository;
         [NotNull] private readonly IDiverService diverService;
-        [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly ITelemetryService telemetryService;
 
         public LogbookService(
             [NotNull] ILogbookEntryRepository logbookEntryRepository,
             [NotNull] IDiverService diverService,
-            [NotNull] IDiverRepository diverRepository,
             [NotNull] ITelemetryService telemetryService)
         {
             this.logbookEntryRepository = logbookEntryRepository ?? throw new ArgumentNullException(nameof(logbookEntryRepository));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
         }
 

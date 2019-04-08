@@ -22,13 +22,11 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
         {
             logbookEntryRepoFake = A.Fake<ILogbookEntryRepository>();
             var diverServiceFake = A.Fake<IDiverService>();
-            var diverRepoFake = A.Fake<IDiverRepository>();
             var telemetryServiceFake = A.Fake<ITelemetryService>();
 
             logbookService = new LogbookService(
                 logbookEntryRepoFake,
                 diverServiceFake,
-                diverRepoFake,
                 telemetryServiceFake
             );
 
