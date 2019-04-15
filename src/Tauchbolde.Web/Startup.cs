@@ -18,6 +18,7 @@ using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using Tauchbolde.Web.Filters;
 using System.Data.SqlClient;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace Tauchbolde.Web
 {
@@ -172,7 +173,16 @@ namespace Tauchbolde.Web
                 app.UseHsts();
             }
 
+            var rewriteOptions = new RewriteOptions()
+                .AddRedirect("user/login", "identity/account/login", 301)
+                .AddRedirect("user/register", "identity/account/register", 301)
+                .AddRedirect("diveplaner", "planer", 301)
+                .AddRedirect("contact", "/home/contact", 301)
+                .AddRedirect("node/*", "/", 301)
+                .AddRedirect("sites/*", "/", 301);
+
             app
+                .UseRewriter(rewriteOptions)
                 .UseHttpsRedirection()
                 .UseStaticFiles()
                 .UseCookiePolicy()
