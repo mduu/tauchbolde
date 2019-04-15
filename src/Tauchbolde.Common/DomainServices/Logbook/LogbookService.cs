@@ -84,25 +84,23 @@ namespace Tauchbolde.Common.DomainServices.Logbook
             {
                 throw new InvalidOperationException($"No existing LogbookEntry found with Id [{upsertModel.Id}]!");
             }
-            
-            MapUpsertModelToLogbookEntry(upsertModel, existingLogbookEntry);
-            existingLogbookEntry.ModifiedAt = DateTime.Now;
-            existingLogbookEntry.EditorAuthorId = currentUser.Id;
-            
+
+            PhotoAndThumbnailIdentification photoIdentifier = null;
             if (upsertModel.TeaserImage != null)
             {
-                var photoIdentifier = await photoService.AddPhotoAsync(
+                photoIdentifier = await photoService.AddPhotoAsync(
                     PhotoCategory.EventTeaser,
                     upsertModel.TeaserImage,
                     upsertModel.TeaserImageFileName,
                     upsertModel.TeaserImageContentType ?? throw new InvalidOperationException(),
                     ThumbnailType.LogbookTeaser);
-                
-                existingLogbookEntry.TeaserImage = photoIdentifier.ToString();
             }
-
-            logbookEntryRepository.Update(existingLogbookEntry);
             
+            MapUpsertModelToLogbookEntry(upsertModel, existingLogbookEntry, photoIdentifier);
+            existingLogbookEntry.ModifiedAt = DateTime.Now;
+            existingLogbookEntry.EditorAuthorId = currentUser.Id;
+            
+            logbookEntryRepository.Update(existingLogbookEntry);
             TrackLogbookEntry("LOGBOOK-UPDATE", existingLogbookEntry);
 
             return existingLogbookEntry.Id;
@@ -118,14 +116,21 @@ namespace Tauchbolde.Common.DomainServices.Logbook
                 Id = Guid.NewGuid(),
                 OriginalAuthorId = currentUser.Id
             };
-     
-            // TODO Store teaser image using upcoming PhotoStorage
 
-            MapUpsertModelToLogbookEntry(upsertModel, newLogbookEntry);
-            // TODO Set teaserImage identifier 
-
-            await logbookEntryRepository.InsertAsync(newLogbookEntry);
             
+            PhotoAndThumbnailIdentification teaserIdentifiers = null;
+            if (upsertModel.TeaserImage != null && upsertModel.TeaserImageContentType != null)
+            {
+                teaserIdentifiers = await photoService.AddPhotoAsync(
+                    PhotoCategory.EventTeaser,
+                    upsertModel.TeaserImage,
+                    upsertModel.TeaserImageFileName,
+                    upsertModel.TeaserImageContentType,
+                    ThumbnailType.LogbookTeaser);
+            }
+
+            MapUpsertModelToLogbookEntry(upsertModel, newLogbookEntry, teaserIdentifiers);
+            await logbookEntryRepository.InsertAsync(newLogbookEntry);
             TrackLogbookEntry("LOGBOOK-INSERT", newLogbookEntry);
 
             return newLogbookEntry.Id;
@@ -149,13 +154,21 @@ namespace Tauchbolde.Common.DomainServices.Logbook
             }
         }
         
-        private static void MapUpsertModelToLogbookEntry(LogbookUpsertModel upsertModel, LogbookEntry existingLogbookEntry)
+        private static void MapUpsertModelToLogbookEntry(
+            [NotNull] LogbookUpsertModel upsertModel,
+            [NotNull] LogbookEntry logbookEntry,
+            [CanBeNull] PhotoAndThumbnailIdentification teaserIdentifiers)
         {
-            existingLogbookEntry.Title = upsertModel.Title;
-            existingLogbookEntry.TeaserText = upsertModel.Teaser ?? "";
-            existingLogbookEntry.Text = upsertModel.Text;
-            existingLogbookEntry.CreatedAt = upsertModel.CreatedAt;
-            existingLogbookEntry.ExternalPhotoAlbumUrl = upsertModel.ExternalPhotoAlbumUrl;
+            if (upsertModel == null) throw new ArgumentNullException(nameof(upsertModel));
+            if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
+            
+            logbookEntry.Title = upsertModel.Title;
+            logbookEntry.TeaserText = upsertModel.Teaser ?? "";
+            logbookEntry.Text = upsertModel.Text;
+            logbookEntry.CreatedAt = upsertModel.CreatedAt;
+            logbookEntry.ExternalPhotoAlbumUrl = upsertModel.ExternalPhotoAlbumUrl;
+            logbookEntry.TeaserImage = teaserIdentifiers?.OriginalPhotoIdentifier?.ToString();
+            logbookEntry.TeaserImageThumb = teaserIdentifiers?.ThumbnailPhotoIdentifier?.ToString();
         }
         
         private async Task RemoveTeaserImagesAsync([NotNull] LogbookEntry logbookEntry)
