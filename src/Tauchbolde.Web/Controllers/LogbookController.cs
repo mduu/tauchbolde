@@ -90,10 +90,14 @@ namespace Tauchbolde.Web.Controllers
             }
 
             Stream teaserImageStream = null;
+            string teaserImageFilename = null;
+            string teaserImageContentType = null;
             if (model.TeaserImage != null && model.TeaserImage.Length > 0)
             {
                 teaserImageStream = new MemoryStream();
                 await model.TeaserImage.CopyToAsync(teaserImageStream);
+                teaserImageFilename = model.TeaserImage.FileName;
+                teaserImageContentType = model.TeaserImage.ContentType;
             }
 
             var currentDiver = await GetDiverForCurrentUserAsync();
@@ -108,6 +112,8 @@ namespace Tauchbolde.Web.Controllers
                 Text = model.Text,
                 Title = model.Title,
                 TeaserImage = teaserImageStream,
+                TeaserImageFileName = teaserImageFilename,
+                TeaserImageContentType = teaserImageContentType,
                 Teaser = model.Teaser,
                 CreatedAt = model.CreatedAt,
                 IsFavorite = model.IsFavorite,

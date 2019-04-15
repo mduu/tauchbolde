@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Tauchbolde.Common.DomainServices.PhotoStorage;
 using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Common.Infrastructure.Telemetry;
@@ -17,15 +18,18 @@ namespace Tauchbolde.Common.DomainServices.Logbook
         [NotNull] private readonly ILogbookEntryRepository logbookEntryRepository;
         [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly ITelemetryService telemetryService;
+        [NotNull] private readonly IPhotoService photoService;
 
         public LogbookService(
             [NotNull] ILogbookEntryRepository logbookEntryRepository,
             [NotNull] IDiverService diverService,
-            [NotNull] ITelemetryService telemetryService)
+            [NotNull] ITelemetryService telemetryService,
+            [NotNull] IPhotoService photoService)
         {
             this.logbookEntryRepository = logbookEntryRepository ?? throw new ArgumentNullException(nameof(logbookEntryRepository));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
+            this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
         }
 
         /// <inheritdoc />
@@ -60,6 +64,7 @@ namespace Tauchbolde.Common.DomainServices.Logbook
             }
                         
             logbookEntryRepository.Delete(logbookEntry);
+            await RemoveTeaserImagesAsync(logbookEntry);
             
             TrackLogbookEntry("LOGBOOK-DELETE", logbookEntry);
         }
@@ -80,12 +85,21 @@ namespace Tauchbolde.Common.DomainServices.Logbook
                 throw new InvalidOperationException($"No existing LogbookEntry found with Id [{upsertModel.Id}]!");
             }
             
-            // TODO Store teaser image using upcoming PhotoStorage
-
             MapUpsertModelToLogbookEntry(upsertModel, existingLogbookEntry);
             existingLogbookEntry.ModifiedAt = DateTime.Now;
-            // TODO Set teaserImage identifier 
             existingLogbookEntry.EditorAuthorId = currentUser.Id;
+            
+            if (upsertModel.TeaserImage != null)
+            {
+                var photoIdentifier = await photoService.AddPhotoAsync(
+                    PhotoCategory.EventTeaser,
+                    upsertModel.TeaserImage,
+                    upsertModel.TeaserImageFileName,
+                    upsertModel.TeaserImageContentType ?? throw new InvalidOperationException(),
+                    ThumbnailType.LogbookTeaser);
+                
+                existingLogbookEntry.TeaserImage = photoIdentifier.ToString();
+            }
 
             logbookEntryRepository.Update(existingLogbookEntry);
             
@@ -142,6 +156,21 @@ namespace Tauchbolde.Common.DomainServices.Logbook
             existingLogbookEntry.Text = upsertModel.Text;
             existingLogbookEntry.CreatedAt = upsertModel.CreatedAt;
             existingLogbookEntry.ExternalPhotoAlbumUrl = upsertModel.ExternalPhotoAlbumUrl;
+        }
+        
+        private async Task RemoveTeaserImagesAsync([NotNull] LogbookEntry logbookEntry)
+        {
+            if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
+
+            if (!string.IsNullOrWhiteSpace(logbookEntry.TeaserImage))
+            {
+                await photoService.RemovePhotosAsync(new PhotoIdentifier(PhotoCategory.EventTeaser, logbookEntry.TeaserImage));
+            }
+
+            if (!string.IsNullOrWhiteSpace(logbookEntry.TeaserImageThumb))
+            {
+                await photoService.RemovePhotosAsync(new PhotoIdentifier(PhotoCategory.EventTeaser, logbookEntry.TeaserImageThumb));
+            }
         }
 
         private async Task<Diver> GetCurrentUserAsync(LogbookUpsertModel model)

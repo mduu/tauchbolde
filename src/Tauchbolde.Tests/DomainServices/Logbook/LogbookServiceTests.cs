@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Common.DomainServices.Logbook;
+using Tauchbolde.Common.DomainServices.PhotoStorage;
 using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Common.Infrastructure.Telemetry;
@@ -23,11 +24,13 @@ namespace Tauchbolde.Tests.DomainServices.Logbook
             logbookEntryRepoFake = A.Fake<ILogbookEntryRepository>();
             var diverServiceFake = A.Fake<IDiverService>();
             var telemetryServiceFake = A.Fake<ITelemetryService>();
+            var photoService = A.Fake<IPhotoService>();
 
             logbookService = new LogbookService(
                 logbookEntryRepoFake,
                 diverServiceFake,
-                telemetryServiceFake
+                telemetryServiceFake,
+                photoService
             );
 
             validInsertModel = CreateValidModel(null);
