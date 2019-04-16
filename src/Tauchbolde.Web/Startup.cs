@@ -79,7 +79,7 @@ namespace Tauchbolde.Web
 
                 // User settings.
                 options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
 
@@ -106,15 +106,16 @@ namespace Tauchbolde.Web
             services.AddAuthorization(options =>
             {
                 options.AddPolicy(PolicyNames.RequireTauchbold, policy => policy.RequireRole(Rolenames.Tauchbold));
-                options.AddPolicy(PolicyNames.RequireAdministrator, policy => policy.RequireRole(Rolenames.Administrator));
-                options.AddPolicy(PolicyNames.RequireTauchboldeOrAdmin, policy => 
+                options.AddPolicy(PolicyNames.RequireAdministrator,
+                    policy => policy.RequireRole(Rolenames.Administrator));
+                options.AddPolicy(PolicyNames.RequireTauchboldeOrAdmin, policy =>
                     policy.RequireRole(Rolenames.Administrator, Rolenames.Tauchbold));
             });
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("de-CH");
-                options.SupportedCultures = new List<CultureInfo> { new CultureInfo("de-CH") };
+                options.SupportedCultures = new List<CultureInfo> {new CultureInfo("de-CH")};
                 options.RequestCultureProviders = new List<IRequestCultureProvider>();
                 options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(
                     async context => await Task.FromResult(new ProviderCultureResult("de"))
@@ -128,13 +129,11 @@ namespace Tauchbolde.Web
                     .WithOrigins("https://twitter.com"));
             });
 
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(typeof(BuildNumberFilter));
-            })
+            services.AddMvc(options => { options.Filters.Add(typeof(BuildNumberFilter)); })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(
-                    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    options => options.SerializerSettings.ReferenceLoopHandling =
+                        Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
 
             ApplicationServices.Register(services);
@@ -142,14 +141,14 @@ namespace Tauchbolde.Web
 
         private void ConfigureDatabase(IServiceCollection services)
         {
-           var connectionString = Configuration.GetConnectionString("TauchboldeConnection");
+            var connectionString = Configuration.GetConnectionString("TauchboldeConnection");
             var builder = new SqlConnectionStringBuilder(connectionString);
 
             if (!string.IsNullOrWhiteSpace(Configuration["DbUser"]))
             {
                 builder.UserID = Configuration["DbUser"];
             }
-            
+
             if (!string.IsNullOrWhiteSpace(Configuration["DbPassword"]))
             {
                 builder.Password = Configuration["DbPassword"];
