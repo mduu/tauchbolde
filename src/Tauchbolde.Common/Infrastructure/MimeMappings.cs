@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Tauchbolde.Commom.Misc
@@ -213,13 +214,14 @@ namespace Tauchbolde.Commom.Misc
         }
 
         public string GetMimeMapping(string fileExtension)
-            => extensionMap.ContainsKey(fileExtension)
+        {
+            fileExtension = fileExtension.ToLower();
+            return extensionMap.ContainsKey(fileExtension)
                 ? extensionMap[fileExtension]
                 : extensionMap[".*"];
+        }
 
         public string GetFileExtensionMapping(string mimeType)
-            => extensionMap.ContainsValue(mimeType)
-                ? null
-                : extensionMap.First(i => i.Value == mimeType).Key;
+            => extensionMap.FirstOrDefault(i => i.Value.Equals(mimeType, StringComparison.InvariantCultureIgnoreCase)).Key;
     }
 }
