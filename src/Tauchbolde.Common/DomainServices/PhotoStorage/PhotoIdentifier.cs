@@ -8,6 +8,11 @@ namespace Tauchbolde.Common.DomainServices.PhotoStorage
     /// </summary>
     public class PhotoIdentifier
     {
+        public PhotoIdentifier(PhotoCategory category)
+        {
+            Category = category;
+        }
+        
         public PhotoIdentifier(PhotoCategory category, [NotNull] string identifier)
         {
             Category = category;
