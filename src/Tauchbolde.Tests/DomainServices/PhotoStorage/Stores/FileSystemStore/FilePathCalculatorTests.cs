@@ -48,6 +48,7 @@ namespace Tauchbolde.Tests.DomainServices.PhotoStorage.Stores.FileSystemStore
                 thumbnailType);
 
             // Assert
+            expectedPath = expectedPath.Replace(@"\/", Path.PathSeparator.ToString());
             filePath.Should().Be(expectedPath);
         }
         
