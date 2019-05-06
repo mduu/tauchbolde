@@ -53,10 +53,10 @@ namespace Tauchbolde.Tests.DomainServices.PhotoStorage.Stores.FileSystemStore
         }
         
         [Theory]
-        [InlineData("IMG_A.JPG", ThumbnailType.None, "/eventteaser/IMG_A.JPG")]
-        [InlineData("IMG_B.JPG", ThumbnailType.None, "/eventteaser/IMG_B_1.JPG")]
-        [InlineData("IMG_C.JPG", ThumbnailType.None, "/eventteaser/IMG_C_2.JPG")]
-        [InlineData("IMG_C.JPG", ThumbnailType.LogbookTeaser, "/eventteaser/thumbs/IMG_C.JPG")]
+        [InlineData("IMG_A.JPG", ThumbnailType.None, "eventteaser/IMG_A.JPG")]
+        [InlineData("IMG_B.JPG", ThumbnailType.None, "eventteaser/IMG_B_1.JPG")]
+        [InlineData("IMG_C.JPG", ThumbnailType.None, "eventteaser/IMG_C_2.JPG")]
+        [InlineData("IMG_C.JPG", ThumbnailType.LogbookTeaser, "eventteaser/thumbs/IMG_C.JPG")]
         public void CalculateUniqueFilePath(string baseFileName, ThumbnailType thumbnailType, string expectedFilePath)
         {
             // Arrange
@@ -71,7 +71,9 @@ namespace Tauchbolde.Tests.DomainServices.PhotoStorage.Stores.FileSystemStore
                 thumbnailType);
 
             // Assert
-            filePath.Should().Be($"{rootPath}{expectedFilePath}");
+            expectedFilePath = expectedFilePath.Replace(@"\/", Path.PathSeparator.ToString());
+            var expected = Path.Combine(rootPath, expectedFilePath);
+            filePath.Should().Be(expected);
             
             CleanPath(rootPath);
         }
