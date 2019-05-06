@@ -12,9 +12,14 @@ using Tauchbolde.Common.Infrastructure.Telemetry;
 using Tauchbolde.Common.DomainServices.Events;
 using Tauchbolde.Common.DomainServices.Logbook;
 using Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting;
+using Tauchbolde.Common.DomainServices.PhotoStorage;
+using Tauchbolde.Common.DomainServices.PhotoStorage.Stores;
+using Tauchbolde.Common.DomainServices.PhotoStorage.Stores.FileSystemStore;
 using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Common.DomainServices.Repositories;
 using Tauchbolde.Common.DomainServices.TextFormatting;
+using IImageResizer = Tauchbolde.Common.DomainServices.Avatar.IImageResizer;
+using ImageResizer = Tauchbolde.Common.DomainServices.Avatar.ImageResizer;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For FakeItEasy to use "internal" visibility
@@ -24,7 +29,7 @@ namespace Tauchbolde.Common
 
     public static class CommonServices
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, string photoStoreRoot)
         {
             if (services == null) { throw new ArgumentNullException(nameof(services)); }
 
@@ -60,6 +65,10 @@ namespace Tauchbolde.Common
             services.AddTransient<IDiverService, DiversService>();
             services.AddTransient<IMassMailService, MassMailService>();
             services.AddTransient<ILogbookService, LogbookService>();
+            services.AddTransient<IPhotoService, PhotoService>();
+            services.AddTransient<IPhotoStore, FilePhotoStore>();
+            services.AddSingleton<IFilePhotoStoreConfiguration>(new FilePhotoStoreConfiguration(photoStoreRoot));
+            services.AddTransient<IFilePhotoIdentifierSerializer, FilePhotoIdentifierSerializer>();
         }
 
         public static void RegisterDevelopment(IServiceCollection services)

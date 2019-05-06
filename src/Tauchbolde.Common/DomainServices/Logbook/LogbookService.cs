@@ -175,15 +175,20 @@ namespace Tauchbolde.Common.DomainServices.Logbook
         {
             if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
 
+            var identifiersToDelete = new List<PhotoIdentifier>();
+            
             if (!string.IsNullOrWhiteSpace(logbookEntry.TeaserImage))
             {
-                await photoService.RemovePhotosAsync(new PhotoIdentifier(PhotoCategory.EventTeaser, logbookEntry.TeaserImage));
+                identifiersToDelete.Add(new PhotoIdentifier(logbookEntry.TeaserImage));
             }
 
             if (!string.IsNullOrWhiteSpace(logbookEntry.TeaserImageThumb))
             {
-                await photoService.RemovePhotosAsync(new PhotoIdentifier(PhotoCategory.EventTeaser, logbookEntry.TeaserImageThumb));
+                identifiersToDelete.Add(new PhotoIdentifier(logbookEntry.TeaserImageThumb));
             }
+            
+            await photoService.RemovePhotosAsync(identifiersToDelete.ToArray());
+
         }
 
         private async Task<Diver> GetCurrentUserAsync(LogbookUpsertModel model)

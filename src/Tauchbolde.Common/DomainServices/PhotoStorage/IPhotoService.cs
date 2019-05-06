@@ -19,7 +19,8 @@ namespace Tauchbolde.Common.DomainServices.PhotoStorage
         Task<PhotoAndThumbnailIdentification> AddPhotoAsync(PhotoCategory category,
             [NotNull] Stream photoData,
             string filename,
-            [NotNull] string contentType, ThumbnailType thumbnailType);
+            [NotNull] string contentType,
+            ThumbnailType thumbnailType = ThumbnailType.None);
 
         Task<PhotoAndThumbnailIdentification> UpdatePhotoAsync([CanBeNull] PhotoAndThumbnailIdentification existingPhoto,
             PhotoCategory category,

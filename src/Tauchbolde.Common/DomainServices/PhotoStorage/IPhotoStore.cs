@@ -5,7 +5,7 @@ namespace Tauchbolde.Common.DomainServices.PhotoStorage
 {
     public interface IPhotoStore
     {
-        Task<PhotoIdentifier> AddPhotoAsync([NotNull] Photo photo);
+        Task<PhotoIdentifier> AddPhotoAsync(PhotoCategory category, [NotNull] Photo photo, ThumbnailType thumbnailType = ThumbnailType.None);
         Task RemovePhotoAsync([NotNull] PhotoIdentifier photoIdentifier);
         Task<Photo> GetPhotoAsync([NotNull] PhotoIdentifier photoIdentifier);
     }

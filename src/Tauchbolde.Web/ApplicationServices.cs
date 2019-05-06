@@ -1,10 +1,12 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Common.DomainServices;
 using Tauchbolde.Web.Services;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Common.DomainServices.Avatar;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Tauchbolde.Common;
 using Tauchbolde.Web.Core.TextFormatting;
 
@@ -13,9 +15,14 @@ namespace Tauchbolde.Web
     [UsedImplicitly]
     public class ApplicationServices
     {
-        public static void Register(IServiceCollection services)
+        public static void Register([NotNull] IServiceCollection services, [NotNull] IConfiguration configuration)
         {
-            CommonServices.RegisterServices(services);
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+
+            var photoStoreRoot = configuration["PhotoStoreRoot"];
+            
+            CommonServices.RegisterServices(services, photoStoreRoot);
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IUrlGenerator, MvcUrlGenerator>();

@@ -136,7 +136,7 @@ namespace Tauchbolde.Web
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
 
-            ApplicationServices.Register(services);
+            ApplicationServices.Register(services, Configuration);
         }
 
         private void ConfigureDatabase(IServiceCollection services)
