@@ -37,6 +37,8 @@ namespace Tauchbolde.Tests.DomainServices.PhotoStorage.Stores.FileSystemStore
             string expectedPath)
         {
             // Arrange
+            rootPath = rootPath.Replace(@"\/", Path.PathSeparator.ToString());
+            expectedPath = expectedPath.Replace(@"\/", Path.PathSeparator.ToString());
 
             // Act
             var filePath = pathCalculator.CalculatePath(
@@ -48,7 +50,6 @@ namespace Tauchbolde.Tests.DomainServices.PhotoStorage.Stores.FileSystemStore
                 thumbnailType);
 
             // Assert
-            expectedPath = expectedPath.Replace(@"\/", Path.PathSeparator.ToString());
             filePath.Should().Be(expectedPath);
         }
         
@@ -61,7 +62,8 @@ namespace Tauchbolde.Tests.DomainServices.PhotoStorage.Stores.FileSystemStore
         {
             // Arrange
             var rootPath = InitializeTestFileSystem();
-            
+            expectedFilePath = expectedFilePath.Replace(@"\/", Path.PathSeparator.ToString());
+       
             // Act
             var filePath = pathCalculator.CalculateUniqueFilePath(
                 rootPath,
@@ -71,7 +73,6 @@ namespace Tauchbolde.Tests.DomainServices.PhotoStorage.Stores.FileSystemStore
                 thumbnailType);
 
             // Assert
-            expectedFilePath = expectedFilePath.Replace(@"\/", Path.PathSeparator.ToString());
             var expected = Path.Combine(rootPath, expectedFilePath);
             filePath.Should().Be(expected);
             
