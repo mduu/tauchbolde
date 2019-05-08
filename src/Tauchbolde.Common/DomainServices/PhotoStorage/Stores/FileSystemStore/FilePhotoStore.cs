@@ -3,27 +3,31 @@ using System.IO;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Tauchbolde.Commom.Misc;
 
 namespace Tauchbolde.Common.DomainServices.PhotoStorage.Stores.FileSystemStore
 {
     public class FilePhotoStore : IPhotoStore
     {
         [NotNull] private readonly ILogger<FilePhotoStore> logger;
-        private readonly IFilePhotoStoreConfiguration configuration;
-        private readonly IFilePathCalculator filePathCalculator;
+        [NotNull] private readonly IFilePhotoStoreConfiguration configuration;
+        [NotNull] private readonly IFilePathCalculator filePathCalculator;
         [NotNull] private readonly IFilePhotoIdentifierSerializer identifierSerializer;
+        [NotNull] private readonly IMimeMapping mimeMapping;
 
         public FilePhotoStore(
             [NotNull] ILogger<FilePhotoStore> logger,
             [NotNull] IFilePhotoStoreConfiguration configuration,
             [NotNull] IFilePathCalculator filePathCalculator,
-            [NotNull] IFilePhotoIdentifierSerializer identifierSerializer)
+            [NotNull] IFilePhotoIdentifierSerializer identifierSerializer,
+            [NotNull] IMimeMapping mimeMapping)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             this.filePathCalculator = filePathCalculator ?? throw new ArgumentNullException(nameof(filePathCalculator));
             this.identifierSerializer =
                 identifierSerializer ?? throw new ArgumentNullException(nameof(identifierSerializer));
+            this.mimeMapping = mimeMapping ?? throw new ArgumentNullException(nameof(mimeMapping));
         }
 
         public async Task<PhotoIdentifier> AddPhotoAsync(
@@ -57,15 +61,17 @@ namespace Tauchbolde.Common.DomainServices.PhotoStorage.Stores.FileSystemStore
         {
             if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
 
-            var photoIdentifierPInfos = identifierSerializer.DeserializePhotoIdentifier(photoIdentifier);
-            var filePath = filePathCalculator.CalculatePath(configuration.RootFolder, photoIdentifierPInfos);
+            var filePath = filePathCalculator
+                .CalculatePath(
+                    configuration.RootFolder,
+                    identifierSerializer.DeserializePhotoIdentifier(photoIdentifier));
 
             if (!File.Exists(filePath))
             {
                 logger.LogWarning(
                     $"Photo file can not be deleted from disk because it does not exists! File: [{filePath}]",
                     photoIdentifier);
-                
+
                 return;
             }
 
@@ -83,20 +89,25 @@ namespace Tauchbolde.Common.DomainServices.PhotoStorage.Stores.FileSystemStore
         {
             if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
 
-            // TODO Identifier to path
+            var filePhotoIdentifierInfos = identifierSerializer.DeserializePhotoIdentifier(photoIdentifier);
+            var filePath = filePathCalculator
+                .CalculatePath(
+                    configuration.RootFolder,
+                    filePhotoIdentifierInfos);
 
-            // TODO Build and return photo
 
-            throw new NotImplementedException();
-        }
+            using (var fileStream = new FileStream(filePath, FileMode.Open))
+            {
+                var memStream = new MemoryStream();
+                await fileStream.CopyToAsync(memStream);
 
-        internal PhotoIdentifier BuildPhotoIdentifier(
-            PhotoCategory category,
-            string filename)
-        {
-            // TODO Build a unique PhotoIdentifier from the given arguments
-
-            throw new NotImplementedException();
+                return new Photo(
+                    mimeMapping.GetMimeMapping(
+                        Path.GetExtension(filePhotoIdentifierInfos.Filename)
+                    ),
+                    memStream,
+                    filePhotoIdentifierInfos.Filename);
+            }
         }
     }
 }
