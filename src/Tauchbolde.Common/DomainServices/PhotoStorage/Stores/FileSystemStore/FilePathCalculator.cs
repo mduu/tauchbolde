@@ -42,6 +42,22 @@ namespace Tauchbolde.Common.DomainServices.PhotoStorage.Stores.FileSystemStore
             return result;
         }
         
+        public string CalculatePath(
+            string rootPath, 
+            FilePhotoIdentifierInfos photoIdentifierInfos)
+        {
+            if (rootPath == null) throw new ArgumentNullException(nameof(rootPath));
+            if (photoIdentifierInfos == null) throw new ArgumentNullException(nameof(photoIdentifierInfos));
+
+            return CombinePath(
+                rootPath,
+                photoIdentifierInfos.Category,
+                photoIdentifierInfos.ThumbnailType, 
+                photoIdentifierInfos.Filename);
+        }
+
+
+        
         internal string CalculatePath(
             string rootPath, 
             PhotoCategory category, 
@@ -54,6 +70,11 @@ namespace Tauchbolde.Common.DomainServices.PhotoStorage.Stores.FileSystemStore
             
             var fileName = CalculateFileName(baseFileName, contentType, count);
 
+            return CombinePath(rootPath, category, thumbnailType, fileName);
+        }
+
+        private static string CombinePath(string rootPath, PhotoCategory category, ThumbnailType thumbnailType, string fileName)
+        {
             return Path.Combine(
                 rootPath,
                 category.ToString().ToLower(),

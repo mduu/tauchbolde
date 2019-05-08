@@ -10,5 +10,9 @@ namespace Tauchbolde.Common.DomainServices.PhotoStorage.Stores.FileSystemStore
             [CanBeNull] string baseFileName, 
             [CanBeNull] string contentType,
             ThumbnailType thumbnailType = ThumbnailType.None);
-        }
+
+        string CalculatePath(
+            [NotNull] string rootPath, 
+            [NotNull] FilePhotoIdentifierInfos photoIdentifierInfos);
+    }
 }
