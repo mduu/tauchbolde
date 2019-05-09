@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Tauchbolde.Common.Model;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Tauchbolde.Common.DomainServices.Repositories;
+using Tauchbolde.Common.Domain.Repositories;
 
 namespace Tauchbolde.Common.DataAccess
 {

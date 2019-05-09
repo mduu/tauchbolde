@@ -12,13 +12,13 @@ using Tauchbolde.Common;
 using Microsoft.AspNetCore.Localization;
 using System.Collections.Generic;
 using System.Globalization;
-using Tauchbolde.Common.DomainServices.SMTPSender;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using Tauchbolde.Web.Filters;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Rewrite;
+using Tauchbolde.Common.Domain.SMTPSender;
 
 namespace Tauchbolde.Web
 {

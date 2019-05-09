@@ -1,13 +1,13 @@
 ﻿using System;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using Tauchbolde.Common.DomainServices;
 using Tauchbolde.Web.Services;
 using Tauchbolde.Web.Core;
-using Tauchbolde.Common.DomainServices.Avatar;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Tauchbolde.Common;
+using Tauchbolde.Common.Domain;
+using Tauchbolde.Common.Domain.Avatar;
 using Tauchbolde.Web.Core.TextFormatting;
 
 namespace Tauchbolde.Web

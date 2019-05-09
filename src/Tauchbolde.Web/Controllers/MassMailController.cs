@@ -6,9 +6,9 @@ using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Web.Models.MassMail;
-using Tauchbolde.Common.DomainServices;
 using Microsoft.AspNetCore.Identity;
-using Tauchbolde.Common.DomainServices.Users;
+using Tauchbolde.Common.Domain;
+using Tauchbolde.Common.Domain.Users;
 
 namespace Tauchbolde.Web.Controllers
 {

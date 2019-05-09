@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Common;
-using Tauchbolde.Common.DomainServices.Events;
+using Tauchbolde.Common.Domain.Events;
+using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
 

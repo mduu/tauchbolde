@@ -2,24 +2,23 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Commom.Misc;
-using Tauchbolde.Common.DomainServices;
-using Tauchbolde.Common.DomainServices.Avatar;
-using Tauchbolde.Common.DomainServices.Notifications;
-using Tauchbolde.Common.DomainServices.SMTPSender;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.Domain;
+using Tauchbolde.Common.Domain.Avatar;
+using Tauchbolde.Common.Domain.Events;
+using Tauchbolde.Common.Domain.Logbook;
+using Tauchbolde.Common.Domain.Notifications;
+using Tauchbolde.Common.Domain.Notifications.HtmlFormatting;
+using Tauchbolde.Common.Domain.PhotoStorage;
+using Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore;
+using Tauchbolde.Common.Domain.Repositories;
+using Tauchbolde.Common.Domain.SMTPSender;
+using Tauchbolde.Common.Domain.TextFormatting;
+using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Infrastructure.Telemetry;
-using Tauchbolde.Common.DomainServices.Events;
-using Tauchbolde.Common.DomainServices.Logbook;
-using Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting;
-using Tauchbolde.Common.DomainServices.PhotoStorage;
-using Tauchbolde.Common.DomainServices.PhotoStorage.Stores;
-using Tauchbolde.Common.DomainServices.PhotoStorage.Stores.FileSystemStore;
-using Tauchbolde.Common.DomainServices.Users;
-using Tauchbolde.Common.DomainServices.Repositories;
-using Tauchbolde.Common.DomainServices.TextFormatting;
-using IImageResizer = Tauchbolde.Common.DomainServices.Avatar.IImageResizer;
-using ImageResizer = Tauchbolde.Common.DomainServices.Avatar.ImageResizer;
+using IImageResizer = Tauchbolde.Common.Domain.Avatar.IImageResizer;
+using ImageResizer = Tauchbolde.Common.Domain.Avatar.ImageResizer;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For FakeItEasy to use "internal" visibility

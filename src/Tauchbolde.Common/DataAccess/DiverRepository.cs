@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Common.Model;
 using Microsoft.AspNetCore.Identity;
-using Tauchbolde.Common.DomainServices.Repositories;
+using Tauchbolde.Common.Domain.Repositories;
 
 namespace Tauchbolde.Common.DataAccess
 {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Tauchbolde.Common.DomainServices;
+using Tauchbolde.Common.Domain;
 
 namespace Tauchbolde.Web.Core
 {

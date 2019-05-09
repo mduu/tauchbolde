@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Tauchbolde.Common.DomainServices.SMTPSender;
+using Tauchbolde.Common.Domain.SMTPSender;
 
 namespace Tauchbolde.Web.Services
 {
