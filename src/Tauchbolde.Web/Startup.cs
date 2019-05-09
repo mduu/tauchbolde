@@ -17,6 +17,7 @@ using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using Tauchbolde.Web.Filters;
 using System.Data.SqlClient;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Rewrite;
 using Tauchbolde.Common.Domain.SMTPSender;
 
@@ -24,9 +25,14 @@ namespace Tauchbolde.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment hostingEnvironment;
+
+        public Startup(
+            [NotNull] IConfiguration configuration,
+            [NotNull] IHostingEnvironment hostingEnvironment)
         {
-            Configuration = configuration;
+            Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            this.hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
         }
 
         public IConfiguration Configuration { get; }
@@ -136,7 +142,7 @@ namespace Tauchbolde.Web
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
 
-            ApplicationServices.Register(services, Configuration);
+            ApplicationServices.Register(services, Configuration, hostingEnvironment);
         }
 
         private void ConfigureDatabase(IServiceCollection services)

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Web.Services;
 using Tauchbolde.Web.Core;
@@ -15,12 +17,20 @@ namespace Tauchbolde.Web
     [UsedImplicitly]
     public class ApplicationServices
     {
-        public static void Register([NotNull] IServiceCollection services, [NotNull] IConfiguration configuration)
+        public static void Register(
+            [NotNull] IServiceCollection services,
+            [NotNull] IConfiguration configuration,
+            [NotNull] IHostingEnvironment hostingEnvironment)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (hostingEnvironment == null) throw new ArgumentNullException(nameof(hostingEnvironment));
 
             var photoStoreRoot = configuration["PhotoStoreRoot"];
+            if (string.IsNullOrWhiteSpace(photoStoreRoot))
+            {
+                photoStoreRoot = Path.Combine(hostingEnvironment.WebRootPath, "photos");
+            }
             
             CommonServices.RegisterServices(services, photoStoreRoot);
 
