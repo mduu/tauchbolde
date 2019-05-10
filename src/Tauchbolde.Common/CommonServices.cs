@@ -41,6 +41,10 @@ namespace Tauchbolde.Common
             services.AddSingleton<IImageResizer, ImageResizer>();
             services.AddScoped<ITelemetryService, AppInsightsTelemetryService>();
             services.AddScoped<ITextFormatter, MarkdownDigFormatter>();
+            services.AddSingleton<IFilePhotoStoreConfiguration>(new FilePhotoStoreConfiguration(photoStoreRoot));
+            services.AddTransient<IFilePathCalculator, FilePathCalculator>();
+            services.AddTransient<IFilePhotoIdentifierSerializer, FilePhotoIdentifierSerializer>();
+            services.AddTransient<Domain.PhotoStorage.IImageResizer, Domain.PhotoStorage.ImageResizer>();
 
             // Repos
             services.AddTransient<IDiverRepository, DiverRepository>();
@@ -66,8 +70,6 @@ namespace Tauchbolde.Common
             services.AddTransient<ILogbookService, LogbookService>();
             services.AddTransient<IPhotoService, PhotoService>();
             services.AddTransient<IPhotoStore, FilePhotoStore>();
-            services.AddSingleton<IFilePhotoStoreConfiguration>(new FilePhotoStoreConfiguration(photoStoreRoot));
-            services.AddTransient<IFilePhotoIdentifierSerializer, FilePhotoIdentifierSerializer>();
         }
 
         public static void RegisterDevelopment(IServiceCollection services)
