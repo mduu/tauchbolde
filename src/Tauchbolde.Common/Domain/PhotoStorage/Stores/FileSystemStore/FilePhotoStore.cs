@@ -45,6 +45,12 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
                 thumbnailType
             );
 
+            var directoryPath = Path.GetDirectoryName(photoFilePath);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
             using (var fileStream = new FileStream(photoFilePath, FileMode.CreateNew, FileAccess.Write))
             {
                 await photo.Content.CopyToAsync(fileStream);
