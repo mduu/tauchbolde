@@ -16,9 +16,8 @@ using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Domain.SMTPSender;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Domain.Users;
+using Tauchbolde.Common.Infrastructure;
 using Tauchbolde.Common.Infrastructure.Telemetry;
-using IImageResizer = Tauchbolde.Common.Infrastructure.IImageResizer;
-using ImageResizer = Tauchbolde.Common.Infrastructure.ImageResizer;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For FakeItEasy to use "internal" visibility
@@ -44,7 +43,6 @@ namespace Tauchbolde.Common
             services.AddSingleton<IFilePhotoStoreConfiguration>(new FilePhotoStoreConfiguration(photoStoreRoot));
             services.AddTransient<IFilePathCalculator, FilePathCalculator>();
             services.AddTransient<IFilePhotoIdentifierSerializer, FilePhotoIdentifierSerializer>();
-            services.AddTransient<Domain.PhotoStorage.IImageResizer, Domain.PhotoStorage.ImageResizer>();
 
             // Repos
             services.AddTransient<IDiverRepository, DiverRepository>();

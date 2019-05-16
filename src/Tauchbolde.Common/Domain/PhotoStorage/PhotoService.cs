@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Tauchbolde.Common.Infrastructure;
 
 namespace Tauchbolde.Common.Domain.PhotoStorage
 {
@@ -122,13 +123,11 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
 
             var thumbnailConfiguration = ThumbnailConfigurations.Get(thumbnailType);
 
-            var thumbnailData = new MemoryStream();
-            
-            await imageResizer.ResizeAsJpegAsync(
-                photoData,
+            var thumbnailData = imageResizer.Resize(
                 thumbnailConfiguration.MaxWidth,
                 thumbnailConfiguration.MaxHeight,
-                thumbnailData);
+                photoData,
+                ".jpg");
 
             return thumbnailData;
         }
