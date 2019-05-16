@@ -17,8 +17,8 @@ using Tauchbolde.Common.Domain.SMTPSender;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Infrastructure.Telemetry;
-using IImageResizer = Tauchbolde.Common.Domain.Avatar.IImageResizer;
-using ImageResizer = Tauchbolde.Common.Domain.Avatar.ImageResizer;
+using IImageResizer = Tauchbolde.Common.Infrastructure.IImageResizer;
+using ImageResizer = Tauchbolde.Common.Infrastructure.ImageResizer;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For FakeItEasy to use "internal" visibility

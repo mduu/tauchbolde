@@ -3,7 +3,7 @@ using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 
-namespace Tauchbolde.Common.Domain.Avatar
+namespace Tauchbolde.Common.Infrastructure
 {
     /// <summary>
     /// Implements a <see cref="IImageResizer"/> using ImageSharp library.

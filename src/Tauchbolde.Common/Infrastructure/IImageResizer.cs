@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Tauchbolde.Common.Domain.Avatar
+namespace Tauchbolde.Common.Infrastructure
 {
     /// <summary>
     /// Interface for resizing images.

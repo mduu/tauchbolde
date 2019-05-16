@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Tauchbolde.Common.Infrastructure;
 
 namespace Tauchbolde.Common.Domain.Avatar
 {

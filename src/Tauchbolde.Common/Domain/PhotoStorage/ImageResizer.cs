@@ -11,7 +11,6 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         /// <inheritdoc />
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task ResizeAsJpegAsync(Stream originalContent, int width, int height, Stream outputStream)
-
         {
             if (originalContent == null) throw new ArgumentNullException(nameof(originalContent));
 
