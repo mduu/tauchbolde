@@ -11,7 +11,7 @@ namespace Tauchbolde.Common.Infrastructure
     public class ImageResizer : IImageResizer
     {
         /// <inheritdoc/>
-        public Stream Resize(int maxWidth, int maxHeight, Stream imageData, string fileExt)
+        public Stream Resize(int maxWidth, int maxHeight, Stream imageData, string targetFileExt)
         {
             var outStream = new MemoryStream();
             using (var image = Image.Load(imageData))
@@ -20,7 +20,7 @@ namespace Tauchbolde.Common.Infrastructure
                     .Resize(maxWidth, maxHeight)
                 );
 
-                switch (fileExt.ToLower())
+                switch (targetFileExt.ToLower())
                 {
                     case ".jpg":
                     case ".jpeg":
@@ -33,7 +33,7 @@ namespace Tauchbolde.Common.Infrastructure
                         image.SaveAsGif(outStream);
                         break;
                     default:
-                        throw new InvalidOperationException($"File extension [{fileExt}] not supported!");
+                        throw new InvalidOperationException($"File extension [{targetFileExt}] not supported!");
                 }
             }
 

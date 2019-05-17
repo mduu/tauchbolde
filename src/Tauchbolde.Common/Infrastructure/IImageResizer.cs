@@ -14,7 +14,7 @@ namespace Tauchbolde.Common.Infrastructure
         /// <param name="maxWidth">Max width in pixels.</param>
         /// <param name="maxHeight">Max height in pixels.</param>
         /// <param name="imageData">Binary image data.</param>
-        /// <param name="fileExt">File extension (eg. ",jpg").</param>
-        Stream Resize(int maxWidth, int maxHeight, Stream imageData, string fileExt);
+        /// <param name="targetFileExt">File extension (eg. ",jpg").</param>
+        Stream Resize(int maxWidth, int maxHeight, Stream imageData, string targetFileExt);
     }
 }
