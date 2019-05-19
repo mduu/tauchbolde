@@ -107,7 +107,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         {
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
             
-            var thumbnailPhotoData = await GeneratedThumbnailAsync(photoData, thumbnailType);
+            var thumbnailPhotoData = await GeneratedThumbnailAsync(photoData, thumbnailType, contentType);
             
             var thumbnailPhoto = new Photo( 
                 "image/jpg",
@@ -117,7 +117,8 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
             return await photoStore.AddPhotoAsync(photoCategory, thumbnailPhoto, thumbnailType);
         }
 
-        private async Task<Stream> GeneratedThumbnailAsync([NotNull] Stream photoData, ThumbnailType thumbnailType)
+        private async Task<Stream> GeneratedThumbnailAsync([NotNull] Stream photoData, ThumbnailType thumbnailType,
+            string contentType)
         {
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
 
@@ -127,7 +128,8 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
                 thumbnailConfiguration.MaxWidth,
                 thumbnailConfiguration.MaxHeight,
                 photoData,
-                ".jpg");
+                ".jpg",
+                contentType);
 
             return thumbnailData;
         }

@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Gif;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
 
 namespace Tauchbolde.Common.Infrastructure
@@ -11,10 +16,15 @@ namespace Tauchbolde.Common.Infrastructure
     public class ImageResizer : IImageResizer
     {
         /// <inheritdoc/>
-        public Stream Resize(int maxWidth, int maxHeight, Stream imageData, string targetFileExt)
+        public Stream Resize(int maxWidth, int maxHeight, Stream imageData, string targetFileExt, string contentType = null)
         {
             var outStream = new MemoryStream();
-            using (var image = Image.Load(imageData))
+            
+            var imageDecoder = GetImageDecoder(contentType);
+
+            var image = imageDecoder != null ? Image.Load(imageData, imageDecoder) : Image.Load(imageData);
+            
+            using (image)
             {
                 image.Mutate(x => x
                     .Resize(maxWidth, maxHeight)
@@ -39,6 +49,24 @@ namespace Tauchbolde.Common.Infrastructure
 
             outStream.Seek(0, 0);
             return outStream;
+        }
+
+        private static IImageDecoder GetImageDecoder(string contentType)
+        {
+            if (string.IsNullOrWhiteSpace(contentType))
+            {
+                return null;
+            };
+
+            var mapping = new Dictionary<string, Func<IImageDecoder>>
+            {
+                {"image/png", () => new PngDecoder()},
+                {"image/gif", () => new GifDecoder()},
+                {"image/jpg", () => new JpegDecoder()},
+                {"image/jpeg", () => new JpegDecoder()},
+            };
+            
+            return mapping[contentType]();
         }
     }
 }
