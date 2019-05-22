@@ -53,6 +53,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
 
             using (var fileStream = new FileStream(photoFilePath, FileMode.CreateNew, FileAccess.Write))
             {
+                photo.Content.Seek(0, 0);
                 await photo.Content.CopyToAsync(fileStream);
             }
 
