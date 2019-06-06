@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Common;
 using Tauchbolde.Common.Domain.Logbook;
+using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Web.Core;
@@ -139,6 +140,14 @@ namespace Tauchbolde.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Photo(string id)
+        {
+            var photoIdentifier = new PhotoIdentifier(id);
+            var photo = await logbookService.GetPhotoDataAsync(photoIdentifier);
+            
+            return File(photo.Content, photo.ContentType, photo.Filename);
+        }
 
         private async Task<LogbookDetailViewModel> CreateLogbookViewModelAsync(Guid logbookEntryId)
         {
@@ -158,6 +167,8 @@ namespace Tauchbolde.Web.Controllers
                 Teaser = logbookEntry.TeaserText,
                 Text = logbookEntry.Text,
                 ExternalPhotoAlbumUrl = logbookEntry.ExternalPhotoAlbumUrl,
+                TeaserImageUrl = Url.Action("Photo", "", logbookEntry.TeaserImage),
+                TeaserThumbImageUrl = logbookEntry.TeaserImageThumb,
                 EventTitel = logbookEntry.EventId != null && logbookEntry.Event != null
                     ? logbookEntry.Event.Name
                     : null,
@@ -203,5 +214,7 @@ namespace Tauchbolde.Web.Controllers
         }
 
         private async Task<bool> GetAllowEdit() => await GetTauchboldOrAdmin();
+
+        private string GetImageUrl(string imageId) => Url.Action("Photo", new {Id = imageId});
     }
 }

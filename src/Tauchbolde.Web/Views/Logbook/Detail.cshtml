@@ -12,6 +12,11 @@
 <div class="col-md-10">
 
     <div class="row">
+        @if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
+        {
+            <img src="@Model.TeaserImageUrl"/>
+        }
+        
         @if (!string.IsNullOrWhiteSpace(Model.Teaser))
         {
             <summary>@textFormatting.FormatText(Model.Teaser)</summary>

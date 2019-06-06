@@ -69,6 +69,14 @@ namespace Tauchbolde.Common.Domain.Logbook
             TrackLogbookEntry("LOGBOOK-DELETE", logbookEntry);
         }
 
+        /// <inheritdoc />
+        public async Task<Photo> GetPhotoDataAsync(PhotoIdentifier photoIdentifier)
+        {
+            if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
+
+            return await photoService.GetPhotoDataAsync(photoIdentifier);
+        }
+
         private async Task<Guid> UpdateExistingLogbookEntryAsync([NotNull] LogbookUpsertModel upsertModel)
         {
             if (upsertModel == null) throw new ArgumentNullException(nameof(upsertModel));

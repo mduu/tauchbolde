@@ -29,5 +29,7 @@ namespace Tauchbolde.Web.Models.Logbook
         [CanBeNull] public string EditUrl { get; set; }
         [CanBeNull] public string DeleteUrl { get; set; }
         [CanBeNull] public string EventUrl { get; set; }
+        [CanBeNull] public string TeaserImageUrl { get; set; }
+        [CanBeNull] public string TeaserThumbImageUrl { get; set; }
     }
 }
