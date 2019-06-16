@@ -31,7 +31,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
                 return false;
             }
 
-            return photoIdentifierObj.ToString()?.Equals(this.ToString()) ?? false;
+            return photoIdentifierObj.ToString()?.Equals(ToString()) ?? false;
         }
 
         /// <inheritdoc />
