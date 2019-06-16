@@ -1,10 +1,12 @@
 using System;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Tauchbolde.Common;
 using Tauchbolde.Common.Domain.Logbook;
 using Tauchbolde.Common.Domain.PhotoStorage;
@@ -143,8 +145,13 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Photo(string id)
         {
-            var photoIdentifier = new PhotoIdentifier(id);
+            var photoIdentifier = new PhotoIdentifier(WebUtility.UrlDecode(id));
             var photo = await logbookService.GetPhotoDataAsync(photoIdentifier);
+
+            if (photo?.Content == null)
+            {
+                return NotFound();
+            }
             
             return File(photo.Content, photo.ContentType, photo.Filename);
         }
@@ -167,8 +174,8 @@ namespace Tauchbolde.Web.Controllers
                 Teaser = logbookEntry.TeaserText,
                 Text = logbookEntry.Text,
                 ExternalPhotoAlbumUrl = logbookEntry.ExternalPhotoAlbumUrl,
-                TeaserImageUrl = Url.Action("Photo", "", logbookEntry.TeaserImage),
-                TeaserThumbImageUrl = logbookEntry.TeaserImageThumb,
+                TeaserImageUrl = Url.Action("Photo", "Logbook", new { id = logbookEntry.TeaserImage }),
+                TeaserThumbImageUrl = Url.Action("Photo", "Logbook", new { id = logbookEntry.TeaserImageThumb }),
                 EventTitel = logbookEntry.EventId != null && logbookEntry.Event != null
                     ? logbookEntry.Event.Name
                     : null,
