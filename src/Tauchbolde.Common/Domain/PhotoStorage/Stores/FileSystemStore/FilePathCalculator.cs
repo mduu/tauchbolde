@@ -7,6 +7,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
 {    
     public class FilePathCalculator : IFilePathCalculator
     {
+        private const string ThumbSubPath = "thumbs";
         private readonly IMimeMapping mimeMapping;
 
         public FilePathCalculator(
@@ -15,12 +16,11 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
             this.mimeMapping = mimeMapping ?? throw new ArgumentNullException(nameof(mimeMapping));
         }
         
-        public string CalculateUniqueFilePath(
-            string rootPath, 
-            PhotoCategory category, 
-            string baseFileName, 
+        public string CalculateUniqueFilePath(string rootPath,
+            PhotoCategory category,
+            string baseFileName,
             string contentType,
-            ThumbnailType thumbnailType = ThumbnailType.None)
+            bool isThumb)
         {
             string result;
             var counter = 0;
@@ -33,7 +33,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
                     baseFileName,
                     contentType,
                     counter,
-                    thumbnailType);
+                    isThumb);
                 
                 counter++;
     
@@ -44,16 +44,16 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
         
         public string CalculatePath(
             string rootPath, 
-            FilePhotoIdentifierInfos photoIdentifierInfos)
+            PhotoIdentifier photoIdentifier)
         {
             if (rootPath == null) throw new ArgumentNullException(nameof(rootPath));
-            if (photoIdentifierInfos == null) throw new ArgumentNullException(nameof(photoIdentifierInfos));
+            if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
 
             return CombinePath(
                 rootPath,
-                photoIdentifierInfos.Category,
-                photoIdentifierInfos.ThumbnailType, 
-                photoIdentifierInfos.Filename);
+                photoIdentifier.Category,
+                photoIdentifier.IsThumb, 
+                photoIdentifier.Filename);
         }
 
 
@@ -64,21 +64,25 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
             string baseFileName, 
             string contentType,
             int count,
-            ThumbnailType thumbnailType = ThumbnailType.None)
+            bool isThumb)
         {
             if (rootPath == null) throw new ArgumentNullException(nameof(rootPath));
             
             var fileName = CalculateFileName(baseFileName, contentType, count);
 
-            return CombinePath(rootPath, category, thumbnailType, fileName);
+            return CombinePath(rootPath, category, isThumb, fileName);
         }
 
-        private static string CombinePath(string rootPath, PhotoCategory category, ThumbnailType thumbnailType, string fileName)
+        private static string CombinePath(
+            string rootPath,
+            PhotoCategory category,
+            bool isThumb,
+            string fileName)
         {
             return Path.Combine(
                 rootPath,
                 category.ToString().ToLower(),
-                thumbnailType == ThumbnailType.None ? "" : "thumbs",
+                isThumb ? ThumbSubPath : "",
                 fileName);
         }
 
@@ -91,7 +95,8 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
                 fileName = $"{Path.GetFileNameWithoutExtension(fileName)}_{count}{Path.GetExtension(fileName)}";
             }
 
-            if (string.IsNullOrWhiteSpace(Path.GetExtension(fileName)) && !string.IsNullOrWhiteSpace(contentType))
+            if (string.IsNullOrWhiteSpace(Path.GetExtension(fileName)) &&
+                !string.IsNullOrWhiteSpace(contentType))
             {
                 var mimeFileExt = mimeMapping.GetFileExtensionMapping(contentType);
                 fileName = Path.ChangeExtension(fileName, mimeFileExt);

@@ -26,23 +26,21 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         public async Task<PhotoAndThumbnailIdentification> AddPhotoAsync(
             PhotoCategory category,
             Stream photoData,
-            string filename,
             string contentType,
-            ThumbnailType thumbnailType)
+            string filename)
         {
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
             if (contentType == null) throw new ArgumentNullException(nameof(contentType));
             
-            return await AddPhotoWithThumbnail(photoData, filename, contentType, thumbnailType, category);
+            return await AddPhotoWithThumbnail(category, photoData, filename, contentType);
         }
-
+        
         public async Task<PhotoAndThumbnailIdentification> UpdatePhotoAsync(
             PhotoAndThumbnailIdentification existingPhoto,
             PhotoCategory category,
             Stream photoData,
             string filename,
-            string contentType,
-            ThumbnailType thumbnailType)
+            string contentType)
         {
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
 
@@ -55,7 +53,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
                 });
             }
 
-            return await AddPhotoWithThumbnail(photoData, filename, contentType, thumbnailType, category);
+            return await AddPhotoWithThumbnail(category, photoData, filename, contentType);
         }
 
         public async Task RemovePhotosAsync(params PhotoIdentifier[] photoIdentifiers)
@@ -71,18 +69,16 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
             return await photoStore.GetPhotoAsync(photoIdentifier);
         }
         
-        private async Task<PhotoAndThumbnailIdentification> AddPhotoWithThumbnail(
+        private async Task<PhotoAndThumbnailIdentification> AddPhotoWithThumbnail(PhotoCategory photoCategory,
             [NotNull] Stream photoData,
             string filename,
-            string contentType,
-            ThumbnailType thumbnailType,
-            PhotoCategory photoCategory)
+            string contentType)
         {
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
 
             return new PhotoAndThumbnailIdentification(
                 await AddOriginalPhoto(photoData, filename, contentType, photoCategory),
-                await AddThumbnail(photoData, filename, contentType, thumbnailType, photoCategory));
+                await AddThumbnail(photoData, filename, contentType, photoCategory));
         }
 
         private async Task<PhotoIdentifier> AddOriginalPhoto(
@@ -94,39 +90,41 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
 
             return await photoStore.AddPhotoAsync(
-                photoCategory,
-                new Photo(contentType, photoData, filename));
+                new Photo(
+                    new PhotoIdentifier(photoCategory, false, filename),
+                    contentType,
+                    photoData));
         }
 
         private async Task<PhotoIdentifier> AddThumbnail(
             [NotNull] Stream photoData,
             string filename,
             string contentType,
-            ThumbnailType thumbnailType,
             PhotoCategory photoCategory)
         {
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
             
-            var thumbnailPhotoData = await GeneratedThumbnailAsync(photoData, thumbnailType, contentType);
-            
-            var thumbnailPhoto = new Photo( 
-                "image/jpg",
-                thumbnailPhotoData,
-                filename);
-            
-            return await photoStore.AddPhotoAsync(photoCategory, thumbnailPhoto, thumbnailType);
+            var thumbnailPhotoData = await GeneratedThumbnailAsync(photoData, photoCategory, contentType);
+
+            return await photoStore.AddPhotoAsync(
+                new Photo(
+                    new PhotoIdentifier(photoCategory, true, filename), 
+                    "image/jpg",
+                    thumbnailPhotoData));
         }
 
-        private async Task<Stream> GeneratedThumbnailAsync([NotNull] Stream photoData, ThumbnailType thumbnailType,
+        private async Task<Stream> GeneratedThumbnailAsync(
+            [NotNull] Stream photoData,
+            PhotoCategory photoCategory,
             string contentType)
         {
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
 
-            var thumbnailConfiguration = ThumbnailConfigurations.Get(thumbnailType);
+            var thumbnailConfiguration = PhotoCategoryConfig.Configs[photoCategory];
 
             var thumbnailData = imageResizer.Resize(
-                thumbnailConfiguration.MaxWidth,
-                thumbnailConfiguration.MaxHeight,
+                thumbnailConfiguration.ThumbMaxWidth,
+                thumbnailConfiguration.ThumbMaxHeight,
                 photoData,
                 ".jpg",
                 contentType);

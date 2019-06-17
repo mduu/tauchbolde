@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Tauchbolde.Common;
 using Tauchbolde.Common.Domain.Logbook;
 using Tauchbolde.Common.Domain.PhotoStorage;
@@ -153,7 +152,7 @@ namespace Tauchbolde.Web.Controllers
                 return NotFound();
             }
             
-            return File(photo.Content, photo.ContentType, photo.Filename);
+            return File(photo.Content, photo.ContentType, photo.Identifier.Filename);
         }
 
         private async Task<LogbookDetailViewModel> CreateLogbookViewModelAsync(Guid logbookEntryId)

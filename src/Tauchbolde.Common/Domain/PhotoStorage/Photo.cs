@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using JetBrains.Annotations;
 
@@ -6,17 +7,25 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
     /// <summary>
     /// Metadata and binary data of a photo.
     /// </summary>
+    /// <seealso cref="PhotoIdentifier"/>
     public class Photo
     {
         public Photo(
+            [NotNull] PhotoIdentifier identifier,
             [NotNull] string contentType,
-            [NotNull] Stream content,
-            [CanBeNull] string filename)
+            [NotNull] Stream content)
         {
-            ContentType = contentType;
-            Content = content;
-            Filename = filename;
+            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            ContentType = contentType ?? throw new ArgumentNullException(nameof(contentType));
+            Content = content ?? throw new ArgumentNullException(nameof(content));
         }
+        
+        /// <summary>
+        /// Identifies the photo with category, filename and an indicator
+        /// whether it is a thumbnail or not.
+        /// </summary>
+        /// <seealso cref="PhotoIdentifier"/>
+        public PhotoIdentifier Identifier { get; set; }
         
         /// <summary>
         /// The MIME content type of the <see cref="Content"/>.
@@ -26,11 +35,6 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         /// <summary>
         /// The binary content of the photo.
         /// </summary>
-        public Stream Content { get; }
-        
-        /// <summary>
-        /// The original filename of the photo.
-        /// </summary>
-        public string Filename { get; }
+        [NotNull] public Stream Content { get; }
     }
 }

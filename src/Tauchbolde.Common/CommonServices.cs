@@ -42,7 +42,6 @@ namespace Tauchbolde.Common
             services.AddScoped<ITextFormatter, MarkdownDigFormatter>();
             services.AddSingleton<IFilePhotoStoreConfiguration>(new FilePhotoStoreConfiguration(photoStoreRoot));
             services.AddTransient<IFilePathCalculator, FilePathCalculator>();
-            services.AddTransient<IFilePhotoIdentifierSerializer, FilePhotoIdentifierSerializer>();
 
             // Repos
             services.AddTransient<IDiverRepository, DiverRepository>();

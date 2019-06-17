@@ -97,11 +97,10 @@ namespace Tauchbolde.Common.Domain.Logbook
             if (upsertModel.TeaserImage != null)
             {
                 photoIdentifier = await photoService.AddPhotoAsync(
-                    PhotoCategory.EventTeaser,
+                    PhotoCategory.Event,
                     upsertModel.TeaserImage,
-                    upsertModel.TeaserImageFileName,
                     upsertModel.TeaserImageContentType ?? throw new InvalidOperationException(),
-                    ThumbnailType.LogbookTeaser);
+                    upsertModel.TeaserImageFileName);
             }
             
             MapUpsertModelToLogbookEntry(upsertModel, existingLogbookEntry, photoIdentifier);
@@ -130,11 +129,10 @@ namespace Tauchbolde.Common.Domain.Logbook
             if (upsertModel.TeaserImage != null && upsertModel.TeaserImageContentType != null)
             {
                 teaserIdentifiers = await photoService.AddPhotoAsync(
-                    PhotoCategory.EventTeaser,
+                    PhotoCategory.Event,
                     upsertModel.TeaserImage,
-                    upsertModel.TeaserImageFileName,
                     upsertModel.TeaserImageContentType,
-                    ThumbnailType.LogbookTeaser);
+                    upsertModel.TeaserImageFileName);
             }
 
             MapUpsertModelToLogbookEntry(upsertModel, newLogbookEntry, teaserIdentifiers);
