@@ -107,7 +107,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 return BadRequest();
             }
-
+            
             var id = await logbookService.UpsertAsync(new LogbookUpsertModel
             {
                 Id = model.Id,

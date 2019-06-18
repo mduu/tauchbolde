@@ -173,8 +173,8 @@ namespace Tauchbolde.Common.Domain.Logbook
             logbookEntry.Text = upsertModel.Text;
             logbookEntry.CreatedAt = upsertModel.CreatedAt;
             logbookEntry.ExternalPhotoAlbumUrl = upsertModel.ExternalPhotoAlbumUrl;
-            logbookEntry.TeaserImage = teaserIdentifiers?.OriginalPhotoIdentifier?.ToString();
-            logbookEntry.TeaserImageThumb = teaserIdentifiers?.ThumbnailPhotoIdentifier?.ToString();
+            logbookEntry.TeaserImage = teaserIdentifiers?.OriginalPhotoIdentifier?.Serialze();
+            logbookEntry.TeaserImageThumb = teaserIdentifiers?.ThumbnailPhotoIdentifier?.Serialze();
         }
         
         private async Task RemoveTeaserImagesAsync([NotNull] LogbookEntry logbookEntry)
