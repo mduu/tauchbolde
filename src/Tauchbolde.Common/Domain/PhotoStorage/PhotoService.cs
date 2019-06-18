@@ -23,7 +23,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
             this.imageResizer = imageResizer ?? throw new ArgumentNullException(nameof(imageResizer));
         }
         
-        public async Task<PhotoAndThumbnailIdentification> AddPhotoAsync(
+        public async Task<PhotoAndThumbnailIdentifiers> AddPhotoAsync(
             PhotoCategory category,
             Stream photoData,
             string contentType,
@@ -35,8 +35,8 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
             return await AddPhotoWithThumbnail(category, photoData, filename, contentType);
         }
         
-        public async Task<PhotoAndThumbnailIdentification> UpdatePhotoAsync(
-            PhotoAndThumbnailIdentification existingPhoto,
+        public async Task<PhotoAndThumbnailIdentifiers> UpdatePhotoAsync(
+            PhotoAndThumbnailIdentifiers existingPhoto,
             PhotoCategory category,
             Stream photoData,
             string filename,
@@ -69,14 +69,14 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
             return await photoStore.GetPhotoAsync(photoIdentifier);
         }
         
-        private async Task<PhotoAndThumbnailIdentification> AddPhotoWithThumbnail(PhotoCategory photoCategory,
+        private async Task<PhotoAndThumbnailIdentifiers> AddPhotoWithThumbnail(PhotoCategory photoCategory,
             [NotNull] Stream photoData,
             string filename,
             string contentType)
         {
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
 
-            return new PhotoAndThumbnailIdentification(
+            return new PhotoAndThumbnailIdentifiers(
                 await AddOriginalPhoto(photoData, filename, contentType, photoCategory),
                 await AddThumbnail(photoData, filename, contentType, photoCategory));
         }

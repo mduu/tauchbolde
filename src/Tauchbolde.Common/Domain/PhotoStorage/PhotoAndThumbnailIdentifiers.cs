@@ -2,9 +2,9 @@ using JetBrains.Annotations;
 
 namespace Tauchbolde.Common.Domain.PhotoStorage
 {
-    public class PhotoAndThumbnailIdentification
+    public class PhotoAndThumbnailIdentifiers
     {
-        public PhotoAndThumbnailIdentification(
+        public PhotoAndThumbnailIdentifiers(
             [CanBeNull] PhotoIdentifier originalPhotoIdentifier,
             [CanBeNull] PhotoIdentifier thumbnailPhotoIdentifier)
         {

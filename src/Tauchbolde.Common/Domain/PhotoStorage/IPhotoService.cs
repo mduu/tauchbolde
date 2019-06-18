@@ -15,14 +15,14 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         /// Stores a photo in the photo storage and returns its identifier.
         /// </summary>
         /// <returns>The unique photo identifier of the added photo.</returns>
-        Task<PhotoAndThumbnailIdentification> AddPhotoAsync(
+        Task<PhotoAndThumbnailIdentifiers> AddPhotoAsync(
             PhotoCategory category,
             [NotNull] Stream photoData,
             [NotNull] string contentType,
             string filename);
 
-        Task<PhotoAndThumbnailIdentification> UpdatePhotoAsync(
-            [CanBeNull] PhotoAndThumbnailIdentification existingPhoto,
+        Task<PhotoAndThumbnailIdentifiers> UpdatePhotoAsync(
+            [CanBeNull] PhotoAndThumbnailIdentifiers existingPhoto,
             PhotoCategory category,
             [CanBeNull] Stream photoData,
             [CanBeNull] string filename,

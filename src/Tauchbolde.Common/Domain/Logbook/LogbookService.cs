@@ -93,7 +93,7 @@ namespace Tauchbolde.Common.Domain.Logbook
                 throw new InvalidOperationException($"No existing LogbookEntry found with Id [{upsertModel.Id}]!");
             }
 
-            PhotoAndThumbnailIdentification photoIdentifier = null;
+            PhotoAndThumbnailIdentifiers photoIdentifier = null;
             if (upsertModel.TeaserImage != null)
             {
                 photoIdentifier = await photoService.AddPhotoAsync(
@@ -125,7 +125,7 @@ namespace Tauchbolde.Common.Domain.Logbook
             };
 
             
-            PhotoAndThumbnailIdentification teaserIdentifiers = null;
+            PhotoAndThumbnailIdentifiers teaserIdentifiers = null;
             if (upsertModel.TeaserImage != null && upsertModel.TeaserImageContentType != null)
             {
                 teaserIdentifiers = await photoService.AddPhotoAsync(
@@ -163,7 +163,7 @@ namespace Tauchbolde.Common.Domain.Logbook
         private static void MapUpsertModelToLogbookEntry(
             [NotNull] LogbookUpsertModel upsertModel,
             [NotNull] LogbookEntry logbookEntry,
-            [CanBeNull] PhotoAndThumbnailIdentification teaserIdentifiers)
+            [CanBeNull] PhotoAndThumbnailIdentifiers teaserIdentifiers)
         {
             if (upsertModel == null) throw new ArgumentNullException(nameof(upsertModel));
             if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
