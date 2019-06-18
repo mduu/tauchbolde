@@ -27,14 +27,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
             
             do
             {
-                result = CalculatePath(
-                    rootPath,
-                    category,
-                    baseFileName,
-                    contentType,
-                    counter,
-                    isThumb);
-                
+                result = CalculatePath(rootPath, category, baseFileName, contentType, counter, isThumb);
                 counter++;
     
             } while (File.Exists(result));
