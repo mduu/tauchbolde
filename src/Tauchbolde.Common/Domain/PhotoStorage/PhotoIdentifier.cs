@@ -10,7 +10,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
     public class PhotoIdentifier
     {
         private static readonly Regex ParseRegex =
-            new Regex(@"^(?<category>.*)-(?<thumbnail>.*)-(?<filename>.*)$", RegexOptions.Compiled);
+            new Regex(@"^(?<category>.*)/(?<thumbnail>.*)/(?<filename>.*)$", RegexOptions.Compiled);
 
         public PhotoIdentifier(PhotoCategory category, bool isThumb, [NotNull] string filename)
         {
@@ -59,6 +59,6 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         }
 
         public string Serialze() =>
-            $"{Category.ToString()}-{(IsThumb ? "thumb" : "")}-{Filename}";
+            $"{Category.ToString()}{(IsThumb ? "/thumb" : "")}/{Filename}";
     }
 }
