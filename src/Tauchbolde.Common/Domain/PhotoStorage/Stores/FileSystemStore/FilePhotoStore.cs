@@ -91,6 +91,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
             {
                 var memStream = new MemoryStream();
                 await fileStream.CopyToAsync(memStream);
+                memStream.Seek(0, 0);
 
                 return new Photo(
                     photoIdentifier,
