@@ -97,7 +97,7 @@ namespace Tauchbolde.Common.Domain.Logbook
             if (upsertModel.TeaserImage != null)
             {
                 photoIdentifier = await photoService.AddPhotoAsync(
-                    PhotoCategory.Event,
+                    PhotoCategory.LogbookTeaser,
                     upsertModel.TeaserImage,
                     upsertModel.TeaserImageContentType ?? throw new InvalidOperationException(),
                     upsertModel.TeaserImageFileName);
@@ -129,7 +129,7 @@ namespace Tauchbolde.Common.Domain.Logbook
             if (upsertModel.TeaserImage != null && upsertModel.TeaserImageContentType != null)
             {
                 teaserIdentifiers = await photoService.AddPhotoAsync(
-                    PhotoCategory.Event,
+                    PhotoCategory.LogbookTeaser,
                     upsertModel.TeaserImage,
                     upsertModel.TeaserImageContentType,
                     upsertModel.TeaserImageFileName);

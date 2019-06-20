@@ -9,8 +9,9 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
     /// </summary>
     public class PhotoIdentifier
     {
-        private static readonly Regex ParseRegex =
-            new Regex(@"^(?<category>.*)/(?<thumbnail>.*)/(?<filename>.*)$", RegexOptions.Compiled);
+        private const string ThumbSubdir = "thumbs";
+        private static readonly Regex IdentifierRegex =
+            new Regex(@"^(?<category>.*?)(/(?<thumbnail>.*)|)/(?<filename>.*)$", RegexOptions.Compiled);
 
         public PhotoIdentifier(PhotoCategory category, bool isThumb, [NotNull] string filename)
         {
@@ -33,24 +34,26 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
 
         private void Deserialize(string serializedIdentifier)
         {
-            var match = ParseRegex.Match(serializedIdentifier);
+            var match = IdentifierRegex.Match(serializedIdentifier);
 
             if (!match.Success)
             {
-                throw new InvalidOperationException($"Invalid PhotoIdentifier: [${serializedIdentifier}]");
+                throw new InvalidOperationException($"Invalid PhotoIdentifier: [{serializedIdentifier}]");
             }
 
             var categoryName = match.Groups["category"]?.Value ?? "";
             if (!Enum.TryParse(categoryName, out PhotoCategory category))
             {
-                throw new InvalidOperationException($"Invalid category: [${categoryName}]");
+                throw new InvalidOperationException($"Invalid category: [{categoryName}]");
             }
 
-            var isThumbValue = match.Groups["thumbnail"]?.Value ?? "0";
-            if (!bool.TryParse(isThumbValue, out var isThumb))
+            var thumbIndicator = match.Groups["thumbnail"]?.Value ?? "";
+            if (!string.IsNullOrEmpty(thumbIndicator) && thumbIndicator != ThumbSubdir)
             {
-                throw new InvalidOperationException($"Invalid thumbnail indicator: [${isThumbValue}]");
+                throw new InvalidOperationException($"Invalid thumbnail indicator: [{thumbIndicator}]");
             }
+
+            var isThumb = thumbIndicator == ThumbSubdir;
 
             Category = category;
             IsThumb = isThumb;
@@ -59,6 +62,6 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         }
 
         public string Serialze() =>
-            $"{Category.ToString()}{(IsThumb ? "/thumb" : "")}/{Filename}";
+            $"{Category.ToString()}{(IsThumb ? $"/{ThumbSubdir}" : "")}/{Filename}";
     }
 }

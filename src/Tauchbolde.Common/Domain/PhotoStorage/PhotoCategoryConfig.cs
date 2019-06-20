@@ -7,7 +7,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         public static IDictionary<PhotoCategory, PhotoCategoryConfig> Configs =
             new Dictionary<PhotoCategory, PhotoCategoryConfig>
             {
-                { PhotoCategory.Event, new PhotoCategoryConfig 
+                { PhotoCategory.LogbookTeaser, new PhotoCategoryConfig 
                     {
                         ThumbMaxWidth = 300,
                         ThumbMaxHeight = 300,

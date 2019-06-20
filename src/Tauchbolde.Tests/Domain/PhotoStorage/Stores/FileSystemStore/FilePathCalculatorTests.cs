@@ -18,15 +18,15 @@ namespace Tauchbolde.Tests.Domain.PhotoStorage.Stores.FileSystemStore
         }
 
         [Theory]
-        [InlineData("/root/path", PhotoCategory.Event, "image.jpg", null, 0, false, "/root/path/event/image.jpg")]
-        [InlineData("/another_root/path", PhotoCategory.Event, "image.jpg", "", 0, false, "/another_root/path/event/image.jpg")]
-        [InlineData("/root/path", PhotoCategory.Event, "image.jpg", "image/jpeg", 0, false, "/root/path/event/image.jpg")]
-        [InlineData("/root/path", PhotoCategory.Event, "image", "image/jpeg", 0, false, "/root/path/event/image.jpg")]
-        [InlineData("/root/path", PhotoCategory.Event, "image", "image/jpeg", 1, false, "/root/path/event/image_1.jpg")]
-        [InlineData("/root/path", PhotoCategory.Event, "", "image/jpeg", 1, false, "/root/path/event/picture_1.jpg")]
-        [InlineData("/root/path", PhotoCategory.Event, "image.jpg", null, 0, true, "/root/path/event/thumbs/image.jpg")]
-        [InlineData("/root/path", PhotoCategory.Event, "IMAGE.JPG", null, 0, true, "/root/path/event/thumbs/IMAGE.JPG")]
-        [InlineData("/root/path", PhotoCategory.Event, "IMAGE.JPG", null, 1, true, "/root/path/event/thumbs/IMAGE_1.JPG")]
+        [InlineData("/root/path", PhotoCategory.LogbookTeaser, "image.jpg", null, 0, false, "/root/path/logbookteaser/image.jpg")]
+        [InlineData("/another_root/path", PhotoCategory.LogbookTeaser, "image.jpg", "", 0, false, "/another_root/path/logbookteaser/image.jpg")]
+        [InlineData("/root/path", PhotoCategory.LogbookTeaser, "image.jpg", "image/jpeg", 0, false, "/root/path/logbookteaser/image.jpg")]
+        [InlineData("/root/path", PhotoCategory.LogbookTeaser, "image", "image/jpeg", 0, false, "/root/path/logbookteaser/image.jpg")]
+        [InlineData("/root/path", PhotoCategory.LogbookTeaser, "image", "image/jpeg", 1, false, "/root/path/logbookteaser/image_1.jpg")]
+        [InlineData("/root/path", PhotoCategory.LogbookTeaser, "", "image/jpeg", 1, false, "/root/path/logbookteaser/picture_1.jpg")]
+        [InlineData("/root/path", PhotoCategory.LogbookTeaser, "image.jpg", null, 0, true, "/root/path/logbookteaser/thumbs/image.jpg")]
+        [InlineData("/root/path", PhotoCategory.LogbookTeaser, "IMAGE.JPG", null, 0, true, "/root/path/logbookteaser/thumbs/IMAGE.JPG")]
+        [InlineData("/root/path", PhotoCategory.LogbookTeaser, "IMAGE.JPG", null, 1, true, "/root/path/logbookteaser/thumbs/IMAGE_1.JPG")]
         public void Calculate(
             string rootPath,
             PhotoCategory category,
@@ -54,10 +54,10 @@ namespace Tauchbolde.Tests.Domain.PhotoStorage.Stores.FileSystemStore
         }
         
         [Theory]
-        [InlineData("IMG_A.JPG", false, "event/IMG_A.JPG")]
-        [InlineData("IMG_B.JPG", false, "event/IMG_B_1.JPG")]
-        [InlineData("IMG_C.JPG", false, "event/IMG_C_2.JPG")]
-        [InlineData("IMG_C.JPG", true, "event/thumbs/IMG_C.JPG")]
+        [InlineData("IMG_A.JPG", false, "logbookteaser/IMG_A.JPG")]
+        [InlineData("IMG_B.JPG", false, "logbookteaser/IMG_B_1.JPG")]
+        [InlineData("IMG_C.JPG", false, "logbookteaser/IMG_C_2.JPG")]
+        [InlineData("IMG_C.JPG", true, "logbookteaser/thumbs/IMG_C.JPG")]
         public void CalculateUniqueFilePath(string baseFileName, bool isThumb, string expectedFilePath)
         {
             // Arrange
@@ -67,7 +67,7 @@ namespace Tauchbolde.Tests.Domain.PhotoStorage.Stores.FileSystemStore
             // Act
             var filePath = pathCalculator.CalculateUniqueFilePath(
                 rootPath,
-                PhotoCategory.Event,
+                PhotoCategory.LogbookTeaser,
                 baseFileName,
                 "image/jpeg",
                 isThumb);
@@ -85,11 +85,11 @@ namespace Tauchbolde.Tests.Domain.PhotoStorage.Stores.FileSystemStore
                 nameof(FilePathCalculatorTests));
 
             Directory.CreateDirectory(rootPath);
-            Directory.CreateDirectory(Path.Combine(rootPath, "event"));
+            Directory.CreateDirectory(Path.Combine(rootPath, "logbookteaser"));
             
-            File.WriteAllText(Path.Combine(rootPath, "event", "IMG_B.JPG"), "This is a test-file");
-            File.WriteAllText(Path.Combine(rootPath, "event", "IMG_C.JPG"), "This is a test-file");
-            File.WriteAllText(Path.Combine(rootPath, "event", "IMG_C_1.JPG"), "This is a test-file");
+            File.WriteAllText(Path.Combine(rootPath, "logbookteaser", "IMG_B.JPG"), "This is a test-file");
+            File.WriteAllText(Path.Combine(rootPath, "logbookteaser", "IMG_C.JPG"), "This is a test-file");
+            File.WriteAllText(Path.Combine(rootPath, "logbookteaser", "IMG_C_1.JPG"), "This is a test-file");
 
             return rootPath;
         }
