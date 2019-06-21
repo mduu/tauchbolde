@@ -12,24 +12,26 @@
 <div class="col-md-10">
 
     <div class="row">
+
         @if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
         {
-            <img src="@Model.TeaserImageUrl"/>
+            <img class="img-responsive img-rounded pull-left" style="margin-right: 7px" src="@Model.TeaserThumbImageUrl"/>
         }
-        
+
         @if (!string.IsNullOrWhiteSpace(Model.Teaser))
         {
-            <summary>@textFormatting.FormatText(Model.Teaser)</summary>
+            <summary class="lead">@textFormatting.FormatText(Model.Teaser)</summary>
         }
-    </div>
 
-    <div class="row">
-        @if (!string.IsNullOrWhiteSpace(Model.Text))
-        {
-            <article>
-                @textFormatting.FormatText(Model.Text)
-            </article>
-        }
+        <div class="row">
+            @if (!string.IsNullOrWhiteSpace(Model.Text))
+            {
+                <article>
+                    @textFormatting.FormatText(Model.Text)
+                </article>
+            }
+        </div>
+
     </div>
 
 </div>
