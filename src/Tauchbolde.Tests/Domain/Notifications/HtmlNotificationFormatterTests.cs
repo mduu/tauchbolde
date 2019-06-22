@@ -5,9 +5,11 @@ using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using FakeItEasy;
+using Microsoft.Extensions.Options;
 using Tauchbolde.Common.Domain;
 using Tauchbolde.Common.Domain.Notifications;
 using Tauchbolde.Common.Domain.Notifications.HtmlFormatting;
+using Tauchbolde.Common.Domain.SMTPSender;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Model;
 using Xunit;
@@ -21,13 +23,22 @@ namespace Tauchbolde.Tests.Domain.Notifications
         public HtmlNotificationFormatterTests()
         {
             var urlGenerator1 = A.Fake<IUrlGenerator>();
-            A.CallTo(() => urlGenerator1.GenerateEventUrl(A<Guid>._))
-                .Returns("http://test/event/1");
-
+            A.CallTo(() => urlGenerator1.GenerateEventUrl(A<string>._, A<Guid>._))
+                .ReturnsLazily(call => $"{call.Arguments[0]}event/1");
+            
+            var smtpSenderOptions = 
+                new OptionsWrapper<SmtpSenderConfiguration>(
+                    new SmtpSenderConfiguration
+                    {
+                        RootUrl = "http://test/"
+                    }
+                );
+            
             var notificationListFormatter = new HtmlListFormatter(
                 urlGenerator1,
                 new NotificationTypeInfos(),
-                new MarkdownDigFormatter());
+                new MarkdownDigFormatter(),
+                smtpSenderOptions);
 
             formatter = new HtmlFormatter(
                 new CssStyleFormatter(),

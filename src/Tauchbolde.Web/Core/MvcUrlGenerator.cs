@@ -18,6 +18,7 @@ namespace Tauchbolde.Web.Core
         /// Initializes a new instance of the <see cref="T:Tauchbolde.Web.Core.MvcUrlGenerator"/> class.
         /// </summary>
         /// <param name="urlHelperFactory">URL helper factory.</param>
+        /// <param name="actionContextAccessor">Action context.</param>
         public MvcUrlGenerator(
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccessor)
@@ -27,12 +28,15 @@ namespace Tauchbolde.Web.Core
         }
 
         /// <inheritdoc />
-        public string GenerateEventUrl(Guid eventId)
+        public string GenerateEventUrl(string baseUrl, Guid eventId)
         {
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
-            var scheme = urlHelper.ActionContext.HttpContext.Request.Scheme;
+            if (baseUrl == null) throw new ArgumentNullException(nameof(baseUrl));
             
-            return urlHelper.Action("Details", "Event", new { Id = eventId }, scheme);
+            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
+            var relativeActionUrl = urlHelper.Action("Details", "Event", new { Id = eventId });
+            var absoluteUri = new Uri(new Uri(baseUrl), relativeActionUrl);
+            
+            return absoluteUri.AbsoluteUri;
         }
     }
 }

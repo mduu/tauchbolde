@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Options;
+using Tauchbolde.Common.Domain.SMTPSender;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Model;
 
@@ -13,15 +15,18 @@ namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
         [NotNull] private readonly IUrlGenerator urlGenerator;
         [NotNull] private readonly INotificationTypeInfos notificationTypeInfos;
         [NotNull] private readonly ITextFormatter textFormatter;
+        [NotNull] private readonly IOptions<SmtpSenderConfiguration> smtpSenderConfiguration;
 
         public HtmlListFormatter(
             [NotNull] IUrlGenerator urlGenerator,
             [NotNull] INotificationTypeInfos notificationTypeInfos,
-            [NotNull] ITextFormatter textFormatter)
+            [NotNull] ITextFormatter textFormatter,
+            [NotNull] IOptions<SmtpSenderConfiguration> smtpSenderConfiguration)
         {
             this.urlGenerator = urlGenerator ?? throw new ArgumentNullException(nameof(urlGenerator));
             this.notificationTypeInfos = notificationTypeInfos ?? throw new ArgumentNullException(nameof(notificationTypeInfos));
             this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
+            this.smtpSenderConfiguration = smtpSenderConfiguration ?? throw new ArgumentNullException(nameof(smtpSenderConfiguration));
         }
 
         public void Format(IEnumerable<Notification> notifications, StringBuilder htmlBuilder)
@@ -51,7 +56,10 @@ namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
             htmlBuilder.Append(textFormatter.GetHtmlText(notification.Message));
             if (notification.EventId != Guid.Empty)
             {
-                var eventUrl = urlGenerator.GenerateEventUrl(notification.EventId);
+                var eventUrl = urlGenerator.GenerateEventUrl(
+                    smtpSenderConfiguration.Value.RootUrl,
+                    notification.EventId);
+                
                 // ReSharper disable once StringLiteralTypo
                 htmlBuilder.Append($" <a href='{eventUrl}'>Mehr...</a>");
             }
