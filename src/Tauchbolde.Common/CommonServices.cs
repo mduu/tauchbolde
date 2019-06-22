@@ -2,19 +2,22 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Commom.Misc;
-using Tauchbolde.Common.DomainServices;
-using Tauchbolde.Common.DomainServices.Avatar;
-using Tauchbolde.Common.DomainServices.Notifications;
-using Tauchbolde.Common.DomainServices.SMTPSender;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Common.DataAccess;
+using Tauchbolde.Common.Domain;
+using Tauchbolde.Common.Domain.Avatar;
+using Tauchbolde.Common.Domain.Events;
+using Tauchbolde.Common.Domain.Logbook;
+using Tauchbolde.Common.Domain.Notifications;
+using Tauchbolde.Common.Domain.Notifications.HtmlFormatting;
+using Tauchbolde.Common.Domain.PhotoStorage;
+using Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore;
+using Tauchbolde.Common.Domain.Repositories;
+using Tauchbolde.Common.Domain.SMTPSender;
+using Tauchbolde.Common.Domain.TextFormatting;
+using Tauchbolde.Common.Domain.Users;
+using Tauchbolde.Common.Infrastructure;
 using Tauchbolde.Common.Infrastructure.Telemetry;
-using Tauchbolde.Common.DomainServices.Events;
-using Tauchbolde.Common.DomainServices.Logbook;
-using Tauchbolde.Common.DomainServices.Notifications.HtmlFormatting;
-using Tauchbolde.Common.DomainServices.Users;
-using Tauchbolde.Common.DomainServices.Repositories;
-using Tauchbolde.Common.DomainServices.TextFormatting;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For FakeItEasy to use "internal" visibility
@@ -24,7 +27,7 @@ namespace Tauchbolde.Common
 
     public static class CommonServices
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, string photoStoreRoot)
         {
             if (services == null) { throw new ArgumentNullException(nameof(services)); }
 
@@ -37,6 +40,8 @@ namespace Tauchbolde.Common
             services.AddSingleton<IImageResizer, ImageResizer>();
             services.AddScoped<ITelemetryService, AppInsightsTelemetryService>();
             services.AddScoped<ITextFormatter, MarkdownDigFormatter>();
+            services.AddSingleton<IFilePhotoStoreConfiguration>(new FilePhotoStoreConfiguration(photoStoreRoot));
+            services.AddTransient<IFilePathCalculator, FilePathCalculator>();
 
             // Repos
             services.AddTransient<IDiverRepository, DiverRepository>();
@@ -60,6 +65,8 @@ namespace Tauchbolde.Common
             services.AddTransient<IDiverService, DiversService>();
             services.AddTransient<IMassMailService, MassMailService>();
             services.AddTransient<ILogbookService, LogbookService>();
+            services.AddTransient<IPhotoService, PhotoService>();
+            services.AddTransient<IPhotoStore, FilePhotoStore>();
         }
 
         public static void RegisterDevelopment(IServiceCollection services)

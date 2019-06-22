@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Common;
 using Tauchbolde.Web.Models.UserProfileModels;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +12,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Tauchbolde.Commom.Misc;
 using System.IO;
-using Tauchbolde.Common.DomainServices.Avatar;
+using Tauchbolde.Common.Domain.Avatar;
+using Tauchbolde.Common.Domain.Users;
 
 namespace Tauchbolde.Web.Controllers
 {

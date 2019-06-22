@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Http;
 
 namespace Tauchbolde.Web.Models.Logbook
 {
@@ -16,6 +17,10 @@ namespace Tauchbolde.Web.Models.Logbook
         
         [DisplayName("Featured")]
         public bool IsFavorite { get; set; }
+        
+        [DisplayName("Titelbild")]
+        [CanBeNull]
+        public IFormFile TeaserImage { get; set; }
         
         [DisplayName("Einleitungstext (optional)")]
         [CanBeNull]

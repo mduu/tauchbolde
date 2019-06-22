@@ -37,9 +37,9 @@
 
   <ItemGroup>
     <Folder Include="Models\" />
-    <Folder Include="DomainServices\Notifications\" />
+    <Folder Include="Domain\Notifications\" />
     <Folder Include="Web\" />
-    <Folder Include="DomainServices\Avatar\" />
+    <Folder Include="Domain\Avatar\" />
   </ItemGroup>
 
   <ItemGroup>

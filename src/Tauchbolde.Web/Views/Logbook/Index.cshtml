@@ -4,17 +4,29 @@
     Layout = "_Layout";
 }
 
-<h2>Logbuch</h2>
-
-@foreach (var logbookEntry in Model.AllEntries)
-{
-    <div class="col-lg-3 col-md-4 col-sm-12">
-        <vc:logbook-entry-card logbook-entry="logbookEntry" allow-edit="Model.AllowEdit">
-        </vc:logbook-entry-card>
+<div class="row">
+    <div class="col-xs-12">
+        <h2>Logbuch</h2>
     </div>
-}
+</div>
+
+<div class="row">
+    @foreach (var logbookEntry in Model.AllEntries)
+    {
+        <div class="col-lg-3 col-md-4 col-sm-12">
+            <vc:logbook-entry-card logbook-entry="logbookEntry" allow-edit="Model.AllowEdit">
+            </vc:logbook-entry-card>
+        </div>
+    }
+</div>
 
 @if (Model.AllowEdit)
 {
-    <a href="@Url.Action("New", "Logbook")" id="create-logbookentry" class="btn btn-primary">Neu</a>
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="@Url.Action("New", "Logbook")" id="create-logbookentry" class="btn btn-primary">
+                Neu
+            </a>
+        </div>
+    </div>
 }

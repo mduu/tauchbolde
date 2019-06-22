@@ -1,11 +1,15 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using System.IO;
+using JetBrains.Annotations;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Tauchbolde.Common.DomainServices;
 using Tauchbolde.Web.Services;
 using Tauchbolde.Web.Core;
-using Tauchbolde.Common.DomainServices.Avatar;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Tauchbolde.Common;
+using Tauchbolde.Common.Domain;
+using Tauchbolde.Common.Domain.Avatar;
 using Tauchbolde.Web.Core.TextFormatting;
 
 namespace Tauchbolde.Web
@@ -13,9 +17,22 @@ namespace Tauchbolde.Web
     [UsedImplicitly]
     public class ApplicationServices
     {
-        public static void Register(IServiceCollection services)
+        public static void Register(
+            [NotNull] IServiceCollection services,
+            [NotNull] IConfiguration configuration,
+            [NotNull] IHostingEnvironment hostingEnvironment)
         {
-            CommonServices.RegisterServices(services);
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+            if (hostingEnvironment == null) throw new ArgumentNullException(nameof(hostingEnvironment));
+
+            var photoStoreRoot = configuration["PhotoStoreRoot"];
+            if (string.IsNullOrWhiteSpace(photoStoreRoot))
+            {
+                photoStoreRoot = Path.Combine(hostingEnvironment.WebRootPath, "photos");
+            }
+            
+            CommonServices.RegisterServices(services, photoStoreRoot);
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IUrlGenerator, MvcUrlGenerator>();

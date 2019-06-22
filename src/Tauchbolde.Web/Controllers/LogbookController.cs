@@ -1,12 +1,15 @@
 using System;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Common;
-using Tauchbolde.Common.DomainServices.Logbook;
-using Tauchbolde.Common.DomainServices.Users;
+using Tauchbolde.Common.Domain.Logbook;
+using Tauchbolde.Common.Domain.PhotoStorage;
+using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Model;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
@@ -88,17 +91,31 @@ namespace Tauchbolde.Web.Controllers
                 return View("Edit", model);
             }
 
+            Stream teaserImageStream = null;
+            string teaserImageFilename = null;
+            string teaserImageContentType = null;
+            if (model.TeaserImage != null && model.TeaserImage.Length > 0)
+            {
+                teaserImageStream = new MemoryStream();
+                await model.TeaserImage.CopyToAsync(teaserImageStream);
+                teaserImageFilename = model.TeaserImage.FileName;
+                teaserImageContentType = model.TeaserImage.ContentType;
+            }
+
             var currentDiver = await GetDiverForCurrentUserAsync();
             if (currentDiver == null)
             {
                 return BadRequest();
             }
-
+            
             var id = await logbookService.UpsertAsync(new LogbookUpsertModel
             {
                 Id = model.Id,
                 Text = model.Text,
                 Title = model.Title,
+                TeaserImage = teaserImageStream,
+                TeaserImageFileName = teaserImageFilename,
+                TeaserImageContentType = teaserImageContentType,
                 Teaser = model.Teaser,
                 CreatedAt = model.CreatedAt,
                 IsFavorite = model.IsFavorite,
@@ -110,6 +127,32 @@ namespace Tauchbolde.Web.Controllers
             ShowSuccessMessage($"Logbucheintrag '{model.Title}' erfolgreich gespeichert.");
 
             return RedirectToAction("Index", "Logbook");
+        }
+        
+        
+        // GET /edit/x
+        [HttpGet]
+        [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await logbookService.DeleteAsync(id);
+            await context.SaveChangesAsync();
+            
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Photo(string id)
+        {
+            var photoIdentifier = new PhotoIdentifier(WebUtility.UrlDecode(id));
+            var photo = await logbookService.GetPhotoDataAsync(photoIdentifier);
+
+            if (photo?.Content == null)
+            {
+                return NotFound();
+            }
+            
+            return File(photo.Content, photo.ContentType, photo.Identifier.Filename);
         }
 
         private async Task<LogbookDetailViewModel> CreateLogbookViewModelAsync(Guid logbookEntryId)
@@ -130,6 +173,8 @@ namespace Tauchbolde.Web.Controllers
                 Teaser = logbookEntry.TeaserText,
                 Text = logbookEntry.Text,
                 ExternalPhotoAlbumUrl = logbookEntry.ExternalPhotoAlbumUrl,
+                TeaserImageUrl = Url.Action("Photo", "Logbook", new { id = logbookEntry.TeaserImage }),
+                TeaserThumbImageUrl = Url.Action("Photo", "Logbook", new { id = logbookEntry.TeaserImageThumb }),
                 EventTitel = logbookEntry.EventId != null && logbookEntry.Event != null
                     ? logbookEntry.Event.Name
                     : null,
@@ -147,6 +192,9 @@ namespace Tauchbolde.Web.Controllers
                 EditedAt = logbookEntry.ModifiedAt.ToStringSwissDateTime(),
                 EditUrl = allowEdit
                     ? Url.Action("Edit", new { id = logbookEntry.Id })
+                    : null,
+                DeleteUrl = allowEdit
+                    ? Url.Action("Delete", new { id = logbookEntry.Id })
                     : null,
             };
         }
@@ -172,5 +220,7 @@ namespace Tauchbolde.Web.Controllers
         }
 
         private async Task<bool> GetAllowEdit() => await GetTauchboldOrAdmin();
+
+        private string GetImageUrl(string imageId) => Url.Action("Photo", new {Id = imageId});
     }
 }

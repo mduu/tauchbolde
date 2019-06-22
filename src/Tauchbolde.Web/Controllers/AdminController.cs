@@ -8,8 +8,8 @@ using Tauchbolde.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
+using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Web.Models.AdminViewModels;
-using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Web.Core;
 
 namespace Tauchbolde.Web.Controllers

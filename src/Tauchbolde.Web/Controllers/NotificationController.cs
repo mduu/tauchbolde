@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Common.DomainServices.Notifications;
 using Microsoft.Extensions.Logging;
+using Tauchbolde.Common.Domain.Notifications;
 
 namespace Tauchbolde.Web.Controllers
 {

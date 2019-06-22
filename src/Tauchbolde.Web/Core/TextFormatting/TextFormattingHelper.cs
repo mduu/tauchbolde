@@ -1,7 +1,7 @@
 using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Html;
-using Tauchbolde.Common.DomainServices.TextFormatting;
+using Tauchbolde.Common.Domain.TextFormatting;
 
 namespace Tauchbolde.Web.Core.TextFormatting
 {

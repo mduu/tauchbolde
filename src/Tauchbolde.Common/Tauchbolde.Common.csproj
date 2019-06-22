@@ -27,18 +27,18 @@
     <Compile Remove="Repositories\ApplicationUserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DomainServices\SMTPSender\" />
+    <Folder Include="Domain\SMTPSender\" />
     <Folder Include="Infrastructure\" />
-    <Folder Include="DomainServices\Avatar\" />
+    <Folder Include="Domain\Avatar\" />
     <Folder Include="Migrations\" />
     <Folder Include="Infrastructure\Telemetry\" />
-    <Folder Include="DomainServices\Events\" />
-    <Folder Include="DomainServices\Users\" />
-    <Folder Include="DomainServices\Repositories\" />
+    <Folder Include="Domain\Events\" />
+    <Folder Include="Domain\Users\" />
+    <Folder Include="Domain\Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="DomainServices\Notifications\HtmlFormatting\EmbeddedStyles.css" />
-    <EmbeddedResource Include="DomainServices\Notifications\HtmlFormatting\EmbeddedStyles.css" />
+    <EmbeddedResource Include="Domain\Notifications\HtmlFormatting\EmbeddedStyles.css" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.EntityFrameworkCore.SqlServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">

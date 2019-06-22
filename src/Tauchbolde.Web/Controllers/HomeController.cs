@@ -2,16 +2,16 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Common.DomainServices.Users;
 using Tauchbolde.Web.Models;
 using Tauchbolde.Web.Models.AboutViewModels;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common;
 using Tauchbolde.Web.Models.HomeViewModels;
 using Tauchbolde.Web.Core;
-using Tauchbolde.Common.DomainServices.SMTPSender;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using Tauchbolde.Common.Domain.SMTPSender;
+using Tauchbolde.Common.Domain.Users;
 
 namespace Tauchbolde.Web.Controllers
 {

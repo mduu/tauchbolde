@@ -1,7 +1,8 @@
 @using Microsoft.AspNetCore.Identity
+@using Tauchbolde.Common.Domain.Users
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@inject Tauchbolde.Common.DomainServices.Users.IDiverService DiverService
+@inject IDiverService DiverService
 @{
     var isAdmin = false;
     var userName = "";
