@@ -44,6 +44,9 @@ namespace Tauchbolde.Common.Model
         [DisplayName("Geändert am")]
         public DateTime? ModifiedAt { get; set; }
 
+        [DisplayName("Publiziert")]
+        public bool IsPublished { get; set; }
+
         /// <summary>
         /// ID of the Author that last modified this <see cref="LogbookEntry"/>.
         /// </summary>

@@ -607,3 +607,18 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190623072628_AddLogbook_IsPublished')
+BEGIN
+    ALTER TABLE [LogbookEntries] ADD [IsPublished] bit NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190623072628_AddLogbook_IsPublished')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190623072628_AddLogbook_IsPublished', N'2.2.3-servicing-35854');
+END;
+
+GO
+
