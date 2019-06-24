@@ -176,7 +176,7 @@ namespace Tauchbolde.Web.Controllers
                 ExternalPhotoAlbumUrl = logbookEntry.ExternalPhotoAlbumUrl,
                 TeaserImageUrl = Url.Action("Photo", "Logbook", new { id = logbookEntry.TeaserImage }),
                 TeaserThumbImageUrl = Url.Action("Photo", "Logbook", new { id = logbookEntry.TeaserImageThumb }),
-                EventTitel = logbookEntry.EventId != null && logbookEntry.Event != null
+                EventTitle = logbookEntry.EventId != null && logbookEntry.Event != null
                     ? logbookEntry.Event.Name
                     : null,
                 EventUrl = logbookEntry.EventId != null

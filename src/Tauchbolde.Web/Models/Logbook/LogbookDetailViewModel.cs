@@ -17,7 +17,7 @@ namespace Tauchbolde.Web.Models.Logbook
         [CanBeNull] public string Teaser { get; set; }
         [CanBeNull] public string Text { get; set; }
         [CanBeNull] public string ExternalPhotoAlbumUrl { get; set; }
-        [CanBeNull] public string EventTitel { get; set; }
+        [CanBeNull] public string EventTitle { get; set; }
         
         public string OriginalAuthorName { get; set; }
         [NotNull] public Diver OriginalAuthor { get; set; } = new Diver();
