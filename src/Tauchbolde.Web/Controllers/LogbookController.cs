@@ -35,8 +35,9 @@ namespace Tauchbolde.Web.Controllers
         // GET /
         public async Task<IActionResult> Index()
         {
+            var allowEdit = await GetAllowEdit();
             var model = new LogbookListViewModel(
-                await logbookService.GetAllEntriesAsync(),
+                await logbookService.GetAllEntriesAsync(allowEdit),
                 await GetTauchboldOrAdmin());
 
             return View(model);
@@ -182,6 +183,7 @@ namespace Tauchbolde.Web.Controllers
                     ? Url.Action("Details", "Event", new {id = logbookEntry.EventId})
                     : null,
                 IsFavorite = logbookEntry.IsFavorite,
+                IsPublished = logbookEntry.IsPublished,
                 OriginalAuthor = logbookEntry.OriginalAuthor,
                 OriginalAuthorName = logbookEntry.OriginalAuthor.Realname,
                 CreatedAt = logbookEntry.CreatedAt.ToStringSwissDateTime(),

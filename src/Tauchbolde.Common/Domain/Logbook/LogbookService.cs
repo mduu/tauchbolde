@@ -32,9 +32,10 @@ namespace Tauchbolde.Common.Domain.Logbook
             this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
         }
 
+        /// <param name="includeUnpublished"></param>
         /// <inheritdoc />
-        public async Task<ICollection<LogbookEntry>> GetAllEntriesAsync()
-            => await logbookEntryRepository.GetAllEntriesAsync();
+        public async Task<ICollection<LogbookEntry>> GetAllEntriesAsync(bool includeUnpublished = false)
+            => await logbookEntryRepository.GetAllEntriesAsync(includeUnpublished);
 
         /// <inheritdoc />
         public async Task<LogbookEntry> FindByIdAsync(Guid logbookEntryId)

@@ -14,13 +14,15 @@ namespace Tauchbolde.Web.Models.ViewComponentModels
             TeaserText = GetTeaserText(logbookEntry);
             LogbookEntryId = logbookEntry.Id;
             TeaserImageUrl = logbookEntry.TeaserImageThumb;
+            IsPublished = logbookEntry.IsPublished;
         }
 
         public Guid LogbookEntryId { get; }
         public string Title { get; }
         public string TeaserText { get; }
         public string TeaserImageUrl { get; }
-        
+        public bool IsPublished { get; }
+
         private static string GetTeaserText(LogbookEntry logbookEntry)
         {
             if (!string.IsNullOrWhiteSpace(logbookEntry.TeaserText))

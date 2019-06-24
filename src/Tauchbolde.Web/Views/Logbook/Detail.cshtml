@@ -26,6 +26,11 @@
     </div>
 
     <h1>@Model.Title</h1>
+    
+    @if (!Model.IsPublished)
+    {
+        <div class="bg-warning text-warning">Nicht publiziert</div>
+    }
 
     <cite>
         <vc:avatar diver="Model.OriginalAuthor" avatarSize="AvatarSize.Small"></vc:avatar> @Model.OriginalAuthorName

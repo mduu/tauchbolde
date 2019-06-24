@@ -13,6 +13,7 @@ namespace Tauchbolde.Web.Models.Logbook
         public Guid Id { get; set; }
         [NotNull] public string Title { get; set; } = "";
         public bool IsFavorite { get; set; }
+        public bool IsPublished { get; set; }
         [CanBeNull] public string Teaser { get; set; }
         [CanBeNull] public string Text { get; set; }
         [CanBeNull] public string ExternalPhotoAlbumUrl { get; set; }

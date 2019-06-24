@@ -3,17 +3,20 @@
 
 <style>
     .logbook-entry {
-        height: 405px;
+        height: 500px;
         display: flex;
         flex-direction: column;
         margin-bottom: 25px;
     }
     
-    .logbook-entry img {
+    .logbook-entry a {
+        flex-shrink: 0;
+    }
+    
+    .logbook-entry a img {
         object-fit: cover;
         height: 200px;
         width: 100%;
-        flex-shrink: 0;
     }
     
     #image-placeholder {
@@ -21,7 +24,6 @@
         background-color: #eee;
         flex-shrink: 0;
     }
-
     
     .logbook-entry-content {
         overflow-y: hidden;
@@ -35,20 +37,27 @@
     
     .logbook-entry-actions {
        flex-shrink: 0;
+       margin-bottom: 10px;
      }
     
 </style>
 
 <div class="thumbnail logbook-entry">
+    @if (!Model.IsPublished)
+    {
+        <div class="bg-warning text-warning">Nicht publiziert</div>
+    }
     @if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
     {
-        <img src="@Url.Action("Photo", "Logbook", new {Id = Model.TeaserImageUrl})"/>
+        <a asp-controller="Logbook" asp-action="Detail" asp-route-id="@Model.LogbookEntryId">
+            <img src="@Url.Action("Photo", "Logbook", new {Id = Model.TeaserImageUrl})"/>
+        </a>
     }
     else
     {
         <div id="image-placeholder"></div>
     }
-    <h3>@Model.Title</h3>
+    <h4>@Model.Title</h4>
     <div class="logbook-entry-content">@TextFormatting.FormatText(Model.TeaserText)</div>
     <div class="spacer"></div>
     <div class="logbook-entry-actions">

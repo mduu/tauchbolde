@@ -15,7 +15,8 @@ namespace Tauchbolde.Common.Domain.Logbook
         /// <summary>
         /// Gets the collection of all <see cref="LogbookEntry"/>.
         /// </summary>
-        Task<ICollection<LogbookEntry>> GetAllEntriesAsync();
+        /// <param name="includeUnpublished"></param>
+        Task<ICollection<LogbookEntry>> GetAllEntriesAsync(bool includeUnpublished = false);
 
         /// <summary>
         /// Gets the <see cref="LogbookEntry"/> by its ID.
