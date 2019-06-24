@@ -1,29 +1,57 @@
 @model Tauchbolde.Web.Models.ViewComponentModels.LogbookCardViewModel
 @inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <h4>@Model.Title</h4>
-        <p>@TextFormatting.FormatText(Model.TeaserText)</p>
-        <div>
-            <a asp-controller="Logbook" asp-action="Detail" asp-route-id="@Model.LogbookEntryId">Mehr ...</a>
-        </div>
-    </div>
+<style>
+    .logbook-entry {
+        height: 405px;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 25px;
+    }
     
-    <div class="panel-footer">
-        Author:
-        @Model.OriginalAuthorName /
-        @Model.CreatedAt
+    .logbook-entry img {
+        object-fit: cover;
+        height: 200px;
+        width: 100%;
+        flex-shrink: 0;
+    }
+    
+    #image-placeholder {
+        height: 200px;
+        background-color: #eee;
+        flex-shrink: 0;
+    }
 
-        @if (!string.IsNullOrWhiteSpace(Model.ModifiedAt) || !string.IsNullOrWhiteSpace(Model.EditorAuthorName))
-        {
-            <text>
-                (
-                Bearbeitet:
-                @Model.EditorAuthorName
-                @Model.ModifiedAt
-                )
-            </text>
-        }
+    
+    .logbook-entry-content {
+        overflow-y: hidden;
+        margin-bottom: 7px;
+        text-overflow: ellipsis;
+    }
+    
+    .spacer {
+        flex: 1;
+    }
+    
+    .logbook-entry-actions {
+       flex-shrink: 0;
+     }
+    
+</style>
+
+<div class="thumbnail logbook-entry">
+    @if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
+    {
+        <img src="@Url.Action("Photo", "Logbook", new {Id = Model.TeaserImageUrl})"/>
+    }
+    else
+    {
+        <div id="image-placeholder"></div>
+    }
+    <h3>@Model.Title</h3>
+    <div class="logbook-entry-content">@TextFormatting.FormatText(Model.TeaserText)</div>
+    <div class="spacer"></div>
+    <div class="logbook-entry-actions">
+        <a class="btn btn-primary" asp-controller="Logbook" asp-action="Detail" asp-route-id="@Model.LogbookEntryId">Mehr ...</a>
     </div>
 </div>
