@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Web.Models;
 using Tauchbolde.Web.Models.AboutViewModels;
@@ -10,6 +11,7 @@ using Tauchbolde.Web.Models.HomeViewModels;
 using Tauchbolde.Web.Core;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using Tauchbolde.Common.Domain.Logbook;
 using Tauchbolde.Common.Domain.SMTPSender;
 using Tauchbolde.Common.Domain.Users;
 
@@ -17,15 +19,14 @@ namespace Tauchbolde.Web.Controllers
 {
     public class HomeController : AppControllerBase
     {
-        private readonly IDiverService diverService;
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly IAppEmailSender emailSender;
-
+        [NotNull] private readonly IDiverService diverService;
+        [NotNull] private readonly UserManager<IdentityUser> userManager;
+        [NotNull] private readonly IAppEmailSender emailSender;
+        
         public HomeController(
-            IDiverService diverService,
-            UserManager<IdentityUser> userManager,
-            IAppEmailSender emailSender
-        ) : base (userManager, diverService)
+            [NotNull] IDiverService diverService,
+            [NotNull] UserManager<IdentityUser> userManager,
+            [NotNull] IAppEmailSender emailSender) : base (userManager, diverService)
         {
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
