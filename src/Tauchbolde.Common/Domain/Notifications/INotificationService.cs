@@ -13,5 +13,6 @@ namespace Tauchbolde.Common.Domain.Notifications
         Task NotifyForCanceledEventAsync(Event canceledEvent, Diver currentUser);
         Task NotifyForChangedParticipationAsync(Participant participant, Diver participatingDiver, Event participatingEvent);
         Task NotifyForEventCommentAsync(Comment comment, Event evt, Diver author);
+        Task NotifyForNewLogbookEntry(LogbookEntry logbookEntry, Diver author);
     }
 }

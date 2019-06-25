@@ -10,6 +10,6 @@
         Declined,
         Tentative,
         Commented,
-        NewPost,
+        NewLogbookEntry
     }
 }
