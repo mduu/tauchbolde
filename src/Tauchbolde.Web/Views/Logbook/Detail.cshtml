@@ -21,6 +21,14 @@
         @if (Model.AllowEdit)
         {
             <a href="@Model.EditUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-pencil"></span> Bearbeiten</a>
+            @if (Model.IsPublished)
+             {
+                 <a href="@Model.UnpublishUrl" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-envelope"></span> Nicht mehr veröffentlichen</a>
+             }
+             else
+             {
+                 <a href="@Model.PublishUrl" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-send"></span> Publizieren</a>
+             }
             <a href="@Model.DeleteUrl" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> Löschen</a>
         }
     </div>

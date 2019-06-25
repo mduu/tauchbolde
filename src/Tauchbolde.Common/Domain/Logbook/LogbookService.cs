@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Domain.Users;
@@ -19,17 +20,20 @@ namespace Tauchbolde.Common.Domain.Logbook
         [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly ITelemetryService telemetryService;
         [NotNull] private readonly IPhotoService photoService;
+        [NotNull] private readonly ILogger<LogbookService> logger;
 
         public LogbookService(
             [NotNull] ILogbookEntryRepository logbookEntryRepository,
             [NotNull] IDiverService diverService,
             [NotNull] ITelemetryService telemetryService,
-            [NotNull] IPhotoService photoService)
+            [NotNull] IPhotoService photoService,
+            [NotNull] ILogger<LogbookService> logger)
         {
             this.logbookEntryRepository = logbookEntryRepository ?? throw new ArgumentNullException(nameof(logbookEntryRepository));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
             this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <param name="includeUnpublished"></param>
@@ -76,6 +80,38 @@ namespace Tauchbolde.Common.Domain.Logbook
             if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
 
             return await photoService.GetPhotoDataAsync(photoIdentifier);
+        }
+
+        public async Task PublishAsync([NotNull] LogbookEntry logbookEntry)
+        {
+            if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
+            
+            var existingLogbookEntry = await logbookEntryRepository.FindByIdAsync(logbookEntry.Id);
+            if (existingLogbookEntry == null)
+            {
+                throw new InvalidOperationException($"No existing LogbookEntry found with Id [{logbookEntry.Id}]!");
+            }
+
+            existingLogbookEntry.IsPublished = true;
+            logbookEntryRepository.Update(existingLogbookEntry);
+            
+            logger.LogInformation($"Logbook entry [{existingLogbookEntry.Id}] published.");
+        }
+
+        public async Task UnPublishAsync([NotNull] LogbookEntry logbookEntry)
+        {
+            if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
+            
+            var existingLogbookEntry = await logbookEntryRepository.FindByIdAsync(logbookEntry.Id);
+            if (existingLogbookEntry == null)
+            {
+                throw new InvalidOperationException($"No existing LogbookEntry found with Id [{logbookEntry.Id}]!");
+            }
+
+            existingLogbookEntry.IsPublished = false;
+            logbookEntryRepository.Update(existingLogbookEntry);
+            
+            logger.LogInformation($"Logbook entry [{existingLogbookEntry.Id}] un-published.");
         }
 
         private async Task<Guid> UpdateExistingLogbookEntryAsync([NotNull] LogbookUpsertModel upsertModel)
