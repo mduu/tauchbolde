@@ -54,11 +54,11 @@ namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
 
             htmlBuilder.AppendLine("<div class='message'>");
             htmlBuilder.Append(textFormatter.GetHtmlText(notification.Message));
-            if (notification.EventId != Guid.Empty)
+            if (notification.EventId != null && notification.EventId != Guid.Empty)
             {
                 var eventUrl = urlGenerator.GenerateEventUrl(
                     smtpSenderConfiguration.Value.RootUrl,
-                    notification.EventId);
+                    notification.EventId.Value);
                 
                 // ReSharper disable once StringLiteralTypo
                 htmlBuilder.Append($" <a href='{eventUrl}'>Mehr...</a>");
