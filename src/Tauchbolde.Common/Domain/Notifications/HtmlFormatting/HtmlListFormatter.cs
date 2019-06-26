@@ -54,19 +54,43 @@ namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
 
             htmlBuilder.AppendLine("<div class='message'>");
             htmlBuilder.Append(textFormatter.GetHtmlText(notification.Message));
-            if (notification.EventId != null && notification.EventId != Guid.Empty)
-            {
-                var eventUrl = urlGenerator.GenerateEventUrl(
-                    smtpSenderConfiguration.Value.RootUrl,
-                    notification.EventId.Value);
-                
-                // ReSharper disable once StringLiteralTypo
-                htmlBuilder.Append($" <a href='{eventUrl}'>Mehr...</a>");
-            }
+            AddContextUrl(htmlBuilder, notification);
             htmlBuilder.AppendLine("</div>");
             
             htmlBuilder.AppendLine("</li>");
             htmlBuilder.AppendLine();
+        }
+
+        private void AddContextUrl(StringBuilder htmlBuilder, Notification notification)
+        {
+            AddEventUrl(htmlBuilder, notification.EventId);
+            AddLogbookEntryUrl(htmlBuilder, notification?.LogbookEntryId);
+        }
+
+        private void AddEventUrl(StringBuilder htmlBuilder, Guid? eventId)
+        {
+            if (eventId != null && eventId != Guid.Empty)
+            {
+                var eventUrl = urlGenerator.GenerateEventUrl(
+                    smtpSenderConfiguration.Value.RootUrl,
+                    eventId.Value);
+
+                // ReSharper disable once StringLiteralTypo
+                htmlBuilder.Append($" <a href='{eventUrl}'>Mehr...</a>");
+            }
+        }
+
+        private void AddLogbookEntryUrl(StringBuilder htmlBuilder, Guid? logbookEntryId)
+        {
+            if (logbookEntryId != null && logbookEntryId != Guid.Empty)
+            {
+                var logbookEntryUrl = urlGenerator.GenerateLogbookEntryUrl(
+                    smtpSenderConfiguration.Value.RootUrl,
+                    logbookEntryId.Value);
+
+                // ReSharper disable once StringLiteralTypo
+                htmlBuilder.Append($" <a href='{logbookEntryUrl}'>Mehr...</a>");
+            }
         }
     }
 }
