@@ -2,10 +2,10 @@ using System.IO;
 using FluentAssertions;
 using Tauchbolde.Commom.Misc;
 using Tauchbolde.Common.Domain.PhotoStorage;
-using Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore;
+using Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore;
 using Xunit;
 
-namespace Tauchbolde.Tests.Domain.PhotoStorage.Stores.FileSystemStore
+namespace Tauchbolde.Tests.Infrastructure.PhotoStores.FileSystemStore
 {
     public class FilePathCalculatorTests
     {

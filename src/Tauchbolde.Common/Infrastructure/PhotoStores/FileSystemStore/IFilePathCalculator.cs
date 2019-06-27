@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
+using Tauchbolde.Common.Domain.PhotoStorage;
 
-namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
+namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
 {
     public interface IFilePathCalculator
     {

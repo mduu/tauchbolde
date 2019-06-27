@@ -11,12 +11,12 @@ using Tauchbolde.Common.Domain.Logbook;
 using Tauchbolde.Common.Domain.Notifications;
 using Tauchbolde.Common.Domain.Notifications.HtmlFormatting;
 using Tauchbolde.Common.Domain.PhotoStorage;
-using Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore;
 using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Domain.SMTPSender;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Infrastructure;
+using Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]

@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Commom.Misc;
+using Tauchbolde.Common.Domain.PhotoStorage;
 
-namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
+namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
 {
     public class FilePhotoStore : IPhotoStore
     {

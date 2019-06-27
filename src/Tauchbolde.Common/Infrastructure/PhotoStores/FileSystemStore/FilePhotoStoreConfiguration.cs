@@ -1,7 +1,7 @@
 using System;
 using JetBrains.Annotations;
 
-namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
+namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
 {
     public class FilePhotoStoreConfiguration : IFilePhotoStoreConfiguration
     {

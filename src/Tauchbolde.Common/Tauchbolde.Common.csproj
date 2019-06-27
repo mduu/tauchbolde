@@ -30,6 +30,7 @@
     <Folder Include="Domain\SMTPSender\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Domain\Avatar\" />
+    <Folder Include="Infrastructure\PhotoStores" />
     <Folder Include="Migrations\" />
     <Folder Include="Infrastructure\Telemetry\" />
     <Folder Include="Domain\Events\" />
