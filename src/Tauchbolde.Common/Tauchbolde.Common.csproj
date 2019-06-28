@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Model\BuddyTeamNames.d.ts">
@@ -30,7 +31,6 @@
     <Folder Include="Domain\SMTPSender\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Domain\Avatar\" />
-    <Folder Include="Infrastructure\PhotoStores" />
     <Folder Include="Migrations\" />
     <Folder Include="Infrastructure\Telemetry\" />
     <Folder Include="Domain\Events\" />
