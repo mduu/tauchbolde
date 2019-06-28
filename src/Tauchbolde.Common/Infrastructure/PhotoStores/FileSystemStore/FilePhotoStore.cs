@@ -15,6 +15,7 @@ namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
         [NotNull] private readonly IFilePathCalculator filePathCalculator;
         [NotNull] private readonly IMimeMapping mimeMapping;
 
+        /// <inheritdoc />
         public FilePhotoStore(
             [NotNull] ILogger<FilePhotoStore> logger,
             [NotNull] IFilePhotoStoreConfiguration configuration,
@@ -27,6 +28,7 @@ namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
             this.mimeMapping = mimeMapping ?? throw new ArgumentNullException(nameof(mimeMapping));
         }
 
+        /// <inheritdoc />
         public async Task<PhotoIdentifier> AddPhotoAsync(Photo photo)
         {
             if (photo == null) throw new ArgumentNullException(nameof(photo));
@@ -54,6 +56,7 @@ namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
             return photo.Identifier;
         }
 
+        /// <inheritdoc />
         public async Task RemovePhotoAsync(PhotoIdentifier photoIdentifier)
         {
             if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
@@ -81,6 +84,7 @@ namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
             }
         }
 
+        /// <inheritdoc />
         public async Task<Photo> GetPhotoAsync(PhotoIdentifier photoIdentifier)
         {
             if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
