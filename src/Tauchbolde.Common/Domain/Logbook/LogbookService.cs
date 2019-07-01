@@ -174,6 +174,7 @@ namespace Tauchbolde.Common.Domain.Logbook
 
             MapUpsertModelToLogbookEntry(upsertModel, newLogbookEntry, teaserIdentifiers);
             await logbookEntryRepository.InsertAsync(newLogbookEntry);
+            
             TrackLogbookEntry("LOGBOOK-INSERT", newLogbookEntry);
 
             return newLogbookEntry.Id;

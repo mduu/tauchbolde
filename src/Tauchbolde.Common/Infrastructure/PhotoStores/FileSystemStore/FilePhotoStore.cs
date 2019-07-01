@@ -29,7 +29,7 @@ namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
         }
 
         /// <inheritdoc />
-        public async Task<PhotoIdentifier> AddPhotoAsync(Photo photo)
+        public async Task AddPhotoAsync(Photo photo)
         {
             if (photo == null) throw new ArgumentNullException(nameof(photo));
 
@@ -52,8 +52,6 @@ namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
                 photo.Content.Seek(0, 0);
                 await photo.Content.CopyToAsync(fileStream);
             }
-
-            return photo.Identifier;
         }
 
         /// <inheritdoc />

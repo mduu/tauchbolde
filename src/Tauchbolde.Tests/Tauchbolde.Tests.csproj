@@ -36,7 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\PhotoStores" />
     <Folder Include="Models\" />
     <Folder Include="Domain\Notifications\" />
     <Folder Include="Web\" />
