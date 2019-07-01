@@ -15,6 +15,8 @@ using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Infrastructure;
+using Tauchbolde.Common.Infrastructure.PhotoStores;
+using Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage;
 using Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore;
 using Tauchbolde.Common.Infrastructure.SMTPSender;
 using Tauchbolde.Common.Infrastructure.Telemetry;
@@ -27,7 +29,10 @@ namespace Tauchbolde.Common
 
     public static class CommonServices
     {
-        public static void RegisterServices(IServiceCollection services, string photoStoreRoot)
+        public static void RegisterServices(
+            IServiceCollection services,
+            string photoStoreRoot,
+            PhotoStoreType photoStoreType)
         {
             if (services == null) { throw new ArgumentNullException(nameof(services)); }
 
@@ -42,6 +47,15 @@ namespace Tauchbolde.Common
             services.AddScoped<ITextFormatter, MarkdownDigFormatter>();
             services.AddSingleton<IFilePhotoStoreConfiguration>(new FilePhotoStoreConfiguration(photoStoreRoot));
             services.AddTransient<IFilePathCalculator, FilePathCalculator>();
+            switch (photoStoreType)
+            {
+                case PhotoStoreType.AzureBlobStorage:
+                    services.AddTransient<IPhotoStore, AzureBlobStore>();
+                    break;
+                default:
+                    services.AddTransient<IPhotoStore, FilePhotoStore>();
+                    break;
+            }
 
             // Repos
             services.AddTransient<IDiverRepository, DiverRepository>();
@@ -66,7 +80,6 @@ namespace Tauchbolde.Common
             services.AddTransient<IMassMailService, MassMailService>();
             services.AddTransient<ILogbookService, LogbookService>();
             services.AddTransient<IPhotoService, PhotoService>();
-            services.AddTransient<IPhotoStore, FilePhotoStore>();
         }
 
         public static void RegisterDevelopment(IServiceCollection services)
