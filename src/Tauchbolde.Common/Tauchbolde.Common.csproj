@@ -28,7 +28,6 @@
     <Compile Remove="Repositories\ApplicationUserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Domain\SMTPSender\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Domain\Avatar\" />
     <Folder Include="Migrations\" />

@@ -19,7 +19,7 @@ using Tauchbolde.Web.Filters;
 using System.Data.SqlClient;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Rewrite;
-using Tauchbolde.Common.Domain.SMTPSender;
+using Tauchbolde.Common.Infrastructure.SMTPSender;
 
 namespace Tauchbolde.Web
 {

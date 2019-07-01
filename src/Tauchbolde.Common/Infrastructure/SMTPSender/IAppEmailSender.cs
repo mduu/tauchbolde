@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Tauchbolde.Common.Domain.SMTPSender
+namespace Tauchbolde.Common.Infrastructure.SMTPSender
 {
     public interface IAppEmailSender
     {

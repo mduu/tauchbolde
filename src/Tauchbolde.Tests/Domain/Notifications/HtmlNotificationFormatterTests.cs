@@ -9,8 +9,8 @@ using Microsoft.Extensions.Options;
 using Tauchbolde.Common.Domain;
 using Tauchbolde.Common.Domain.Notifications;
 using Tauchbolde.Common.Domain.Notifications.HtmlFormatting;
-using Tauchbolde.Common.Domain.SMTPSender;
 using Tauchbolde.Common.Domain.TextFormatting;
+using Tauchbolde.Common.Infrastructure.SMTPSender;
 using Tauchbolde.Common.Model;
 using Xunit;
 

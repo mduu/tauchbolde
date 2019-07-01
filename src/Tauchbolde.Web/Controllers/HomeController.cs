@@ -12,8 +12,8 @@ using Tauchbolde.Web.Core;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Common.Domain.Logbook;
-using Tauchbolde.Common.Domain.SMTPSender;
 using Tauchbolde.Common.Domain.Users;
+using Tauchbolde.Common.Infrastructure.SMTPSender;
 
 namespace Tauchbolde.Web.Controllers
 {
