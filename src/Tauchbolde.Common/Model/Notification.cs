@@ -32,8 +32,13 @@ namespace Tauchbolde.Common.Model
         public NotificationType Type { get; set; }
 
         [Display(Name = "Anlass ID")]
-        public Guid EventId { get; set; }
+        public Guid? EventId { get; set; }
         [Display(Name = "Anlass")]
         public virtual Event Event { get; set; }
+        
+        [Display(Name = "Logbucheintrag ID")]
+        public Guid? LogbookEntryId { get; set; }
+        [Display(Name = "Logbucheintrag")]
+        public virtual LogbookEntry LogbookEntry { get; set; }
     }
 }

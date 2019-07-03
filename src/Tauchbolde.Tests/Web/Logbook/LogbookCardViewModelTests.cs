@@ -34,7 +34,6 @@ namespace Tauchbolde.Tests.Web.Logbook
                         Title = "A title",
                         TeaserText = teaser,
                         Text = text
-                    },
-                    false);
+                    });
     }
 }

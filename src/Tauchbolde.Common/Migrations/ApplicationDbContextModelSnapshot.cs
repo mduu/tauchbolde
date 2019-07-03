@@ -310,6 +310,8 @@ namespace Tauchbolde.Common.Migrations
 
                     b.Property<bool>("IsFavorite");
 
+                    b.Property<bool>("IsPublished");
+
                     b.Property<DateTime?>("ModifiedAt");
 
                     b.Property<Guid>("OriginalAuthorId");
@@ -353,7 +355,9 @@ namespace Tauchbolde.Common.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(0);
 
-                    b.Property<Guid>("EventId");
+                    b.Property<Guid?>("EventId");
+
+                    b.Property<Guid?>("LogbookEntryId");
 
                     b.Property<string>("Message")
                         .IsRequired();
@@ -367,6 +371,8 @@ namespace Tauchbolde.Common.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
+
+                    b.HasIndex("LogbookEntryId");
 
                     b.HasIndex("RecipientId");
 
@@ -495,8 +501,11 @@ namespace Tauchbolde.Common.Migrations
                 {
                     b.HasOne("Tauchbolde.Common.Model.Event", "Event")
                         .WithMany()
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EventId");
+
+                    b.HasOne("Tauchbolde.Common.Model.LogbookEntry", "LogbookEntry")
+                        .WithMany()
+                        .HasForeignKey("LogbookEntryId");
 
                     b.HasOne("Tauchbolde.Common.Model.Diver", "Recipient")
                         .WithMany("Notificationses")

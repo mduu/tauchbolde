@@ -7,79 +7,96 @@
     Layout = "_Layout";
 }
 
-<h2>@Model.Title</h2>
+<style>
+    .jumbotron {
+        background: url(@Model.TeaserImageUrl) no-repeat center center;
+        background-size: cover;
+        width: 100%;
+        height: 350px
+    }
+</style>
 
-<div class="col-md-10">
-
-    <div class="row">
-
-        @if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
-        {
-            <img class="img-responsive img-rounded pull-left" style="margin-right: 7px" src="@Model.TeaserThumbImageUrl"/>
-        }
-
-        @if (!string.IsNullOrWhiteSpace(Model.Teaser))
-        {
-            <summary class="lead">@textFormatting.FormatText(Model.Teaser)</summary>
-        }
-
-        <div class="row">
-            @if (!string.IsNullOrWhiteSpace(Model.Text))
-            {
-                <article>
-                    @textFormatting.FormatText(Model.Text)
-                </article>
-            }
-        </div>
-
-    </div>
-
-</div>
-
-<div class="col-md-2">
-    <ul class="list-group">
-
-        @if (Model.EventUrl != null && Model.EventTitel != null)
-        {
-            <li class="list-group-item">
-                Aktivität:<br/>
-                <a href="@Model.EventUrl">@Model.EventTitel</a>
-            </li>
-        }
-
-        @if (Model.ExternalPhotoAlbumUrl != null)
-        {
-            <li class="list-group-item">
-                <a href="@Model.ExternalPhotoAlbumUrl" target="_blank" class="btn btn-primary">Weitere Bilder</a>
-            </li>
-        }
-
-        <li class="list-group-item">
-            Author:<br/>
-            <vc:avatar diver="Model.OriginalAuthor" avatarSize="AvatarSize.Small"></vc:avatar> @Model.OriginalAuthorName
-        </li>
-
-        <li class="list-group-item">
-            Erstellt am:<br/>
-            @Model.CreatedAt
-        </li>
-
-        @if (Model.EditorAuthor != null || Model.EditedAt != null)
-        {
-            <li class="list-group-item">
-                Bearbeitet:<br/>
-                <vc:avatar diver="Model.EditorAuthor" avatarSize="AvatarSize.Small"></vc:avatar> @Model.EditorAuthorName <br/>
-                @Model.EditedAt
-            </li>
-        }
-
+<div class="row page-header">
+    <div class="pull-right">
         @if (Model.AllowEdit)
         {
-            <hr/>
-            <a href="@Model.EditUrl" class="btn btn-primary">Bearbeiten</a>
-            <hr/>
-            <a href="@Model.DeleteUrl" class="btn btn-danger">Löschen</a>
+            <a href="@Model.EditUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-pencil"></span> Bearbeiten</a>
+            @if (Model.IsPublished)
+             {
+                 <a href="@Model.UnpublishUrl" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-envelope"></span> Nicht mehr veröffentlichen</a>
+             }
+             else
+             {
+                 <a href="@Model.PublishUrl" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-send"></span> Publizieren</a>
+             }
+            <a href="@Model.DeleteUrl" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> Löschen</a>
         }
-    </ul>
+    </div>
 
+    <h1>@Model.Title</h1>
+    
+    @if (!Model.IsPublished)
+    {
+        <div class="bg-warning text-warning">Nicht publiziert</div>
+    }
+
+    <cite>
+        <vc:avatar diver="Model.OriginalAuthor" avatarSize="AvatarSize.Small"></vc:avatar> @Model.OriginalAuthorName
+        &mdash;@Model.CreatedAt
+    </cite>
+
+    @if (Model.EditorAuthor != null || Model.EditedAt != null)
+    {
+        <br/>
+        <small>
+            <span class="glyphicon glyphicon-pencil"></span>
+            @Model.EditorAuthorName
+            &mdash;@Model.EditedAt
+        </small>
+    }
+</div>
+
+<div class="row">
+
+    @if (!string.IsNullOrWhiteSpace(Model.Teaser))
+    {
+        <div id="lead">@textFormatting.FormatText(Model.Teaser)</div>
+    }
+
+
+    @if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
+    {
+        <div class="row">
+            <div class="jumbotron">
+            </div>
+        </div>
+    }
+
+
+    <div class="row">
+        @if (!string.IsNullOrWhiteSpace(Model.Text))
+        {
+            <article>
+                @textFormatting.FormatText(Model.Text)
+            </article>
+        }
+    </div>
+
+    @if (Model.ExternalPhotoAlbumUrl != null)
+    {
+        <div class="row">
+            <a href="@Model.ExternalPhotoAlbumUrl" target="_blank" class="btn btn-lg btn-primary">
+                <span class="glyphicon glyphicon-picture"></span>
+                Weitere Bilder
+            </a>
+        </div>
+    }
+
+    @if (Model.EventUrl != null && Model.EventTitle != null)
+    {
+        <div class="row">
+            Aktivität:<br/>
+            <a href="@Model.EventUrl">@Model.EventTitle</a>
+        </div>
+    }
 </div>

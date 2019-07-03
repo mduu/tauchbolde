@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Org.BouncyCastle.Asn1.Ocsp
+@{
     ViewData["Title"] = "Home Page";
 }
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
@@ -12,7 +13,7 @@
     </ol>
     <div class="carousel-inner" role="listbox">
         <div class="item active">
-            <img src="~/images/banners/banner_4.jpg" alt="Tauchbolde" class="img-responsive" />
+            <img src="~/images/banners/banner_4.jpg" alt="Tauchbolde" class="img-responsive"/>
             <div class="carousel-caption" role="option">
                 <p>
                     Wir sind Kaltwassertaucher.
@@ -23,7 +24,7 @@
             </div>
         </div>
         <div class="item">
-            <img src="~/images/banners/banner_2.jpg" alt="Visual Studio" class="img-responsive" />
+            <img src="~/images/banners/banner_2.jpg" alt="Visual Studio" class="img-responsive"/>
             <div class="carousel-caption" role="option">
                 <p>
                     Wir tauchen in den schweizer Seen und Flüssen.
@@ -34,7 +35,7 @@
             </div>
         </div>
         <div class="item">
-            <img src="~/images/banners/banner_3.jpg" alt="Visual Studio" class="img-responsive" />
+            <img src="~/images/banners/banner_3.jpg" alt="Visual Studio" class="img-responsive"/>
             <div class="carousel-caption" role="option">
                 <p>
                     Wir tauchen das ganze Jahr über.
@@ -45,7 +46,7 @@
             </div>
         </div>
         <div class="item">
-            <img src="~/images/banners/banner_1.jpg" alt="Visual Studio" class="img-responsive" />
+            <img src="~/images/banners/banner_1.jpg" alt="Visual Studio" class="img-responsive"/>
             <div class="carousel-caption" role="option">
                 <p>
                     'Hausriff' ist der Zürichsee.
@@ -56,7 +57,7 @@
             </div>
         </div>
         <div class="item">
-            <img src="~/images/banners/banner_5.jpg" alt="Visual Studio" class="img-responsive" />
+            <img src="~/images/banners/banner_5.jpg" alt="Visual Studio" class="img-responsive"/>
             <div class="carousel-caption" role="option">
                 <p>
                     Erfahrung und Zusammenhalt.
@@ -67,7 +68,7 @@
             </div>
         </div>
         <div class="item">
-            <img src="~/images/banners/banner_6.jpg" alt="Visual Studio" class="img-responsive" />
+            <img src="~/images/banners/banner_6.jpg" alt="Visual Studio" class="img-responsive"/>
             <div class="carousel-caption" role="option">
                 <p>
                     Tief, dunkel, kalt.
@@ -95,15 +96,16 @@
             Wir gehören keinem Tauchshop und keiner Tauchschule an und verstehen uns auch nicht als Tauchclub. Am besten würde es das Wort
             "Interessensgemeinschaft" treffen.
         </p>
-        <a class="btn btn-default" asp-action="About" asp-controller="Home">Mehr ...</a>
+        <a class="btn btn-primary" asp-action="About" asp-controller="Home">Mehr ...</a>
         <h3>Aktititäten</h3>
         @await Component.InvokeAsync("RecentAndUpcomingEvents")
 
-        <hr />
+        <hr/>
 
         <partial name="_SocialMediaLinks" />
     </div>
     <div class="col-md-6">
-        <a class="twitter-timeline" data-lang="de" data-height="600" data-dnt="true" data-theme="light" href="https://twitter.com/tauchbolde?ref_src=twsrc%5Etfw">Tweets by tauchbolde</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <h3>Logbuch</h3>
+        @await Component.InvokeAsync("LogbookSummaryList")
     </div>
 </div>

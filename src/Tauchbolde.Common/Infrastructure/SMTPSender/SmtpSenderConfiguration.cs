@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Tauchbolde.Common.Domain.SMTPSender
+namespace Tauchbolde.Common.Infrastructure.SMTPSender
 {
     public class SmtpSenderConfiguration
     {

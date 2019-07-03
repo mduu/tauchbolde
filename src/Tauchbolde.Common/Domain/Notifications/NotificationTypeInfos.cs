@@ -16,6 +16,7 @@ namespace Tauchbolde.Common.Domain.Notifications
                 { NotificationType.Declined, new NotificationTypeInfo { Caption = "Absage" }},
                 { NotificationType.Tentative, new NotificationTypeInfo {Caption = "Vorbehalt" }},
                 { NotificationType.Neutral, new NotificationTypeInfo { Caption = "Unklar" }},
+                { NotificationType.NewLogbookEntry, new NotificationTypeInfo { Caption = "Neuer Logbucheintrag" }},
                 // ReSharper restore StringLiteralTypo
             };
 

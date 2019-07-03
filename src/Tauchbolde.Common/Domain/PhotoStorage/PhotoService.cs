@@ -89,11 +89,15 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         {
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
 
-            return await photoStore.AddPhotoAsync(
+            var photoIdentifier = new PhotoIdentifier(photoCategory, false, filename);
+            
+            await photoStore.AddPhotoAsync(
                 new Photo(
-                    new PhotoIdentifier(photoCategory, false, filename),
+                    photoIdentifier,
                     contentType,
                     photoData));
+
+            return photoIdentifier;
         }
 
         private async Task<PhotoIdentifier> AddThumbnail(
@@ -105,12 +109,15 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
             
             var thumbnailPhotoData = await GeneratedThumbnailAsync(photoData, photoCategory, contentType);
-
-            return await photoStore.AddPhotoAsync(
+            var photoIdentifier = new PhotoIdentifier(photoCategory, true, filename);
+            
+            await photoStore.AddPhotoAsync(
                 new Photo(
-                    new PhotoIdentifier(photoCategory, true, filename), 
+                    photoIdentifier, 
                     "image/jpg",
                     thumbnailPhotoData));
+
+            return photoIdentifier;
         }
 
         private async Task<Stream> GeneratedThumbnailAsync(

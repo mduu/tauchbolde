@@ -10,12 +10,13 @@ using Microsoft.Extensions.Configuration;
 using Tauchbolde.Common;
 using Tauchbolde.Common.Domain;
 using Tauchbolde.Common.Domain.Avatar;
+using Tauchbolde.Common.Infrastructure.PhotoStores;
 using Tauchbolde.Web.Core.TextFormatting;
 
 namespace Tauchbolde.Web
 {
     [UsedImplicitly]
-    public class ApplicationServices
+    public static class ApplicationServices
     {
         public static void Register(
             [NotNull] IServiceCollection services,
@@ -26,13 +27,10 @@ namespace Tauchbolde.Web
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
             if (hostingEnvironment == null) throw new ArgumentNullException(nameof(hostingEnvironment));
 
-            var photoStoreRoot = configuration["PhotoStoreRoot"];
-            if (string.IsNullOrWhiteSpace(photoStoreRoot))
-            {
-                photoStoreRoot = Path.Combine(hostingEnvironment.WebRootPath, "photos");
-            }
-            
-            CommonServices.RegisterServices(services, photoStoreRoot);
+            var photoStoreRoot = GetPhotoStoreRoot(configuration, hostingEnvironment);
+            var photoStoreType = GetPhotoStoreType(configuration);
+
+            CommonServices.RegisterServices(services, photoStoreRoot, photoStoreType);
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IUrlGenerator, MvcUrlGenerator>();
@@ -41,7 +39,7 @@ namespace Tauchbolde.Web
             services.AddSingleton<IAvatarPathProvider, AvatarPathProvider>();
             services.AddTransient<ITextFormattingHelper, TextFormattingHelper>();
         }
-
+        
         public static void RegisterDevelopment(IServiceCollection services)
         {
             if (services == null) { throw new System.ArgumentNullException(nameof(services)); }
@@ -54,6 +52,29 @@ namespace Tauchbolde.Web
             if (services == null) { throw new System.ArgumentNullException(nameof(services)); }
 
             CommonServices.RegisterProduction(services);
+        }
+        
+        private static string GetPhotoStoreRoot(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        {
+            var photoStoreRoot = configuration["PhotoStoreRoot"];
+            if (string.IsNullOrWhiteSpace(photoStoreRoot))
+            {
+                photoStoreRoot = Path.Combine(hostingEnvironment.WebRootPath, "photos");
+            }
+
+            return photoStoreRoot;
+        }
+        
+        private static PhotoStoreType GetPhotoStoreType(IConfiguration configuration)
+        {
+            var photoStoreType = PhotoStoreType.FileSystem;
+            var photoStoreTypeString = configuration["PhotoStoreType"];
+            if (!string.IsNullOrWhiteSpace(photoStoreTypeString))
+            {
+                Enum.TryParse(photoStoreTypeString, out photoStoreType);
+            }
+
+            return photoStoreType;
         }
     }
 }

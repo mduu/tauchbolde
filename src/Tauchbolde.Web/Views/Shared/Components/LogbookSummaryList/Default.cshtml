@@ -1,0 +1,42 @@
+@model Tauchbolde.Web.Models.ViewComponentModels.LogbookSummaryListViewModel
+@inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
+
+<style>
+    img.logbook-teaser-image {
+        object-fit: cover;
+        height: 64px;
+        width: 64px;
+    }
+    div.logbook-image-placeholder {
+            width: 64px;
+            height: 64px;
+            background-color: #eee;
+            border-radius: 3px;
+    }
+</style>
+
+@foreach (var logbookEntry in Model.LogbookEntries.Take(5))
+{
+    <div class="media">
+        <div class="media-left">
+            <a href="@Url.Action("Detail", "Logbook", new {Id = logbookEntry.Id})">
+                @if (!string.IsNullOrWhiteSpace(logbookEntry.TeaserImageThumb))
+                {
+                    <img class="media-object logbook-teaser-image img-rounded" src="@Url.Action("Photo", "Logbook", new {Id = logbookEntry.TeaserImageThumb})" alt="Teaser Image">
+                }
+                else
+                {
+                    <div class="logbook-image-placeholder"></div>
+                }
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading">@logbookEntry.Title</h4>
+            @TextFormatting.FormatText(logbookEntry.TeaserText)
+            <a href="@Url.Action("Detail", "Logbook", new {Id = logbookEntry.Id})">Weiterlesen...</a>
+        </div>
+    </div>
+    <hr />
+}
+
+<a class="btn btn-primary" href="@Url.Action("Index", "Logbook")">Mehr ...</a>

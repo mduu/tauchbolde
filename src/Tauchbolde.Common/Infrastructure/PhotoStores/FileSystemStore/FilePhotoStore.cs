@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Commom.Misc;
+using Tauchbolde.Common.Domain.PhotoStorage;
 
-namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
+namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
 {
     public class FilePhotoStore : IPhotoStore
     {
@@ -14,6 +15,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
         [NotNull] private readonly IFilePathCalculator filePathCalculator;
         [NotNull] private readonly IMimeMapping mimeMapping;
 
+        /// <inheritdoc />
         public FilePhotoStore(
             [NotNull] ILogger<FilePhotoStore> logger,
             [NotNull] IFilePhotoStoreConfiguration configuration,
@@ -26,7 +28,8 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
             this.mimeMapping = mimeMapping ?? throw new ArgumentNullException(nameof(mimeMapping));
         }
 
-        public async Task<PhotoIdentifier> AddPhotoAsync(Photo photo)
+        /// <inheritdoc />
+        public async Task AddPhotoAsync(Photo photo)
         {
             if (photo == null) throw new ArgumentNullException(nameof(photo));
 
@@ -49,10 +52,9 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
                 photo.Content.Seek(0, 0);
                 await photo.Content.CopyToAsync(fileStream);
             }
-
-            return photo.Identifier;
         }
 
+        /// <inheritdoc />
         public async Task RemovePhotoAsync(PhotoIdentifier photoIdentifier)
         {
             if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
@@ -80,6 +82,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
             }
         }
 
+        /// <inheritdoc />
         public async Task<Photo> GetPhotoAsync(PhotoIdentifier photoIdentifier)
         {
             if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));

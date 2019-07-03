@@ -8,7 +8,7 @@ namespace Tauchbolde.Web.ViewComponents
     {
         public IViewComponentResult Invoke(LogbookEntry logbookEntry, bool allowEdit)
         {
-            return View(new LogbookCardViewModel(logbookEntry, allowEdit));
+            return View(new LogbookCardViewModel(logbookEntry));
         }
     }
 }

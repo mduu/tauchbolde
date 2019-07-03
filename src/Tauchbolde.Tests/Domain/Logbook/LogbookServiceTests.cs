@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Domain.Logbook;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Domain.Repositories;
@@ -30,8 +31,8 @@ namespace Tauchbolde.Tests.Domain.Logbook
                 logbookEntryRepoFake,
                 diverServiceFake,
                 telemetryServiceFake,
-                photoService
-            );
+                photoService,
+                A.Fake<ILogger<LogbookService>>());
 
             validInsertModel = CreateValidModel(null);
             validUpdateModel = CreateValidModel(new Guid("50D106BD-D47A-47A5-8244-CF3560A2A3E4"));

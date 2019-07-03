@@ -1,35 +1,28 @@
 using System;
 using JetBrains.Annotations;
-using Tauchbolde.Common;
 using Tauchbolde.Common.Model;
 
 namespace Tauchbolde.Web.Models.ViewComponentModels
 {
     public class LogbookCardViewModel
     {
-        public LogbookCardViewModel([NotNull] LogbookEntry logbookEntry, bool allowEdit)
+        public LogbookCardViewModel(
+            [NotNull] LogbookEntry logbookEntry)
         {
             if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
-            
-            AllowEdit = allowEdit;
             Title = logbookEntry.Title;
             TeaserText = GetTeaserText(logbookEntry);
-            OriginalAuthorName = logbookEntry.OriginalAuthor?.Realname ?? "";
-            EditorAuthorName = logbookEntry.EditorAuthor?.Realname;
-            CreatedAt = logbookEntry.CreatedAt.ToStringSwissDateTime();
-            ModifiedAt = logbookEntry.ModifiedAt.ToStringSwissDateTime();
             LogbookEntryId = logbookEntry.Id;
+            TeaserImageUrl = logbookEntry.TeaserImageThumb;
+            IsPublished = logbookEntry.IsPublished;
         }
 
-        public Guid LogbookEntryId { get; set; }
-        public string Title { get; set; }
-        public string OriginalAuthorName { get; set; }
-        public string EditorAuthorName { get; set; }
-        public string TeaserText { get; set; }
-        public string CreatedAt { get; set; }
-        public string ModifiedAt { get; set; }
-        public bool AllowEdit { get; }
-        
+        public Guid LogbookEntryId { get; }
+        public string Title { get; }
+        public string TeaserText { get; }
+        public string TeaserImageUrl { get; }
+        public bool IsPublished { get; }
+
         private static string GetTeaserText(LogbookEntry logbookEntry)
         {
             if (!string.IsNullOrWhiteSpace(logbookEntry.TeaserText))

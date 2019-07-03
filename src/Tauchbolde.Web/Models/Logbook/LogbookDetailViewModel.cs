@@ -13,10 +13,11 @@ namespace Tauchbolde.Web.Models.Logbook
         public Guid Id { get; set; }
         [NotNull] public string Title { get; set; } = "";
         public bool IsFavorite { get; set; }
+        public bool IsPublished { get; set; }
         [CanBeNull] public string Teaser { get; set; }
         [CanBeNull] public string Text { get; set; }
         [CanBeNull] public string ExternalPhotoAlbumUrl { get; set; }
-        [CanBeNull] public string EventTitel { get; set; }
+        [CanBeNull] public string EventTitle { get; set; }
         
         public string OriginalAuthorName { get; set; }
         [NotNull] public Diver OriginalAuthor { get; set; } = new Diver();
@@ -27,6 +28,8 @@ namespace Tauchbolde.Web.Models.Logbook
         [CanBeNull] public string EditedAt { get; set; }
 
         [CanBeNull] public string EditUrl { get; set; }
+        [CanBeNull] public string UnpublishUrl { get; set; }
+        [CanBeNull] public string PublishUrl { get; set; }
         [CanBeNull] public string DeleteUrl { get; set; }
         [CanBeNull] public string EventUrl { get; set; }
         [CanBeNull] public string TeaserImageUrl { get; set; }

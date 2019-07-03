@@ -6,6 +6,8 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Logging;
 using Tauchbolde.Common;
 using Tauchbolde.Common.Domain.Logbook;
 using Tauchbolde.Common.Domain.PhotoStorage;
@@ -19,24 +21,28 @@ namespace Tauchbolde.Web.Controllers
     public class LogbookController : AppControllerBase
     {
         [NotNull] private readonly ApplicationDbContext context;
-        private readonly ILogbookService logbookService;
+        [NotNull] private readonly ILogbookService logbookService;
+        [NotNull] private readonly ILogger<LogbookController> logger;
 
         public LogbookController(
             [NotNull] ApplicationDbContext context,
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ILogbookService logbookService,
-            [NotNull] IDiverService diverService)
+            [NotNull] IDiverService diverService,
+            [NotNull] ILogger<LogbookController> logger)
             : base(userManager, diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.logbookService = logbookService ?? throw new ArgumentNullException(nameof(logbookService));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         // GET /
         public async Task<IActionResult> Index()
         {
+            var allowEdit = await GetAllowEdit();
             var model = new LogbookListViewModel(
-                await logbookService.GetAllEntriesAsync(),
+                await logbookService.GetAllEntriesAsync(allowEdit),
                 await GetTauchboldOrAdmin());
 
             return View(model);
@@ -63,7 +69,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 CreatedAt = DateTime.Now
             };
-            
+
             return View("Edit", model);
         }
 
@@ -77,7 +83,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 return BadRequest();
             }
-                
+
             return View("Edit", model);
         }
 
@@ -107,7 +113,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 return BadRequest();
             }
-            
+
             var id = await logbookService.UpsertAsync(new LogbookUpsertModel
             {
                 Id = model.Id,
@@ -123,13 +129,64 @@ namespace Tauchbolde.Web.Controllers
                 ExternalPhotoAlbumUrl = model.ExternalPhotoAlbumUrl,
             });
             await context.SaveChangesAsync();
-            
+
             ShowSuccessMessage($"Logbucheintrag '{model.Title}' erfolgreich gespeichert.");
 
             return RedirectToAction("Index", "Logbook");
         }
-        
-        
+
+        [HttpGet]
+        [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
+        public async Task<IActionResult> Publish(Guid id)
+        {
+            var logbookEntry = await logbookService.FindByIdAsync(id);
+            if (logbookEntry == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await logbookService.PublishAsync(logbookEntry);
+                await context.SaveChangesAsync();
+
+                ShowSuccessMessage($"Logbucheintrag '{logbookEntry.Title}' erfolgreich publiziert.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"Error publishing logbook entry [{logbookEntry.Id}]!");
+                ShowErrorMessage($"Fehler beim Publizieren: {ex.Message}");
+            }
+
+            return RedirectToAction("Detail", "Logbook", new {logbookEntry.Id});
+        }
+
+        [HttpGet]
+        [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
+        public async Task<IActionResult> Unpublish(Guid id)
+        {
+            var logbookEntry = await logbookService.FindByIdAsync(id);
+            if (logbookEntry == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await logbookService.UnPublishAsync(logbookEntry);
+                await context.SaveChangesAsync();
+                
+                ShowSuccessMessage($"Logbucheintrag '{logbookEntry.Title}' erfolgreich nicht mehr publiziert.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"Error un-publishing logbook entry [{logbookEntry.Id}]!");
+                ShowErrorMessage($"Fehler beim Publizieren: {ex.Message}");
+            }
+
+            return RedirectToAction("Detail", "Logbook", new {logbookEntry.Id});
+        }
+
         // GET /edit/x
         [HttpGet]
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
@@ -137,7 +194,7 @@ namespace Tauchbolde.Web.Controllers
         {
             await logbookService.DeleteAsync(id);
             await context.SaveChangesAsync();
-            
+
             return RedirectToAction("Index");
         }
 
@@ -151,7 +208,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 return NotFound();
             }
-            
+
             return File(photo.Content, photo.ContentType, photo.Identifier.Filename);
         }
 
@@ -164,7 +221,7 @@ namespace Tauchbolde.Web.Controllers
             }
 
             var allowEdit = await GetAllowEdit();
-            
+
             return new LogbookDetailViewModel
             {
                 AllowEdit = allowEdit,
@@ -173,15 +230,16 @@ namespace Tauchbolde.Web.Controllers
                 Teaser = logbookEntry.TeaserText,
                 Text = logbookEntry.Text,
                 ExternalPhotoAlbumUrl = logbookEntry.ExternalPhotoAlbumUrl,
-                TeaserImageUrl = Url.Action("Photo", "Logbook", new { id = logbookEntry.TeaserImage }),
-                TeaserThumbImageUrl = Url.Action("Photo", "Logbook", new { id = logbookEntry.TeaserImageThumb }),
-                EventTitel = logbookEntry.EventId != null && logbookEntry.Event != null
+                TeaserImageUrl = Url.Action("Photo", "Logbook", new {id = logbookEntry.TeaserImage}),
+                TeaserThumbImageUrl = Url.Action("Photo", "Logbook", new {id = logbookEntry.TeaserImageThumb}),
+                EventTitle = logbookEntry.EventId != null && logbookEntry.Event != null
                     ? logbookEntry.Event.Name
                     : null,
                 EventUrl = logbookEntry.EventId != null
                     ? Url.Action("Details", "Event", new {id = logbookEntry.EventId})
                     : null,
                 IsFavorite = logbookEntry.IsFavorite,
+                IsPublished = logbookEntry.IsPublished,
                 OriginalAuthor = logbookEntry.OriginalAuthor,
                 OriginalAuthorName = logbookEntry.OriginalAuthor.Realname,
                 CreatedAt = logbookEntry.CreatedAt.ToStringSwissDateTime(),
@@ -191,14 +249,20 @@ namespace Tauchbolde.Web.Controllers
                     : null,
                 EditedAt = logbookEntry.ModifiedAt.ToStringSwissDateTime(),
                 EditUrl = allowEdit
-                    ? Url.Action("Edit", new { id = logbookEntry.Id })
+                    ? Url.Action("Edit", new {id = logbookEntry.Id})
+                    : null,
+                PublishUrl = allowEdit
+                    ? Url.Action("Publish", new {id = logbookEntry.Id})
+                    : null,
+                UnpublishUrl = allowEdit
+                    ? Url.Action("Unpublish", new {id = logbookEntry.Id})
                     : null,
                 DeleteUrl = allowEdit
-                    ? Url.Action("Delete", new { id = logbookEntry.Id })
+                    ? Url.Action("Delete", new {id = logbookEntry.Id})
                     : null,
             };
         }
-        
+
         private async Task<LogbookEditViewModel> CreateLogbookEditViewModelAsync(Guid logbookEntryId)
         {
             var logbookEntry = await logbookService.FindByIdAsync(logbookEntryId);

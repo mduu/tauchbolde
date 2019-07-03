@@ -9,7 +9,7 @@ using MimeKit;
 using MimeKit.Text;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 
-namespace Tauchbolde.Common.Domain.SMTPSender
+namespace Tauchbolde.Common.Infrastructure.SMTPSender
 {
     internal class SmtpSender : IAppEmailSender
     {

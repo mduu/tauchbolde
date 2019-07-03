@@ -160,6 +160,25 @@ namespace Tauchbolde.Common.Domain.Notifications
                 author);
         }
 
+        /// <inheritdoc />
+        public async Task NotifyForNewLogbookEntry(
+            [NotNull] LogbookEntry logbookEntry,
+            [NotNull] Diver author)
+        {
+            if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
+            if (author == null) throw new ArgumentNullException(nameof(author));
+
+            var recipients = await diverRepository.GetAllTauchboldeUsersAsync();
+            var message = $"Neuer Logbucheintrag von '{author.Realname}' mit Titel '{logbookEntry.Title}'.";
+
+            await InsertNotification(
+                null,
+                recipients,
+                NotificationType.NewLogbookEntry,
+                message,
+                author);
+        }
+
         private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(
             Guid currentDiverId,
             Guid eventId)

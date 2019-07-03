@@ -1,29 +1,66 @@
 @model Tauchbolde.Web.Models.ViewComponentModels.LogbookCardViewModel
 @inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <h4>@Model.Title</h4>
-        <p>@TextFormatting.FormatText(Model.TeaserText)</p>
-        <div>
-            <a asp-controller="Logbook" asp-action="Detail" asp-route-id="@Model.LogbookEntryId">Mehr ...</a>
-        </div>
-    </div>
+<style>
+    .logbook-entry {
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 25px;
+    }
     
-    <div class="panel-footer">
-        Author:
-        @Model.OriginalAuthorName /
-        @Model.CreatedAt
+    .logbook-entry a {
+        flex-shrink: 0;
+    }
+    
+    .logbook-entry a img {
+        object-fit: cover;
+        height: 200px;
+        width: 100%;
+    }
+    
+    #image-placeholder {
+        height: 200px;
+        background-color: #eee;
+        flex-shrink: 0;
+    }
+    
+    .logbook-entry-content {
+        overflow-y: hidden;
+        margin-bottom: 7px;
+        text-overflow: ellipsis;
+    }
+    
+    .spacer {
+        flex: 1;
+    }
+    
+    .logbook-entry-actions {
+       flex-shrink: 0;
+       margin-bottom: 10px;
+     }
+    
+</style>
 
-        @if (!string.IsNullOrWhiteSpace(Model.ModifiedAt) || !string.IsNullOrWhiteSpace(Model.EditorAuthorName))
-        {
-            <text>
-                (
-                Bearbeitet:
-                @Model.EditorAuthorName
-                @Model.ModifiedAt
-                )
-            </text>
-        }
+<div class="thumbnail logbook-entry">
+    @if (!Model.IsPublished)
+    {
+        <div class="bg-warning text-warning">Nicht publiziert</div>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
+    {
+        <a asp-controller="Logbook" asp-action="Detail" asp-route-id="@Model.LogbookEntryId">
+            <img src="@Url.Action("Photo", "Logbook", new {Id = Model.TeaserImageUrl})"/>
+        </a>
+    }
+    else
+    {
+        <div id="image-placeholder"></div>
+    }
+    <h4>@Model.Title</h4>
+    <div class="logbook-entry-content">@TextFormatting.FormatText(Model.TeaserText)</div>
+    <div class="spacer"></div>
+    <div class="logbook-entry-actions">
+        <a class="btn btn-primary" asp-controller="Logbook" asp-action="Detail" asp-route-id="@Model.LogbookEntryId">Mehr ...</a>
     </div>
 </div>

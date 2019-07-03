@@ -607,3 +607,74 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190623072628_AddLogbook_IsPublished')
+BEGIN
+    ALTER TABLE [LogbookEntries] ADD [IsPublished] bit NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190623072628_AddLogbook_IsPublished')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190623072628_AddLogbook_IsPublished', N'2.2.3-servicing-35854');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190626050606_Notifications_Add_LogbookEntryId')
+BEGIN
+    ALTER TABLE [Notifications] DROP CONSTRAINT [FK_Notifications_Events_EventId];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190626050606_Notifications_Add_LogbookEntryId')
+BEGIN
+    DECLARE @var5 sysname;
+    SELECT @var5 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Notifications]') AND [c].[name] = N'EventId');
+    IF @var5 IS NOT NULL EXEC(N'ALTER TABLE [Notifications] DROP CONSTRAINT [' + @var5 + '];');
+    ALTER TABLE [Notifications] ALTER COLUMN [EventId] uniqueidentifier NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190626050606_Notifications_Add_LogbookEntryId')
+BEGIN
+    ALTER TABLE [Notifications] ADD [LogbookEntryId] uniqueidentifier NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190626050606_Notifications_Add_LogbookEntryId')
+BEGIN
+    CREATE INDEX [IX_Notifications_LogbookEntryId] ON [Notifications] ([LogbookEntryId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190626050606_Notifications_Add_LogbookEntryId')
+BEGIN
+    ALTER TABLE [Notifications] ADD CONSTRAINT [FK_Notifications_Events_EventId] FOREIGN KEY ([EventId]) REFERENCES [Events] ([Id]) ON DELETE NO ACTION;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190626050606_Notifications_Add_LogbookEntryId')
+BEGIN
+    ALTER TABLE [Notifications] ADD CONSTRAINT [FK_Notifications_LogbookEntries_LogbookEntryId] FOREIGN KEY ([LogbookEntryId]) REFERENCES [LogbookEntries] ([Id]) ON DELETE NO ACTION;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190626050606_Notifications_Add_LogbookEntryId')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190626050606_Notifications_Add_LogbookEntryId', N'2.2.3-servicing-35854');
+END;
+
+GO
+

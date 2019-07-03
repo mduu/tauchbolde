@@ -29,10 +29,12 @@ namespace Tauchbolde.Common.DataAccess
         }
 
 
+        /// <param name="includeUnpublished"></param>
         /// <inheritdoc />
-        public async Task<ICollection<LogbookEntry>> GetAllEntriesAsync()
+        public async Task<ICollection<LogbookEntry>> GetAllEntriesAsync(bool includeUnpublished)
         {
             return await Context.LogbookEntries
+                .Where(l => includeUnpublished || l.IsPublished)
                 .Include(l => l.OriginalAuthor)
                 .Include(l => l.EditorAuthor)
                 .Include(l => l.Event)

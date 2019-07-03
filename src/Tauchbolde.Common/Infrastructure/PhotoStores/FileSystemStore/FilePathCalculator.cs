@@ -2,8 +2,9 @@ using System;
 using System.IO;
 using JetBrains.Annotations;
 using Tauchbolde.Commom.Misc;
+using Tauchbolde.Common.Domain.PhotoStorage;
 
-namespace Tauchbolde.Common.Domain.PhotoStorage.Stores.FileSystemStore
+namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
 {    
     public class FilePathCalculator : IFilePathCalculator
     {
