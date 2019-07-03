@@ -19,6 +19,7 @@ using Tauchbolde.Web.Filters;
 using System.Data.SqlClient;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Rewrite;
+using Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage;
 using Tauchbolde.Common.Infrastructure.SMTPSender;
 
 namespace Tauchbolde.Web
@@ -52,6 +53,7 @@ namespace Tauchbolde.Web
         private void ConfigureServices(IServiceCollection services)
         {
             services.Configure<SmtpSenderConfiguration>(Configuration.GetSection("SMTP"));
+            services.Configure<AzureBlobStoreConfiguration>(Configuration.GetSection("AzureBlobStore"));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
