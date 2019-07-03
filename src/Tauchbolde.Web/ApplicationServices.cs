@@ -16,7 +16,7 @@ using Tauchbolde.Web.Core.TextFormatting;
 namespace Tauchbolde.Web
 {
     [UsedImplicitly]
-    public class ApplicationServices
+    public static class ApplicationServices
     {
         public static void Register(
             [NotNull] IServiceCollection services,
