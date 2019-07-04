@@ -90,6 +90,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
             if (photoData == null) throw new ArgumentNullException(nameof(photoData));
 
             var photoIdentifier = new PhotoIdentifier(photoCategory, false, filename);
+            photoData.Seek(0, 0);
             
             await photoStore.AddPhotoAsync(
                 new Photo(
@@ -110,6 +111,8 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
             
             var thumbnailPhotoData = await GeneratedThumbnailAsync(photoData, photoCategory, contentType);
             var photoIdentifier = new PhotoIdentifier(photoCategory, true, filename);
+
+            photoData.Seek(0, 0);
             
             await photoStore.AddPhotoAsync(
                 new Photo(
