@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Tauchbolde.Commom.Misc;
@@ -25,7 +26,7 @@ namespace Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage
 
         public AzureBlobStore(
             [NotNull] ILogger<AzureBlobStore> logger,
-            [NotNull] IAzureBlobStoreConfiguration configuration,
+            [NotNull] IOptions<AzureBlobStoreConfiguration> configuration,
             [NotNull] IMimeMapping mimeMapping)
         {
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
@@ -34,14 +35,14 @@ namespace Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage
             this.mimeMapping = mimeMapping ?? throw new ArgumentNullException(nameof(mimeMapping));
     
             if (!TryParseAzureBlobStorageAccount(
-                configuration.BlobStorageConnectionString,
+                configuration.Value.BlobStorageConnectionString,
                 out var account))
             {
                 logger.LogError(
                     $"{nameof(AzureBlobStore)}.ctor: Error parsing Azure Storage Account!",
-                    configuration.BlobStorageConnectionString);
+                    configuration.Value.BlobStorageConnectionString);
                 
-                throw new ArgumentException($"Error parsing Azure Storage account: [{configuration.BlobStorageConnectionString}]");
+                throw new ArgumentException($"Error parsing Azure Storage account: [{configuration.Value.BlobStorageConnectionString}]");
             }
 
             storageAccount = account;
