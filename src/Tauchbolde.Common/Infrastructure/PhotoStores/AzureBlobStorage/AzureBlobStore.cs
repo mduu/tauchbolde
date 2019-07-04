@@ -76,8 +76,10 @@ namespace Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage
 
             var memStream = new MemoryStream();
             await cloudBlob.DownloadToStreamAsync(memStream);
+            memStream.Seek(0, 0);
             await cloudBlob.FetchAttributesAsync();
-            var contentType = cloudBlob.Properties?.ContentType ?? mimeMapping.GetMimeMapping(photoIdentifier.Filename);
+            
+            var contentType = mimeMapping.GetMimeMapping(Path.GetExtension(photoIdentifier.Filename));
 
             return new Photo(photoIdentifier, contentType, memStream);
         }
