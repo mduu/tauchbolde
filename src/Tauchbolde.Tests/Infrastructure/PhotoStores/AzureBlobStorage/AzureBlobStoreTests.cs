@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Tauchbolde.Commom.Misc;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage;
+using Tauchbolde.Common.Infrastructure.Telemetry;
 using Xunit;
 
 namespace Tauchbolde.Tests.Infrastructure.PhotoStores.AzureBlobStorage
@@ -68,7 +69,8 @@ namespace Tauchbolde.Tests.Infrastructure.PhotoStores.AzureBlobStorage
                     {
                         BlobStorageConnectionString = azureBlobConnectionString
                     }),
-                new MimeMapping());
+                new MimeMapping(),
+                A.Fake<ITelemetryService>());
         }
     }
 }

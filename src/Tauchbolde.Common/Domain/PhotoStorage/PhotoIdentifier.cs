@@ -32,6 +32,11 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         public bool IsThumb { get; private set; }
         [NotNull] public string Filename { get; private set; }
 
+        public string Serialze() =>
+            $"{Category.ToString()}{(IsThumb ? $"/{ThumbSubdir}" : "")}/{Filename}";
+
+        public override string ToString() => Serialze();
+
         private void Deserialize(string serializedIdentifier)
         {
             var match = IdentifierRegex.Match(serializedIdentifier);
@@ -60,8 +65,5 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
             Filename = match.Groups["filename"]?.Value ??
                        throw new InvalidOperationException($"Filename must not be null in {nameof(PhotoIdentifier)}!");
         }
-
-        public string Serialze() =>
-            $"{Category.ToString()}{(IsThumb ? $"/{ThumbSubdir}" : "")}/{Filename}";
     }
 }
