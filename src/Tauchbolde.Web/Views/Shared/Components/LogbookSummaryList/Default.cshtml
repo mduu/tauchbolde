@@ -22,7 +22,7 @@
             <a href="@Url.Action("Detail", "Logbook", new {Id = logbookEntry.Id})">
                 @if (!string.IsNullOrWhiteSpace(logbookEntry.TeaserImageThumb))
                 {
-                    <img class="media-object logbook-teaser-image img-rounded" src="@Url.Action("Photo", "Logbook", new {Id = logbookEntry.TeaserImageThumb})" alt="Teaser Image">
+                    <img class="media-object logbook-teaser-image img-rounded" src="@Url.Action("Photo", "Logbook", new {photoId = logbookEntry.TeaserImageThumb})" alt="Teaser Image">
                 }
                 else
                 {
@@ -36,7 +36,7 @@
             <a href="@Url.Action("Detail", "Logbook", new {Id = logbookEntry.Id})">Weiterlesen...</a>
         </div>
     </div>
-    <hr />
+    <hr/>
 }
 
 <a class="btn btn-primary" href="@Url.Action("Index", "Logbook")">Mehr ...</a>
