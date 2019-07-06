@@ -11,7 +11,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
     {
         private const string ThumbSubdir = "thumbs";
         private static readonly Regex IdentifierRegex =
-            new Regex(@"^(?<category>.*?)(/(?<thumbnail>.*)|)/(?<filename>.*)$", RegexOptions.Compiled);
+            new Regex(@"^(?<category>.*?)(-(?<thumbnail>.*)|)-(?<filename>.*)$", RegexOptions.Compiled);
 
         public PhotoIdentifier(PhotoCategory category, bool isThumb, [NotNull] string filename)
         {
@@ -33,7 +33,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
         [NotNull] public string Filename { get; private set; }
 
         public string Serialze() =>
-            $"{Category.ToString()}{(IsThumb ? $"/{ThumbSubdir}" : "")}/{Filename}";
+            $"{Category.ToString()}{(IsThumb ? $"-{ThumbSubdir}" : "")}-{Filename}";
 
         public override string ToString() => Serialze();
 
