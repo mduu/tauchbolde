@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Common.Domain.Logbook;
+using Tauchbolde.Common.Model;
 using Tauchbolde.Web.Models.ViewComponentModels;
 
 namespace Tauchbolde.Web.ViewComponents
@@ -18,7 +20,7 @@ namespace Tauchbolde.Web.ViewComponents
         
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var allEntries = await logbookService.GetAllEntriesAsync();
+            var allEntries = await logbookService.GetAllEntriesAsync() ?? Enumerable.Empty<LogbookEntry>();
             var model = new LogbookSummaryListViewModel(allEntries);
             
             return View(model);
