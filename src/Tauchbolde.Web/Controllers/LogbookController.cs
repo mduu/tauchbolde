@@ -205,7 +205,7 @@ namespace Tauchbolde.Web.Controllers
 
             if (photo?.Content == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             return File(photo.Content, photo.ContentType, photo.Identifier.Filename);
@@ -283,7 +283,5 @@ namespace Tauchbolde.Web.Controllers
         }
 
         private async Task<bool> GetAllowEdit() => await GetTauchboldOrAdmin();
-
-        private string GetImageUrl(string imageId) => Url.Action("Photo", new {Id = imageId});
     }
 }
