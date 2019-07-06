@@ -9,7 +9,7 @@ namespace Tauchbolde.Tests.Domain.PhotoStorage
         [Fact]
         public void TestSerializeOriginalPhotoIdentifier()
         {
-            var result = new PhotoIdentifier("LogbookTeaser/myimage.jpg");
+            var result = new PhotoIdentifier("LogbookTeaser-myimage.jpg");
 
             result.Category.Should().Be(PhotoCategory.LogbookTeaser);
             result.IsThumb.Should().BeFalse();
@@ -19,7 +19,7 @@ namespace Tauchbolde.Tests.Domain.PhotoStorage
         [Fact]
         public void TestSerializeThumbPhotoIdentifier()
         {
-            var result = new PhotoIdentifier("LogbookTeaser/thumbs/myimage.jpg");
+            var result = new PhotoIdentifier("LogbookTeaser-thumbs-myimage.jpg");
 
             result.Category.Should().Be(PhotoCategory.LogbookTeaser);
             result.IsThumb.Should().BeTrue();
