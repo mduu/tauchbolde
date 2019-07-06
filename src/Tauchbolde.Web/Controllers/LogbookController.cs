@@ -174,7 +174,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 await logbookService.UnPublishAsync(logbookEntry);
                 await context.SaveChangesAsync();
-                
+
                 ShowSuccessMessage($"Logbucheintrag '{logbookEntry.Title}' erfolgreich nicht mehr publiziert.");
             }
             catch (Exception ex)
@@ -198,9 +198,9 @@ namespace Tauchbolde.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Photo(string id)
+        public async Task<IActionResult> Photo(string photoId)
         {
-            var photoIdentifier = new PhotoIdentifier(WebUtility.UrlDecode(id));
+            var photoIdentifier = new PhotoIdentifier(WebUtility.UrlDecode(photoId));
             var photo = await logbookService.GetPhotoDataAsync(photoIdentifier);
 
             if (photo?.Content == null)
@@ -229,8 +229,8 @@ namespace Tauchbolde.Web.Controllers
                 Teaser = logbookEntry.TeaserText,
                 Text = logbookEntry.Text,
                 ExternalPhotoAlbumUrl = logbookEntry.ExternalPhotoAlbumUrl,
-                TeaserImageUrl = Url.Action("Photo", "Logbook", new {id = logbookEntry.TeaserImage}),
-                TeaserThumbImageUrl = Url.Action("Photo", "Logbook", new {id = logbookEntry.TeaserImageThumb}),
+                TeaserImageUrl = Url.Action("Photo", "Logbook", new {photoId = logbookEntry.TeaserImage}),
+                TeaserThumbImageUrl = Url.Action("Photo", "Logbook", new {photoId = logbookEntry.TeaserImageThumb}),
                 EventTitle = logbookEntry.EventId != null && logbookEntry.Event != null
                     ? logbookEntry.Event.Name
                     : null,
