@@ -8,15 +8,15 @@
 }
 
 <style>
-    .jumbotron {
+    .teaser-img {
         background: url(@Model.TeaserImageUrl) no-repeat center center;
         background-size: cover;
         width: 100%;
-        height: 350px
+        height: 350px;
     }
 </style>
 
-<div class="row page-header">
+<div class="row">
     <div class="pull-right">
         @if (Model.AllowEdit)
         {
@@ -33,8 +33,6 @@
         }
     </div>
 
-    <h1>@Model.Title</h1>
-    
     @if (!Model.IsPublished)
     {
         <div class="bg-warning text-warning">Nicht publiziert</div>
@@ -54,49 +52,47 @@
             &mdash;@Model.EditedAt
         </small>
     }
+
+    <hr/>
 </div>
 
-<div class="row">
-
-    @if (!string.IsNullOrWhiteSpace(Model.Teaser))
-    {
-        <div id="lead">@textFormatting.FormatText(Model.Teaser)</div>
-    }
-
-
-    @if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
-    {
-        <div class="row">
-            <div class="jumbotron">
-            </div>
-        </div>
-    }
-
-
+@if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
+{
     <div class="row">
-        @if (!string.IsNullOrWhiteSpace(Model.Text))
-        {
-            <article>
+        <img class="pull-right teaser-img img-rounded" style="margin-bottom: 15px;"/>
+
+        <div class="well">
+            <h1>@Model.Title</h1>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Teaser))
+            {
+                <div class="lead">@textFormatting.FormatText(Model.Teaser)</div>
+            }
+            
+            @if (Model.ExternalPhotoAlbumUrl != null)
+            {
+                <a href="@Model.ExternalPhotoAlbumUrl" target="_blank" class="btn btn-lg btn-primary">
+                    <span class="glyphicon glyphicon-picture"></span>
+                    Weitere Bilder
+                </a>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Text))
+            {
+                <div style="margin-top: 20px;">
                 @textFormatting.FormatText(Model.Text)
-            </article>
-        }
-    </div>
-
-    @if (Model.ExternalPhotoAlbumUrl != null)
-    {
-        <div class="row">
-            <a href="@Model.ExternalPhotoAlbumUrl" target="_blank" class="btn btn-lg btn-primary">
-                <span class="glyphicon glyphicon-picture"></span>
-                Weitere Bilder
-            </a>
+                </div>
+            }
         </div>
-    }
+    </div>
+}
 
-    @if (Model.EventUrl != null && Model.EventTitle != null)
-    {
-        <div class="row">
+@if (Model.EventUrl != null && Model.EventTitle != null)
+{
+    <div class="row">
+        <div>
             Aktivität:<br/>
             <a href="@Model.EventUrl">@Model.EventTitle</a>
         </div>
-    }
-</div>
+    </div>
+}
