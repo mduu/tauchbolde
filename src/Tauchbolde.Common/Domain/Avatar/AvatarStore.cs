@@ -43,7 +43,7 @@ namespace Tauchbolde.Common.Domain.Avatar
                 await StoreNewAvatarAsync(resizedImageStream, newAvatarId);
             }
 
-            if (!string.IsNullOrWhiteSpace(oldAvatarId))
+            if (!string.IsNullOrWhiteSpace(oldAvatarId) && oldAvatarId != newAvatarId)
             {
                 DeleteAllByAvatarId(oldAvatarId);
             }
