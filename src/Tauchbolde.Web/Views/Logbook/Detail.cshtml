@@ -17,43 +17,49 @@
 </style>
 
 <div class="row">
-    <div class="pull-right">
-        @if (Model.AllowEdit)
+    <div class="page-header">
+        <div class="pull-right">
+            @if (Model.AllowEdit)
+            {
+                <a href="@Model.EditUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-pencil"></span> Bearbeiten</a>
+                @if (Model.IsPublished)
+                 {
+                     <a href="@Model.UnpublishUrl" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-envelope"></span> Nicht mehr veröffentlichen</a>
+                 }
+                 else
+                 {
+                     <a href="@Model.PublishUrl" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-send"></span> Publizieren</a>
+                 }
+                <a href="@Model.DeleteUrl" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> Löschen</a>
+            }
+        </div>
+        
+        @if (!Model.IsPublished)
         {
-            <a href="@Model.EditUrl" class="btn btn-sm btn-default"><span class="glyphicon glyphicon-pencil"></span> Bearbeiten</a>
-            @if (Model.IsPublished)
-             {
-                 <a href="@Model.UnpublishUrl" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-envelope"></span> Nicht mehr veröffentlichen</a>
-             }
-             else
-             {
-                 <a href="@Model.PublishUrl" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-send"></span> Publizieren</a>
-             }
-            <a href="@Model.DeleteUrl" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-trash"></span> Löschen</a>
+            <div class="clearfix">
+            </div>
+
+            <div class="alert alert-warning" role="alert">
+                <strong><span class="glyphicon glyphicon-bullhorn"></span> Achtung:</strong> Logbucheintrag noch nicht publiziert.
+            </div>
         }
+
+        <cite>
+            <vc:avatar diver="@Model.OriginalAuthor" avatarSize="Small"/> @Model.OriginalAuthorName
+            &mdash;@Model.CreatedAt
+        </cite>
+
+        @if (Model.EditorAuthor != null || Model.EditedAt != null)
+        {
+            <br/>
+            <small>
+                <span class="glyphicon glyphicon-pencil"></span>
+                @Model.EditorAuthorName
+                &mdash;@Model.EditedAt
+            </small>
+        }
+
     </div>
-
-    @if (!Model.IsPublished)
-    {
-        <div class="bg-warning text-warning">Nicht publiziert</div>
-    }
-
-    <cite>
-        <vc:avatar diver="@Model.OriginalAuthor" avatarSize="Small"/> @Model.OriginalAuthorName
-        &mdash;@Model.CreatedAt
-    </cite>
-
-    @if (Model.EditorAuthor != null || Model.EditedAt != null)
-    {
-        <br/>
-        <small>
-            <span class="glyphicon glyphicon-pencil"></span>
-            @Model.EditorAuthorName
-            &mdash;@Model.EditedAt
-        </small>
-    }
-
-    <hr/>
 </div>
 
 @if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
@@ -68,7 +74,7 @@
             {
                 <div class="lead">@textFormatting.FormatText(Model.Teaser)</div>
             }
-            
+
             @if (Model.ExternalPhotoAlbumUrl != null)
             {
                 <a href="@Model.ExternalPhotoAlbumUrl" target="_blank" class="btn btn-lg btn-primary">
@@ -80,7 +86,7 @@
             @if (!string.IsNullOrWhiteSpace(Model.Text))
             {
                 <div style="margin-top: 20px;">
-                @textFormatting.FormatText(Model.Text)
+                    @textFormatting.FormatText(Model.Text)
                 </div>
             }
         </div>
