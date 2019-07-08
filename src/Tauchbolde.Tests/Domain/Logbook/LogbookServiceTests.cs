@@ -4,6 +4,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Domain.Logbook;
+using Tauchbolde.Common.Domain.Notifications;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Domain.Users;
@@ -32,7 +33,8 @@ namespace Tauchbolde.Tests.Domain.Logbook
                 diverServiceFake,
                 telemetryServiceFake,
                 photoService,
-                A.Fake<ILogger<LogbookService>>());
+                A.Fake<ILogger<LogbookService>>(),
+                A.Fake<INotificationService>());
 
             validInsertModel = CreateValidModel(null);
             validUpdateModel = CreateValidModel(new Guid("50D106BD-D47A-47A5-8244-CF3560A2A3E4"));
