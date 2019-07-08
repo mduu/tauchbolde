@@ -103,7 +103,7 @@ namespace Tauchbolde.Common.Domain.Logbook
             logger.LogInformation($"Logbook entry [{existingLogbookEntry.Id}] published.");
         }
 
-        public async Task UnPublishAsync([NotNull] LogbookEntry logbookEntry)
+        public async Task UnPublishAsync(LogbookEntry logbookEntry)
         {
             if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
             

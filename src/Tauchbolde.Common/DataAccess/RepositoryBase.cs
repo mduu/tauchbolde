@@ -17,42 +17,48 @@ namespace Tauchbolde.Common.DataAccess
     {
         protected readonly ApplicationDbContext Context;
 
-        public RepositoryBase(ApplicationDbContext context)
+        protected RepositoryBase(ApplicationDbContext context)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <inheritdoc />
         public virtual async Task<TEntity> FindByIdAsync(Guid id)
         {
             return await Context.Set<TEntity>().FindAsync(id);
         }
         
+        /// <inheritdoc />
         public virtual async Task<ICollection<TEntity>> GetAllAsync()
         {
             return await Context.Set<TEntity>().ToListAsync();
         }
 
-        public EntityEntry<TEntity> Insert(TEntity entity)
+        /// <inheritdoc />
+        public virtual EntityEntry<TEntity> Insert(TEntity entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
             return Context.Add(entity);
         }
 
-        public async Task<EntityEntry<TEntity>> InsertAsync(TEntity entity)
+        /// <inheritdoc />
+        public virtual async Task<EntityEntry<TEntity>> InsertAsync(TEntity entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
             return await Context.AddAsync(entity);
         }
 
-        public EntityEntry<TEntity> Update(TEntity entity)
+        /// <inheritdoc />
+        public virtual EntityEntry<TEntity> Update(TEntity entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
             return Context.Update(entity);
         }
 
+        /// <inheritdoc />
         public virtual void Delete(TEntity entity)
         {
             Context.Set<TEntity>().Remove(entity);
