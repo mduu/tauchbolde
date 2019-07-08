@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Tauchbolde.Common.Domain.Notifications;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Domain.Users;
@@ -21,19 +22,22 @@ namespace Tauchbolde.Common.Domain.Logbook
         [NotNull] private readonly ITelemetryService telemetryService;
         [NotNull] private readonly IPhotoService photoService;
         [NotNull] private readonly ILogger<LogbookService> logger;
+        [NotNull] private readonly INotificationService notificationService;
 
         public LogbookService(
             [NotNull] ILogbookEntryRepository logbookEntryRepository,
             [NotNull] IDiverService diverService,
             [NotNull] ITelemetryService telemetryService,
             [NotNull] IPhotoService photoService,
-            [NotNull] ILogger<LogbookService> logger)
+            [NotNull] ILogger<LogbookService> logger,
+            [NotNull] INotificationService notificationService)
         {
             this.logbookEntryRepository = logbookEntryRepository ?? throw new ArgumentNullException(nameof(logbookEntryRepository));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
             this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
         /// <param name="includeUnpublished"></param>
@@ -82,7 +86,7 @@ namespace Tauchbolde.Common.Domain.Logbook
             return await photoService.GetPhotoDataAsync(photoIdentifier);
         }
 
-        public async Task PublishAsync([NotNull] LogbookEntry logbookEntry)
+        public async Task PublishAsync(LogbookEntry logbookEntry)
         {
             if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
             
@@ -94,11 +98,12 @@ namespace Tauchbolde.Common.Domain.Logbook
 
             existingLogbookEntry.IsPublished = true;
             logbookEntryRepository.Update(existingLogbookEntry);
+            await notificationService.NotifyForNewLogbookEntry(existingLogbookEntry, existingLogbookEntry.OriginalAuthor);
             
             logger.LogInformation($"Logbook entry [{existingLogbookEntry.Id}] published.");
         }
 
-        public async Task UnPublishAsync([NotNull] LogbookEntry logbookEntry)
+        public async Task UnPublishAsync(LogbookEntry logbookEntry)
         {
             if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
             

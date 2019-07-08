@@ -169,7 +169,7 @@ namespace Tauchbolde.Common.Domain.Notifications
             if (author == null) throw new ArgumentNullException(nameof(author));
 
             var recipients = await diverRepository.GetAllTauchboldeUsersAsync();
-            var message = $"Neuer Logbucheintrag von '{author.Realname}' mit Titel '{logbookEntry.Title}'.";
+            var message = $"Neuer Logbucheintrag '{logbookEntry.Title} von {author.Realname}.";
 
             await InsertNotification(
                 null,

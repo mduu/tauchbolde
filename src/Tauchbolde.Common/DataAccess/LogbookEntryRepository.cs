@@ -19,27 +19,21 @@ namespace Tauchbolde.Common.DataAccess
         {
         }
 
-        public override async Task<LogbookEntry> FindByIdAsync(Guid id)
-        {
-            return await Context.LogbookEntries
+        public override async Task<LogbookEntry> FindByIdAsync(Guid id) =>
+            await Context.LogbookEntries
                 .Include(l => l.OriginalAuthor)
                 .Include(l => l.EditorAuthor)
                 .Include(l => l.Event)
                 .FirstOrDefaultAsync(l => l.Id.Equals(id));
-        }
-
-
-        /// <param name="includeUnpublished"></param>
+        
         /// <inheritdoc />
-        public async Task<ICollection<LogbookEntry>> GetAllEntriesAsync(bool includeUnpublished)
-        {
-            return await Context.LogbookEntries
+        public async Task<ICollection<LogbookEntry>> GetAllEntriesAsync(bool includeUnpublished) =>
+            await Context.LogbookEntries
                 .Where(l => includeUnpublished || l.IsPublished)
                 .Include(l => l.OriginalAuthor)
                 .Include(l => l.EditorAuthor)
                 .Include(l => l.Event)
                 .OrderByDescending(l => l.CreatedAt)
-                .ToListAsync();        
-        }
+                .ToListAsync();
     }
 }
