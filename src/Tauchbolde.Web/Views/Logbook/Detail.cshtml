@@ -45,14 +45,14 @@
         }
 
         <cite>
-            <vc:avatar diver="@Model.OriginalAuthor" avatarSize="Small"/> @Model.OriginalAuthorName
+            <vc:avatar diver="@Model.OriginalAuthor" avatar-size="Small"/> @Model.OriginalAuthorName
             &mdash;@Model.CreatedAt
         </cite>
 
         @if (Model.EditorAuthor != null || Model.EditedAt != null)
         {
-            <br/>
             <small>
+                &nbsp;&mdash;&nbsp;
                 <span class="glyphicon glyphicon-pencil"></span>
                 @Model.EditorAuthorName
                 &mdash;@Model.EditedAt
