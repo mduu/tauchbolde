@@ -176,7 +176,8 @@ namespace Tauchbolde.Common.Domain.Notifications
                 recipients,
                 NotificationType.NewLogbookEntry,
                 message,
-                author);
+                author,
+                logbookEntry);
         }
 
         private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(
@@ -201,7 +202,8 @@ namespace Tauchbolde.Common.Domain.Notifications
             [NotNull] IEnumerable<Diver> recipients,
             NotificationType notificationType,
             string message,
-            [CanBeNull] Diver currentDiver = null)
+            [CanBeNull] Diver currentDiver = null,
+            [CanBeNull] LogbookEntry relatedLogbookEntry = null)
         {
             if (recipients == null) throw new ArgumentNullException(nameof(recipients));
             
@@ -221,6 +223,7 @@ namespace Tauchbolde.Common.Domain.Notifications
                     Recipient = recipient,
                     Type = notificationType,
                     Message = message,
+                    LogbookEntry = relatedLogbookEntry,
                 };
 
                 await notificationRepository.InsertAsync(notification);
