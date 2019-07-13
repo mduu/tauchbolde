@@ -14,6 +14,7 @@ using Tauchbolde.Commom.Misc;
 using System.IO;
 using Tauchbolde.Common.Domain.Avatar;
 using Tauchbolde.Common.Domain.Users;
+using Tauchbolde.DataAccess;
 
 namespace Tauchbolde.Web.Controllers
 {

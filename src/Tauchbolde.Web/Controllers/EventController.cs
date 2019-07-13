@@ -11,6 +11,7 @@ using Tauchbolde.Common;
 using Tauchbolde.Common.Domain.Events;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Model;
+using Tauchbolde.DataAccess;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
 
@@ -199,6 +200,7 @@ namespace Tauchbolde.Web.Controllers
                 }
 
                 await participationService.ChangeParticipationAsync(currentUser, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
+                await context.SaveChangesAsync();
 
                 return RedirectToAction("Details", new { id = model.EventId });
             }

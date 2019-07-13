@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common.Domain.Notifications;
-using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 using Tauchbolde.Common.Model;
+using Tauchbolde.Common.Repositories;
 using Xunit;
 
 namespace Tauchbolde.Tests.Domain.Notifications

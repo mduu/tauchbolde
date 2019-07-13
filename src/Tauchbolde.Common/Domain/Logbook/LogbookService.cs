@@ -5,10 +5,10 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Domain.Notifications;
 using Tauchbolde.Common.Domain.PhotoStorage;
-using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 using Tauchbolde.Common.Model;
+using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.Domain.Logbook
 {

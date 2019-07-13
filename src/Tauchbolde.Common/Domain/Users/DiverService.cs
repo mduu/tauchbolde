@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
-using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Model;
+using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.Domain.Users
 {

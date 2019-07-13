@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tauchbolde.Common.Model;
 using Tauchbolde.Common;
 using Microsoft.AspNetCore.Localization;
 using System.Collections.Generic;
@@ -21,6 +20,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Rewrite;
 using Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage;
 using Tauchbolde.Common.Infrastructure.SMTPSender;
+using Tauchbolde.DataAccess;
 
 namespace Tauchbolde.Web
 {

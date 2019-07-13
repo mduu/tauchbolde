@@ -7,8 +7,8 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Domain.Notifications;
-using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Model;
+using Tauchbolde.Common.Repositories;
 using Xunit;
 
 namespace Tauchbolde.Tests.Domain.Notifications
@@ -16,8 +16,7 @@ namespace Tauchbolde.Tests.Domain.Notifications
     public class NotificationSenderTests
     {
         private readonly ILoggerFactory loggerFactory = A.Fake<ILoggerFactory>();
-        private readonly ApplicationDbContext db = A.Fake<ApplicationDbContext>();
-    
+
         [Fact]
         public async Task No_Check_Without_Pending_Notifications()
         {
@@ -25,10 +24,10 @@ namespace Tauchbolde.Tests.Domain.Notifications
             var notificationRepository = A.Fake<INotificationRepository>();
             var formatter = A.Fake<INotificationFormatter>();
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
-            var sender = new NotificationSender(loggerFactory, db, notificationRepository);
+            var sender = new NotificationSender(loggerFactory, notificationRepository);
 
             // Act
-            await sender.SendAsync(formatter, submitter);
+            await sender.SendAsync(formatter, submitter, () => Task.CompletedTask);
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappenedOnceExactly();
@@ -45,12 +44,12 @@ namespace Tauchbolde.Tests.Domain.Notifications
             var notificationRepository = A.Fake<INotificationRepository>();
             var formatter = A.Fake<INotificationFormatter>();
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
-            var sender = new NotificationSender(loggerFactory, db, notificationRepository);
+            var sender = new NotificationSender(loggerFactory, notificationRepository);
 
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
 
             // Act
-            await sender.SendAsync(formatter, submitter);
+            await sender.SendAsync(formatter, submitter, () => Task.CompletedTask);
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappenedOnceExactly();
@@ -68,13 +67,13 @@ namespace Tauchbolde.Tests.Domain.Notifications
             var notificationRepository = A.Fake<INotificationRepository>();
             var formatter = A.Fake<INotificationFormatter>();
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
-            var sender = new NotificationSender(loggerFactory, db, notificationRepository);
+            var sender = new NotificationSender(loggerFactory, notificationRepository);
 
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
             A.CallTo(() => formatter.FormatAsync(A<Diver>._, A<IGrouping<Diver, Notification>>._)).Returns("Some content!");
 
             // Act
-            await sender.SendAsync(formatter, submitter);
+            await sender.SendAsync(formatter, submitter, () => Task.CompletedTask);
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappenedOnceExactly();
@@ -96,13 +95,13 @@ namespace Tauchbolde.Tests.Domain.Notifications
             var notificationRepository = A.Fake<INotificationRepository>();
             var formatter = A.Fake<INotificationFormatter>();
             var submitter = A.Fake<INotificationSubmitter>(o => o.Wrapping(new ConsoleNotificationSubmitter()));
-            var sender = new NotificationSender(loggerFactory, db, notificationRepository);
+            var sender = new NotificationSender(loggerFactory, notificationRepository);
 
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
             A.CallTo(() => formatter.FormatAsync(A<Diver>._, A<IGrouping<Diver, Notification>>._)).Returns("Some content!");
 
             // Act
-            await sender.SendAsync(formatter, submitter);
+            await sender.SendAsync(formatter, submitter, () => Task.CompletedTask);
 
             // Assert
             A.CallTo(() => notificationRepository.GetPendingNotificationByUserAsync()).MustHaveHappenedOnceExactly();

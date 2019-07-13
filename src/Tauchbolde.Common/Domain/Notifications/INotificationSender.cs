@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Tauchbolde.Common.Domain.Notifications
 {
     public interface INotificationSender
     {
         Task SendAsync(INotificationFormatter notificationFormatter,
-            INotificationSubmitter notificationSubmitter);
+            INotificationSubmitter notificationSubmitter,
+            Func<Task> saver);
     }
 }

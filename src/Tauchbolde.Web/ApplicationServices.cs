@@ -11,6 +11,7 @@ using Tauchbolde.Common;
 using Tauchbolde.Common.Domain;
 using Tauchbolde.Common.Domain.Avatar;
 using Tauchbolde.Common.Infrastructure.PhotoStores;
+using Tauchbolde.DataAccess;
 using Tauchbolde.Web.Core.TextFormatting;
 
 namespace Tauchbolde.Web
@@ -30,6 +31,7 @@ namespace Tauchbolde.Web
             var photoStoreRoot = GetPhotoStoreRoot(configuration, hostingEnvironment);
             var photoStoreType = GetPhotoStoreType(configuration);
 
+            DataAccessServices.RegisterServices(services);
             CommonServices.RegisterServices(services, photoStoreRoot, photoStoreType);
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();

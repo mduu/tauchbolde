@@ -2,8 +2,6 @@
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Commom.Misc;
-using Tauchbolde.Common.Model;
-using Tauchbolde.Common.DataAccess;
 using Tauchbolde.Common.Domain;
 using Tauchbolde.Common.Domain.Avatar;
 using Tauchbolde.Common.Domain.Events;
@@ -11,7 +9,6 @@ using Tauchbolde.Common.Domain.Logbook;
 using Tauchbolde.Common.Domain.Notifications;
 using Tauchbolde.Common.Domain.Notifications.HtmlFormatting;
 using Tauchbolde.Common.Domain.PhotoStorage;
-using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Infrastructure;
@@ -36,8 +33,31 @@ namespace Tauchbolde.Common
         {
             if (services == null) { throw new ArgumentNullException(nameof(services)); }
 
-            // Add application services.
-            services.AddScoped<ApplicationDbContext>();
+            RegisterInfrastructureServices(services, photoStoreRoot, photoStoreType);
+            RegisterDomainServices(services);
+        }
+
+        private static void RegisterDomainServices(IServiceCollection services)
+        {
+            services.AddTransient<IParticipationService, ParticipationService>();
+            services.AddTransient<IEventService, EventService>();
+            services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<INotificationSender, NotificationSender>();
+            services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
+            services.AddTransient<INotificationFormatter, HtmlFormatter>();
+            services.AddTransient<ICssStyleFormatter, CssStyleFormatter>();
+            services.AddTransient<IHtmlListFormatter, HtmlListFormatter>();
+            services.AddTransient<IHtmlHeaderFormatter, HtmlHeaderFormatter>();
+            services.AddTransient<IHtmlFooterFormatter, HtmlFooterFormatter>();
+            services.AddTransient<IDiverService, DiversService>();
+            services.AddTransient<IMassMailService, MassMailService>();
+            services.AddTransient<ILogbookService, LogbookService>();
+            services.AddTransient<IPhotoService, PhotoService>();
+        }
+
+        private static void RegisterInfrastructureServices(IServiceCollection services, string photoStoreRoot,
+            PhotoStoreType photoStoreType)
+        {
             services.AddSingleton<IMimeMapping, MimeMapping>();
             services.AddTransient<IAppEmailSender, SmtpSender>();
             services.AddSingleton<IAvatarIdGenerator, AvatarIdGenerator>();
@@ -56,30 +76,6 @@ namespace Tauchbolde.Common
                     services.AddTransient<IPhotoStore, FilePhotoStore>();
                     break;
             }
-
-            // Repos
-            services.AddTransient<IDiverRepository, DiverRepository>();
-            services.AddTransient<IEventRepository, EventRepository>();
-            services.AddTransient<IParticipantRepository, ParticipantRepository>();
-            services.AddTransient<INotificationRepository, NotificationRepository>();
-            services.AddTransient<ICommentRepository, CommentRepository>();
-            services.AddTransient<ILogbookEntryRepository, LogbookEntryRepository>();
-
-            // DomainServices
-            services.AddTransient<IParticipationService, ParticipationService>();
-            services.AddTransient<IEventService, EventService>();
-            services.AddTransient<INotificationService, NotificationService>();
-            services.AddTransient<INotificationSender, NotificationSender>();
-            services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
-            services.AddTransient<INotificationFormatter, HtmlFormatter>();
-            services.AddTransient<ICssStyleFormatter, CssStyleFormatter>();
-            services.AddTransient<IHtmlListFormatter, HtmlListFormatter>();
-            services.AddTransient<IHtmlHeaderFormatter, HtmlHeaderFormatter>();
-            services.AddTransient<IHtmlFooterFormatter, HtmlFooterFormatter>();
-            services.AddTransient<IDiverService, DiversService>();
-            services.AddTransient<IMassMailService, MassMailService>();
-            services.AddTransient<ILogbookService, LogbookService>();
-            services.AddTransient<IPhotoService, PhotoService>();
         }
 
         public static void RegisterDevelopment(IServiceCollection services)

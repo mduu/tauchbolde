@@ -22,7 +22,8 @@ namespace Tauchbolde.Web.Core
         /// </summary>
         /// <param name="userManager">User manager.</param>
         /// <param name="diverService"></param>
-        protected AppControllerBase(UserManager<IdentityUser> userManager,
+        protected AppControllerBase(
+            UserManager<IdentityUser> userManager,
             IDiverService diverService)
         {
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));

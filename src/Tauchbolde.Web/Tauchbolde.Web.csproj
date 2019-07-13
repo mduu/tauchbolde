@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tauchbolde.Common\Tauchbolde.Common.csproj" />
+    <ProjectReference Include="..\Tauchbolde.DataAccess\Tauchbolde.DataAccess.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\AboutViewModels\" />

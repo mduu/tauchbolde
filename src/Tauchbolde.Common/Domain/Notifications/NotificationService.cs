@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 using Tauchbolde.Common.Model;
+using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.Domain.Notifications
 {
