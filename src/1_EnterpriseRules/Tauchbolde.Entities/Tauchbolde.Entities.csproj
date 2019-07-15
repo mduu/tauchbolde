@@ -2,20 +2,17 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
+        <RuntimeFrameworkVersion>2.2.0</RuntimeFrameworkVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.Extensions.Identity.Stores, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\..\..\..\..\..\..\usr\local\share\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.identity.stores\2.2.0\lib\netstandard2.0\Microsoft.Extensions.Identity.Stores.dll</HintPath>
-      </Reference>
+        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
+        <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Tauchbolde.Extensions\Tauchbolde.Extensions.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" />
-    </ItemGroup>
-
+    
 </Project>
