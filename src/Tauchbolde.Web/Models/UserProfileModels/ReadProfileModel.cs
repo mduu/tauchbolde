@@ -1,4 +1,4 @@
-﻿using Tauchbolde.Common.Model;
+﻿using Tauchbolde.Entities;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

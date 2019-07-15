@@ -12,6 +12,7 @@ using Tauchbolde.Common.Domain.Logbook;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.DataAccess;
+using Tauchbolde.Extensions;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
 

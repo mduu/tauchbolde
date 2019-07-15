@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 using Tauchbolde.Common;
 using Tauchbolde.Web.Models.UserProfileModels;
 using Microsoft.AspNetCore.Identity;

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 using Tauchbolde.Common;
 using Tauchbolde.Common.Domain.Users;
 

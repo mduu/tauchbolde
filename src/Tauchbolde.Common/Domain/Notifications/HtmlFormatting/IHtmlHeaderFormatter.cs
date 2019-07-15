@@ -1,5 +1,5 @@
 using System.Text;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
 {

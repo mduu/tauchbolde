@@ -11,7 +11,7 @@ using Tauchbolde.Common.Domain.Notifications;
 using Tauchbolde.Common.Domain.Notifications.HtmlFormatting;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Infrastructure.SMTPSender;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 using Xunit;
 
 namespace Tauchbolde.Tests.Domain.Notifications

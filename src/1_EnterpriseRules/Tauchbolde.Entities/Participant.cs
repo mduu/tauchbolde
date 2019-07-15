@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Tauchbolde.Common.Model
+namespace Tauchbolde.Entities
 {
     public class Participant
     {

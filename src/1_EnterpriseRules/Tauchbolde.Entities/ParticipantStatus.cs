@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Tauchbolde.Common.Model
+namespace Tauchbolde.Entities
 {
     public enum ParticipantStatus
     {

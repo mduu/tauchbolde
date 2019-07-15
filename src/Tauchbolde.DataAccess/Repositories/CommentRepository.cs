@@ -1,4 +1,4 @@
-﻿using Tauchbolde.Common.Model;
+﻿using Tauchbolde.Entities;
 using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.DataAccess.Repositories

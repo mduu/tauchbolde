@@ -1,6 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Common.Domain
 {

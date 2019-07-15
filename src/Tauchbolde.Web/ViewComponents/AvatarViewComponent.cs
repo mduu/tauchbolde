@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 using Tauchbolde.Web.Models.ViewComponentModels;
 
 namespace Tauchbolde.Web.ViewComponents

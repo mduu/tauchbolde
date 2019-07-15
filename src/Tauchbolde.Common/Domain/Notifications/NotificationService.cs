@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Common.Infrastructure.Telemetry;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.Domain.Notifications

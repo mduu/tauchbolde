@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Tauchbolde.Extensions;
 
-namespace Tauchbolde.Common.Model
+namespace Tauchbolde.Entities
 {
     public class Event
     {

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Common;
 using Tauchbolde.Common.Domain.Events;
 using Tauchbolde.Common.Domain.Users;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 using Tauchbolde.DataAccess;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;

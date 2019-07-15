@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
 {

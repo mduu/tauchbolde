@@ -6,7 +6,8 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Infrastructure.SMTPSender;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
+using Tauchbolde.Extensions;
 
 namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
 {

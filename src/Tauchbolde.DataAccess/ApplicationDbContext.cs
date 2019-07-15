@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.DataAccess
 {

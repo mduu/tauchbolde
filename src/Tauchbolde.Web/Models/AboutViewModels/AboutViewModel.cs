@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Tauchbolde.Common.Model;
+﻿using System.Collections.Generic;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Web.Models.AboutViewModels
 {

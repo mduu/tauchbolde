@@ -1,4 +1,4 @@
-﻿namespace Tauchbolde.Common.Model
+﻿namespace Tauchbolde.Entities
 {
     public enum NotificationType
     {

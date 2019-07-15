@@ -1,4 +1,4 @@
-﻿using Tauchbolde.Common.Model;
+﻿using Tauchbolde.Entities;
 using Xunit;
 
 namespace Tauchbolde.Tests.Models

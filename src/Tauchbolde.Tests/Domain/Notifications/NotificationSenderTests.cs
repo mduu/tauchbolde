@@ -7,7 +7,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Domain.Notifications;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 using Tauchbolde.Common.Repositories;
 using Xunit;
 

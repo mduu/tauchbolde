@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Tauchbolde.Common.Model
+namespace Tauchbolde.Entities
 {
     public class BuddyTeamNames
     {

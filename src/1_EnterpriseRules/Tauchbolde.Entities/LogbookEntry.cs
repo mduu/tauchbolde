@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 
-namespace Tauchbolde.Common.Model
+namespace Tauchbolde.Entities
 {
     /// <summary>
     /// Entity model for Entries in the Logbook.

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Common.Repositories
 {

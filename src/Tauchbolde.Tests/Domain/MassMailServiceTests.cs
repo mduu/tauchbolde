@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common.Domain;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 using Xunit;
 
 namespace Tauchbolde.Tests.Domain
