@@ -16,6 +16,7 @@ namespace Tauchbolde.Common.Domain.Notifications
     {
         [NotNull] private readonly INotificationRepository notificationRepository;
         [NotNull] private readonly IDiverRepository diverRepository;
+        [NotNull] private readonly IEventRepository eventRepository;
         [NotNull] private readonly IParticipantRepository participantRepository;
         [NotNull] private readonly ITelemetryService telemetryService;
 
@@ -23,12 +24,14 @@ namespace Tauchbolde.Common.Domain.Notifications
             [NotNull] INotificationRepository notificationRepository,
             [NotNull] IDiverRepository diverRepository,
             [NotNull] IParticipantRepository participantRepository,
+            [NotNull] IEventRepository eventRepository,
             [NotNull] ITelemetryService telemetryService)
         {
             this.notificationRepository = notificationRepository ?? throw new ArgumentNullException(nameof(notificationRepository));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
+            this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
         }
 
         /// <inheritdoc />
@@ -94,32 +97,33 @@ namespace Tauchbolde.Common.Domain.Notifications
         public async Task NotifyForChangedParticipationAsync(
             [NotNull] Participant participant,
             [NotNull] Diver participatingDiver,
-            [NotNull] Event participatingEvent)
+            Guid eventId)
         {
             if (participant == null) throw new ArgumentNullException(nameof(participant));
             if (participatingDiver == null) throw new ArgumentNullException(nameof(participatingDiver));
-            if (participatingEvent == null) throw new ArgumentNullException(nameof(participatingEvent));
+            if (eventId == null) throw new ArgumentNullException(nameof(eventId));
 
             var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(participatingDiver.Id, participant.EventId);
-
+            var evt = await eventRepository.FindByIdAsync(eventId);
+            
             string message;
             NotificationType notificationType;
             switch (participant.Status)
             {
                 case ParticipantStatus.None:
-                    message = $"{participatingDiver.Realname ?? "Unbekannt"} weiss nicht ob Er/Sie an der Aktivität '{participatingEvent.Name}' ({participatingEvent.StartEndTimeAsString}) teil nimmt.";
+                    message = $"{participatingDiver.Realname ?? "Unbekannt"} weiss nicht ob Er/Sie an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil nimmt.";
                     notificationType = NotificationType.Neutral;
                     break;
                 case ParticipantStatus.Accepted:
-                    message = $"{participatingDiver.Realname ?? "Unbekannt"} nimmt an der Aktivität '{participatingEvent.Name}' ({participatingEvent.StartEndTimeAsString}) teil.";
+                    message = $"{participatingDiver.Realname ?? "Unbekannt"} nimmt an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Accepted;
                     break;
                 case ParticipantStatus.Declined:
-                    message = $"{participatingDiver.Realname ?? "Unbekannt"} hat für die Aktivität '{participatingEvent.Name}' ({participatingEvent.StartEndTimeAsString}) abgesagt.";
+                    message = $"{participatingDiver.Realname ?? "Unbekannt"} hat für die Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) abgesagt.";
                     notificationType = NotificationType.Declined;
                     break;
                 case ParticipantStatus.Tentative:
-                    message = $"{participatingDiver.Realname ?? "Unbekannt"} nimmt eventuell an der Aktivität '{participatingEvent.Name}' ({participatingEvent.StartEndTimeAsString}) teil.";
+                    message = $"{participatingDiver.Realname ?? "Unbekannt"} nimmt eventuell an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil.";
                     notificationType = NotificationType.Tentative;
                     break;
                 default:
@@ -132,7 +136,7 @@ namespace Tauchbolde.Common.Domain.Notifications
             }
 
             await InsertNotification(
-                participatingEvent,
+                evt,
                 recipients,
                 notificationType,
                 message,

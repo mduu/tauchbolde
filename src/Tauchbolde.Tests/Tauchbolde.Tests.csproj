@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Entities\" />
     <Folder Include="Domain\Notifications\" />
     <Folder Include="Web\" />
     <Folder Include="Domain\Avatar\" />

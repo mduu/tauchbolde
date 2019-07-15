@@ -1,7 +1,7 @@
 ﻿using Tauchbolde.Entities;
 using Xunit;
 
-namespace Tauchbolde.Tests.Models
+namespace Tauchbolde.Tests.Entities
 {
     public class DiverTests
     {

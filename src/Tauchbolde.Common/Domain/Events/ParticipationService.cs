@@ -67,7 +67,7 @@ namespace Tauchbolde.Common.Domain.Events
             await notificationService.NotifyForChangedParticipationAsync(
                 participant,
                 user,
-                participant.Event);
+                eventId);
             
             TrackEvent("CHANGE-PARTICIPATION", participant);
 
