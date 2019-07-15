@@ -27,9 +27,11 @@ namespace Tauchbolde.Common.Domain.Notifications
             [NotNull] IEventRepository eventRepository,
             [NotNull] ITelemetryService telemetryService)
         {
-            this.notificationRepository = notificationRepository ?? throw new ArgumentNullException(nameof(notificationRepository));
+            this.notificationRepository = notificationRepository ??
+                                          throw new ArgumentNullException(nameof(notificationRepository));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
-            this.participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
+            this.participantRepository =
+                participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
         }
@@ -42,7 +44,8 @@ namespace Tauchbolde.Common.Domain.Notifications
             if (newEvent == null) throw new ArgumentNullException(nameof(newEvent));
 
             var recipients = await diverRepository.GetAllTauchboldeUsersAsync();
-            var message = $"Neue Aktivität '{newEvent.Name}' ({newEvent.StartEndTimeAsString}) von {newEvent.Organisator.Realname} erstellt";
+            var message =
+                $"Neue Aktivität '{newEvent.Name}' ({newEvent.StartEndTimeAsString}) von {newEvent.Organisator.Realname} erstellt";
 
             await InsertNotification(
                 newEvent,
@@ -60,7 +63,8 @@ namespace Tauchbolde.Common.Domain.Notifications
             if (changedEvent == null) throw new ArgumentNullException(nameof(changedEvent));
 
             var recipients = await diverRepository.GetAllTauchboldeUsersAsync();
-            var message = $"Aktivität geändert '{changedEvent.Name}' ({changedEvent.StartEndTimeAsString}) von {changedEvent.Organisator.Realname}";
+            var message =
+                $"Aktivität geändert '{changedEvent.Name}' ({changedEvent.StartEndTimeAsString}) von {changedEvent.Organisator.Realname}";
 
             await InsertNotification(
                 changedEvent,
@@ -78,12 +82,15 @@ namespace Tauchbolde.Common.Domain.Notifications
             if (canceledEvent == null) throw new ArgumentNullException(nameof(canceledEvent));
 
             // Recipients all Tauchbolde that did not yet "decline" the Event already
-            var declinedParticipants = await participantRepository.GetParticipantsForEventByStatusAsync(canceledEvent.Id, ParticipantStatus.Declined);
+            var declinedParticipants =
+                await participantRepository.GetParticipantsForEventByStatusAsync(canceledEvent.Id,
+                    ParticipantStatus.Declined);
             var recipients = (await diverRepository.GetAllTauchboldeUsersAsync())
                 .Where(u => declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
                 .ToList();
 
-            var message = $"Aktivität '{canceledEvent.Name}' ({canceledEvent.StartEndTimeAsString}) wurde abgesagt von {canceledEvent.Organisator.Realname}.";
+            var message =
+                $"Aktivität '{canceledEvent.Name}' ({canceledEvent.StartEndTimeAsString}) wurde abgesagt von {canceledEvent.Organisator.Realname}.";
 
             await InsertNotification(
                 canceledEvent,
@@ -103,33 +110,46 @@ namespace Tauchbolde.Common.Domain.Notifications
             if (participatingDiver == null) throw new ArgumentNullException(nameof(participatingDiver));
             if (eventId == null) throw new ArgumentNullException(nameof(eventId));
 
-            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(participatingDiver.Id, participant.EventId);
+            var recipients =
+                await GetAllTauchboldeButDeclinedParticipantsAsync(participatingDiver.Id, participant.EventId);
             var evt = await eventRepository.FindByIdAsync(eventId);
-            
-            string message;
-            NotificationType notificationType;
-            switch (participant.Status)
-            {
-                case ParticipantStatus.None:
-                    message = $"{participatingDiver.Realname ?? "Unbekannt"} weiss nicht ob Er/Sie an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil nimmt.";
-                    notificationType = NotificationType.Neutral;
-                    break;
-                case ParticipantStatus.Accepted:
-                    message = $"{participatingDiver.Realname ?? "Unbekannt"} nimmt an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil.";
-                    notificationType = NotificationType.Accepted;
-                    break;
-                case ParticipantStatus.Declined:
-                    message = $"{participatingDiver.Realname ?? "Unbekannt"} hat für die Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) abgesagt.";
-                    notificationType = NotificationType.Declined;
-                    break;
-                case ParticipantStatus.Tentative:
-                    message = $"{participatingDiver.Realname ?? "Unbekannt"} nimmt eventuell an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil.";
-                    notificationType = NotificationType.Tentative;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            
+
+            var mapping =
+                new Dictionary<ParticipantStatus, ( Func<string> msgFactory, NotificationType notificationType)>
+                {
+                    {
+                        ParticipantStatus.None,
+                        (
+                            () => $"{participatingDiver.Realname ?? "Unbekannt"} weiss nicht ob Er/Sie an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil nimmt.",
+                            NotificationType.Neutral
+                        )
+                    },
+                    {
+                        ParticipantStatus.Accepted,
+                        (
+                            () => $"{participatingDiver.Realname ?? "Unbekannt"} nimmt an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil.",
+                            NotificationType.Accepted
+                        )
+                    },
+                    {
+                        ParticipantStatus.Declined,
+                        (
+                            () => $"{participatingDiver.Realname ?? "Unbekannt"} hat für die Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) abgesagt.",
+                            NotificationType.Declined
+                        )
+                    },
+                    {
+                        ParticipantStatus.Tentative,
+                        (
+                            () => $"{participatingDiver.Realname ?? "Unbekannt"} nimmt eventuell an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil.",
+                            NotificationType.Tentative
+                        )
+                    }
+                };
+
+            var message = mapping[participant.Status].msgFactory();
+            NotificationType notificationType = mapping[participant.Status].notificationType;
+
             if (!string.IsNullOrWhiteSpace(participant.Note))
             {
                 message = $"{message}: {participant.Note}";
@@ -154,7 +174,8 @@ namespace Tauchbolde.Common.Domain.Notifications
             if (author == null) throw new ArgumentNullException(nameof(author));
 
             var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(author.Id, comment.EventId);
-            var message = $"Neuer Kommentar von '{author.Realname}' für Event '{evt.Name}' ({evt.StartEndTimeAsString}): {comment.Text}";
+            var message =
+                $"Neuer Kommentar von '{author.Realname}' für Event '{evt.Name}' ({evt.StartEndTimeAsString}): {comment.Text}";
 
             await InsertNotification(
                 evt,
@@ -193,7 +214,7 @@ namespace Tauchbolde.Common.Domain.Notifications
                 .Where(p => p.ParticipatingDiver.Id != currentDiverId);
 
             var result = (await diverRepository
-                .GetAllTauchboldeUsersAsync())
+                    .GetAllTauchboldeUsersAsync())
                 .Where(u =>
                     declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
                 .ToList();
@@ -210,7 +231,7 @@ namespace Tauchbolde.Common.Domain.Notifications
             [CanBeNull] LogbookEntry relatedLogbookEntry = null)
         {
             if (recipients == null) throw new ArgumentNullException(nameof(recipients));
-            
+
             foreach (var recipient in recipients)
             {
                 if (currentDiver != null && !currentDiver.SendOwnNoticiations &&
@@ -245,10 +266,10 @@ namespace Tauchbolde.Common.Domain.Notifications
                 name,
                 new Dictionary<string, string>
                 {
-                    { "NotificationId", notification.Id.ToString("B") },
-                    { "RecipientId", notification.Recipient?.Id.ToString("B") ?? "" },
-                    { "Type", notification.Type.ToString() },
-                    { "Message", notification.Message },
+                    {"NotificationId", notification.Id.ToString("B")},
+                    {"RecipientId", notification.Recipient?.Id.ToString("B") ?? ""},
+                    {"Type", notification.Type.ToString()},
+                    {"Message", notification.Message},
                 });
         }
     }
