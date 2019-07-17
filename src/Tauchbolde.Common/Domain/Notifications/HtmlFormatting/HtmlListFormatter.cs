@@ -77,7 +77,7 @@ namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
                     eventId.Value);
 
                 // ReSharper disable once StringLiteralTypo
-                htmlBuilder.Append($" <a href='{eventUrl}'>Mehr...</a>");
+                htmlBuilder.Append($"<p><a href='{eventUrl}'>Mehr...</a></p>");
             }
         }
 
@@ -90,7 +90,7 @@ namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
                     logbookEntryId.Value);
 
                 // ReSharper disable once StringLiteralTypo
-                htmlBuilder.Append($" <a href='{logbookEntryUrl}'>Mehr...</a>");
+                htmlBuilder.Append($"<p><a href='{logbookEntryUrl}'>Mehr...</a></p>");
             }
         }
     }
