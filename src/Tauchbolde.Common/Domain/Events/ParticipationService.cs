@@ -2,26 +2,23 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Domain.Notifications;
-using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Infrastructure.Telemetry;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
+using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.Domain.Events
 {
     internal class ParticipationService : IParticipationService
     {
-        private readonly ApplicationDbContext context;
         private readonly IParticipantRepository participantRepository;
         private readonly INotificationService notificationService;
         private readonly ITelemetryService telemetryService;
 
         public ParticipationService(
-            ApplicationDbContext context,
             IParticipantRepository participantRepository,
             INotificationService notificationService,
             ITelemetryService telemetryService)
         {
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
             this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
@@ -58,7 +55,7 @@ namespace Tauchbolde.Common.Domain.Events
                     EventId = eventId,
                 };
 
-                await context.Participants.AddAsync(participant);
+                await participantRepository.InsertAsync(participant);
             }
 
             participant.Status = status;
@@ -66,14 +63,11 @@ namespace Tauchbolde.Common.Domain.Events
             participant.BuddyTeamName = buddyTeamName;
             participant.Note = note;
             participant.CountPeople = numberOfPeople;
-            await context.SaveChangesAsync();
 
-            var reReadParticipant = await participantRepository.GetParticipantByIdAsync(participant.Id);
             await notificationService.NotifyForChangedParticipationAsync(
-                reReadParticipant,
-                reReadParticipant.ParticipatingDiver,
-                reReadParticipant.Event);
-            await context.SaveChangesAsync();
+                participant,
+                user,
+                eventId);
             
             TrackEvent("CHANGE-PARTICIPATION", participant);
 

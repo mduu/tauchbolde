@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,10 @@ using Tauchbolde.Common;
 using Tauchbolde.Common.Domain.Logbook;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Domain.Users;
-using Tauchbolde.Common.Model;
+using Tauchbolde.DataAccess;
+using Tauchbolde.Extensions;
+using Tauchbolde.UseCases.Logbook.PublishUseCase;
+using Tauchbolde.UseCases.Logbook.UnpublishUseCase;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
 
@@ -22,18 +26,21 @@ namespace Tauchbolde.Web.Controllers
         [NotNull] private readonly ApplicationDbContext context;
         [NotNull] private readonly ILogbookService logbookService;
         [NotNull] private readonly ILogger<LogbookController> logger;
+        [NotNull] private readonly IMediator mediator;
 
         public LogbookController(
             [NotNull] ApplicationDbContext context,
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ILogbookService logbookService,
             [NotNull] IDiverService diverService,
-            [NotNull] ILogger<LogbookController> logger)
+            [NotNull] ILogger<LogbookController> logger,
+            [NotNull] IMediator mediator)
             : base(userManager, diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.logbookService = logbookService ?? throw new ArgumentNullException(nameof(logbookService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         // GET /
@@ -138,52 +145,33 @@ namespace Tauchbolde.Web.Controllers
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public async Task<IActionResult> Publish(Guid id)
         {
-            var logbookEntry = await logbookService.FindByIdAsync(id);
-            if (logbookEntry == null)
+            var publishLogbookEntry = new PublishLogbookEntry(id);
+            var result = await mediator.Send(publishLogbookEntry);
+            if (!result)
             {
-                return NotFound();
+                ShowErrorMessage("Fehler beim Publizieren des Logbucheintrages!");
             }
 
-            try
-            {
-                await logbookService.PublishAsync(logbookEntry);
-                await context.SaveChangesAsync();
-
-                ShowSuccessMessage($"Logbucheintrag '{logbookEntry.Title}' erfolgreich publiziert.");
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, $"Error publishing logbook entry [{logbookEntry.Id}]!");
-                ShowErrorMessage($"Fehler beim Publizieren: {ex.Message}");
-            }
-
-            return RedirectToAction("Detail", "Logbook", new {logbookEntry.Id});
+            ShowSuccessMessage("Logbucheintrag erfolgreich publiziert.");
+            return RedirectToAction("Detail", "Logbook", new {id});
         }
 
         [HttpGet]
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public async Task<IActionResult> Unpublish(Guid id)
         {
-            var logbookEntry = await logbookService.FindByIdAsync(id);
-            if (logbookEntry == null)
+            var unpublishLogbookEntry = new UnpublishLogbookEntry(id);
+            var result = await mediator.Send(unpublishLogbookEntry);
+            if (!result)
             {
-                return NotFound();
+                ShowErrorMessage("Fehler beim nicht mehr publizieren des Logbuch Eintrages!");
+            }
+            else
+            {
+                ShowSuccessMessage("Logbucheintrag erfolgreich nicht mehr publiziert.");
             }
 
-            try
-            {
-                await logbookService.UnPublishAsync(logbookEntry);
-                await context.SaveChangesAsync();
-
-                ShowSuccessMessage($"Logbucheintrag '{logbookEntry.Title}' erfolgreich nicht mehr publiziert.");
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, $"Error un-publishing logbook entry [{logbookEntry.Id}]!");
-                ShowErrorMessage($"Fehler beim Publizieren: {ex.Message}");
-            }
-
-            return RedirectToAction("Detail", "Logbook", new {logbookEntry.Id});
+            return RedirectToAction("Detail", "Logbook", new {id});
         }
 
         // GET /edit/x

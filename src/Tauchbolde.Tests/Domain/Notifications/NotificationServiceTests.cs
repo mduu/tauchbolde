@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Common.Domain.Notifications;
-using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Infrastructure.Telemetry;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
+using Tauchbolde.Common.Repositories;
 using Xunit;
 
 namespace Tauchbolde.Tests.Domain.Notifications
@@ -140,7 +140,7 @@ namespace Tauchbolde.Tests.Domain.Notifications
             var notificationService = CreateNotificationService(notificationRepo, sendOwnNotifications);
             
             // Act
-            await notificationService.NotifyForChangedParticipationAsync(participant, participant?.ParticipatingDiver, participant.Event);
+            await notificationService.NotifyForChangedParticipationAsync(participant, participant?.ParticipatingDiver, participant.EventId);
 
             // Assert
             A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._)).MustHaveHappened(expectedNotificationInserts, Times.Exactly);
@@ -175,7 +175,7 @@ namespace Tauchbolde.Tests.Domain.Notifications
             var notificationService = CreateNotificationService(notificationRepo, sendOwnNotifications, participantRepo);
 
             // Act
-            await notificationService.NotifyForChangedParticipationAsync(participant, participant?.ParticipatingDiver, participant.Event);
+            await notificationService.NotifyForChangedParticipationAsync(participant, participant?.ParticipatingDiver, participant.EventId);
             
             A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._))
                 .MustHaveHappened(expectedNotificationInsertsPhase, Times.Exactly);
@@ -189,11 +189,13 @@ namespace Tauchbolde.Tests.Domain.Notifications
             IParticipantRepository participantRepo = null)
         {
             var diverRepo = CreateDiverRepoFakeWithTauchbolde(sendOwnNotifications);
+            var eventRepo = A.Fake<IEventRepository>();
 
             return new NotificationService(
                 notificationRepo,
                 diverRepo,
                 participantRepo ?? CreateParticipantRepo(),
+                eventRepo,
                 A.Fake<ITelemetryService>()
             );
         }

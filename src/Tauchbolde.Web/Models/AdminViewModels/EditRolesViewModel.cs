@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Tauchbolde.Common.Model;
-using System.Collections;
+﻿using System.Collections.Generic;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Web.Models.AdminViewModels
 {

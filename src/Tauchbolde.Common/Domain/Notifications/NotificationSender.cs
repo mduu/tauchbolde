@@ -1,21 +1,20 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
-using Tauchbolde.Common.Domain.Repositories;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
+using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.Domain.Notifications
 {
     internal class NotificationSender : INotificationSender
     {
         private readonly ILogger logger;
-        private readonly ApplicationDbContext databaseContext;
         private readonly INotificationRepository notificationRepository;
 
         public NotificationSender(
             ILoggerFactory loggerFactory,
-            ApplicationDbContext databaseContext,
             [NotNull] INotificationRepository notificationRepository)
         {
             if (loggerFactory == null)
@@ -24,13 +23,14 @@ namespace Tauchbolde.Common.Domain.Notifications
             }
 
             logger = loggerFactory.CreateLogger<NotificationSender>();
-            this.databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
             this.notificationRepository = notificationRepository ?? throw new ArgumentNullException(nameof(notificationRepository));
         }
 
         /// <inheritdoc />
-        public async Task SendAsync(INotificationFormatter notificationFormatter,
-            INotificationSubmitter notificationSubmitter)
+        public async Task SendAsync(
+            INotificationFormatter notificationFormatter,
+            INotificationSubmitter notificationSubmitter,
+            Func<Task> saver)
         {
             if (notificationRepository == null) throw new ArgumentNullException(nameof(notificationRepository));
 
@@ -56,7 +56,7 @@ namespace Tauchbolde.Common.Domain.Notifications
                                     content);
                             }
 
-                            await UpdateDatabaseForRecipient(pendingNotificationsForRecipient, recipient);
+                            await UpdateDatabaseForRecipient(pendingNotificationsForRecipient, recipient, saver);
                         }
                     }
                 }
@@ -92,7 +92,10 @@ namespace Tauchbolde.Common.Domain.Notifications
             }
         }
 
-        private async Task UpdateDatabaseForRecipient(System.Linq.IGrouping<Diver, Notification> pendingNotificationsForRecipient, Diver recipient)
+        private async Task UpdateDatabaseForRecipient(
+            IGrouping<Diver, Notification> pendingNotificationsForRecipient,
+            Diver recipient, 
+            Func<Task> saver)
         {
             if (pendingNotificationsForRecipient == null) { throw new ArgumentNullException(nameof(pendingNotificationsForRecipient)); }
             if (recipient == null) { throw new ArgumentNullException(nameof(recipient)); }
@@ -102,7 +105,7 @@ namespace Tauchbolde.Common.Domain.Notifications
                 logger.LogTrace($"Updating database records for {pendingNotificationsForRecipient.Key} ...");
 
                 recipient.LastNotificationCheckAt = DateTime.Now;
-                await databaseContext.SaveChangesAsync();
+                await saver();
 
                 logger.LogTrace($"Database updated for {pendingNotificationsForRecipient.Key}");
             }

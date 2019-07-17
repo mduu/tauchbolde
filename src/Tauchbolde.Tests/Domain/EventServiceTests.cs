@@ -10,9 +10,9 @@ using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Common.Domain.Events;
 using Tauchbolde.Common.Domain.Notifications;
-using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Infrastructure.Telemetry;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
+using Tauchbolde.Common.Repositories;
 using Xunit;
 
 namespace Tauchbolde.Tests.Domain

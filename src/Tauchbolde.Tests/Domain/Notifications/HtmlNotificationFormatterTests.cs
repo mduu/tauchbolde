@@ -11,7 +11,7 @@ using Tauchbolde.Common.Domain.Notifications;
 using Tauchbolde.Common.Domain.Notifications.HtmlFormatting;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Infrastructure.SMTPSender;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 using Xunit;
 
 namespace Tauchbolde.Tests.Domain.Notifications
@@ -56,6 +56,7 @@ namespace Tauchbolde.Tests.Domain.Notifications
         [InlineData(NotificationType.Declined)]
         [InlineData(NotificationType.Neutral)]
         [InlineData(NotificationType.Tentative)]
+        [InlineData(NotificationType.NewLogbookEntry)]
         [UseReporter(typeof(DiffReporter))]
         public async Task Format(NotificationType notificationType)
         {
@@ -91,6 +92,7 @@ namespace Tauchbolde.Tests.Domain.Notifications
                     OccuredAt = new DateTime(2018, 10, 1, 14, 0, 0, DateTimeKind.Local),
                     Message = "Notification 1",
                     Type = notificationType,
+                    EventId = new Guid("8E83A186-7ACC-4DFC-9D75-6516EB623D72")
                 }
             };
     }

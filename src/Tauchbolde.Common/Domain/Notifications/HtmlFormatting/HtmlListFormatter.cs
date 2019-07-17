@@ -6,7 +6,8 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Tauchbolde.Common.Domain.TextFormatting;
 using Tauchbolde.Common.Infrastructure.SMTPSender;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
+using Tauchbolde.Extensions;
 
 namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
 {
@@ -76,7 +77,7 @@ namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
                     eventId.Value);
 
                 // ReSharper disable once StringLiteralTypo
-                htmlBuilder.Append($" <a href='{eventUrl}'>Mehr...</a>");
+                htmlBuilder.Append($"<p><a href='{eventUrl}'>Mehr...</a></p>");
             }
         }
 
@@ -89,7 +90,7 @@ namespace Tauchbolde.Common.Domain.Notifications.HtmlFormatting
                     logbookEntryId.Value);
 
                 // ReSharper disable once StringLiteralTypo
-                htmlBuilder.Append($" <a href='{logbookEntryUrl}'>Mehr...</a>");
+                htmlBuilder.Append($"<p><a href='{logbookEntryUrl}'>Mehr...</a></p>");
             }
         }
     }

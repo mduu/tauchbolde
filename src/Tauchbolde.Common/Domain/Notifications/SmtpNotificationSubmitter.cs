@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Tauchbolde.Common.Infrastructure.SMTPSender;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Common.Domain.Notifications
 {

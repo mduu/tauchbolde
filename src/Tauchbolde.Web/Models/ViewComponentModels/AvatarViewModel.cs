@@ -1,5 +1,4 @@
-﻿using System;
-using Tauchbolde.Common.Model;
+﻿using Tauchbolde.Entities;
 using Tauchbolde.Web.ViewComponents;
 namespace Tauchbolde.Web.Models.ViewComponentModels
 {

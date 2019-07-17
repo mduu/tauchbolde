@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using Tauchbolde.Common.Domain.Users;
+using Tauchbolde.DataAccess;
 using Tauchbolde.Web.Models.AdminViewModels;
 using Tauchbolde.Web.Core;
 

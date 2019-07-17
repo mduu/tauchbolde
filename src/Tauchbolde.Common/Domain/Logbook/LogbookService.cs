@@ -5,10 +5,10 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Common.Domain.Notifications;
 using Tauchbolde.Common.Domain.PhotoStorage;
-using Tauchbolde.Common.Domain.Repositories;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.Common.Infrastructure.Telemetry;
-using Tauchbolde.Common.Model;
+using Tauchbolde.Entities;
+using Tauchbolde.Common.Repositories;
 
 namespace Tauchbolde.Common.Domain.Logbook
 {
@@ -84,39 +84,6 @@ namespace Tauchbolde.Common.Domain.Logbook
             if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
 
             return await photoService.GetPhotoDataAsync(photoIdentifier);
-        }
-
-        public async Task PublishAsync(LogbookEntry logbookEntry)
-        {
-            if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
-            
-            var existingLogbookEntry = await logbookEntryRepository.FindByIdAsync(logbookEntry.Id);
-            if (existingLogbookEntry == null)
-            {
-                throw new InvalidOperationException($"No existing LogbookEntry found with Id [{logbookEntry.Id}]!");
-            }
-
-            existingLogbookEntry.IsPublished = true;
-            logbookEntryRepository.Update(existingLogbookEntry);
-            await notificationService.NotifyForNewLogbookEntry(existingLogbookEntry, existingLogbookEntry.OriginalAuthor);
-            
-            logger.LogInformation($"Logbook entry [{existingLogbookEntry.Id}] published.");
-        }
-
-        public async Task UnPublishAsync(LogbookEntry logbookEntry)
-        {
-            if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
-            
-            var existingLogbookEntry = await logbookEntryRepository.FindByIdAsync(logbookEntry.Id);
-            if (existingLogbookEntry == null)
-            {
-                throw new InvalidOperationException($"No existing LogbookEntry found with Id [{logbookEntry.Id}]!");
-            }
-
-            existingLogbookEntry.IsPublished = false;
-            logbookEntryRepository.Update(existingLogbookEntry);
-            
-            logger.LogInformation($"Logbook entry [{existingLogbookEntry.Id}] un-published.");
         }
 
         private async Task<Guid> UpdateExistingLogbookEntryAsync([NotNull] LogbookUpsertModel upsertModel)

@@ -30,11 +30,9 @@
   <ItemGroup>
     <Folder Include="Infrastructure\" />
     <Folder Include="Domain\Avatar\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Infrastructure\Telemetry\" />
     <Folder Include="Domain\Events\" />
     <Folder Include="Domain\Users\" />
-    <Folder Include="Domain\Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="DomainServices\Notifications\HtmlFormatting\EmbeddedStyles.css" />
@@ -44,5 +42,8 @@
     <Reference Include="Microsoft.EntityFrameworkCore.SqlServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
       <HintPath>..\..\..\..\..\..\..\..\usr\local\share\dotnet\sdk\NuGetFallbackFolder\microsoft.entityframeworkcore.sqlserver\2.2.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\1_EnterpriseRules\Tauchbolde.Entities\Tauchbolde.Entities.csproj" />
   </ItemGroup>
 </Project>

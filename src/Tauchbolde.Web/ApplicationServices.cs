@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using JetBrains.Annotations;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Web.Services;
@@ -11,6 +12,8 @@ using Tauchbolde.Common;
 using Tauchbolde.Common.Domain;
 using Tauchbolde.Common.Domain.Avatar;
 using Tauchbolde.Common.Infrastructure.PhotoStores;
+using Tauchbolde.DataAccess;
+using Tauchbolde.UseCases.Logbook;
 using Tauchbolde.Web.Core.TextFormatting;
 
 namespace Tauchbolde.Web
@@ -30,6 +33,8 @@ namespace Tauchbolde.Web
             var photoStoreRoot = GetPhotoStoreRoot(configuration, hostingEnvironment);
             var photoStoreType = GetPhotoStoreType(configuration);
 
+            LogbookUseCasesRegistration.RegisterServices(services);
+            DataAccessServices.RegisterServices(services);
             CommonServices.RegisterServices(services, photoStoreRoot, photoStoreType);
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
