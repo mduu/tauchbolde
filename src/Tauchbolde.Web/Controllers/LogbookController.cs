@@ -14,7 +14,8 @@ using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.DataAccess;
 using Tauchbolde.Extensions;
-using Tauchbolde.UseCases.Logbook.Publish;
+using Tauchbolde.UseCases.Logbook.PublishUseCase;
+using Tauchbolde.UseCases.Logbook.UnpublishUseCase;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
 

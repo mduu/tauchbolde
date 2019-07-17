@@ -6,7 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Entities;
 using Tauchbolde.UseCases.Logbook.DataAccess;
-using Tauchbolde.UseCases.Logbook.Publish;
+using Tauchbolde.UseCases.Logbook.PublishUseCase;
 using Xunit;
 
 namespace Tauchbolde.Tests.UseCases.Logbook
