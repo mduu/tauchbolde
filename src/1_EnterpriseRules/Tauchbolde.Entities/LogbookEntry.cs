@@ -71,5 +71,10 @@ namespace Tauchbolde.Entities
 
         public Guid? EventId { get; set; }
         [CanBeNull] public Event Event { get; set; }
+
+        public void Publish()
+        {
+            IsPublished = true;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.DataAccess;
 using Tauchbolde.Extensions;
+using Tauchbolde.UseCases.Logbook.Publish;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
 
@@ -23,18 +25,21 @@ namespace Tauchbolde.Web.Controllers
         [NotNull] private readonly ApplicationDbContext context;
         [NotNull] private readonly ILogbookService logbookService;
         [NotNull] private readonly ILogger<LogbookController> logger;
+        [NotNull] private readonly IMediator mediator;
 
         public LogbookController(
             [NotNull] ApplicationDbContext context,
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ILogbookService logbookService,
             [NotNull] IDiverService diverService,
-            [NotNull] ILogger<LogbookController> logger)
+            [NotNull] ILogger<LogbookController> logger,
+            [NotNull] IMediator mediator)
             : base(userManager, diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.logbookService = logbookService ?? throw new ArgumentNullException(nameof(logbookService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         // GET /
@@ -139,26 +144,16 @@ namespace Tauchbolde.Web.Controllers
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public async Task<IActionResult> Publish(Guid id)
         {
-            var logbookEntry = await logbookService.FindByIdAsync(id);
-            if (logbookEntry == null)
+            var publishLogbookEntry = new PublishLogbookEntry(id);
+            var result = await mediator.Send(publishLogbookEntry);
+            if (!result)
             {
+                logger.LogError($"Error publishing logbook entry [{id}]!");
                 return NotFound();
             }
 
-            try
-            {
-                await logbookService.PublishAsync(logbookEntry);
-                await context.SaveChangesAsync();
-
-                ShowSuccessMessage($"Logbucheintrag '{logbookEntry.Title}' erfolgreich publiziert.");
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, $"Error publishing logbook entry [{logbookEntry.Id}]!");
-                ShowErrorMessage($"Fehler beim Publizieren: {ex.Message}");
-            }
-
-            return RedirectToAction("Detail", "Logbook", new {logbookEntry.Id});
+            ShowSuccessMessage("Logbucheintrag erfolgreich publiziert.");
+            return RedirectToAction("Detail", "Logbook", new {id});
         }
 
         [HttpGet]

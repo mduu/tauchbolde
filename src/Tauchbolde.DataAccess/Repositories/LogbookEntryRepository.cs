@@ -6,14 +6,16 @@ using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Entities;
 using Tauchbolde.Common.Repositories;
+using Tauchbolde.UseCases.Logbook.DataAccess;
 
 namespace Tauchbolde.DataAccess.Repositories
 {
     /// <summary>
-    /// Implements <see cref="ILogbookEntryRepository" /> using EF Core.
+    /// Implements <see cref="ILogbookEntryRepository" /> and
+    /// <see cref="ILogbookDataAccess"/> using EF Core.
     /// </summary>
     [UsedImplicitly]
-    internal class LogbookEntryRepository : RepositoryBase<LogbookEntry>, ILogbookEntryRepository
+    internal class LogbookEntryRepository : RepositoryBase<LogbookEntry>, ILogbookEntryRepository, ILogbookDataAccess
     {
         public LogbookEntryRepository(ApplicationDbContext context) : base(context)
         {
@@ -35,5 +37,22 @@ namespace Tauchbolde.DataAccess.Repositories
                 .Include(l => l.Event)
                 .OrderByDescending(l => l.CreatedAt)
                 .ToListAsync();
+
+        /// <inheritdoc />
+        public async Task<LogbookEntry> GetLogbookEntryByIdAsync(Guid logbookEntryId)
+        {
+            return await base.FindByIdAsync(logbookEntryId);
+        }
+
+        /// <inheritdoc />
+        public async Task UpdateLogbookEntryAsync(LogbookEntry logbookEntry)
+        {
+            base.Update(logbookEntry);
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await Context.SaveChangesAsync();
+        }
     }
 }
