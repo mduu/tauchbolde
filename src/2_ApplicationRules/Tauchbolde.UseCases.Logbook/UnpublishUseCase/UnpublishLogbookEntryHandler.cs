@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.UseCases.Logbook.DataAccess;
 
-namespace Tauchbolde.UseCases.Logbook.Publish
+namespace Tauchbolde.UseCases.Logbook.UnpublishUseCase
 {
     [UsedImplicitly]
     internal class UnpublishLogbookEntryHandler : IRequestHandler<UnpublishLogbookEntry, bool>

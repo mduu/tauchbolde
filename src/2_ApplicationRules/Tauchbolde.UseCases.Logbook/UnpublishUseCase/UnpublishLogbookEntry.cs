@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 
-namespace Tauchbolde.UseCases.Logbook.Publish
+namespace Tauchbolde.UseCases.Logbook.UnpublishUseCase
 {
     public class UnpublishLogbookEntry : IRequest<bool>
     {

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Tauchbolde.UseCases.Logbook.Publish;
+using Tauchbolde.UseCases.Logbook.PublishUseCase;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For FakeItEasy to use "internal" visibility
