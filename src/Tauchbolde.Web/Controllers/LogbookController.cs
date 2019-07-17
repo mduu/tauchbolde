@@ -148,8 +148,7 @@ namespace Tauchbolde.Web.Controllers
             var result = await mediator.Send(publishLogbookEntry);
             if (!result)
             {
-                logger.LogError($"Error publishing logbook entry [{id}]!");
-                return NotFound();
+                ShowErrorMessage("Fehler beim Publizieren des Logbucheintrages!");
             }
 
             ShowSuccessMessage("Logbucheintrag erfolgreich publiziert.");
@@ -160,26 +159,18 @@ namespace Tauchbolde.Web.Controllers
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public async Task<IActionResult> Unpublish(Guid id)
         {
-            var logbookEntry = await logbookService.FindByIdAsync(id);
-            if (logbookEntry == null)
+            var unpublishLogbookEntry = new UnpublishLogbookEntry(id);
+            var result = await mediator.Send(unpublishLogbookEntry);
+            if (!result)
             {
-                return NotFound();
+                ShowErrorMessage("Fehler beim nicht mehr publizieren des Logbuch Eintrages!");
+            }
+            else
+            {
+                ShowSuccessMessage("Logbucheintrag erfolgreich nicht mehr publiziert.");
             }
 
-            try
-            {
-                await logbookService.UnPublishAsync(logbookEntry);
-                await context.SaveChangesAsync();
-
-                ShowSuccessMessage($"Logbucheintrag '{logbookEntry.Title}' erfolgreich nicht mehr publiziert.");
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, $"Error un-publishing logbook entry [{logbookEntry.Id}]!");
-                ShowErrorMessage($"Fehler beim Publizieren: {ex.Message}");
-            }
-
-            return RedirectToAction("Detail", "Logbook", new {logbookEntry.Id});
+            return RedirectToAction("Detail", "Logbook", new {id});
         }
 
         // GET /edit/x

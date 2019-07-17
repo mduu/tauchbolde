@@ -76,5 +76,10 @@ namespace Tauchbolde.Entities
         {
             IsPublished = true;
         }
+
+        public void Unpublish()
+        {
+            IsPublished = false;
+        }
     }
 }

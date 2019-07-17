@@ -86,39 +86,6 @@ namespace Tauchbolde.Common.Domain.Logbook
             return await photoService.GetPhotoDataAsync(photoIdentifier);
         }
 
-        public async Task PublishAsync(LogbookEntry logbookEntry)
-        {
-            if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
-            
-            var existingLogbookEntry = await logbookEntryRepository.FindByIdAsync(logbookEntry.Id);
-            if (existingLogbookEntry == null)
-            {
-                throw new InvalidOperationException($"No existing LogbookEntry found with Id [{logbookEntry.Id}]!");
-            }
-
-            existingLogbookEntry.IsPublished = true;
-            logbookEntryRepository.Update(existingLogbookEntry);
-            await notificationService.NotifyForNewLogbookEntry(existingLogbookEntry, existingLogbookEntry.OriginalAuthor);
-            
-            logger.LogInformation($"Logbook entry [{existingLogbookEntry.Id}] published.");
-        }
-
-        public async Task UnPublishAsync(LogbookEntry logbookEntry)
-        {
-            if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
-            
-            var existingLogbookEntry = await logbookEntryRepository.FindByIdAsync(logbookEntry.Id);
-            if (existingLogbookEntry == null)
-            {
-                throw new InvalidOperationException($"No existing LogbookEntry found with Id [{logbookEntry.Id}]!");
-            }
-
-            existingLogbookEntry.IsPublished = false;
-            logbookEntryRepository.Update(existingLogbookEntry);
-            
-            logger.LogInformation($"Logbook entry [{existingLogbookEntry.Id}] un-published.");
-        }
-
         private async Task<Guid> UpdateExistingLogbookEntryAsync([NotNull] LogbookUpsertModel upsertModel)
         {
             if (upsertModel == null) throw new ArgumentNullException(nameof(upsertModel));

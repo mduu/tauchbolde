@@ -44,17 +44,5 @@ namespace Tauchbolde.Common.Domain.Logbook
         /// <param name="photoIdentifier">The identifier of the photo to retrieve.</param>
         /// <returns>The photo data including metadata and binary stream.</returns>
         [NotNull] Task<Photo> GetPhotoDataAsync([NotNull] PhotoIdentifier photoIdentifier);
-
-        /// <summary>
-        /// Publish a unpublished logbook entry.
-        /// </summary>
-        /// <param name="logbookEntry">The logbook entry to publish.</param>
-        [NotNull] Task PublishAsync([NotNull] LogbookEntry logbookEntry);
-        
-        /// <summary>
-        /// Un-publish an already published logbook entry.
-        /// </summary>
-        /// <param name="logbookEntry">The logbook entry to un-publish.</param>
-        [NotNull] Task UnPublishAsync([NotNull] LogbookEntry logbookEntry);
     }
 }
