@@ -1,6 +1,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Common.Domain.PhotoStorage
 {

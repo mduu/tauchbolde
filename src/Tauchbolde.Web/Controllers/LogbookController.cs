@@ -13,6 +13,7 @@ using Tauchbolde.Common.Domain.Logbook;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Domain.Users;
 using Tauchbolde.DataAccess;
+using Tauchbolde.Entities;
 using Tauchbolde.Extensions;
 using Tauchbolde.UseCases.Logbook.PublishUseCase;
 using Tauchbolde.UseCases.Logbook.UnpublishUseCase;

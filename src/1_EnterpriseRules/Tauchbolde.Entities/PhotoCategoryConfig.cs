@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Tauchbolde.Common.Domain.PhotoStorage
+namespace Tauchbolde.Entities
 {
-    internal class PhotoCategoryConfig
+    public class PhotoCategoryConfig
     {
         public static IDictionary<PhotoCategory, PhotoCategoryConfig> Configs =
             new Dictionary<PhotoCategory, PhotoCategoryConfig>
@@ -15,7 +15,7 @@ namespace Tauchbolde.Common.Domain.PhotoStorage
                 }
             };
 
-        internal int ThumbMaxWidth { get; private set; }
-        internal int ThumbMaxHeight { get; private set; }
+        public int ThumbMaxWidth { get; private set; }
+        public int ThumbMaxHeight { get; private set; }
     }
 }

@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Tauchbolde.Common.Domain.PhotoStorage;
+using Tauchbolde.Entities;
 using Xunit;
 
 namespace Tauchbolde.Tests.Domain.PhotoStorage

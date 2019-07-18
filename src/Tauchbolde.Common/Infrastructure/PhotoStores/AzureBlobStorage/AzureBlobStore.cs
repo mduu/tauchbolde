@@ -10,6 +10,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using Tauchbolde.Commom.Misc;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Infrastructure.Telemetry;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage
 {

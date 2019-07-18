@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Tauchbolde.Common.Domain.PhotoStorage
+namespace Tauchbolde.Entities
 {
     public class PhotoAndThumbnailIdentifiers
     {

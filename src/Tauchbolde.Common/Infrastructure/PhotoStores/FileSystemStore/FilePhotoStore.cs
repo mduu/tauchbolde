@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Commom.Misc;
 using Tauchbolde.Common.Domain.PhotoStorage;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
 {

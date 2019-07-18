@@ -1,4 +1,4 @@
-namespace Tauchbolde.Common.Domain.PhotoStorage
+namespace Tauchbolde.Entities
 {
     public enum ThumbnailType
     {

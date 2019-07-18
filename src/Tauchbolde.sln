@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Extensions", "1_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.UseCases.Logbook", "2_ApplicationRules\Tauchbolde.UseCases.Logbook\Tauchbolde.UseCases.Logbook.csproj", "{6EF64236-A389-4CF4-90DC-2F06573A5D15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.UseCases.Photo", "2_ApplicationRules\Tauchbolde.UseCases.Photo\Tauchbolde.UseCases.Photo.csproj", "{02CFC6B3-91B5-4D4E-979A-A96245C25263}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,18 @@ Global
 		{6EF64236-A389-4CF4-90DC-2F06573A5D15}.Release|x64.Build.0 = Release|Any CPU
 		{6EF64236-A389-4CF4-90DC-2F06573A5D15}.Release|x86.ActiveCfg = Release|Any CPU
 		{6EF64236-A389-4CF4-90DC-2F06573A5D15}.Release|x86.Build.0 = Release|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Debug|x64.Build.0 = Debug|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Debug|x86.Build.0 = Debug|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Release|x64.ActiveCfg = Release|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Release|x64.Build.0 = Release|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Release|x86.ActiveCfg = Release|Any CPU
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,6 +137,7 @@ Global
 		{3253C877-30E2-4DBD-81EC-C540EEE21164} = {D6C3511D-51E9-4F59-BFFB-4E09E24D62F4}
 		{D09693BB-A7E6-40F1-8186-C4D20C0A5A9B} = {D6C3511D-51E9-4F59-BFFB-4E09E24D62F4}
 		{6EF64236-A389-4CF4-90DC-2F06573A5D15} = {F6B3F175-FD1D-4B06-85BA-A2D6C6E7631C}
+		{02CFC6B3-91B5-4D4E-979A-A96245C25263} = {F6B3F175-FD1D-4B06-85BA-A2D6C6E7631C}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
-namespace Tauchbolde.Common.Domain.PhotoStorage
+namespace Tauchbolde.Entities
 {
     /// <summary>
     /// Represents a unique photo identifier.

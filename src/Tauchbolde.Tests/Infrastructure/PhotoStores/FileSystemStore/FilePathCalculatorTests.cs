@@ -3,6 +3,7 @@ using FluentAssertions;
 using Tauchbolde.Commom.Misc;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore;
+using Tauchbolde.Entities;
 using Xunit;
 
 namespace Tauchbolde.Tests.Infrastructure.PhotoStores.FileSystemStore

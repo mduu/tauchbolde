@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using Tauchbolde.Common.Domain.PhotoStorage;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
 {

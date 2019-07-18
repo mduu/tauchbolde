@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Common.Infrastructure;
+using Tauchbolde.Entities;
 
 namespace Tauchbolde.Common.Domain.PhotoStorage
 {

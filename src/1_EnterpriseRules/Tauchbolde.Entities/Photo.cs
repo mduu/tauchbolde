@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using JetBrains.Annotations;
 
-namespace Tauchbolde.Common.Domain.PhotoStorage
+namespace Tauchbolde.Entities
 {
     /// <summary>
     /// Metadata and binary data of a photo.

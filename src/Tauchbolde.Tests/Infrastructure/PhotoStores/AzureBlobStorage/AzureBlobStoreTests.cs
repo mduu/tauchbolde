@@ -9,6 +9,7 @@ using Tauchbolde.Commom.Misc;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage;
 using Tauchbolde.Common.Infrastructure.Telemetry;
+using Tauchbolde.Entities;
 using Xunit;
 
 namespace Tauchbolde.Tests.Infrastructure.PhotoStores.AzureBlobStorage
