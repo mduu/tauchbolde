@@ -45,5 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\1_EnterpriseRules\Tauchbolde.Entities\Tauchbolde.Entities.csproj" />
+    <ProjectReference Include="..\2_ApplicationRules\Tauchbolde.UseCases.Photo\Tauchbolde.UseCases.Photo.csproj" />
   </ItemGroup>
 </Project>

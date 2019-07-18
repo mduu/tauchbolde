@@ -11,6 +11,7 @@ using Tauchbolde.Commom.Misc;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Infrastructure.Telemetry;
 using Tauchbolde.Entities;
+using Tauchbolde.UseCases.Photo.DataAccess;
 
 namespace Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage
 {

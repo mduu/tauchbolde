@@ -6,6 +6,7 @@ using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage;
 using Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore;
 using Tauchbolde.Tests.TestingTools;
+using Tauchbolde.UseCases.Photo.DataAccess;
 using Tauchbolde.Web;
 using Xunit;
 

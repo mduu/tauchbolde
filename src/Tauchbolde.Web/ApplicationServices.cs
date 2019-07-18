@@ -34,6 +34,7 @@ namespace Tauchbolde.Web
             var photoStoreType = GetPhotoStoreType(configuration);
 
             LogbookUseCasesRegistration.RegisterServices(services);
+            PhotoUseCasesRegistration.RegisterServices(services);
             DataAccessServices.RegisterServices(services);
             CommonServices.RegisterServices(services, photoStoreRoot, photoStoreType);
 

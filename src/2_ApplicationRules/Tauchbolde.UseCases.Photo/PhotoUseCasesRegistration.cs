@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Tauchbolde.UseCases.Logbook
 {
-    public static class LogbookUseCasesRegistration
+    public static class PhotoUseCasesRegistration
     {
         public static void RegisterServices([NotNull] IServiceCollection services)
         {

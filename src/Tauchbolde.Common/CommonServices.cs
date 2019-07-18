@@ -17,6 +17,7 @@ using Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage;
 using Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore;
 using Tauchbolde.Common.Infrastructure.SMTPSender;
 using Tauchbolde.Common.Infrastructure.Telemetry;
+using Tauchbolde.UseCases.Photo.DataAccess;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For FakeItEasy to use "internal" visibility

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Tauchbolde.Commom.Misc;
 using Tauchbolde.Common.Domain.PhotoStorage;
 using Tauchbolde.Entities;
+using Tauchbolde.UseCases.Photo.DataAccess;
 
 namespace Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore
 {
