@@ -8,10 +8,8 @@ using Tauchbolde.Domain.SharedKernel;
 
 namespace Tauchbolde.Domain.Entities
 {
-    public class Diver : BaseEntity
+    public class Diver : EntityBase
     {
-        public Guid Id { get; set; }
-
         [Display(Name = "Name")]
         [Required]
         public string Fullname { get; set; }

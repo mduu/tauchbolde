@@ -4,12 +4,11 @@ using Tauchbolde.Domain.SharedKernel;
 
 namespace Tauchbolde.Domain.Entities
 {
-    public class Comment : BaseEntity
+    public class Comment : EntityBase
     {
-        public Guid Id { get; set; }
-
         [Display(Name = "Anlass ID")]
         public Guid EventId { get; set; }
+        
         [Display(Name = "Anlass")]
         [Required]
         public Event Event { get; set; }

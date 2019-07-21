@@ -5,10 +5,8 @@ using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.Domain.Entities
 {
-    public class Participant : BaseEntity
+    public class Participant : EntityBase
     {
-        public Guid Id { get; set; }
-
         [Display(Name = "Anlass ID")]
         [Required]
         public Guid EventId { get; set; }

@@ -2,24 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Application.DataGateways;
-using Tauchbolde.Domain;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Driver.DataAccessSql.Repositories
 {
     internal class EventRepository : RepositoryBase<Event>, IEventRepository
     {
-        public EventRepository(ApplicationDbContext context)
+        [NotNull] private readonly IClock clock;
+
+        public EventRepository(
+            [NotNull] ApplicationDbContext context,
+            [NotNull] IClock clock)
             : base(context)
         {
+            this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
         }
 
         /// <inheritdoc />>
         public async Task<List<Event>> GetUpcomingEventsAsync()
         {
-            return await CreateQueryForStartingAt(DateTime.Now)
+            return await CreateQueryForStartingAt(clock.Now().DateTime)
                 .Include(e => e.Comments)
                     .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
@@ -30,7 +36,7 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
 
         public async Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync()
         {
-            return await CreateQueryForStartingAt(DateTime.Now.AddDays(-30))
+            return await CreateQueryForStartingAt(clock.Now().AddDays(-30).DateTime)
                 .Include(e => e.Comments)
                     .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
@@ -57,7 +63,7 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
             return result;
         }
 
-        public IQueryable<Event> CreateQueryForStartingAt(DateTime startDate, bool includeCanceled = false)
+        private IQueryable<Event> CreateQueryForStartingAt(DateTime startDate, bool includeCanceled = false)
         {
             return Context.Events
                 .Where(e =>

@@ -38,20 +38,16 @@ namespace Tauchbolde.Application.UseCases.Logbook.PublishUseCase
             try
             {
                 logbookEntry.Publish();
-                dataAccess.UpdateAsync(logbookEntry);
-//                await notificationService.NotifyForNewLogbookEntry(
-//                    existingLogbookEntry,
-//                    existingLogbookEntry.OriginalAuthor);
+                await dataAccess.UpdateAsync(logbookEntry);
 
                 logger.LogInformation("Logbook-Entry {logbookEntryId} published successfull.", request.LogbookEntryId);
+                return true;
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error publishing logbook entry {logbookEntryId} {logbookEntryTitle}", logbookEntry.Id, logbookEntry.Title);
                 return false;
             }
-
-            return true;
         }
     }
 }

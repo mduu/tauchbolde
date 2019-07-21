@@ -7,11 +7,8 @@ using Tauchbolde.Domain.SharedKernel.Helpers;
 
 namespace Tauchbolde.Domain.Entities
 {
-    public class Event : BaseEntity
+    public class Event : EntityBase
     {
-        [Display(Name = "ID")]
-        public Guid Id { get; set; }
-
         [Display(Name = "Name")]
         [Required]
         public string Name { get; set; }

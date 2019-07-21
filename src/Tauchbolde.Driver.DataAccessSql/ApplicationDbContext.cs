@@ -42,9 +42,9 @@ namespace Tauchbolde.Driver.DataAccessSql
             return result;
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
         {
-            var result = base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+            var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
             DispatchDomainEventsForSuccessfullySavedEntities();
             return result;
         }
@@ -105,7 +105,7 @@ namespace Tauchbolde.Driver.DataAccessSql
         
         private void DispatchDomainEventsForSuccessfullySavedEntities()
         {
-            var entitiesWithEvents = ChangeTracker.Entries<BaseEntity>()
+            var entitiesWithEvents = ChangeTracker.Entries<EntityBase>()
                 .Select(e => e.Entity)
                 .Where(e => e.Events.Any())
                 .ToArray();

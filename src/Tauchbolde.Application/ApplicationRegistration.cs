@@ -14,7 +14,6 @@ using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
-using Tauchbolde.Application.UseCases.Notifications.Shared;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For FakeItEasy to use "internal" visibility
@@ -29,9 +28,9 @@ namespace Tauchbolde.Application
             
             services.AddMediatR(typeof(PublishLogbookEntryHandler));
 
-            services.AddScoped<INotificationPublisher, NotificationPublisher>();
             services.AddScoped<IClock, Clock>();
             services.AddSingleton<IMimeMapping, MimeMapping>();
+            services.AddScoped<INotificationPublisher, NotificationPublisher>();
      
             RegisterOldDomainServices(services);
         }

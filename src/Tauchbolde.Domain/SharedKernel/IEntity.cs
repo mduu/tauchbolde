@@ -6,6 +6,6 @@ namespace Tauchbolde.Domain.SharedKernel
     public interface IEntity
     {
         Guid Id { get; set; }
-        IList<BaseDomainEvent> Events { get; }
+        IList<DomainEventBase> Events { get; }
     }
 }

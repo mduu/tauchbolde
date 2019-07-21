@@ -2,20 +2,14 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
+using Tauchbolde.Domain.Events;
 using Tauchbolde.Domain.SharedKernel;
 
 namespace Tauchbolde.Domain.Entities
 {
-    /// <summary>
-    /// Entity model for Entries in the Logbook.
-    /// </summary>
     [UsedImplicitly]
-    public class LogbookEntry : BaseEntity
+    public class LogbookEntry : EntityBase
     {
-        [Key]
-        [DisplayName("Logbuch ID")]
-        public Guid Id { get; set; }
-
         [DisplayName("Titel")]
         [Required]
         [NotNull] public string Title { get; set; } = "";
@@ -48,34 +42,24 @@ namespace Tauchbolde.Domain.Entities
         [DisplayName("Publiziert")]
         public bool IsPublished { get; set; }
 
-        /// <summary>
-        /// ID of the Author that last modified this <see cref="LogbookEntry"/>.
-        /// </summary>
         public Guid? EditorAuthorId { get; set; }
         
-        /// <summary>
-        /// Author that last modified this <see cref="LogbookEntry"/>.
-        /// </summary>
         public Diver EditorAuthor { get; set; }
 
-        /// <summary>
-        /// ID of the Original author that initially created this <see cref="LogbookEntry"/>.
-        /// </summary>
         [Required]
         [UsedImplicitly]
         public Guid OriginalAuthorId { get; set; }
         
-        /// <summary>
-        /// Original author that initially created this <see cref="LogbookEntry"/>.
-        /// </summary>
         public Diver OriginalAuthor { get; set; }
 
         public Guid? EventId { get; set; }
+        
         [CanBeNull] public Event Event { get; set; }
 
         public void Publish()
         {
             IsPublished = true;
+            RaiseDomainEvent(new LogbookEntryPublishedEvent(Id));
         }
 
         public void Unpublish()

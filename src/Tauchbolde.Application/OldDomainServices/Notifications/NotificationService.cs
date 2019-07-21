@@ -186,26 +186,6 @@ namespace Tauchbolde.Application.OldDomainServices.Notifications
                 author);
         }
 
-        /// <inheritdoc />
-        public async Task NotifyForNewLogbookEntry(
-            [NotNull] LogbookEntry logbookEntry,
-            [NotNull] Diver author)
-        {
-            if (logbookEntry == null) throw new ArgumentNullException(nameof(logbookEntry));
-            if (author == null) throw new ArgumentNullException(nameof(author));
-
-            var recipients = await diverRepository.GetAllTauchboldeUsersAsync();
-            var message = $"Neuer Logbucheintrag '{logbookEntry.Title} von {author.Realname}.";
-
-            await InsertNotification(
-                null,
-                recipients,
-                NotificationType.NewLogbookEntry,
-                message,
-                author,
-                logbookEntry);
-        }
-
         private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(
             Guid currentDiverId,
             Guid eventId)

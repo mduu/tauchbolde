@@ -6,7 +6,6 @@ namespace Tauchbolde.Application.OldDomainServices
 {
     internal class MassMailService : IMassMailService
     {
-        /// <inheritdoc/>
         public string CreateReceiverString(ICollection<Diver> divers)
             => string.Join(";",
                 divers.Select(d => $"\"{d.Fullname}\"<{d.User.Email}>"));
