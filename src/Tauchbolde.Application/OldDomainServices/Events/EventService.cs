@@ -168,7 +168,7 @@ namespace Tauchbolde.Application.OldDomainServices.Events
             }
 
             TrackEvent("COMMENT-DELETE", comment);
-            commentRepository.DeleteAsync(comment);
+            await commentRepository.DeleteAsync(comment);
         }
 
         /// <inheritdoc />

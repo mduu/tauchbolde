@@ -74,7 +74,7 @@ namespace Tauchbolde.Application.OldDomainServices.Logbook
                 throw new InvalidOperationException($"No {nameof(LogbookEntry)} with Id [{logbookEntryId}] found!");
             }
                         
-            logbookEntryRepository.DeleteAsync(logbookEntry);
+            await logbookEntryRepository.DeleteAsync(logbookEntry);
             await RemoveTeaserImagesAsync(logbookEntry);
             
             TrackLogbookEntry("LOGBOOK-DELETE", logbookEntry);
