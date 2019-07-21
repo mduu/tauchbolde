@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tauchbolde.Extensions
+namespace Tauchbolde.Domain.Helpers
 {
     public static class DateTimeExtensions
     {
