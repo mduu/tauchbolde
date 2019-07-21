@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Application.DataGateways;
-using Tauchbolde.Domain;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 
@@ -16,34 +15,24 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         {
         }
         
-        public async Task<Participant> GetParticipantByIdAsync(Guid participationId)
-        {
-            return await Context.Participants
+        public async Task<Participant> GetParticipantByIdAsync(Guid participationId) =>
+            await Context.Participants
                 .Include(p => p.Event)
                 .Include(p => p.ParticipatingDiver)
                 .FirstOrDefaultAsync(p => p.Id == participationId);
-        }
 
 
-        public async Task<Participant> GetParticipationForEventAndUserAsync(Diver user, Guid eventId)
-        {
-            return await Context.Participants
+        public async Task<Participant> GetParticipationForEventAndUserAsync(Diver user, Guid eventId) =>
+            await Context.Participants
                 .Include(p => p.Event)
                 .Include(p => p.ParticipatingDiver)
                 .FirstOrDefaultAsync(p =>
                     p.EventId == eventId && p.ParticipatingDiver.Id == user.Id);
-        }
 
-        public async Task<ICollection<Participant>> GetParticipantsForEventByStatusAsync(Guid eventId, ParticipantStatus status)
-        {
-            if (eventId == Guid.Empty) throw new AggregateException($"{nameof(eventId)} must not be empty!");
-
-            var query = Context.Participants
+        public async Task<ICollection<Participant>> GetParticipantsForEventByStatusAsync(Guid eventId, ParticipantStatus status) =>
+            await Context.Participants
                 .Include(p => p.Event)
                 .Include(p => p.ParticipatingDiver)
-                .Where(p => p.EventId == eventId && p.Status == status);
-
-            return await query.ToListAsync();
-        }
+                .Where(p => p.EventId == eventId && p.Status == status).ToListAsync();
     }
 }

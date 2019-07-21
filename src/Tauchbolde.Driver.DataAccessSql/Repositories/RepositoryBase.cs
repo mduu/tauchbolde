@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Application.DataGateways;
 
@@ -21,19 +22,13 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         }
 
         /// <inheritdoc />
-        public virtual async Task<TEntity> FindByIdAsync(Guid id)
-        {
-            return await Context.Set<TEntity>().FindAsync(id);
-        }
-        
+        public virtual async Task<TEntity> FindByIdAsync(Guid id) => await Context.Set<TEntity>().FindAsync(id);
+
         /// <inheritdoc />
-        public virtual async Task<ICollection<TEntity>> GetAllAsync()
-        {
-            return await Context.Set<TEntity>().ToListAsync();
-        }
-        
+        public virtual async Task<ICollection<TEntity>> GetAllAsync() => await Context.Set<TEntity>().ToListAsync();
+
         /// <inheritdoc />
-        public virtual async Task<TEntity> InsertAsync(TEntity entity)
+        public virtual async Task<TEntity> InsertAsync([NotNull] TEntity entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
@@ -44,7 +39,7 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         }
 
         /// <inheritdoc />
-        public virtual async Task UpdateAsync(TEntity entity)
+        public virtual async Task UpdateAsync([NotNull] TEntity entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
@@ -53,8 +48,10 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         }
 
         /// <inheritdoc />
-        public virtual async Task DeleteAsync(TEntity entity)
+        public virtual async Task DeleteAsync([NotNull] TEntity entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            
             Context.Set<TEntity>().Remove(entity);
             await Context.SaveChangesAsync();
         }
