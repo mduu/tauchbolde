@@ -12,7 +12,7 @@ using Tauchbolde.Application.OldDomainServices.Logbook;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
 using Tauchbolde.Application.UseCases.Logbook.UnpublishUseCase;
-using Tauchbolde.Domain.SharedKernel.Helpers;
+using Tauchbolde.Domain.Helpers;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.ValueObjects;
 using Tauchbolde.Web.Core;

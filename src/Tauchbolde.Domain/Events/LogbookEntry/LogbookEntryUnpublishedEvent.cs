@@ -1,7 +1,7 @@
 using System;
 using Tauchbolde.Domain.SharedKernel;
 
-namespace Tauchbolde.Domain.Events
+namespace Tauchbolde.Domain.Events.LogbookEntry
 {
     public class LogbookEntryUnpublishedEvent : DomainEventBase
     {

@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Events;
+using Tauchbolde.Domain.Events.LogbookEntry;
 using Xunit;
 
 namespace Tauchbolde.Tests.Domain.Entities

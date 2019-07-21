@@ -1,9 +1,8 @@
 using System.IO;
 using FluentAssertions;
-using Tauchbolde.Commom.Misc;
-using Tauchbolde.Common.Domain.PhotoStorage;
-using Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore;
-using Tauchbolde.Entities;
+using Tauchbolde.Application.Services;
+using Tauchbolde.Domain.Types;
+using Tauchbolde.Driver.PhotoStorage.FileSystemStore;
 using Xunit;
 
 namespace Tauchbolde.Tests.Infrastructure.PhotoStores.FileSystemStore

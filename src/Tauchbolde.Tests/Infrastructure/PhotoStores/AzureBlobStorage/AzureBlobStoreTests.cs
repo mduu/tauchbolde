@@ -5,11 +5,10 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Tauchbolde.Commom.Misc;
-using Tauchbolde.Common.Domain.PhotoStorage;
-using Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage;
-using Tauchbolde.Common.Infrastructure.Telemetry;
-using Tauchbolde.Entities;
+using Tauchbolde.Application.Services;
+using Tauchbolde.Domain.Types;
+using Tauchbolde.Domain.ValueObjects;
+using Tauchbolde.Driver.PhotoStorage.AzureBlobStorage;
 using Xunit;
 
 namespace Tauchbolde.Tests.Infrastructure.PhotoStores.AzureBlobStorage

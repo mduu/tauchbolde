@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Tauchbolde.Domain.Helpers;
 using Tauchbolde.Domain.SharedKernel;
-using Tauchbolde.Domain.SharedKernel.Helpers;
 
 namespace Tauchbolde.Domain.Entities
 {

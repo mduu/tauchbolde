@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.SharedKernel.Helpers;
+using Tauchbolde.Domain.Helpers;
 using Tauchbolde.Driver.SmtpEmail;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
 
