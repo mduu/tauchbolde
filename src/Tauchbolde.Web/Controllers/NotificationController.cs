@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Tauchbolde.Common.Domain.Notifications;
-using Tauchbolde.DataAccess;
+using Tauchbolde.Application.OldDomainServices.Notifications;
+using Tauchbolde.Application.Services.Notifications;
+using Tauchbolde.Driver.DataAccessSql;
 
 namespace Tauchbolde.Web.Controllers
 {

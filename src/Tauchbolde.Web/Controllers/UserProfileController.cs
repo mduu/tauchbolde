@@ -2,19 +2,19 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Tauchbolde.Entities;
-using Tauchbolde.Common;
 using Tauchbolde.Web.Models.UserProfileModels;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Web.Core;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-using Tauchbolde.Commom.Misc;
 using System.IO;
-using Tauchbolde.Common.Domain.Avatar;
-using Tauchbolde.Common.Domain.Users;
-using Tauchbolde.DataAccess;
+using Tauchbolde.Application.OldDomainServices.Avatar;
+using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Application.Services;
+using Tauchbolde.Driver.DataAccessSql;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Web.Controllers
 {

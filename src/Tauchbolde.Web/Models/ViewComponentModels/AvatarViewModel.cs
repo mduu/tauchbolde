@@ -1,4 +1,5 @@
-﻿using Tauchbolde.Entities;
+﻿using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
 using Tauchbolde.Web.ViewComponents;
 namespace Tauchbolde.Web.Models.ViewComponentModels
 {

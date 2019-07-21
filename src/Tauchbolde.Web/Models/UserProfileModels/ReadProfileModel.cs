@@ -1,6 +1,7 @@
-﻿using Tauchbolde.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Web.Models.UserProfileModels
 {

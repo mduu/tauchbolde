@@ -7,44 +7,27 @@
     <OutputType>library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
     <PackageReference Include="MailKit" Version="2.1.3" />
-    <PackageReference Include="Markdig" Version="0.16.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.9.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
-    <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Model\BuddyTeamNames.d.ts">
-      <DependentUpon>BuddyTeamNames.cs</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Model\ApplicationUser.cs" />
     <Compile Remove="Repositories\ApplicationUserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
-    <Folder Include="Domain\Avatar\" />
-    <Folder Include="Infrastructure\Telemetry\" />
-    <Folder Include="Domain\Events\" />
-    <Folder Include="Domain\Users\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="DomainServices\Notifications\HtmlFormatting\EmbeddedStyles.css" />
-    <EmbeddedResource Include="Domain\Notifications\HtmlFormatting\EmbeddedStyles.css" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.EntityFrameworkCore.SqlServer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-      <HintPath>..\..\..\..\..\..\..\..\usr\local\share\dotnet\sdk\NuGetFallbackFolder\microsoft.entityframeworkcore.sqlserver\2.2.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\1_EnterpriseRules\Tauchbolde.Entities\Tauchbolde.Entities.csproj" />
-    <ProjectReference Include="..\2_ApplicationRules\Tauchbolde.UseCases.Photo\Tauchbolde.UseCases.Photo.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Application\Tauchbolde.Application.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Driver.PhotoStorage\Tauchbolde.Driver.PhotoStorage.csproj" />
+    <ProjectReference Include="..\Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj" />
   </ItemGroup>
 </Project>

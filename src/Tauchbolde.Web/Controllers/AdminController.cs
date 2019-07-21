@@ -1,15 +1,16 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Entities;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Tauchbolde.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
-using Tauchbolde.Common.Domain.Users;
-using Tauchbolde.DataAccess;
+using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Driver.DataAccessSql;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
+using Tauchbolde.Domain.Types;
 using Tauchbolde.Web.Models.AdminViewModels;
 using Tauchbolde.Web.Core;
 

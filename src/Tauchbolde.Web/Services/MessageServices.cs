@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Tauchbolde.Common.Infrastructure.SMTPSender;
+using Tauchbolde.Driver.SmtpEmail;
 
 namespace Tauchbolde.Web.Services
 {

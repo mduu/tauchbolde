@@ -7,11 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Tauchbolde.Common;
-using Tauchbolde.Common.Domain.Events;
-using Tauchbolde.Common.Domain.Users;
-using Tauchbolde.Entities;
-using Tauchbolde.DataAccess;
+using Tauchbolde.Application.OldDomainServices.Events;
+using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Driver.DataAccessSql;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
+using Tauchbolde.Domain.Types;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
 

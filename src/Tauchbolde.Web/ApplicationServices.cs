@@ -1,19 +1,22 @@
 ﻿using System;
 using System.IO;
 using JetBrains.Annotations;
-using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Web.Services;
 using Tauchbolde.Web.Core;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
-using Tauchbolde.Common;
-using Tauchbolde.Common.Domain;
-using Tauchbolde.Common.Domain.Avatar;
-using Tauchbolde.Common.Infrastructure.PhotoStores;
-using Tauchbolde.DataAccess;
-using Tauchbolde.UseCases.Logbook;
+using Tauchbolde.Application;
+using Tauchbolde.Application.OldDomainServices.Avatar;
+using Tauchbolde.Application.Services;
+using Tauchbolde.Application.Services.PhotoStores;
+using Tauchbolde.Driver.DataAccessSql;
+using Tauchbolde.Driver.ApplicationInsights;
+using Tauchbolde.Driver.ImageSharp;
+using Tauchbolde.Driver.PhotoStorage;
+using Tauchbolde.Driver.SmtpEmail;
+using Tauchbolde.InterfaceAdapters;
 using Tauchbolde.Web.Core.TextFormatting;
 
 namespace Tauchbolde.Web
@@ -33,11 +36,15 @@ namespace Tauchbolde.Web
             var photoStoreRoot = GetPhotoStoreRoot(configuration, hostingEnvironment);
             var photoStoreType = GetPhotoStoreType(configuration);
 
-            LogbookUseCasesRegistration.RegisterServices(services);
-            PhotoUseCasesRegistration.RegisterServices(services);
+            ApplicationRegistration.RegisterServices(services);
+            InterfaceAdaptersRegistration.RegisterServices(services);
+            
+            PhotoStorageRegistration.RegisterServices(services, photoStoreRoot, photoStoreType);
+            ApplicationInsightsRegistration.RegisterServices(services);
+            ImageSharpRegistrations.RegisterServices(services);
+            SmtpEmailRegistrations.RegisterServices(services);
             DataAccessServices.RegisterServices(services);
-            CommonServices.RegisterServices(services, photoStoreRoot, photoStoreType);
-
+            
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IUrlGenerator, MvcUrlGenerator>();
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -50,14 +57,14 @@ namespace Tauchbolde.Web
         {
             if (services == null) { throw new System.ArgumentNullException(nameof(services)); }
 
-            CommonServices.RegisterDevelopment(services);
+            ApplicationRegistration.RegisterDevelopment(services);
         }
 
         public static void RegisterProduction(IServiceCollection services)
         {
             if (services == null) { throw new System.ArgumentNullException(nameof(services)); }
 
-            CommonServices.RegisterProduction(services);
+            SmtpEmailRegistrations.RegisterServices(services);
         }
         
         private static string GetPhotoStoreRoot(IConfiguration configuration, IHostingEnvironment hostingEnvironment)

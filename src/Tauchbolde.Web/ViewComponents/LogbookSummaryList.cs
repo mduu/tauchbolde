@@ -3,8 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Common.Domain.Logbook;
-using Tauchbolde.Entities;
+using Tauchbolde.Application.OldDomainServices.Logbook;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
 using Tauchbolde.Web.Models.ViewComponentModels;
 
 namespace Tauchbolde.Web.ViewComponents

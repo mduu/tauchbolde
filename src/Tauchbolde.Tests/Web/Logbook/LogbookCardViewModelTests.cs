@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
-using Tauchbolde.Entities;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
 using Tauchbolde.Web.Models.ViewComponentModels;
 using Xunit;
 

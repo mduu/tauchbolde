@@ -20,12 +20,19 @@
     <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="2.2.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.3" PrivateAssets="All" />
-    <PackageReference Include="Markdig" Version="0.16.0" />
+    <PackageReference Include="Markdig" Version="0.17.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tauchbolde.Common\Tauchbolde.Common.csproj" />
-    <ProjectReference Include="..\Tauchbolde.DataAccess\Tauchbolde.DataAccess.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Application\Tauchbolde.Application.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Domain\Tauchbolde.Domain.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Driver.ApplicationInsights\Tauchbolde.Driver.ApplicationInsights.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Driver.DataAccessSql\Tauchbolde.Driver.DataAccessSql.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Driver.ImageSharp\Tauchbolde.Driver.ImageSharp.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Driver.PhotoStorage\Tauchbolde.Driver.PhotoStorage.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Driver.SmtpEmail\Tauchbolde.Driver.SmtpEmail.csproj" />
+    <ProjectReference Include="..\Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\AboutViewModels\" />
