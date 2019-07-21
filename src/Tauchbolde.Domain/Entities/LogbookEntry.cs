@@ -65,6 +65,7 @@ namespace Tauchbolde.Domain.Entities
         public void Unpublish()
         {
             IsPublished = false;
+            RaiseDomainEvent(new LogbookEntryUnpublishedEvent(Id));
         }
     }
 }
