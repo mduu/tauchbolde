@@ -34,6 +34,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
             var result = await handler.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
+            result.Payload.Id.Should().NotBeEmpty();
+            result.Payload.Title.Should().Be(request.Title);
         }
 
         [Fact]
