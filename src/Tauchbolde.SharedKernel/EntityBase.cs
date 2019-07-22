@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
 
-namespace Tauchbolde.Domain.SharedKernel
+namespace Tauchbolde.SharedKernel
 {
     public abstract class EntityBase : IEntity
     {

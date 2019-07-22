@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Tauchbolde.Domain.SharedKernel;
+using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Domain.Entities
 {

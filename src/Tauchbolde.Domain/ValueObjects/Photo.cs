@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using JetBrains.Annotations;
-using Tauchbolde.Domain.SharedKernel;
+using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Domain.ValueObjects
 {

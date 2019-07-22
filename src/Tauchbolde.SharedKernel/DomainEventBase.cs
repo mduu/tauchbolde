@@ -1,7 +1,7 @@
 using System;
 using MediatR;
 
-namespace Tauchbolde.Domain.SharedKernel
+namespace Tauchbolde.SharedKernel
 {
     public abstract class DomainEventBase : INotification
     {

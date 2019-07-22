@@ -1,5 +1,5 @@
 using System;
-using Tauchbolde.Domain.SharedKernel;
+using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Domain.Events.LogbookEntry
 {

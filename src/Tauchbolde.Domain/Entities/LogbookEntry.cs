@@ -2,9 +2,8 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
-using Tauchbolde.Domain.Events;
 using Tauchbolde.Domain.Events.LogbookEntry;
-using Tauchbolde.Domain.SharedKernel;
+using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Domain.Entities
 {

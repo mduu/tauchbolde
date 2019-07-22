@@ -1,6 +1,6 @@
 using System;
 
-namespace Tauchbolde.Domain.SharedKernel
+namespace Tauchbolde.SharedKernel
 {
     // source: https://github.com/jhewlett/ValueObject
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]

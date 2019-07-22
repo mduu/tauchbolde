@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Tauchbolde.Application;
 using Tauchbolde.Application.OldDomainServices.Avatar;
-using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Driver.ApplicationInsights;
@@ -17,6 +16,7 @@ using Tauchbolde.Driver.ImageSharp;
 using Tauchbolde.Driver.PhotoStorage;
 using Tauchbolde.Driver.SmtpEmail;
 using Tauchbolde.InterfaceAdapters;
+using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core.TextFormatting;
 
 namespace Tauchbolde.Web
@@ -36,6 +36,7 @@ namespace Tauchbolde.Web
             var photoStoreRoot = GetPhotoStoreRoot(configuration, hostingEnvironment);
             var photoStoreType = GetPhotoStoreType(configuration);
 
+            SharedKernelRegistrations.RegisterServices(services);
             ApplicationRegistration.RegisterServices(services);
             InterfaceAdaptersRegistration.RegisterServices(services);
             

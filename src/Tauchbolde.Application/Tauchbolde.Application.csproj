@@ -15,8 +15,4 @@
         <ProjectReference Include="..\Tauchbolde.Domain\Tauchbolde.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="UseCases" />
-    </ItemGroup>
-
 </Project>

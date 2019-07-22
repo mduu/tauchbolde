@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.SharedKernel;
+using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Driver.DataAccessSql
 {
