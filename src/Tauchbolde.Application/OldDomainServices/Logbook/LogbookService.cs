@@ -60,7 +60,7 @@ namespace Tauchbolde.Application.OldDomainServices.Logbook
 
             return model.Id.HasValue
                 ? await UpdateExistingLogbookEntryAsync(model)
-                : await InsertNewLogbookEntryAsync(model);
+                : throw new NotImplementedException("This part is moved to use-cases!");
         }
 
         /// <inheritdoc />
@@ -122,36 +122,6 @@ namespace Tauchbolde.Application.OldDomainServices.Logbook
             TrackLogbookEntry("LOGBOOK-UPDATE", existingLogbookEntry);
 
             return existingLogbookEntry.Id;
-        }
-
-        private async Task<Guid> InsertNewLogbookEntryAsync([NotNull] LogbookUpsertModel upsertModel)
-        {
-            if (upsertModel == null) throw new ArgumentNullException(nameof(upsertModel));
-            
-            var currentUser = await GetCurrentUserAsync(upsertModel);
-            var newLogbookEntry = new LogbookEntry
-            {
-                Id = Guid.NewGuid(),
-                OriginalAuthorId = currentUser.Id
-            };
-
-            
-            PhotoAndThumbnailIdentifiers teaserIdentifiers = null;
-            if (upsertModel.TeaserImage != null && upsertModel.TeaserImageContentType != null)
-            {
-                teaserIdentifiers = await photoService.AddPhotoAsync(
-                    PhotoCategory.LogbookTeaser,
-                    upsertModel.TeaserImage,
-                    upsertModel.TeaserImageContentType,
-                    upsertModel.TeaserImageFileName);
-            }
-
-            MapUpsertModelToLogbookEntry(upsertModel, newLogbookEntry, teaserIdentifiers);
-            await logbookEntryRepository.InsertAsync(newLogbookEntry);
-            
-            TrackLogbookEntry("LOGBOOK-INSERT", newLogbookEntry);
-
-            return newLogbookEntry.Id;
         }
 
         private static void ValidateUpsertModel(LogbookUpsertModel model)
