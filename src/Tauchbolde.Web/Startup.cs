@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tauchbolde.Common;
 using Microsoft.AspNetCore.Localization;
 using System.Collections.Generic;
 using System.Globalization;
@@ -18,9 +17,10 @@ using Tauchbolde.Web.Filters;
 using System.Data.SqlClient;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Rewrite;
-using Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage;
-using Tauchbolde.Common.Infrastructure.SMTPSender;
-using Tauchbolde.DataAccess;
+using Tauchbolde.Driver.DataAccessSql;
+using Tauchbolde.Domain.Types;
+using Tauchbolde.Driver.PhotoStorage.AzureBlobStorage;
+using Tauchbolde.Driver.SmtpEmail;
 
 namespace Tauchbolde.Web
 {
@@ -72,7 +72,7 @@ namespace Tauchbolde.Web
 
             services.Configure<IdentityOptions>(options =>
             {
-                // Password settings.
+                // Password settings
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireNonAlphanumeric = true;

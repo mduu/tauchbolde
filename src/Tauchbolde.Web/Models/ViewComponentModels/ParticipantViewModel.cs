@@ -1,4 +1,7 @@
-﻿using Tauchbolde.Entities;
+﻿using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
+using Tauchbolde.Domain.Types;
+
 namespace Tauchbolde.Web.Models.ViewComponentModels
 {
     public class ParticipantViewModel

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Tauchbolde.Entities;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Web.Models.EventViewModels
 {

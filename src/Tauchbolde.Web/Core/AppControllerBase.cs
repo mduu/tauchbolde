@@ -3,9 +3,10 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Tauchbolde.Entities;
-using Tauchbolde.Common;
-using Tauchbolde.Common.Domain.Users;
+using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
+using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.Web.Core
 {

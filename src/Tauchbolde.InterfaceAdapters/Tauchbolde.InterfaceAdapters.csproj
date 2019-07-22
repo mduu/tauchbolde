@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tauchbolde.Application\Tauchbolde.Application.csproj" />
+      <ProjectReference Include="..\Tauchbolde.Driver.SmtpEmail\Tauchbolde.Driver.SmtpEmail.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Markdig" Version="0.17.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="MailHtmlFormatting\EmbeddedStyles.css" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Tauchbolde.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\Tauchbolde.Common\bin\Debug\netcoreapp2.2\Tauchbolde.Common.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

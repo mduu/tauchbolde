@@ -1,4 +1,4 @@
-﻿@using Tauchbolde.Extensions
+﻿@using Tauchbolde.Domain.Helpers
 @model Tauchbolde.Web.Models.AboutViewModels.AboutViewModel
 @foreach (var member in Model.Members)
 {
@@ -10,6 +10,7 @@
                     <div class="col-md-4 col-sm-12">
                 
                         <div class="col-md-6 col-sm-12">
+                            <!--suppress XmlUnboundNsPrefix -->
                             <vc:avatar avatar-size="Medium" diver="@member" />
                         </div>
                         

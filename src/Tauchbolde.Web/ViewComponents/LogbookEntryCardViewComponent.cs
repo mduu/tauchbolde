@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Entities;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
 using Tauchbolde.Web.Models.ViewComponentModels;
 
 namespace Tauchbolde.Web.ViewComponents

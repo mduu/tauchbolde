@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Tauchbolde.Entities;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.Web.Models.EventViewModels
 {

@@ -1,14 +1,13 @@
 ﻿using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Common;
 using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Web.Models.MassMail;
 using Microsoft.AspNetCore.Identity;
-using Tauchbolde.Common.Domain;
-using Tauchbolde.Common.Domain.Users;
+using Tauchbolde.Application.OldDomainServices;
+using Tauchbolde.Application.OldDomainServices.Users;
 
 namespace Tauchbolde.Web.Controllers
 {

@@ -1,6 +1,7 @@
 using System;
 using JetBrains.Annotations;
-using Tauchbolde.Entities;
+using Tauchbolde.Domain;
+using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Web.Models.ViewComponentModels
 {

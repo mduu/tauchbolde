@@ -1,4 +1,4 @@
-﻿@using Tauchbolde.Extensions
+﻿@using Tauchbolde.Domain.Helpers
 @model Tauchbolde.Web.Models.UserProfileModels.ReadProfileModel
 @{
     ViewBag.Title = "Profil von " + Model.Profile.Realname;
@@ -15,6 +15,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">Profilbild</label>
                 <div class="col-sm-9">
+                    <!--suppress XmlUnboundNsPrefix -->
                     <vc:avatar Diver="@Model.Profile" avatar-size="Medium" />
                     @if(Model.AllowEdit)
                     {

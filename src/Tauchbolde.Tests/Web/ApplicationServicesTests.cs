@@ -1,10 +1,9 @@
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Tauchbolde.Common.Domain.PhotoStorage;
-using Tauchbolde.Common.Infrastructure.PhotoStores.AzureBlobStorage;
-using Tauchbolde.Common.Infrastructure.PhotoStores.FileSystemStore;
+using Tauchbolde.Application.Services.PhotoStores;
+using Tauchbolde.Driver.PhotoStorage.AzureBlobStorage;
+using Tauchbolde.Driver.PhotoStorage.FileSystemStore;
 using Tauchbolde.Tests.TestingTools;
 using Tauchbolde.Web;
 using Xunit;
