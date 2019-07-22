@@ -17,7 +17,8 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
             [CanBeNull] Stream teaserImage,
             [CanBeNull] string teaserImageFileName,
             [CanBeNull] string teaserImageContentType,
-            [CanBeNull] string externalPhotoAlbumUrl)
+            [CanBeNull] string externalPhotoAlbumUrl,
+            Guid? relatedEventId = null)
         {
             IsFavorite = isFavorite;
             TeaserImage = teaserImage;
@@ -25,6 +26,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
             TeaserImageContentType = teaserImageContentType;
             Teaser = teaser;
             ExternalPhotoAlbumUrl = externalPhotoAlbumUrl;
+            RelatedEventId = relatedEventId;
             AuthorDiverId = authorDiverId;
             Title = title;
             Text = text;
@@ -39,5 +41,6 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
         [CanBeNull] public string TeaserImageContentType { get; }
         [CanBeNull] public string Teaser { get; }
         [CanBeNull] public string ExternalPhotoAlbumUrl { get; }
+        public Guid? RelatedEventId { get; }
     }
 }
