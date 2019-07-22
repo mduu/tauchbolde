@@ -18,7 +18,6 @@ namespace Tauchbolde.Tests.Application.OldDomainServices.Logbook
     {
         private readonly ILogbookEntryRepository logbookEntryRepoFake;
         private readonly LogbookService logbookService;
-        private readonly LogbookUpsertModel validInsertModel;
         private readonly LogbookUpsertModel validUpdateModel;
 
         public LogbookServiceTests()
@@ -36,39 +35,7 @@ namespace Tauchbolde.Tests.Application.OldDomainServices.Logbook
                 A.Fake<ILogger<LogbookService>>(),
                 A.Fake<INotificationService>());
 
-            validInsertModel = CreateValidModel(null);
             validUpdateModel = CreateValidModel(new Guid("50D106BD-D47A-47A5-8244-CF3560A2A3E4"));
-        }
-
-        [Fact]
-        public async Task TestInsertSuccess()
-        {
-            var id = await logbookService.UpsertAsync(validInsertModel);
-
-            id.Should().NotBeEmpty();
-            A.CallTo(() => logbookEntryRepoFake.InsertAsync(A<LogbookEntry>._)).MustHaveHappened();
-        }
-
-        [Fact]
-        public void TestInsertWithoutTitle()
-        {
-            // ReSharper disable once AssignNullToNotNullAttribute
-            validInsertModel.Title = null;
-
-            Func<Task> act = async () => await logbookService.UpsertAsync(validInsertModel);
-
-            act.Should().Throw<InvalidOperationException>().WithMessage("Title must not be null or empty!");
-        }
-        
-        [Fact]
-        public void TestInsertWithoutText()
-        {
-            // ReSharper disable once AssignNullToNotNullAttribute
-            validInsertModel.Text = null;
-
-            Func<Task> act = async () => await logbookService.UpsertAsync(validInsertModel);
-
-            act.Should().Throw<InvalidOperationException>().WithMessage("Text must not be null or empty!");
         }
 
         [Fact]
