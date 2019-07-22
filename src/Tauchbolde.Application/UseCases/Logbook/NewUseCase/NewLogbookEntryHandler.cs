@@ -63,7 +63,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
             var newLogbookEntry = await repository.InsertAsync(logbookEntry);
             
             logger.LogInformation("New LogbookEntry for [{title}] created with Id [{}]", request.Title, newLogbookEntry.Id);
-            throw new System.NotImplementedException();
+            return UseCaseResult.Success();
         }
     }
 }
