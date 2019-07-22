@@ -3,12 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Tauchbolde.Application.Services;
-using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Domain.ValueObjects;
 
-namespace Tauchbolde.Application.OldDomainServices.PhotoStorage
+namespace Tauchbolde.Application.Services.PhotoStores
 {
     /// <summary>
     /// Default implementation of <see cref="IPhotoService"/>.

@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Domain.ValueObjects;
 
-namespace Tauchbolde.Application.OldDomainServices.PhotoStorage
+namespace Tauchbolde.Application.Services.PhotoStores
 {
     /// <summary>
     /// Service providing access to the photo storage backend.

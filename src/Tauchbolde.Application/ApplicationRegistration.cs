@@ -8,11 +8,11 @@ using Tauchbolde.Application.OldDomainServices.Avatar;
 using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Logbook;
 using Tauchbolde.Application.OldDomainServices.Notifications;
-using Tauchbolde.Application.OldDomainServices.PhotoStorage;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.Services.Notifications;
+using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]

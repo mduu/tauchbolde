@@ -6,9 +6,9 @@ using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Logbook;
 using Tauchbolde.Application.OldDomainServices.Notifications;
-using Tauchbolde.Application.OldDomainServices.PhotoStorage;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services;
+using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Domain.Entities;
 using Xunit;
 
