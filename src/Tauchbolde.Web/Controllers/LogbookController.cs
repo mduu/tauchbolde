@@ -125,15 +125,13 @@ namespace Tauchbolde.Web.Controllers
                 await mediator.Send(new NewLogbookEntry(
                     currentDiver.Id,
                     model.Title,
-                    model.Text,
                     model.Teaser,
+                    model.Text,
                     model.IsFavorite,
                     teaserImageStream,
                     teaserImageFilename,
                     teaserImageContentType,
-                    model.ExternalPhotoAlbumUrl,
-                    null
-                ));
+                    model.ExternalPhotoAlbumUrl, null));
             }
             else
             {
