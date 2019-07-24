@@ -26,13 +26,6 @@ namespace Tauchbolde.Application.OldDomainServices.Logbook
         Task<LogbookEntry> FindByIdAsync(Guid logbookEntryId);
 
         /// <summary>
-        /// Update or insert an entry into the logbook.
-        /// </summary>
-        /// <param name="model">The logbook model to update or insert.</param>
-        /// <returns>The ID of the logbook entry.</returns>
-        Task<Guid> UpsertAsync(LogbookUpsertModel model);
-
-        /// <summary>
         /// Deletes a <see cref="LogbookEntry"/> by its <see cref="LogbookEntry.Id"/>.
         /// </summary>
         /// <param name="logbookEntryId">The Id of the <see cref="LogbookEntry"/> to delete.</param>
