@@ -34,7 +34,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-
+            
             logger.LogInformation("Editing existing LogbookEntry with Id [{id}] and title [{title}]",
                 request.LogbookEntryId, request.Title);
 
@@ -64,7 +64,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
                 request.Teaser,
                 request.Text,
                 request.IsFavorite,
-                request.AuthorDiverId,
+                request.EditorDiverId,
                 request.ExternalPhotoAlbumUrl,
                 request.RelatedEventId,
                 teaserIdentifiers);
