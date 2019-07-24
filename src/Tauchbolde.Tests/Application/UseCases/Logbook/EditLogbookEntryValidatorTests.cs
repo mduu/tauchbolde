@@ -13,7 +13,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         [Fact]
         public void Validate_Valid()
         {
-            var useCase = CreateEditLogbookEntry("The Title", "The Text");
+            var useCase = CreateEditLogbookEntry("The Title", "The Teaser", "The Text");
 
             var result = validator.Validate(useCase);
 
@@ -24,7 +24,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         [Fact]
         public void Validate_EmptyLogbookEntryId()
         {
-            var useCase = CreateEditLogbookEntry("", "The Text", Guid.Empty);
+            var useCase = CreateEditLogbookEntry("", "The Teaser", "The Text", Guid.Empty);
 
             var result = validator.Validate(useCase);
 
@@ -33,9 +33,9 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         }
 
         [Fact]
-        public void Validate_EmptyTitleIsInvalid()
+        public void Validate_EmptyTitleIsEmpty()
         {
-            var useCase = CreateEditLogbookEntry("", "The Text");
+            var useCase = CreateEditLogbookEntry("", "The Teaser", "The Text");
 
             var result = validator.Validate(useCase);
 
@@ -44,9 +44,20 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         }
 
         [Fact]
-        public void Validate_EmptyTextIsInvalid()
+        public void Validate_EmptyTeaserIsEmpty()
         {
-            var useCase = CreateEditLogbookEntry("The Title", "");
+            var useCase = CreateEditLogbookEntry("The Title", "", "The Text");
+
+            var result = validator.Validate(useCase);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(EditLogbookEntry.Teaser));
+        }
+
+        [Fact]
+        public void Validate_EmptyTextIsEmpty()
+        {
+            var useCase = CreateEditLogbookEntry("The Title", "The Teaser", "");
 
             var result = validator.Validate(useCase);
 
@@ -54,18 +65,18 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
             result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(EditLogbookEntry.Text));
         }
   
-        private EditLogbookEntry CreateEditLogbookEntry(string title, string text, Guid? logbookEntryId = null) =>
+        private EditLogbookEntry CreateEditLogbookEntry(string title, string teaser, string text,
+            Guid? logbookEntryId = null) =>
             new EditLogbookEntry(
                 logbookEntryId ?? validLogbookEntryId,
                 new Guid("31D4B2B7-BE14-4334-A342-110FC30B62CD"),
                 title,
+                teaser,
                 text,
-                null,
                 false,
                 null,
                 null,
-                null,
-                null);
+                null, null);
 
     }
 }
