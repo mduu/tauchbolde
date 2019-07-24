@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.OldDomainServices.Logbook;
 using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Application.UseCases.Logbook.EditUseCase;
 using Tauchbolde.Application.UseCases.Logbook.NewUseCase;
 using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
 using Tauchbolde.Application.UseCases.Logbook.UnpublishUseCase;
@@ -131,26 +132,22 @@ namespace Tauchbolde.Web.Controllers
                     teaserImageStream,
                     teaserImageFilename,
                     teaserImageContentType,
-                    model.ExternalPhotoAlbumUrl, null));
+                    model.ExternalPhotoAlbumUrl,
+                    null));
             }
             else
             {
-                // TODO Replace this block with an explicit edit use-case
-                await logbookService.UpsertAsync(new LogbookUpsertModel
-                {
-                    Id = model.Id,
-                    Text = model.Text,
-                    Title = model.Title,
-                    TeaserImage = teaserImageStream,
-                    TeaserImageFileName = teaserImageFilename,
-                    TeaserImageContentType = teaserImageContentType,
-                    Teaser = model.Teaser,
-                    CreatedAt = model.CreatedAt,
-                    IsFavorite = model.IsFavorite,
-                    CurrentDiverId = currentDiver.Id,
-                    ExternalPhotoAlbumUrl = model.ExternalPhotoAlbumUrl,
-                });
-                await context.SaveChangesAsync();
+                await mediator.Send(new EditLogbookEntry(
+                    model.Id.Value,
+                    currentDiver.Id,
+                    model.Title,
+                    model.Teaser,
+                    model.Text,
+                    model.IsFavorite,
+                    teaserImageStream,
+                    teaserImageFilename,
+                    teaserImageContentType,
+                    model.ExternalPhotoAlbumUrl));
             }
 
             ShowSuccessMessage($"Logbucheintrag '{model.Title}' erfolgreich gespeichert.");
