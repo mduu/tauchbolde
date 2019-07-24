@@ -77,8 +77,8 @@ namespace Tauchbolde.Domain.Entities
 
         public static LogbookEntry CreateNew(
             [NotNull] string title,
-            [CanBeNull] string teaser,
-            [CanBeNull] string text,
+            [NotNull] string teaser,
+            [NotNull] string text,
             bool isFavorite,
             Guid authorDiverId,
             [CanBeNull] string externalPhotoAlbumUrl,
@@ -87,6 +87,10 @@ namespace Tauchbolde.Domain.Entities
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(title));
+            if (string.IsNullOrWhiteSpace(teaser))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(teaser));
+            if (string.IsNullOrWhiteSpace(text))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(text));
 
             var result = new LogbookEntry
             {
@@ -105,6 +109,38 @@ namespace Tauchbolde.Domain.Entities
             };
 
             return result;
+        }
+
+        public void Edit(
+            [NotNull] string title,
+            [NotNull] string teaser,
+            [NotNull] string text,
+            bool isFavorite,
+            Guid editorDiverId,
+            [CanBeNull] string externalPhotoAlbumUrl,
+            Guid? relatedEventId,
+            [CanBeNull] PhotoAndThumbnailIdentifiers photoIdentifiers)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(title));
+            if (string.IsNullOrWhiteSpace(teaser))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(teaser));
+            if (string.IsNullOrWhiteSpace(text))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(text));
+
+            Title = title;
+            TeaserText = teaser;
+            Text = text;
+            IsFavorite = isFavorite;
+            EditorAuthorId = editorDiverId;
+            ModifiedAt = DateTimeOffset.UtcNow.DateTime;
+            ExternalPhotoAlbumUrl = externalPhotoAlbumUrl;
+            EventId = relatedEventId;
+            if (photoIdentifiers != null && (photoIdentifiers.OriginalPhotoIdentifier == null || photoIdentifiers.ThumbnailPhotoIdentifier == null))
+            {
+                TeaserImage = photoIdentifiers?.OriginalPhotoIdentifier?.Serialze();
+                TeaserImageThumb = photoIdentifiers?.ThumbnailPhotoIdentifier?.Serialze();
+            }
         }
     }
 }

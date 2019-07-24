@@ -11,59 +11,70 @@ using Tauchbolde.Domain.Types;
 using Tauchbolde.Domain.ValueObjects;
 using Tauchbolde.SharedKernel;
 
-namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
+namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
 {
     [UsedImplicitly]
-    public class NewLogbookEntryHandler : IRequestHandler<NewLogbookEntry, UseCaseResult<LogbookEntry>>
+    internal class EditLogbookEntryHandler : IRequestHandler<EditLogbookEntry, UseCaseResult<LogbookEntry>>
     {
-        private readonly ILogger<NewLogbookEntryHandler> logger;
-        private readonly ILogbookEntryRepository repository;
+        private readonly ILogger<EditLogbookEntryHandler> logger;
         private readonly IPhotoService photoService;
+        private readonly ILogbookEntryRepository repository;
 
-        public NewLogbookEntryHandler(
-            [NotNull] ILogger<NewLogbookEntryHandler> logger,
-            [NotNull] ILogbookEntryRepository repository,
-            [NotNull] IPhotoService photoService)
+        public EditLogbookEntryHandler(
+            [NotNull] ILogger<EditLogbookEntryHandler> logger,
+            [NotNull] IPhotoService photoService,
+            [NotNull] ILogbookEntryRepository repository)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
             this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
-        
-        public async Task<UseCaseResult<LogbookEntry>> Handle([NotNull] NewLogbookEntry request, CancellationToken cancellationToken)
+
+        public async Task<UseCaseResult<LogbookEntry>> Handle([NotNull] EditLogbookEntry request,
+            CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             
-            logger.LogInformation("Creating new LogbookEntry for [{title}]", request.Title);
+            logger.LogInformation("Editing existing LogbookEntry with Id [{id}] and title [{title}]",
+                request.LogbookEntryId, request.Title);
+
+            var existingLogbookEntry = await repository.FindByIdAsync(request.LogbookEntryId);
+            if (existingLogbookEntry == null)
+            {
+                logger.LogError("Error editing logbook-entry because the entry with with ID [{}] can not be found!",
+                    request.LogbookEntryId);
+            }
 
             PhotoAndThumbnailIdentifiers teaserIdentifiers = null;
             if (request.TeaserImage != null && request.TeaserImageContentType != null)
             {
                 logger.LogInformation("Storing teaser image in photo store: [{filename}]", request.TeaserImageFileName);
-    
+
                 teaserIdentifiers = await photoService.AddPhotoAsync(
                     PhotoCategory.LogbookTeaser,
                     request.TeaserImage,
                     request.TeaserImageContentType,
                     request.TeaserImageFileName);
-                
+
                 logger.LogInformation("Teaser image stored in photo store: [{filename}]", request.TeaserImageFileName);
             }
 
-            var logbookEntry = LogbookEntry.CreateNew(
+            existingLogbookEntry.Edit(
                 request.Title,
                 request.Teaser,
                 request.Text,
                 request.IsFavorite,
-                request.AuthorDiverId,
+                request.EditorDiverId,
                 request.ExternalPhotoAlbumUrl,
                 request.RelatedEventId,
                 teaserIdentifiers);
 
-            var newLogbookEntry = await repository.InsertAsync(logbookEntry);
-            
-            logger.LogInformation("New LogbookEntry for [{title}] created with Id [{id}]", request.Title, newLogbookEntry.Id);
-            return UseCaseResult<LogbookEntry>.Success(logbookEntry);
+            await repository.UpdateAsync(existingLogbookEntry);
+
+            logger.LogInformation(
+                "LogbookEntry with ID [{id}] and title [{title}] editeted successfully.",
+             existingLogbookEntry.Id, existingLogbookEntry.Title);
+            return UseCaseResult<LogbookEntry>.Success(existingLogbookEntry);
         }
     }
 }

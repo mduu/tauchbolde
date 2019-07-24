@@ -12,7 +12,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         [Fact]
         public void Validate_Valid()
         {
-            var useCase = CreateNewLogbookEntry("The Title", "The Text");
+            var useCase = CreateNewLogbookEntry("The Title", "The Teaser", "The Text");
 
             var result = validator.Validate(useCase);
 
@@ -23,7 +23,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         [Fact]
         public void Validate_EmptyTitleIsInvalid()
         {
-            var useCase = CreateNewLogbookEntry("", "The Text");
+            var useCase = CreateNewLogbookEntry("", "The Teaser", "The Text");
 
             var result = validator.Validate(useCase);
 
@@ -32,9 +32,20 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         }
 
         [Fact]
+        public void Validate_EmptyTeaserIsInvalid()
+        {
+            var useCase = CreateNewLogbookEntry("The Title", "", "The Text");
+
+            var result = validator.Validate(useCase);
+
+            result.IsValid.Should().BeFalse();
+            result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(NewLogbookEntry.Teaser));
+        }
+
+        [Fact]
         public void Validate_EmptyTextIsInvalid()
         {
-            var useCase = CreateNewLogbookEntry("The Title", "");
+            var useCase = CreateNewLogbookEntry("The Title", "The Teaser", "");
 
             var result = validator.Validate(useCase);
 
@@ -42,16 +53,15 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
             result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(NewLogbookEntry.Text));
         }
   
-        private static NewLogbookEntry CreateNewLogbookEntry(string title, string text) =>
+        private static NewLogbookEntry CreateNewLogbookEntry(string title, string teaser, string text) =>
             new NewLogbookEntry(
                 new Guid("31D4B2B7-BE14-4334-A342-110FC30B62CD"),
                 title,
+                teaser,
                 text,
-                null,
                 false,
                 null,
                 null,
-                null,
-                null);
+                null, null);
     }
 }

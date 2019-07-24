@@ -45,13 +45,13 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
             var request = new NewLogbookEntry(
                 new Guid("94441135-BAD0-4EAD-AE32-0DD72EC2D159"),
                 "The Title",
+                "The Teaser",
                 "The Text",
-                null,
                 false,
                 imageData,
                 "hello.jpg",
                 "image/jpeg",
-                null,
+                null, 
                 null);
             
             var result = await handler.Handle(request, CancellationToken.None);
@@ -64,14 +64,13 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
             var request = new NewLogbookEntry(
                 new Guid("94441135-BAD0-4EAD-AE32-0DD72EC2D159"),
                 "The Title",
+                "The teaser",
                 "The Text",
-                null,
                 false,
                 null,
                 null,
                 null,
-                null,
-                null);
+                null, null);
             return request;
         }
     }

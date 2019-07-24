@@ -5,11 +5,12 @@ using MediatR;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
 
-namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
+namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
 {
-    public class NewLogbookEntry : IRequest<UseCaseResult<LogbookEntry>>
+    public class EditLogbookEntry : IRequest<UseCaseResult<LogbookEntry>>
     {
-        public NewLogbookEntry(Guid authorDiverId,
+        public EditLogbookEntry(Guid logbookEntryId,
+            Guid editorDiverId,
             [NotNull] string title,
             [NotNull] string teaser,
             [NotNull] string text,
@@ -20,6 +21,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
             [CanBeNull] string externalPhotoAlbumUrl,
             Guid? relatedEventId = null)
         {
+            LogbookEntryId = logbookEntryId;
             Title = title ?? throw new ArgumentNullException(nameof(title));
             Teaser = teaser ?? throw new ArgumentNullException(nameof(teaser));
             Text = text ?? throw new ArgumentNullException(nameof(text));
@@ -29,18 +31,20 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
             TeaserImageContentType = teaserImageContentType;
             ExternalPhotoAlbumUrl = externalPhotoAlbumUrl;
             RelatedEventId = relatedEventId;
-            AuthorDiverId = authorDiverId;
+            EditorDiverId = editorDiverId;
         }
 
+        public Guid LogbookEntryId { get; }
         [NotNull] public string Title { get; }
         [NotNull] public string Teaser { get; }
         [NotNull] public string Text { get; }
-        public Guid AuthorDiverId { get; }
+        public Guid EditorDiverId { get; }
         public bool IsFavorite { get; }
         [CanBeNull] public Stream TeaserImage { get; }
         [CanBeNull] public string TeaserImageFileName { get; }
         [CanBeNull] public string TeaserImageContentType { get; }
         [CanBeNull] public string ExternalPhotoAlbumUrl { get; }
         public Guid? RelatedEventId { get; }
+
     }
 }
