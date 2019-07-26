@@ -5,6 +5,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Application.UseCases.Logbook.DeleteUseCase;
 using Tauchbolde.Domain.Entities;
 using Xunit;
@@ -16,6 +17,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         private readonly Guid validLogbookEntryId = new Guid("C77B50BF-614B-4CC7-B611-3A240E0D5D80");
         private readonly ILogger<DeleteLogbookEntryHandler> logger = A.Fake<ILogger<DeleteLogbookEntryHandler>>();
         private readonly ILogbookEntryRepository repository = A.Fake<ILogbookEntryRepository>();
+        private readonly IPhotoService photoService = A.Fake<IPhotoService>();
         private readonly DeleteLogbookEntryHandler handler;
 
         public DeleteLogbookEntryHandlerTests()
@@ -26,7 +28,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                         ? CreateValidLogbookEntry()
                         : null));
             
-            handler = new DeleteLogbookEntryHandler(logger, repository);
+            handler = new DeleteLogbookEntryHandler(logger, repository, photoService);
         }
 
         [Fact]

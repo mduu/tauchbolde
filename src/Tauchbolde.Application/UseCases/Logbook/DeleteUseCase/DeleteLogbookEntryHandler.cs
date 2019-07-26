@@ -7,6 +7,9 @@ using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.PhotoStores;
+using Tauchbolde.Domain.Entities;
+using Tauchbolde.Domain.ValueObjects;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Application.UseCases.Logbook.DeleteUseCase
@@ -16,13 +19,16 @@ namespace Tauchbolde.Application.UseCases.Logbook.DeleteUseCase
     {
         private readonly ILogger<DeleteLogbookEntryHandler> logger;
         private readonly ILogbookEntryRepository repository;
+        private readonly IPhotoService photoService;
 
         public DeleteLogbookEntryHandler(
             [NotNull] ILogger<DeleteLogbookEntryHandler> logger,
-            [NotNull] ILogbookEntryRepository repository)
+            [NotNull] ILogbookEntryRepository repository,
+            [NotNull] IPhotoService photoService)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
         }
         
         public async Task<UseCaseResult> Handle([NotNull] DeleteLogbookEntry request, CancellationToken cancellationToken)
@@ -41,9 +47,27 @@ namespace Tauchbolde.Application.UseCases.Logbook.DeleteUseCase
             }
 
             await repository.DeleteAsync(existingLogbookEntry);
+            await RemoveTeaserPhotosAsync(existingLogbookEntry);
 
             logger.LogInformation("Deleted LogbookEntry with Id [{id}] successfully", request.LogbookEntryId);
             return UseCaseResult.Success();
+        }
+
+        private async Task RemoveTeaserPhotosAsync(LogbookEntry existingLogbookEntry)
+        {
+            var identifiersToDelete = new List<PhotoIdentifier>();
+
+            if (!string.IsNullOrWhiteSpace(existingLogbookEntry.TeaserImage))
+            {
+                identifiersToDelete.Add(new PhotoIdentifier(existingLogbookEntry.TeaserImage));
+            }
+
+            if (!string.IsNullOrWhiteSpace(existingLogbookEntry.TeaserImageThumb))
+            {
+                identifiersToDelete.Add(new PhotoIdentifier(existingLogbookEntry.TeaserImageThumb));
+            }
+
+            await photoService.RemovePhotosAsync(identifiersToDelete.ToArray());
         }
     }
 }
