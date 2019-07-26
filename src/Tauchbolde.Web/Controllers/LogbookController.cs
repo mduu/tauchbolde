@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.OldDomainServices.Logbook;
 using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Application.UseCases.Logbook.DeleteUseCase;
 using Tauchbolde.Application.UseCases.Logbook.EditUseCase;
 using Tauchbolde.Application.UseCases.Logbook.NewUseCase;
 using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
@@ -193,8 +194,15 @@ namespace Tauchbolde.Web.Controllers
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await logbookService.DeleteAsync(id);
-            await context.SaveChangesAsync();
+            var result = await mediator.Send(new DeleteLogbookEntry(id));
+            if (!result.IsSuccessful)
+            {
+                ShowErrorMessage("Fehler beim Löschen des Logbuch Eintrages!");
+            }
+            else
+            {
+                ShowSuccessMessage("Logbucheintrag erfolgreich gelöscht.");
+            }
 
             return RedirectToAction("Index");
         }
