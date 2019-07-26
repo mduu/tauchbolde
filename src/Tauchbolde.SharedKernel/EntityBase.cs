@@ -12,13 +12,13 @@ namespace Tauchbolde.SharedKernel
         public Guid Id { get; set; }
         
         [NotMapped]
-        public IList<DomainEventBase> Events { get; } = new List<DomainEventBase>();
+        public IList<DomainEventBase> UncommittedDomainEvents { get; } = new List<DomainEventBase>();
 
         protected void RaiseDomainEvent([NotNull] DomainEventBase domainEvent)
         {
             if (domainEvent == null) throw new ArgumentNullException(nameof(domainEvent));
             
-            Events.Add(domainEvent);
+            UncommittedDomainEvents.Add(domainEvent);
         }
     }
 }

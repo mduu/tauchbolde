@@ -16,7 +16,7 @@ namespace Tauchbolde.Tests.Domain.Entities
             logbookEntry.Publish();
 
             logbookEntry.IsPublished.Should().BeTrue();
-            logbookEntry.Events.Should().ContainSingle(e => e is LogbookEntryPublishedEvent);
+            logbookEntry.UncommittedDomainEvents.Should().ContainSingle(e => e is LogbookEntryPublishedEvent);
         }
         
         [Fact]
@@ -27,7 +27,7 @@ namespace Tauchbolde.Tests.Domain.Entities
             logbookEntry.Publish();
 
             logbookEntry.IsPublished.Should().BeTrue();
-            logbookEntry.Events.Should().BeEmpty();
+            logbookEntry.UncommittedDomainEvents.Should().BeEmpty();
         }
         
         [Fact]
@@ -38,7 +38,7 @@ namespace Tauchbolde.Tests.Domain.Entities
             logbookEntry.Unpublish();
 
             logbookEntry.IsPublished.Should().BeFalse();
-            logbookEntry.Events.Should().ContainSingle(e => e is LogbookEntryUnpublishedEvent);
+            logbookEntry.UncommittedDomainEvents.Should().ContainSingle(e => e is LogbookEntryUnpublishedEvent);
         }
         
         [Fact]
@@ -49,7 +49,7 @@ namespace Tauchbolde.Tests.Domain.Entities
             logbookEntry.Unpublish();
 
             logbookEntry.IsPublished.Should().BeFalse();
-            logbookEntry.Events.Should().BeEmpty();
+            logbookEntry.UncommittedDomainEvents.Should().BeEmpty();
         }
     }
 }

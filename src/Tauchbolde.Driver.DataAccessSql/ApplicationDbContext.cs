@@ -107,13 +107,13 @@ namespace Tauchbolde.Driver.DataAccessSql
         {
             var entitiesWithEvents = ChangeTracker.Entries<EntityBase>()
                 .Select(e => e.Entity)
-                .Where(e => e.Events.Any())
+                .Where(e => e.UncommittedDomainEvents.Any())
                 .ToArray();
 
             foreach (var entity in entitiesWithEvents)
             {
-                var events = entity.Events.ToArray();
-                entity.Events.Clear();
+                var events = entity.UncommittedDomainEvents.ToArray();
+                entity.UncommittedDomainEvents.Clear();
                 foreach (var domainEvent in events)
                 {
                     mediator.Publish(domainEvent);

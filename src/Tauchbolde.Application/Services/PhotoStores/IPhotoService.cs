@@ -11,8 +11,6 @@ namespace Tauchbolde.Application.Services.PhotoStores
     /// </summary>
     public interface IPhotoService
     {
-        // TODO Change to more high-level API
-        
         /// <summary>
         /// Stores a photo in the photo storage and returns its identifier.
         /// </summary>
