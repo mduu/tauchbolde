@@ -16,7 +16,9 @@ namespace Tauchbolde.Web.Core.TextFormatting
         
         public HtmlString FormatText(string sourceText)
         {
-            return new HtmlString(textFormatter.GetHtmlText(sourceText));
+            return string.IsNullOrWhiteSpace(sourceText) 
+                ? new HtmlString("")
+                : new HtmlString(textFormatter.GetHtmlText(sourceText));
         }
 
     }
