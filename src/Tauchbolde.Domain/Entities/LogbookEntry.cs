@@ -145,7 +145,7 @@ namespace Tauchbolde.Domain.Entities
 
         public void Delete()
         {
-            RaiseDomainEvent(new LogbookEntryDeletedEvent(Id));
+            RaiseDomainEvent(new LogbookEntryDeletedEvent(Id, TeaserImage, TeaserImageThumb));
         }
     }
 }

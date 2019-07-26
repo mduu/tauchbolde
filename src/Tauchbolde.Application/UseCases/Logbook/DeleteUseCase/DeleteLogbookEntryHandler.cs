@@ -49,27 +49,9 @@ namespace Tauchbolde.Application.UseCases.Logbook.DeleteUseCase
             existingLogbookEntry.Delete();
 
             await repository.DeleteAsync(existingLogbookEntry);
-            await RemoveTeaserPhotosAsync(existingLogbookEntry);
 
             logger.LogInformation("Deleted LogbookEntry with Id [{id}] successfully", request.LogbookEntryId);
             return UseCaseResult.Success();
-        }
-
-        private async Task RemoveTeaserPhotosAsync(LogbookEntry existingLogbookEntry)
-        {
-            var identifiersToDelete = new List<PhotoIdentifier>();
-
-            if (!string.IsNullOrWhiteSpace(existingLogbookEntry.TeaserImage))
-            {
-                identifiersToDelete.Add(new PhotoIdentifier(existingLogbookEntry.TeaserImage));
-            }
-
-            if (!string.IsNullOrWhiteSpace(existingLogbookEntry.TeaserImageThumb))
-            {
-                identifiersToDelete.Add(new PhotoIdentifier(existingLogbookEntry.TeaserImageThumb));
-            }
-
-            await photoService.RemovePhotosAsync(identifiersToDelete.ToArray());
         }
     }
 }
