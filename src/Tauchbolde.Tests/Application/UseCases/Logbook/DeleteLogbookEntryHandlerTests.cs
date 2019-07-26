@@ -8,6 +8,7 @@ using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Application.UseCases.Logbook.DeleteUseCase;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.Domain.Events.LogbookEntry;
 using Xunit;
 
 namespace Tauchbolde.Tests.Application.UseCases.Logbook
@@ -18,15 +19,22 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         private readonly ILogger<DeleteLogbookEntryHandler> logger = A.Fake<ILogger<DeleteLogbookEntryHandler>>();
         private readonly ILogbookEntryRepository repository = A.Fake<ILogbookEntryRepository>();
         private readonly IPhotoService photoService = A.Fake<IPhotoService>();
+        private readonly LogbookEntry validLogbookEntry;
         private readonly DeleteLogbookEntryHandler handler;
 
         public DeleteLogbookEntryHandlerTests()
         {
+            
+            validLogbookEntry = CreateValidLogbookEntry();
+            
             A.CallTo(() => repository.FindByIdAsync(A<Guid>._))
-                .ReturnsLazily(call => Task.FromResult(
-                    (Guid)call.Arguments[0] == validLogbookEntryId
-                        ? CreateValidLogbookEntry()
-                        : null));
+                .ReturnsLazily(call =>
+                {
+                    return Task.FromResult(
+                        (Guid) call.Arguments[0] == validLogbookEntryId
+                            ? validLogbookEntry
+                            : null);
+                });
             
             handler = new DeleteLogbookEntryHandler(logger, repository, photoService);
         }
@@ -39,6 +47,10 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
             var result = await handler.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
+            validLogbookEntry.UncommittedDomainEvents.Should()
+                .ContainSingle(e => 
+                    e.GetType() == typeof(LogbookEntryDeletedEvent) &&
+                    ((LogbookEntryDeletedEvent)e).LogbookEntryId == validLogbookEntryId);
         }
 
         [Fact]

@@ -142,5 +142,10 @@ namespace Tauchbolde.Domain.Entities
                 TeaserImageThumb = photoIdentifiers?.ThumbnailPhotoIdentifier?.Serialze();
             }
         }
+
+        public void Delete()
+        {
+            RaiseDomainEvent(new LogbookEntryDeletedEvent(Id));
+        }
     }
 }

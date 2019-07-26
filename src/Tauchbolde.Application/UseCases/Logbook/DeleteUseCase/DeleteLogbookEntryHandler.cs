@@ -46,6 +46,8 @@ namespace Tauchbolde.Application.UseCases.Logbook.DeleteUseCase
                 });
             }
 
+            existingLogbookEntry.Delete();
+
             await repository.DeleteAsync(existingLogbookEntry);
             await RemoveTeaserPhotosAsync(existingLogbookEntry);
 
