@@ -58,6 +58,7 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
                 .Include(e => e.Participants)
                     .ThenInclude(p => p.ParticipatingDiver)
                         .ThenInclude(d => d.User)
+                .Include(e => e.Organisator)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
             return result;
