@@ -26,12 +26,6 @@ namespace Tauchbolde.Application.OldDomainServices.Logbook
         Task<LogbookEntry> FindByIdAsync(Guid logbookEntryId);
 
         /// <summary>
-        /// Deletes a <see cref="LogbookEntry"/> by its <see cref="LogbookEntry.Id"/>.
-        /// </summary>
-        /// <param name="logbookEntryId">The Id of the <see cref="LogbookEntry"/> to delete.</param>
-        Task DeleteAsync(Guid logbookEntryId);
-
-        /// <summary>
         /// Get a logbook photo by its identifier.
         /// </summary>
         /// <param name="photoIdentifier">The identifier of the photo to retrieve.</param>
