@@ -48,7 +48,8 @@ namespace Tauchbolde.Application.OldDomainServices.Events
             if (numberOfPeople < 0) { throw new ArgumentOutOfRangeException(nameof(numberOfPeople)); }
 
             var participant = await participantRepository.GetParticipationForEventAndUserAsync(user, eventId);
-            if (participant == null)
+            var isNew = participant == null;
+            if (isNew)
             {
                 participant = new Participant
                 {
@@ -56,7 +57,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
                     EventId = eventId,
                 };
 
-                await participantRepository.InsertAsync(participant);
             }
 
             participant.Status = status;
@@ -64,6 +64,15 @@ namespace Tauchbolde.Application.OldDomainServices.Events
             participant.BuddyTeamName = buddyTeamName;
             participant.Note = note;
             participant.CountPeople = numberOfPeople;
+
+            if (isNew)
+            {
+                await participantRepository.InsertAsync(participant);
+            }
+            else
+            {
+                await participantRepository.UpdateAsync(participant);
+            }
 
             await notificationService.NotifyForChangedParticipationAsync(
                 participant,
