@@ -1,0 +1,32 @@
+﻿{
+    "dataObject": {
+        "EventId": "925ce378-c86e-47eb-b98a-7d5689b5aea6",
+        "Event": null,
+        "AuthorId": "1c9b6622-2caa-4fdf-9186-2331eb446616",
+        "Author": null,
+        "CreateDate": "2019-12-13T00:00:00",
+        "ModifiedDate": "2019-12-14T00:00:00",
+        "Text": "The Text!",
+        "Id": "debc03e1-fbfc-4895-afbe-d8e221507c86"
+    },
+    "domainObject": {
+        "EventId": "925ce378-c86e-47eb-b98a-7d5689b5aea6",
+        "Event": null,
+        "AuthorId": "1c9b6622-2caa-4fdf-9186-2331eb446616",
+        "Author": null,
+        "CreateDate": "2019-12-13T00:00:00",
+        "ModifiedDate": "2019-12-14T00:00:00",
+        "Text": "The Text!",
+        "Id": "debc03e1-fbfc-4895-afbe-d8e221507c86"
+    },
+    "newDataObject": {
+        "EventId": "925ce378-c86e-47eb-b98a-7d5689b5aea6",
+        "Event": null,
+        "AuthorId": "1c9b6622-2caa-4fdf-9186-2331eb446616",
+        "Author": null,
+        "CreateDate": "2019-12-13T00:00:00",
+        "ModifiedDate": "2019-12-14T00:00:00",
+        "Text": "The Text!",
+        "Id": "debc03e1-fbfc-4895-afbe-d8e221507c86"
+    }
+}

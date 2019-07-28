@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -7,12 +8,9 @@ using Tauchbolde.Application.DataGateways;
 
 namespace Tauchbolde.Driver.DataAccessSql.Repositories
 {
-    /// <summary>
-    /// Implementation of the repository base class.
-    /// </summary>
-    /// <typeparam name="TEntity">Type of the Entity.</typeparam>
-    internal abstract class RepositoryBase<TEntity> : IRepository<TEntity>
+    internal abstract class RepositoryBase<TEntity, TDataEntity> : IRepository<TEntity>
         where TEntity: class, new()
+        where TDataEntity: class, new()
     {
         protected readonly ApplicationDbContext Context;
 
@@ -22,20 +20,25 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         }
 
         /// <inheritdoc />
-        public virtual async Task<TEntity> FindByIdAsync(Guid id) => await Context.Set<TEntity>().FindAsync(id);
+        public virtual async Task<TEntity> FindByIdAsync(Guid id) =>
+            MapTo(
+                await Context.Set<TDataEntity>().FindAsync(id));
 
         /// <inheritdoc />
-        public virtual async Task<ICollection<TEntity>> GetAllAsync() => await Context.Set<TEntity>().ToListAsync();
+        public virtual async Task<ICollection<TEntity>> GetAllAsync() =>
+            (await Context.Set<TDataEntity>().ToListAsync())
+            .Select(MapTo)
+            .ToList();
 
         /// <inheritdoc />
         public virtual async Task<TEntity> InsertAsync([NotNull] TEntity entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            var entityEntry = await Context.AddAsync(entity);
+            var entityEntry = await Context.AddAsync(MapTo(entity));
             await Context.SaveChangesAsync();
             
-            return entityEntry.Entity;
+            return MapTo(entityEntry.Entity);
         }
 
         /// <inheritdoc />
@@ -43,7 +46,7 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-            Context.Update(entity);
+            Context.Update(MapTo(entity));
             await Context.SaveChangesAsync();
         }
 
@@ -52,8 +55,11 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
             
-            Context.Set<TEntity>().Remove(entity);
+            Context.Set<TDataEntity>().Remove(MapTo(entity));
             await Context.SaveChangesAsync();
         }
+
+        protected abstract TEntity MapTo(TDataEntity dataEntity);
+        protected abstract TDataEntity MapTo(TEntity domainEntity);
     }
 }

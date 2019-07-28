@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Driver.DataAccessSql.Repositories;
 
+[assembly: InternalsVisibleTo("Tauchbolde.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")] // For FakeItEasy to use "internal" visibility
 
 namespace Tauchbolde.Driver.DataAccessSql
 {

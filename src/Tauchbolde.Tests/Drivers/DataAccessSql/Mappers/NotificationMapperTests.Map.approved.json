@@ -1,0 +1,44 @@
+﻿{
+    "dataObject": {
+        "RecipientId": "2223cdff-e5fe-4a68-81cd-bcc8800c365e",
+        "Recipient": null,
+        "OccuredAt": "2019-08-01T00:00:00",
+        "AlreadySent": true,
+        "CountOfTries": 2,
+        "Message": "The Message",
+        "Type": 3,
+        "EventId": "86e2735d-a537-43ad-9048-b1899a2e3f40",
+        "Event": null,
+        "LogbookEntryId": "9beccc85-bf62-4caa-916e-3fb911868ae7",
+        "LogbookEntry": null,
+        "Id": "674ed914-ace3-4ff0-ad5c-4335ccf92607"
+    },
+    "domainObject": {
+        "RecipientId": "2223cdff-e5fe-4a68-81cd-bcc8800c365e",
+        "Recipient": null,
+        "OccuredAt": "2019-08-01T00:00:00",
+        "AlreadySent": true,
+        "CountOfTries": 2,
+        "Message": "The Message",
+        "Type": 3,
+        "EventId": "86e2735d-a537-43ad-9048-b1899a2e3f40",
+        "Event": null,
+        "LogbookEntryId": "9beccc85-bf62-4caa-916e-3fb911868ae7",
+        "LogbookEntry": null,
+        "Id": "674ed914-ace3-4ff0-ad5c-4335ccf92607"
+    },
+    "newDataObject": {
+        "RecipientId": "2223cdff-e5fe-4a68-81cd-bcc8800c365e",
+        "Recipient": null,
+        "OccuredAt": "2019-08-01T00:00:00",
+        "AlreadySent": true,
+        "CountOfTries": 2,
+        "Message": "The Message",
+        "Type": 3,
+        "EventId": "86e2735d-a537-43ad-9048-b1899a2e3f40",
+        "Event": null,
+        "LogbookEntryId": "9beccc85-bf62-4caa-916e-3fb911868ae7",
+        "LogbookEntry": null,
+        "Id": "674ed914-ace3-4ff0-ad5c-4335ccf92607"
+    }
+}

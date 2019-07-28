@@ -1,0 +1,50 @@
+﻿{
+    "dataObject": {
+        "Name": "Test Event",
+        "OrganisatorId": "f82be2f0-ee77-4c61-afcf-8f604e133e0b",
+        "Organisator": null,
+        "Location": "The location",
+        "MeetingPoint": "The Meeting-Point",
+        "Description": "A description",
+        "StartTime": "2019-08-01T19:00:00",
+        "EndTime": "2019-08-02T12:30:00",
+        "Canceled": true,
+        "Deleted": true,
+        "Participants": [],
+        "Comments": [],
+        "StartEndTimeAsString": "01.08.2019 - 02.08.2019",
+        "Id": "cf0cfa4e-da42-4702-acaa-5fcdc68e4fce"
+    },
+    "domainObject": {
+        "Name": "Test Event",
+        "OrganisatorId": "f82be2f0-ee77-4c61-afcf-8f604e133e0b",
+        "Organisator": null,
+        "Location": "The location",
+        "MeetingPoint": "The Meeting-Point",
+        "Description": "A description",
+        "StartTime": "2019-08-01T19:00:00",
+        "EndTime": "2019-08-02T12:30:00",
+        "Canceled": true,
+        "Deleted": true,
+        "Participants": [],
+        "Comments": [],
+        "StartEndTimeAsString": "01.08.2019 - 02.08.2019",
+        "Id": "cf0cfa4e-da42-4702-acaa-5fcdc68e4fce"
+    },
+    "newDataObject": {
+        "Name": "Test Event",
+        "OrganisatorId": "f82be2f0-ee77-4c61-afcf-8f604e133e0b",
+        "Organisator": null,
+        "Location": "The location",
+        "MeetingPoint": "The Meeting-Point",
+        "Description": "A description",
+        "StartTime": "2019-08-01T19:00:00",
+        "EndTime": "2019-08-02T12:30:00",
+        "Canceled": true,
+        "Deleted": true,
+        "Participants": [],
+        "Comments": [],
+        "StartEndTimeAsString": "01.08.2019 - 02.08.2019",
+        "Id": "cf0cfa4e-da42-4702-acaa-5fcdc68e4fce"
+    }
+}

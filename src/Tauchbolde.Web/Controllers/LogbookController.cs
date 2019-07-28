@@ -16,7 +16,6 @@ using Tauchbolde.Application.UseCases.Logbook.NewUseCase;
 using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
 using Tauchbolde.Application.UseCases.Logbook.UnpublishUseCase;
 using Tauchbolde.Domain.Helpers;
-using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.ValueObjects;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
@@ -25,13 +24,11 @@ namespace Tauchbolde.Web.Controllers
 {
     public class LogbookController : AppControllerBase
     {
-        [NotNull] private readonly ApplicationDbContext context;
         [NotNull] private readonly ILogbookService logbookService;
         [NotNull] private readonly ILogger<LogbookController> logger;
         [NotNull] private readonly IMediator mediator;
 
         public LogbookController(
-            [NotNull] ApplicationDbContext context,
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ILogbookService logbookService,
             [NotNull] IDiverService diverService,
@@ -39,7 +36,6 @@ namespace Tauchbolde.Web.Controllers
             [NotNull] IMediator mediator)
             : base(userManager, diverService)
         {
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.logbookService = logbookService ?? throw new ArgumentNullException(nameof(logbookService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));

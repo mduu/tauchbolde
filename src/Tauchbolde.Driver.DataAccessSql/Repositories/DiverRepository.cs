@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.Driver.DataAccessSql.DataEntities;
+using Tauchbolde.Driver.DataAccessSql.Mappers;
 using Rolenames = Tauchbolde.Domain.Types.Rolenames;
 
 namespace Tauchbolde.Driver.DataAccessSql.Repositories
 {
-    internal class DiverRepository : RepositoryBase<Diver>, IDiverRepository
+    internal class DiverRepository : RepositoryBase<Diver, DiverData>, IDiverRepository
     {
         private readonly UserManager<IdentityUser> userManager;
 
@@ -22,21 +24,32 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         /// <inheritdoc />
         public async Task<Diver> FindByUserNameAsync(string username)
         {
-            if (string.IsNullOrWhiteSpace(username)) { throw new ArgumentNullException(nameof(username)); }
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new ArgumentNullException(nameof(username));
+            }
 
-            return await Context.Diver
-                                .Include(d => d.User)
-                                .FirstOrDefaultAsync(u => u.User.UserName.Equals(username, StringComparison.CurrentCultureIgnoreCase));
+            return
+                (await Context.Diver
+                    .Include(d => d.User)
+                    .FirstOrDefaultAsync(u =>
+                        u.User.UserName.Equals(username, StringComparison.CurrentCultureIgnoreCase)))
+                .MapTo();
         }
-        
+
         /// <inheritdoc />
         public override async Task<Diver> FindByIdAsync(Guid id)
         {
-            if (id == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(id)); }
-            
-            return await Context.Diver
-                                .Include(d => d.User)
-                                .FirstOrDefaultAsync(u => u.Id == id);
+            if (id == Guid.Empty)
+            {
+                throw new ArgumentException("Guid.Empty not allowed!", nameof(id));
+            }
+
+            return
+                (await Context.Diver
+                    .Include(d => d.User)
+                    .FirstOrDefaultAsync(u => u.Id == id))
+                .MapTo();
         }
 
         /// <inheritdoc />
@@ -57,26 +70,31 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
                 usersIds = usersIds.Union(admins).Distinct().ToList();
             }
 
-            var divers = await Context.Diver
-                .Include(u => u.User)
-                .OrderBy(d => d.Firstname)
-                .ThenBy(d => d.Lastname)
-                .ToListAsync();
+            var divers =
+                (await Context.Diver
+                    .Include(u => u.User)
+                    .OrderBy(d => d.Firstname)
+                    .ThenBy(d => d.Lastname)
+                    .ToListAsync())
+                .Select(d => d.MapTo())
+                .ToList();
 
-            var result = divers
+            return divers
                 .Where(u => usersIds.Contains(u.UserId))
                 .ToArray();
-
-            return result;
         }
 
         /// <inheritdoc />
         public async Task<ICollection<Diver>> GetAllDiversAsync() =>
-            await Context.Diver
+            (await Context.Diver
                 .Include(u => u.User)
                 .OrderBy(d => d.Firstname)
                 .ThenBy(d => d.Lastname)
-                .ToListAsync();
-
+                .ToListAsync())
+            .Select(d => d.MapTo())
+            .ToList();
+   
+        protected override Diver MapTo(DiverData dataEntity) => dataEntity.MapTo();
+        protected override DiverData MapTo(Diver domainEntity) => domainEntity.MapTo();
     }
 }
