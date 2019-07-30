@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Driver.DataAccessSql.DataEntities;
+using Tauchbolde.Driver.DataAccessSql.DataEntities.Configurations;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Driver.DataAccessSql
@@ -53,54 +54,12 @@ namespace Tauchbolde.Driver.DataAccessSql
         {
             base.OnModelCreating(builder);
             
-            // TODO Extract the following mapping into their own files
-
-            // Diver
-            builder.Entity<DiverData>()
-                .HasMany(e => e.Notificationses)
-                .WithOne(e => e.Recipient)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<DiverData>()
-                .HasMany(e => e.Comments)
-                .WithOne(e => e.Author)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<DiverData>()
-                .HasMany(e => e.Events)
-                .WithOne(e => e.Organisator)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<DiverData>()
-               .Property(e => e.NotificationIntervalInHours)
-               .HasDefaultValue(1);
-            builder.Entity<DiverData>()
-               .HasOne(d => d.User);
-            builder.Entity<DiverData>()
-                .HasMany(e => e.OriginalAuthorOfLogbookEntries)
-                .WithOne(e => e.OriginalAuthor)
-                .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<DiverData>()
-                .HasMany(e => e.EditorAuthorOfLogbookEntries)
-                .WithOne(e => e.EditorAuthor)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // Comment
-            builder.Entity<CommentData>().HasOne(e => e.Event).WithMany(e => e.Comments).OnDelete(DeleteBehavior.Restrict);
-
-            // Event
-            builder.Entity<DataEntities.EventData>().HasIndex(p => new { p.StartTime, p.Deleted });
-            builder.Entity<DataEntities.EventData>().Property(e => e.Deleted).HasDefaultValue(false);
-            builder.Entity<DataEntities.EventData>().Property(e => e.Canceled).HasDefaultValue(false);
-            builder.Entity<DataEntities.EventData>().HasMany(e => e.Comments).WithOne(c => c.Event);
-
-            // Notification
-            builder.Entity<NotificationData>().Property(e => e.AlreadySent).HasDefaultValue(false);
-            builder.Entity<NotificationData>().Property(e => e.CountOfTries).HasDefaultValue(0);
-
-            // Participants
-            builder.Entity<ParticipantData>().HasOne(e => e.Event).WithMany(e => e.Participants).OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<ParticipantData>().Property(e => e.CountPeople).HasDefaultValue(1);
-
-            // LogbookEntry
-            builder.Entity<LogbookEntryData>().HasIndex(e => new { e.IsFavorite, e.CreatedAt});
+            builder.ApplyConfiguration(new CommentDataConfiguration());
+            builder.ApplyConfiguration(new DiverDataConfiguration());
+            builder.ApplyConfiguration(new EventDataConfiguration());
+            builder.ApplyConfiguration(new LogbookEntryDataConfiguration());
+            builder.ApplyConfiguration(new NotificationDataConfiguration());
+            builder.ApplyConfiguration(new ParticipantDataConfiguration());
         }
         
         private void DispatchDomainEventsForSuccessfullySavedEntities()
