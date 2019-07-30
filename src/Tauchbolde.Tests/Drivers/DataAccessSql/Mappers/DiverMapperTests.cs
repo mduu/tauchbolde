@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using FluentAssertions;
@@ -15,6 +16,7 @@ namespace Tauchbolde.Tests.Drivers.DataAccessSql.Mappers
         private readonly Guid diverId = new Guid("C35F8D49-057B-4A18-85D9-1AB3E866D3EC");
 
         [Fact]
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public void Map()
         {
             var dataObject = new DiverData
