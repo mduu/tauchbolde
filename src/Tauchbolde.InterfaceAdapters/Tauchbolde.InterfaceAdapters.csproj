@@ -2,6 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
+        <RuntimeFrameworkVersion>2.2.0</RuntimeFrameworkVersion>
+        <RootNamespace>Tauchbolde.InterfaceAdapters</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,11 +18,5 @@
     <ItemGroup>
       <EmbeddedResource Include="MailHtmlFormatting\EmbeddedStyles.css" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Tauchbolde.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\Tauchbolde.Common\bin\Debug\netcoreapp2.2\Tauchbolde.Common.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
+    
 </Project>

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Tauchbolde.Application.Services;
 using Tauchbolde.InterfaceAdapters;
 
 namespace Tauchbolde.Web.Core

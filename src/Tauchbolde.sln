@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.3
@@ -26,6 +26,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{49F2A5AC-2442-41A5-BBB0-D16C68038927}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.SharedKernel", "Tauchbolde.SharedKernel\Tauchbolde.SharedKernel.csproj", "{B852A5FC-2224-400D-AF9C-4D4CB69A3CC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InterfaceAdapters", "InterfaceAdapters", "{84E8973E-D89B-4997-8C91-82B02490FF1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.InterfaceAdapters", "Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj", "{17974AD9-A67A-4E91-9839-342DECF69451}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,6 +161,18 @@ Global
 		{B852A5FC-2224-400D-AF9C-4D4CB69A3CC2}.Release|x64.Build.0 = Release|Any CPU
 		{B852A5FC-2224-400D-AF9C-4D4CB69A3CC2}.Release|x86.ActiveCfg = Release|Any CPU
 		{B852A5FC-2224-400D-AF9C-4D4CB69A3CC2}.Release|x86.Build.0 = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|x64.Build.0 = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|x86.Build.0 = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|x64.ActiveCfg = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|x64.Build.0 = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|x86.ActiveCfg = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -170,6 +186,7 @@ Global
 		{445EC923-60CB-43D9-B1ED-377DF5F1B104} = {49F2A5AC-2442-41A5-BBB0-D16C68038927}
 		{3ECCB5D8-B659-4F1A-9D2B-CDCB0BAAFE23} = {49F2A5AC-2442-41A5-BBB0-D16C68038927}
 		{B852A5FC-2224-400D-AF9C-4D4CB69A3CC2} = {49F2A5AC-2442-41A5-BBB0-D16C68038927}
+		{17974AD9-A67A-4E91-9839-342DECF69451} = {84E8973E-D89B-4997-8C91-82B02490FF1D}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
