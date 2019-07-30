@@ -35,10 +35,6 @@ namespace Tauchbolde.Application.OldDomainServices.Logbook
         
         /// <inheritdoc />
         public async Task<Photo> GetPhotoDataAsync(PhotoIdentifier photoIdentifier)
-        {
-            if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
-
-            return await photoService.GetPhotoDataAsync(photoIdentifier);
-        }
+            => await photoService.GetPhotoDataAsync(photoIdentifier);
     }
 }

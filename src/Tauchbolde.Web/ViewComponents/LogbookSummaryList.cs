@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Application.OldDomainServices.Logbook;
-using Tauchbolde.Domain;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Web.Models.ViewComponentModels;
 

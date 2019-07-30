@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using JetBrains.Annotations;
 using Tauchbolde.Domain.Events.LogbookEntry;
 using Tauchbolde.Domain.ValueObjects;
@@ -14,27 +13,23 @@ namespace Tauchbolde.Domain.Entities
     {
         [DisplayName("Titel")]
         [Required]
-        [NotNull]
         public string Title { get; set; } = "";
 
         [DisplayName("Text/Beschreibung")]
         [Required]
-        [NotNull]
         public string Text { get; set; } = "";
 
         [DisplayName("Optionaler Teaser/Intro")]
         [Required]
-        [NotNull]
         public string TeaserText { get; set; } = "";
 
         [DisplayName("Favorisierter Eintrag")] public bool IsFavorite { get; set; } = false;
 
-        [CanBeNull] public string TeaserImage { get; set; }
+        public string TeaserImage { get; set; }
 
-        [CanBeNull] public string TeaserImageThumb { get; set; }
+        public string TeaserImageThumb { get; set; }
 
         [DisplayName("Optionale Url externer Fotoalbum")]
-        [CanBeNull]
         public string ExternalPhotoAlbumUrl { get; set; }
 
         [DisplayName("Erstellt am")]
@@ -55,24 +50,22 @@ namespace Tauchbolde.Domain.Entities
 
         public Guid? EventId { get; set; }
 
-        [CanBeNull] public Event Event { get; set; }
+        public Event Event { get; set; }
 
         public void Publish()
         {
-            if (!IsPublished)
-            {
-                IsPublished = true;
-                RaiseDomainEvent(new LogbookEntryPublishedEvent(Id));
-            }
+            if (IsPublished) return;
+            
+            IsPublished = true;
+            RaiseDomainEvent(new LogbookEntryPublishedEvent(Id));
         }
 
         public void Unpublish()
         {
-            if (IsPublished)
-            {
-                IsPublished = false;
-                RaiseDomainEvent(new LogbookEntryUnpublishedEvent(Id));
-            }
+            if (!IsPublished) return;
+            
+            IsPublished = false;
+            RaiseDomainEvent(new LogbookEntryUnpublishedEvent(Id));
         }
 
         public static LogbookEntry CreateNew(

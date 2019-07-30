@@ -10,6 +10,7 @@ namespace Tauchbolde.Domain.Entities
         [Display(Name = "Anlass ID")]
         [Required]
         public Guid EventId { get; set; }
+        
         [Display(Name = "Anlass")]
         [Required]
         public Event Event { get; set; }
