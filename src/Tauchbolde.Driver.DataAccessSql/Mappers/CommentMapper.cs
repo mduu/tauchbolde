@@ -15,7 +15,6 @@ namespace Tauchbolde.Driver.DataAccessSql.Mappers
                     CreateDate = dataEntity.CreateDate,
                     ModifiedDate = dataEntity.ModifiedDate,
                     EventId = dataEntity.EventId,
-                    Event = dataEntity.Event.MapTo(),
                     AuthorId = dataEntity.AuthorId,
                     Author = dataEntity.Author.MapTo(),
                 };
@@ -30,7 +29,6 @@ namespace Tauchbolde.Driver.DataAccessSql.Mappers
                     CreateDate = domainEntity.CreateDate,
                     ModifiedDate = domainEntity.ModifiedDate,
                     EventId = domainEntity.EventId,
-                    Event = domainEntity.Event.MapTo(),
                     AuthorId = domainEntity.AuthorId,
                     Author = domainEntity.Author.MapTo(),
                 };

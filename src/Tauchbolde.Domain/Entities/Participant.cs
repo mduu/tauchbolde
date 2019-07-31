@@ -11,10 +11,6 @@ namespace Tauchbolde.Domain.Entities
         [Required]
         public Guid EventId { get; set; }
         
-        [Display(Name = "Anlass")]
-        [Required]
-        public Event Event { get; set; }
-
         public Guid ParticipatingDiverId { get; set; }
         
         [Display(Name = "Teilnehmer")]
