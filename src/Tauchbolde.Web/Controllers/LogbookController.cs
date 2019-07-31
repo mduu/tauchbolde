@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -12,9 +14,11 @@ using Tauchbolde.Application.OldDomainServices.Logbook;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.UseCases.Logbook.DeleteUseCase;
 using Tauchbolde.Application.UseCases.Logbook.EditUseCase;
+using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
 using Tauchbolde.Application.UseCases.Logbook.NewUseCase;
 using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
 using Tauchbolde.Application.UseCases.Logbook.UnpublishUseCase;
+using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Helpers;
 using Tauchbolde.Domain.ValueObjects;
 using Tauchbolde.Web.Core;
@@ -45,9 +49,15 @@ namespace Tauchbolde.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var allowEdit = await GetAllowEdit();
+            var allLogbookEntries = await mediator.Send(new ListAllLogbookEntries(allowEdit));
+            if (!allLogbookEntries.IsSuccessful)
+            {
+                ShowErrorMessage("Fehler beim Abfragen aller Logbucheinträge!");
+            }
+            
             var model = new LogbookListViewModel(
-                await logbookService.GetAllEntriesAsync(allowEdit),
-                await GetTauchboldOrAdmin());
+                allLogbookEntries.Payload?.ToList() ?? new List<LogbookEntry>(),
+                allowEdit);
 
             return View(model);
         }
