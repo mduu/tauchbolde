@@ -72,6 +72,14 @@ namespace Tauchbolde.Domain.Entities
         [NotMapped]
         public string Realname => string.IsNullOrWhiteSpace(Fullname) ? User.UserName : Fullname;
 
+        public virtual ICollection<Notification> Notificationses { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+
+        public virtual ICollection<LogbookEntry> OriginalAuthorOfLogbookEntries { get; set; }
+        
+        public virtual ICollection<LogbookEntry> EditorAuthorOfLogbookEntries { get; set; }
+
         public string GetTwitterUrl()
         {
             if (string.IsNullOrWhiteSpace(TwitterHandle)) { return ""; }

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Driver.DataAccessSql;
+using Tauchbolde.Domain;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Web.Core;
@@ -19,17 +21,20 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class EventController : AppControllerBase
     {
+        private readonly ApplicationDbContext context;
         private readonly IParticipationService participationService;
         private readonly IEventService eventService;
         [NotNull] private readonly IDiverService diverService;
 
         public EventController(
             [NotNull] UserManager<IdentityUser> userManager,
+            [NotNull] ApplicationDbContext context,
             [NotNull] IParticipationService participationService,
             [NotNull] IEventService eventService,
             [NotNull] IDiverService diverService)
         :base(userManager, diverService)
         {
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
             this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
@@ -143,6 +148,7 @@ namespace Tauchbolde.Web.Controllers
                     };
 
                     var persistedEvent = await eventService.UpsertEventAsync(evt, currentDiver);
+                    await context.SaveChangesAsync();
 
                     return RedirectToAction("Details", new { persistedEvent.Id });
                 }
@@ -195,6 +201,7 @@ namespace Tauchbolde.Web.Controllers
                 }
 
                 await participationService.ChangeParticipationAsync(currentUser, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
+                await context.SaveChangesAsync();
 
                 return RedirectToAction("Details", new { id = model.EventId });
             }
@@ -233,10 +240,15 @@ namespace Tauchbolde.Web.Controllers
                 }
 
                 var comment = await eventService.AddCommentAsync(eventId, newCommentText, currentUser);
-                if (comment == null)
+                if (comment != null)
+                {
+                    await context.SaveChangesAsync();
+                }
+                else
                 {
                     ModelState.AddModelError("", "Fehler beim Speichern des Kommentares!");
                 }
+
             }
 
             return RedirectToAction("Details", new { id = eventId });
@@ -254,10 +266,15 @@ namespace Tauchbolde.Web.Controllers
                 }
 
                 var comment = await eventService.EditCommentAsync(commentId, commentText, currentUser);
-                if (comment == null)
+                if (comment != null)
+                {
+                    await context.SaveChangesAsync();
+                }
+                else
                 {
                     ModelState.AddModelError("", "Fehler beim Speichern des Kommentares!");
                 }
+
             }
 
             return RedirectToAction("Details", new { id = eventId });
@@ -275,6 +292,7 @@ namespace Tauchbolde.Web.Controllers
                 }
 
                 await eventService.DeleteCommentAsync(deleteCommentId, currentUser);
+                await context.SaveChangesAsync();
             }
 
             return RedirectToAction("Details", new { id = deleteEventId });

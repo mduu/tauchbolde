@@ -6,8 +6,8 @@ using JetBrains.Annotations;
 using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Tauchbolde.Driver.DataAccessSql.DataEntities;
 using Tauchbolde.Driver.DataAccessSql.DataEntities.Configurations;
+using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Driver.DataAccessSql
@@ -29,12 +29,12 @@ namespace Tauchbolde.Driver.DataAccessSql
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        public DbSet<EventData> Events { get; set; }
-        public DbSet<ParticipantData> Participants { get; set; }
-        public DbSet<CommentData> Comments { get; set; }
-        public DbSet<DiverData> Diver { get; set; }
-        public DbSet<NotificationData> Notifications { get; set; }
-        public DbSet<LogbookEntryData> LogbookEntries { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Participant> Participants { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Diver> Diver { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<LogbookEntry> LogbookEntries { get; set; }
 
         public override int SaveChanges()
         {

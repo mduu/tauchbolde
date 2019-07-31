@@ -7,8 +7,6 @@ namespace Tauchbolde.Domain.Entities
 {
     public class Notification : EntityBase
     {
-        [Required] public Guid RecipientId { get; set; }
-        
         [Display(Name = "Empfänger")]
         [Required]
         public Diver Recipient { get; set; }

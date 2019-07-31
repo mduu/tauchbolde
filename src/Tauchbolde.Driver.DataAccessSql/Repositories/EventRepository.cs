@@ -7,12 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.Driver.DataAccessSql.DataEntities;
-using Tauchbolde.Driver.DataAccessSql.Mappers;
 
 namespace Tauchbolde.Driver.DataAccessSql.Repositories
 {
-    internal class EventRepository : RepositoryBase<Event, EventData>, IEventRepository
+    internal class EventRepository : RepositoryBase<Event>, IEventRepository
     {
         [NotNull] private readonly IClock clock;
 
@@ -24,22 +22,23 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
             this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
         }
 
-        public async Task<List<Event>> GetUpcomingEventsAsync() =>
-            (await CreateQueryForStartingAt(clock.Now().DateTime)
+        /// <inheritdoc />>
+        public async Task<List<Event>> GetUpcomingEventsAsync()
+        {
+            return await CreateQueryForStartingAt(clock.Now().DateTime)
                 .Include(e => e.Comments)
-                .ThenInclude(c => c.Author)
+                    .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
-                .ThenInclude(p => p.ParticipatingDiver)
-                .ToListAsync())
-            .Select(e => e.MapTo())
-            .ToList();
+                    .ThenInclude(p => p.ParticipatingDiver)
+                .ToListAsync();
+        }
 
 
         public async Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync()
         {
             var events = await CreateQueryForStartingAt(clock.Now().AddDays(-30).DateTime)
                 .Include(e => e.Comments)
-                .ThenInclude(c => c.Author)
+                    .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
                 .ThenInclude(p => p.ParticipatingDiver)
                 .ToListAsync();
@@ -59,17 +58,17 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
 
             var result = await Context.Events
                 .Include(e => e.Comments)
-                .ThenInclude(c => c.Author)
+                    .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
-                .ThenInclude(p => p.ParticipatingDiver)
-                .ThenInclude(d => d.User)
+                    .ThenInclude(p => p.ParticipatingDiver)
+                        .ThenInclude(d => d.User)
                 .Include(e => e.Organisator)
                 .FirstOrDefaultAsync(e => e.Id == id);
 
-            return result.MapTo();
+            return result;
         }
 
-        private IQueryable<EventData> CreateQueryForStartingAt(DateTime startDate, bool includeCanceled = false)
+        private IQueryable<Event> CreateQueryForStartingAt(DateTime startDate, bool includeCanceled = false)
         {
             return Context.Events
                 .Where(e =>
@@ -80,8 +79,5 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
                 .OrderBy(e => e.StartTime)
                 .ThenBy(e => e.EndTime);
         }
-        
-        protected override Event MapTo(EventData dataEntity) => dataEntity.MapTo();
-        protected override EventData MapTo(Event domainEntity) => domainEntity.MapTo();
     }
 }
