@@ -25,13 +25,6 @@ namespace Tauchbolde.SharedKernel
 
     public class UseCaseResult<TPayload> : UseCaseResult where TPayload : class
     {
-        public UseCaseResult()
-        {
-        }
-
-        public static UseCaseResult<TPayload> Success(TPayload payload) => new UseCaseResult<TPayload>(payload: payload);
-        public new static UseCaseResult<TPayload> Fail(IEnumerable<ValidationFailure> errors = null) => new UseCaseResult<TPayload>(errors);
-
         public UseCaseResult(
             [CanBeNull] IEnumerable<ValidationFailure> errors = null,
             [CanBeNull] TPayload payload = null)
@@ -41,5 +34,8 @@ namespace Tauchbolde.SharedKernel
         }
 
         [CanBeNull] public TPayload Payload { get; }
+        
+        public static UseCaseResult<TPayload> Success(TPayload payload) => new UseCaseResult<TPayload>(payload: payload);
+        public new static UseCaseResult<TPayload> Fail(IEnumerable<ValidationFailure> errors = null) => new UseCaseResult<TPayload>(errors);
     }
 }
