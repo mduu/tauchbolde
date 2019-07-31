@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Driver.DataAccessSql.DataEntities.Configurations
 {
-    public class EventDataConfiguration : IEntityTypeConfiguration<EventData>
+    public class EventDataConfiguration : IEntityTypeConfiguration<Event>
     {
-        public void Configure(EntityTypeBuilder<EventData> builder)
+        public void Configure(EntityTypeBuilder<Event> builder)
         {
             builder.ToTable("Events");
             

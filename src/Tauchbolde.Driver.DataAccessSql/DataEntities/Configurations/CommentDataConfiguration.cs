@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Driver.DataAccessSql.DataEntities.Configurations
 {
-    public class CommentDataConfiguration : IEntityTypeConfiguration<CommentData>
+    public class CommentDataConfiguration : IEntityTypeConfiguration<Comment>
     {
-        public void Configure(EntityTypeBuilder<CommentData> builder)
+        public void Configure(EntityTypeBuilder<Comment> builder)
         {
             builder.ToTable("Comments");
             

@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Driver.DataAccessSql.DataEntities.Configurations
 {
-    public class NotificationDataConfiguration : IEntityTypeConfiguration<NotificationData>
+    public class NotificationDataConfiguration : IEntityTypeConfiguration<Notification>
     {
-        public void Configure(EntityTypeBuilder<NotificationData> builder)
+        public void Configure(EntityTypeBuilder<Notification> builder)
         {
             builder.ToTable("Notifications");
             

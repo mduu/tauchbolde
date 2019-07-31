@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Driver.DataAccessSql.DataEntities.Configurations
 {
-    public class DiverDataConfiguration : IEntityTypeConfiguration<DiverData>
+    public class DiverDataConfiguration : IEntityTypeConfiguration<Diver>
     {
-        public void Configure(EntityTypeBuilder<DiverData> builder)
+        public void Configure(EntityTypeBuilder<Diver> builder)
         {
             builder.ToTable("Diver");
             

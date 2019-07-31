@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Driver.DataAccessSql.DataEntities.Configurations
 {
-    public class ParticipantDataConfiguration : IEntityTypeConfiguration<ParticipantData>
+    public class ParticipantDataConfiguration : IEntityTypeConfiguration<Participant>
     {
-        public void Configure(EntityTypeBuilder<ParticipantData> builder)
+        public void Configure(EntityTypeBuilder<Participant> builder)
         {
             builder.ToTable("Participants");
             

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -7,10 +8,6 @@ using Tauchbolde.Application.DataGateways;
 
 namespace Tauchbolde.Driver.DataAccessSql.Repositories
 {
-    /// <summary>
-    /// Implementation of the repository base class.
-    /// </summary>
-    /// <typeparam name="TEntity">Type of the Entity.</typeparam>
     internal abstract class RepositoryBase<TEntity> : IRepository<TEntity>
         where TEntity: class, new()
     {
@@ -22,10 +19,13 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         }
 
         /// <inheritdoc />
-        public virtual async Task<TEntity> FindByIdAsync(Guid id) => await Context.Set<TEntity>().FindAsync(id);
+        public virtual async Task<TEntity> FindByIdAsync(Guid id) =>
+            await Context.Set<TEntity>().FindAsync(id);
 
         /// <inheritdoc />
-        public virtual async Task<ICollection<TEntity>> GetAllAsync() => await Context.Set<TEntity>().ToListAsync();
+        public virtual async Task<ICollection<TEntity>> GetAllAsync() =>
+            (await Context.Set<TEntity>().ToListAsync())
+            .ToList();
 
         /// <inheritdoc />
         public virtual async Task<TEntity> InsertAsync([NotNull] TEntity entity)
