@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Driver.DataAccessSql;
-using Tauchbolde.Domain;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Web.Core;
@@ -156,7 +155,7 @@ namespace Tauchbolde.Web.Controllers
                 {
                     ModelState.AddModelError("", "Unable to save changes. " +
                         "Try again, and if the problem persists " +
-                         $"see your system administrator. Message: {ex.Message}, {ex.InnerException.Message}");
+                         $"see your system administrator. Message: {ex.Message}, {ex.InnerException?.Message}");
                     model.BuddyTeamNames = GetBuddyTeamNames();
                     return View(model);
                 }
