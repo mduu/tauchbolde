@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <UserSecretsId>aspnet-Tauchbolde.Web-739F3BCA-06DE-4304-853C-BA69E6E56B4A</UserSecretsId>
   </PropertyGroup>
 
