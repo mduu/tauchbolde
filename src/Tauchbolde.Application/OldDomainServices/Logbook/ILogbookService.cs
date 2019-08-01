@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Domain.Entities;
@@ -12,12 +11,6 @@ namespace Tauchbolde.Application.OldDomainServices.Logbook
     /// </summary>
     public interface ILogbookService
     {
-        /// <summary>
-        /// Gets the collection of all <see cref="LogbookEntry"/>.
-        /// </summary>
-        /// <param name="includeUnpublished"></param>
-        Task<ICollection<LogbookEntry>> GetAllEntriesAsync(bool includeUnpublished = false);
-
         /// <summary>
         /// Gets the <see cref="LogbookEntry"/> by its ID.
         /// </summary>

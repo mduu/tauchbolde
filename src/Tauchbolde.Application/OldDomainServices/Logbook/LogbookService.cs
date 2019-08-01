@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Application.DataGateways;
@@ -24,10 +23,6 @@ namespace Tauchbolde.Application.OldDomainServices.Logbook
             this.logbookEntryRepository = logbookEntryRepository ?? throw new ArgumentNullException(nameof(logbookEntryRepository));
             this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
         }
-
-        /// <inheritdoc />
-        public async Task<ICollection<LogbookEntry>> GetAllEntriesAsync(bool includeUnpublished = false)
-            => await logbookEntryRepository.GetAllEntriesAsync(includeUnpublished);
 
         /// <inheritdoc />
         public async Task<LogbookEntry> FindByIdAsync(Guid logbookEntryId)
