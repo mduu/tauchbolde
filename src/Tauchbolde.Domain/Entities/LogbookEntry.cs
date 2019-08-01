@@ -11,71 +11,18 @@ namespace Tauchbolde.Domain.Entities
     [UsedImplicitly]
     public class LogbookEntry : EntityBase
     {
-        [DisplayName("Titel")]
-        [Required]
-        public string Title { get; set; } = "";
-
-        [DisplayName("Text/Beschreibung")]
-        [Required]
-        public string Text { get; set; } = "";
-
-        [DisplayName("Optionaler Teaser/Intro")]
-        [Required]
-        public string TeaserText { get; set; } = "";
-
-        [DisplayName("Favorisierter Eintrag")] public bool IsFavorite { get; set; } = false;
-
-        public string TeaserImage { get; set; }
-
-        public string TeaserImageThumb { get; set; }
-
-        [DisplayName("Optionale Url externer Fotoalbum")]
-        public string ExternalPhotoAlbumUrl { get; set; }
-
-        [DisplayName("Erstellt am")]
-        [Required]
-        public DateTime CreatedAt { get; set; }
-
-        [DisplayName("Geändert am")] public DateTime? ModifiedAt { get; set; }
-
-        [DisplayName("Publiziert")] public bool IsPublished { get; set; }
-
-        public Guid? EditorAuthorId { get; set; }
-
-        public Diver EditorAuthor { get; set; }
-
-        [Required] [UsedImplicitly] public Guid OriginalAuthorId { get; set; }
-
-        public Diver OriginalAuthor { get; set; }
-
-        public Guid? EventId { get; set; }
-
-        public Event Event { get; set; }
-
-        public void Publish()
+        internal LogbookEntry()
         {
-            if (IsPublished) return;
-            
-            IsPublished = true;
-            RaiseDomainEvent(new LogbookEntryPublishedEvent(Id));
         }
 
-        public void Unpublish()
-        {
-            if (!IsPublished) return;
-            
-            IsPublished = false;
-            RaiseDomainEvent(new LogbookEntryUnpublishedEvent(Id));
-        }
-
-        public static LogbookEntry CreateNew(
+        public LogbookEntry(
             [NotNull] string title,
             [NotNull] string teaser,
             [NotNull] string text,
             bool isFavorite,
             Guid authorDiverId,
             [CanBeNull] string externalPhotoAlbumUrl,
-            Guid? relatedEventId,
+            [CanBeNull] Guid? relatedEventId,
             [CanBeNull] PhotoAndThumbnailIdentifiers photoIdentifiers)
         {
             if (string.IsNullOrWhiteSpace(title))
@@ -85,23 +32,78 @@ namespace Tauchbolde.Domain.Entities
             if (string.IsNullOrWhiteSpace(text))
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(text));
 
-            var result = new LogbookEntry
-            {
-                Id = Guid.NewGuid(),
-                Title = title,
-                TeaserText = teaser,
-                Text = text,
-                IsFavorite = isFavorite,
-                IsPublished = false,
-                OriginalAuthorId = authorDiverId,
-                CreatedAt = DateTimeOffset.Now.UtcDateTime,
-                ExternalPhotoAlbumUrl = externalPhotoAlbumUrl,
-                EventId = relatedEventId,
-                TeaserImage = photoIdentifiers?.OriginalPhotoIdentifier?.Serialze(),
-                TeaserImageThumb = photoIdentifiers?.ThumbnailPhotoIdentifier?.Serialze(),
-            };
+            Id = Guid.NewGuid();
+            Title = title;
+            TeaserText = teaser;
+            Text = text;
+            IsFavorite = isFavorite;
+            IsPublished = false;
+            OriginalAuthorId = authorDiverId;
+            CreatedAt = DateTimeOffset.Now.UtcDateTime;
+            ExternalPhotoAlbumUrl = externalPhotoAlbumUrl;
+            EventId = relatedEventId;
+            TeaserImage = photoIdentifiers?.OriginalPhotoIdentifier?.Serialze();
+            TeaserImageThumb = photoIdentifiers?.ThumbnailPhotoIdentifier?.Serialze();
+        }
+        
+        [DisplayName("Titel")]
+        [Required] 
+        public string Title { get; internal set; } = "";
 
-            return result;
+        [DisplayName("Text/Beschreibung")]
+        [Required]
+        public string Text { get; internal set; } = "";
+
+        [DisplayName("Optionaler Teaser/Intro")]
+        [Required]
+        public string TeaserText { get; internal set; } = "";
+
+        [DisplayName("Favorisierter Eintrag")]
+        public bool IsFavorite { get; internal set; }
+
+        public string TeaserImage { get; internal set; }
+
+        public string TeaserImageThumb { get; internal set; }
+
+        [DisplayName("Optionale Url externer Fotoalbum")]
+        public string ExternalPhotoAlbumUrl { get; internal set; }
+
+        [DisplayName("Erstellt am")]
+        [Required]
+        public DateTime CreatedAt { get; internal set; }
+
+        [DisplayName("Geändert am")]
+        public DateTime? ModifiedAt { get; internal set; }
+
+        [DisplayName("Publiziert")]
+        public bool IsPublished { get; internal set; }
+
+        public Guid? EditorAuthorId { get; internal set; }
+
+        public Diver EditorAuthor { get; internal set; }
+
+        [Required] public Guid OriginalAuthorId { get; internal set; }
+
+        public Diver OriginalAuthor { get; internal set; }
+
+        public Guid? EventId { get; internal set; }
+
+        public Event Event { get; internal set; }
+
+        public void Publish()
+        {
+            if (IsPublished) return;
+
+            IsPublished = true;
+            RaiseDomainEvent(new LogbookEntryPublishedEvent(Id));
+        }
+
+        public void Unpublish()
+        {
+            if (!IsPublished) return;
+
+            IsPublished = false;
+            RaiseDomainEvent(new LogbookEntryUnpublishedEvent(Id));
         }
 
         public void Edit(
@@ -129,7 +131,8 @@ namespace Tauchbolde.Domain.Entities
             ModifiedAt = DateTimeOffset.UtcNow.DateTime;
             ExternalPhotoAlbumUrl = externalPhotoAlbumUrl;
             EventId = relatedEventId;
-            if (photoIdentifiers != null && (photoIdentifiers.OriginalPhotoIdentifier == null || photoIdentifiers.ThumbnailPhotoIdentifier == null))
+            if (photoIdentifiers != null && (photoIdentifiers.OriginalPhotoIdentifier == null ||
+                                             photoIdentifiers.ThumbnailPhotoIdentifier == null))
             {
                 TeaserImage = photoIdentifiers?.OriginalPhotoIdentifier?.Serialze();
                 TeaserImageThumb = photoIdentifiers?.ThumbnailPhotoIdentifier?.Serialze();

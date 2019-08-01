@@ -9,7 +9,7 @@ using Tauchbolde.Application.DataGateways;
 namespace Tauchbolde.Driver.DataAccessSql.Repositories
 {
     internal abstract class RepositoryBase<TEntity> : IRepository<TEntity>
-        where TEntity: class, new()
+        where TEntity: class
     {
         protected readonly ApplicationDbContext Context;
 
