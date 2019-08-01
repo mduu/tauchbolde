@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using MediatR;
+using MediatR.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Application.OldDomainServices;
 using Tauchbolde.Application.OldDomainServices.Avatar;
