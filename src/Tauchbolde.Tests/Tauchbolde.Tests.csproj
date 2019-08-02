@@ -42,7 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\OldDomainServices\Logbook" />
     <Folder Include="Domain" />
     <Folder Include="Web\" />
   </ItemGroup>
