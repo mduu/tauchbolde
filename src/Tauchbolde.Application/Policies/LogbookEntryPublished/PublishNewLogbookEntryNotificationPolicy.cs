@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using MediatR;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Notifications;
-using Tauchbolde.Domain.Events;
 using Tauchbolde.Domain.Events.LogbookEntry;
 using Tauchbolde.Domain.Types;
 
