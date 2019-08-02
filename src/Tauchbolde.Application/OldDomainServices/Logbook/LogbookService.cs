@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.ValueObjects;
 
 namespace Tauchbolde.Application.OldDomainServices.Logbook
 {
@@ -27,9 +26,5 @@ namespace Tauchbolde.Application.OldDomainServices.Logbook
         /// <inheritdoc />
         public async Task<LogbookEntry> FindByIdAsync(Guid logbookEntryId)
             => await logbookEntryRepository.FindByIdAsync(logbookEntryId);
-        
-        /// <inheritdoc />
-        public async Task<Photo> GetPhotoDataAsync(PhotoIdentifier photoIdentifier)
-            => await photoService.GetPhotoDataAsync(photoIdentifier);
     }
 }
