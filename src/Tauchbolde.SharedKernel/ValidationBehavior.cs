@@ -59,11 +59,10 @@ namespace Tauchbolde.SharedKernel
             
             if (typeof(TResponse).IsAssignableFrom(typeof(UseCaseResult)))
             {
-                return (TResponse) Activator.CreateInstance(typeof(TResponse), failures);
+                return (TResponse) Activator.CreateInstance(typeof(TResponse), failures, ResultCategory.ValidationFailed);
             }
 
             throw new ValidationException(failures);
-
         }
     }
 }
