@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.OldDomainServices.Logbook;
 using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Application.UseCases.Logbook.DeleteUseCase;
 using Tauchbolde.Application.UseCases.Logbook.EditUseCase;
 using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
@@ -20,7 +21,6 @@ using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
 using Tauchbolde.Application.UseCases.Logbook.UnpublishUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Helpers;
-using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.ValueObjects;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
@@ -30,18 +30,21 @@ namespace Tauchbolde.Web.Controllers
     public class LogbookController : AppControllerBase
     {
         [NotNull] private readonly ILogbookService logbookService;
+        [NotNull] private readonly IPhotoService photoService;
         [NotNull] private readonly ILogger<LogbookController> logger;
         [NotNull] private readonly IMediator mediator;
 
         public LogbookController(
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ILogbookService logbookService,
+            [NotNull] IPhotoService photoService,
             [NotNull] IDiverService diverService,
             [NotNull] ILogger<LogbookController> logger,
             [NotNull] IMediator mediator)
             : base(userManager, diverService)
         {
             this.logbookService = logbookService ?? throw new ArgumentNullException(nameof(logbookService));
+            this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
@@ -218,7 +221,7 @@ namespace Tauchbolde.Web.Controllers
         public async Task<IActionResult> Photo(string photoId)
         {
             var photoIdentifier = new PhotoIdentifier(WebUtility.UrlDecode(photoId));
-            var photo = await logbookService.GetPhotoDataAsync(photoIdentifier);
+            var photo = await photoService.GetPhotoDataAsync(photoIdentifier);
 
             if (photo?.Content == null)
             {
