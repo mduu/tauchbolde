@@ -44,6 +44,8 @@ namespace Tauchbolde.Domain.Entities
             EventId = relatedEventId;
             TeaserImage = photoIdentifiers?.OriginalPhotoIdentifier?.Serialze();
             TeaserImageThumb = photoIdentifiers?.ThumbnailPhotoIdentifier?.Serialze();
+            
+            RaiseDomainEvent(new LogbookEntryCreatedEvent(Id, title));
         }
         
         [DisplayName("Titel")]
