@@ -12,8 +12,7 @@ namespace Tauchbolde.Web.ViewComponents
     {
         [NotNull] private readonly IEventService eventService;
 
-        public RecentAndUpcomingEventsViewComponent([NotNull] IEventService eventService
-            )
+        public RecentAndUpcomingEventsViewComponent([NotNull] IEventService eventService)
         {
             this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
         }

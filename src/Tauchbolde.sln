@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Domain", "Tauchb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Application", "Tauchbolde.Application\Tauchbolde.Application.csproj", "{445EC923-60CB-43D9-B1ED-377DF5F1B104}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.InterfaceAdapters", "Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj", "{08A79F7C-4E11-4325-8C51-C211922FB0FB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Driver.PhotoStorage", "Tauchbolde.Driver.PhotoStorage\Tauchbolde.Driver.PhotoStorage.csproj", "{CC76C9F1-1429-46BC-AB0B-858178311C8E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.Driver.ApplicationInsights", "Tauchbolde.Driver.ApplicationInsights\Tauchbolde.Driver.ApplicationInsights.csproj", "{9BEB0CFD-CE37-4ED8-BD03-BB59F3A3B19C}"
@@ -28,6 +26,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{49F2A5AC-2442-41A5-BBB0-D16C68038927}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.SharedKernel", "Tauchbolde.SharedKernel\Tauchbolde.SharedKernel.csproj", "{B852A5FC-2224-400D-AF9C-4D4CB69A3CC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InterfaceAdapters", "InterfaceAdapters", "{84E8973E-D89B-4997-8C91-82B02490FF1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tauchbolde.InterfaceAdapters", "Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj", "{17974AD9-A67A-4E91-9839-342DECF69451}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,18 +101,6 @@ Global
 		{445EC923-60CB-43D9-B1ED-377DF5F1B104}.Release|x64.Build.0 = Release|Any CPU
 		{445EC923-60CB-43D9-B1ED-377DF5F1B104}.Release|x86.ActiveCfg = Release|Any CPU
 		{445EC923-60CB-43D9-B1ED-377DF5F1B104}.Release|x86.Build.0 = Release|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Debug|x64.Build.0 = Debug|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Debug|x86.Build.0 = Debug|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Release|x64.ActiveCfg = Release|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Release|x64.Build.0 = Release|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Release|x86.ActiveCfg = Release|Any CPU
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB}.Release|x86.Build.0 = Release|Any CPU
 		{CC76C9F1-1429-46BC-AB0B-858178311C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC76C9F1-1429-46BC-AB0B-858178311C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC76C9F1-1429-46BC-AB0B-858178311C8E}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -171,6 +161,18 @@ Global
 		{B852A5FC-2224-400D-AF9C-4D4CB69A3CC2}.Release|x64.Build.0 = Release|Any CPU
 		{B852A5FC-2224-400D-AF9C-4D4CB69A3CC2}.Release|x86.ActiveCfg = Release|Any CPU
 		{B852A5FC-2224-400D-AF9C-4D4CB69A3CC2}.Release|x86.Build.0 = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|x64.Build.0 = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Debug|x86.Build.0 = Debug|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|x64.ActiveCfg = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|x64.Build.0 = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|x86.ActiveCfg = Release|Any CPU
+		{17974AD9-A67A-4E91-9839-342DECF69451}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -183,8 +185,8 @@ Global
 		{66BD6C46-28A9-47DD-ACEC-F4B78D24D812} = {AFF5C119-7D56-4C0F-9BDD-DCCBFFDB60B2}
 		{445EC923-60CB-43D9-B1ED-377DF5F1B104} = {49F2A5AC-2442-41A5-BBB0-D16C68038927}
 		{3ECCB5D8-B659-4F1A-9D2B-CDCB0BAAFE23} = {49F2A5AC-2442-41A5-BBB0-D16C68038927}
-		{08A79F7C-4E11-4325-8C51-C211922FB0FB} = {49F2A5AC-2442-41A5-BBB0-D16C68038927}
 		{B852A5FC-2224-400D-AF9C-4D4CB69A3CC2} = {49F2A5AC-2442-41A5-BBB0-D16C68038927}
+		{17974AD9-A67A-4E91-9839-342DECF69451} = {84E8973E-D89B-4997-8C91-82B02490FF1D}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

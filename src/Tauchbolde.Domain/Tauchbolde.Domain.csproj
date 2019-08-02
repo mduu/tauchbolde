@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-        <RuntimeFrameworkVersion>2.2.0</RuntimeFrameworkVersion>
         <RootNamespace>Tauchbolde.Domain</RootNamespace>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Tauchbolde.SharedKernel\Tauchbolde.SharedKernel.csproj" />
+        <ProjectReference Include="..\Tauchbolde.SharedKernel\Tauchbolde.SharedKernel.csproj" />
     </ItemGroup>
-    
+
 </Project>

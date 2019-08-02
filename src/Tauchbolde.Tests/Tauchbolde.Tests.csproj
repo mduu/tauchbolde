@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <PropertyGroup>    
-    <TargetFramework>netcoreapp2.2</TargetFramework>    
-    <RuntimeFrameworkVersion>2.2.0</RuntimeFrameworkVersion>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <ApplicationIcon />    
     <OutputTypeEx>library</OutputTypeEx>    
     <StartupObject />
@@ -31,7 +31,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Tauchbolde.Application\Tauchbolde.Application.csproj" />
     <ProjectReference Include="..\Tauchbolde.Domain\Tauchbolde.Domain.csproj" />
+    <ProjectReference Include="..\Tauchbolde.Driver.DataAccessSql\Tauchbolde.Driver.DataAccessSql.csproj" />
     <ProjectReference Include="..\Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj" />
+    <ProjectReference Include="..\Tauchbolde.SharedKernel\Tauchbolde.SharedKernel.csproj" />
     <ProjectReference Include="..\Tauchbolde.Web\Tauchbolde.Web.csproj" />
   </ItemGroup>
 

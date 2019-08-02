@@ -34,15 +34,13 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         }
 
 
-        public async Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync()
-        {
-            return await CreateQueryForStartingAt(clock.Now().AddDays(-30).DateTime)
+        public async Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync() =>
+            await CreateQueryForStartingAt(clock.Now().AddDays(-30).DateTime)
                 .Include(e => e.Comments)
-                    .ThenInclude(c => c.Author)
+                .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
-                    .ThenInclude(p => p.ParticipatingDiver)
+                .ThenInclude(p => p.ParticipatingDiver)
                 .ToListAsync();
-        }
 
         public override async Task<Event> FindByIdAsync(Guid id)
         {

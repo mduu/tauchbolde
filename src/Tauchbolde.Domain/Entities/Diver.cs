@@ -82,10 +82,7 @@ namespace Tauchbolde.Domain.Entities
 
         public string GetTwitterUrl()
         {
-            if (string.IsNullOrWhiteSpace(TwitterHandle))
-            {
-                return "";
-            }
+            if (string.IsNullOrWhiteSpace(TwitterHandle)) { return ""; }
 
             var twitterUrl = TwitterHandle;
 
@@ -97,24 +94,14 @@ namespace Tauchbolde.Domain.Entities
             return $"https://twitter.com/{twitterUrl}";
         }
 
-        public string GetFacebookeUrl()
-        {
-            if (string.IsNullOrWhiteSpace(FacebookId))
-            {
-                return "";
-            }
+        public string GetFacebookeUrl() => 
+            !string.IsNullOrWhiteSpace(FacebookId) 
+                ? new Uri($"https://facebook.com/{FacebookId}" ).AbsoluteUri 
+                : "";
 
-            return new Uri($"https://facebook.com/{FacebookId}" ).AbsoluteUri;
-        }
-
-        public string GetSkypeUrl()
-        {
-            if (string.IsNullOrWhiteSpace(SkypeId))
-            {
-                return "";
-            }
-
-            return new Uri($"skype:{SkypeId}" ).AbsoluteUri;
-        }
+        public string GetSkypeUrl() =>
+            !string.IsNullOrWhiteSpace(SkypeId) 
+                ? new Uri($"skype:{SkypeId}" ).AbsoluteUri
+                : "";
     }
 }

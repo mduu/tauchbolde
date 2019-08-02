@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
         <LangVersion>latest</LangVersion>
+        <RootNamespace>Tauchbolde.Application</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

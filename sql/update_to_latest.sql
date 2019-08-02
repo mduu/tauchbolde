@@ -385,7 +385,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181002051420_initial')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181002051420_initial', N'2.2.3-servicing-35854');
+    VALUES (N'20181002051420_initial', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -407,7 +407,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181015191233_RemovePosts')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181015191233_RemovePosts', N'2.2.3-servicing-35854');
+    VALUES (N'20181015191233_RemovePosts', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -422,7 +422,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181015192404_AddFacebookId')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181015192404_AddFacebookId', N'2.2.3-servicing-35854');
+    VALUES (N'20181015192404_AddFacebookId', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -437,7 +437,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181016143224_AddAvatarId')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181016143224_AddAvatarId', N'2.2.3-servicing-35854');
+    VALUES (N'20181016143224_AddAvatarId', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -445,7 +445,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181127061632_Update_AspNetIdentity')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181127061632_Update_AspNetIdentity', N'2.2.3-servicing-35854');
+    VALUES (N'20181127061632_Update_AspNetIdentity', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -460,7 +460,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181127063336_Add_Diver_OwnNotifications')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20181127063336_Add_Diver_OwnNotifications', N'2.2.3-servicing-35854');
+    VALUES (N'20181127063336_Add_Diver_OwnNotifications', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -521,7 +521,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190322161054_Add_LogbookEntry')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190322161054_Add_LogbookEntry', N'2.2.3-servicing-35854');
+    VALUES (N'20190322161054_Add_LogbookEntry', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -581,7 +581,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190323082907_Change_Nullables_In_LogbookEntry')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190323082907_Change_Nullables_In_LogbookEntry', N'2.2.3-servicing-35854');
+    VALUES (N'20190323082907_Change_Nullables_In_LogbookEntry', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -602,7 +602,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327090609_LogbookEntry_EditorAuthorId_Nullable')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190327090609_LogbookEntry_EditorAuthorId_Nullable', N'2.2.3-servicing-35854');
+    VALUES (N'20190327090609_LogbookEntry_EditorAuthorId_Nullable', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -617,7 +617,7 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190623072628_AddLogbook_IsPublished')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190623072628_AddLogbook_IsPublished', N'2.2.3-servicing-35854');
+    VALUES (N'20190623072628_AddLogbook_IsPublished', N'2.2.6-servicing-10079');
 END;
 
 GO
@@ -673,7 +673,15 @@ GO
 IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190626050606_Notifications_Add_LogbookEntryId')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190626050606_Notifications_Add_LogbookEntryId', N'2.2.3-servicing-35854');
+    VALUES (N'20190626050606_Notifications_Add_LogbookEntryId', N'2.2.6-servicing-10079');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190731102038_GeneralUpgrade')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190731102038_GeneralUpgrade', N'2.2.6-servicing-10079');
 END;
 
 GO

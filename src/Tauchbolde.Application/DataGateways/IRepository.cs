@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Tauchbolde.Application.DataGateways
 {
     public interface IRepository<TEntity>
-        where TEntity: class, new()
+        where TEntity: class
     {
         Task<TEntity> FindByIdAsync(Guid id);
         Task<ICollection<TEntity>> GetAllAsync();

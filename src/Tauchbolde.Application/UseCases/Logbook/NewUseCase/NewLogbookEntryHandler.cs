@@ -50,7 +50,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
                 logger.LogInformation("Teaser image stored in photo store: [{filename}]", request.TeaserImageFileName);
             }
 
-            var logbookEntry = LogbookEntry.CreateNew(
+            var logbookEntry = new LogbookEntry(
                 request.Title,
                 request.Teaser,
                 request.Text,
