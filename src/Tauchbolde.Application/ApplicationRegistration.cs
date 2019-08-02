@@ -29,8 +29,13 @@ namespace Tauchbolde.Application
 
             services.AddScoped<IClock, Clock>();
             services.AddSingleton<IMimeMapping, MimeMapping>();
+            
             services.AddScoped<INotificationPublisher, NotificationPublisher>();
-     
+            services.AddTransient<INotificationSender, NotificationSender>();
+            services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
+
+            services.AddTransient<IPhotoService, PhotoService>();
+
             RegisterOldDomainServices(services);
         }
 
@@ -48,11 +53,8 @@ namespace Tauchbolde.Application
             services.AddTransient<IParticipationService, ParticipationService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<INotificationService, NotificationService>();
-            services.AddTransient<INotificationSender, NotificationSender>();
-            services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
             services.AddTransient<IDiverService, DiversService>();
             services.AddTransient<IMassMailService, MassMailService>();
-            services.AddTransient<IPhotoService, PhotoService>();
             
             services.AddSingleton<IAvatarIdGenerator, AvatarIdGenerator>();
             services.AddSingleton<IAvatarStore, AvatarStore>();
