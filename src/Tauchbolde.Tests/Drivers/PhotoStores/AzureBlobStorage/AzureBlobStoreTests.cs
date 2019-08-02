@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Tauchbolde.Application.Services;
+using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Domain.ValueObjects;
 using Tauchbolde.Driver.PhotoStorage.AzureBlobStorage;

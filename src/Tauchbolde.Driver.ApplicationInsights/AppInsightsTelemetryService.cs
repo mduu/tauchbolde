@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.ApplicationInsights;
 using Tauchbolde.Application.Services;
+using Tauchbolde.Application.Services.Telemetry;
 
 namespace Tauchbolde.Driver.ApplicationInsights
 {

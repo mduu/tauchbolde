@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Notifications;
 using Tauchbolde.Application.Services;
+using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 using Xunit;

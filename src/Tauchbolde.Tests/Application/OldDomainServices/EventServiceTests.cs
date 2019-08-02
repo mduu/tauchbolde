@@ -12,6 +12,7 @@ using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Notifications;
 using Tauchbolde.Application.Services;
+using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Entities;
 using Xunit;
 

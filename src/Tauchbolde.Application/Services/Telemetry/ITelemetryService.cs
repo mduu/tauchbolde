@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Tauchbolde.Application.Services
+namespace Tauchbolde.Application.Services.Telemetry
 {
     /// <summary>
     /// Telemetry service interface.

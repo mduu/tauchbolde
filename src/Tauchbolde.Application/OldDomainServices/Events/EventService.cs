@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Notifications;
 using Tauchbolde.Application.Services;
+using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Application.OldDomainServices.Events
