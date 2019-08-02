@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.PhotoStores;
+using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.ValueObjects;
 
 namespace Tauchbolde.Driver.PhotoStorage.AzureBlobStorage

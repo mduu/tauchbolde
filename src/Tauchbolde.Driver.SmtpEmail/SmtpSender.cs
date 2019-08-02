@@ -8,6 +8,7 @@ using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
 using Tauchbolde.Application.Services;
+using Tauchbolde.Application.Services.Telemetry;
 
 namespace Tauchbolde.Driver.SmtpEmail
 {

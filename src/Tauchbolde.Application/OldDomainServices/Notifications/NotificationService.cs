@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services;
+using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 
