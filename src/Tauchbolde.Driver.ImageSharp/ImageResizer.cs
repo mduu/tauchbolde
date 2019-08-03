@@ -36,7 +36,7 @@ namespace Tauchbolde.Driver.ImageSharp
             using (image)
             {
                 image.Mutate(x => x
-                    .Resize(maxWidth, maxHeight)
+                    .Resize(maxWidth, 0)
                 );
 
                 switch (targetFileExt.ToLower())

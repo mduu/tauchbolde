@@ -6,8 +6,8 @@ using JetBrains.Annotations;
 using MediatR;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Tauchbolde.Driver.DataAccessSql.DataEntities.Configurations;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.Driver.DataAccessSql.EntityConfigurations;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Driver.DataAccessSql
