@@ -133,8 +133,8 @@ namespace Tauchbolde.Domain.Entities
             ModifiedAt = DateTimeOffset.UtcNow.DateTime;
             ExternalPhotoAlbumUrl = externalPhotoAlbumUrl;
             EventId = relatedEventId;
-            if (photoIdentifiers != null && (photoIdentifiers.OriginalPhotoIdentifier == null ||
-                                             photoIdentifiers.ThumbnailPhotoIdentifier == null))
+            if (photoIdentifiers != null && (photoIdentifiers.OriginalPhotoIdentifier != null ||
+                                             photoIdentifiers.ThumbnailPhotoIdentifier != null))
             {
                 TeaserImage = photoIdentifiers?.OriginalPhotoIdentifier?.Serialze();
                 TeaserImageThumb = photoIdentifiers?.ThumbnailPhotoIdentifier?.Serialze();
