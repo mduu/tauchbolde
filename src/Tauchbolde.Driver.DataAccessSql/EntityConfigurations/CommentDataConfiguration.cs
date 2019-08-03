@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Tauchbolde.Domain.Entities;
 
-namespace Tauchbolde.Driver.DataAccessSql.DataEntities.Configurations
+namespace Tauchbolde.Driver.DataAccessSql.EntityConfigurations
 {
     public class CommentDataConfiguration : IEntityTypeConfiguration<Comment>
     {
