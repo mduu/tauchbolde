@@ -33,6 +33,7 @@ namespace Tauchbolde.Application
             services.AddScoped<INotificationPublisher, NotificationPublisher>();
             services.AddTransient<INotificationSender, NotificationSender>();
             services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
+            services.AddTransient<IRecipientsBuilder, RecipientsBuilder>();
 
             services.AddTransient<IPhotoService, PhotoService>();
 
