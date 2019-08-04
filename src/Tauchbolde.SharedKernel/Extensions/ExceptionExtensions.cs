@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Text;
 
-namespace Tauchbolde.Web.Core
+namespace Tauchbolde.SharedKernel.Extensions
 {
-    public static class ExceptionTools
+    public static class ExceptionExtensions
     {
         /// <summary>
         /// Unwinds the exception message on all inner exceptions.
@@ -31,5 +31,6 @@ namespace Tauchbolde.Web.Core
 
             return messageBuilder.ToString();
         }
+
     }
 }

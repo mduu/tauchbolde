@@ -1,11 +1,11 @@
 ﻿using System;
 using FluentAssertions;
-using Tauchbolde.Web.Core;
+using Tauchbolde.SharedKernel.Extensions;
 using Xunit;
 
-namespace Tauchbolde.Tests.Web
+namespace Tauchbolde.Tests.SharedKernel.Extensions
 {
-    public class ExceptionToolsTests
+    public class ExceptionExtensionsTests
     {
         [Fact]
         public void UnwindWithoutInnerException()

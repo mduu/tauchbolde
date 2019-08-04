@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Tauchbolde.SharedKernel.Extensions;
 using Tauchbolde.Web.Core;
 
 namespace Tauchbolde.Web.Filters
