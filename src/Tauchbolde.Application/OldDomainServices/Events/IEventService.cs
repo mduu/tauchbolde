@@ -25,14 +25,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
         Task<Event> UpsertEventAsync(Event eventToUpsert, Diver currentUser);
 
         /// <summary>
-        /// Adds the comment to a event async.
-        /// </summary>
-        /// <returns>The comment that was added.</returns>
-        /// <param name="eventId">The Id of the event to add the comment to.</param>
-        /// <param name="commentToAdd">Comment to add to the event.</param>
-        Task<Comment> AddCommentAsync(Guid eventId, string commentToAdd, Diver authorDiver);
-
-        /// <summary>
         /// Edits the comment async.
         /// </summary>
         /// <returns>The edited comment async.</returns>

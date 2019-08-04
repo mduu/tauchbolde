@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using JetBrains.Annotations;
 using Tauchbolde.Domain.Helpers;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Domain.Entities
 {
+    // TODO Change setters and ctor() to internal
     public class Event : EntityBase
     {
         [Display(Name = "Name")]
@@ -48,7 +50,7 @@ namespace Tauchbolde.Domain.Entities
         public bool Deleted { get; set; }
 
         public virtual ICollection<Participant> Participants { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         [Display(Name = "Datum / Zeit")]
         [NotMapped]
@@ -57,5 +59,16 @@ namespace Tauchbolde.Domain.Entities
                 ? $"{StartTime.ToStringSwissDate()} - {EndTime.Value.ToStringSwissTime()}"
                 : $"{StartTime.ToStringSwissDate()} - {EndTime.ToStringSwissDate()}"
             : $"{StartTime.ToStringSwissDateTime()}";
+
+        public Comment AddNewComment(Guid authorId, [NotNull] string text)
+        {
+            if (authorId == Guid.Empty) throw new ArgumentException("Guid.Empty is not allowed!", nameof(authorId));
+            if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(text));
+
+            var newComment = new Comment(Id, authorId, text);
+            Comments.Add(newComment);
+
+            return newComment;
+        }
     }
 }
