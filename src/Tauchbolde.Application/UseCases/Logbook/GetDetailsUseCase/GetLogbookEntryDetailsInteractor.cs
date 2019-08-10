@@ -12,13 +12,13 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase
 {
     [UsedImplicitly]
-    public class GetLogbookEntryDetailsHandler : IRequestHandler<GetLogbookEntryDetails, UseCaseResult<LogbookEntry>>
+    public class GetLogbookEntryDetailsInteractor : IRequestHandler<GetLogbookEntryDetails, UseCaseResult<LogbookEntry>>
     {
-        private readonly ILogger<GetLogbookEntryDetailsHandler> logger;
+        private readonly ILogger<GetLogbookEntryDetailsInteractor> logger;
         [NotNull] private readonly ILogbookEntryRepository repository;
 
-        public GetLogbookEntryDetailsHandler(
-            [NotNull] ILogger<GetLogbookEntryDetailsHandler> logger,
+        public GetLogbookEntryDetailsInteractor(
+            [NotNull] ILogger<GetLogbookEntryDetailsInteractor> logger,
             [NotNull] ILogbookEntryRepository repository)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));

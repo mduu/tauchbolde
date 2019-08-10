@@ -12,17 +12,17 @@ using Xunit;
 
 namespace Tauchbolde.Tests.Application.UseCases.Logbook
 {
-    public class GetLogbookEntryDetailsHandlerTests
+    public class GetLogbookEntryDetailsInteractorTests
     {
         private readonly Guid validId = new Guid("544E7E71-67F8-4676-9247-BA51ACC7884A");
         private readonly ILogbookEntryRepository repository = A.Fake<ILogbookEntryRepository>();
 
-        private readonly ILogger<GetLogbookEntryDetailsHandler> logger =
-            A.Fake<ILogger<GetLogbookEntryDetailsHandler>>();
+        private readonly ILogger<GetLogbookEntryDetailsInteractor> logger =
+            A.Fake<ILogger<GetLogbookEntryDetailsInteractor>>();
 
-        private readonly GetLogbookEntryDetailsHandler handler;
+        private readonly GetLogbookEntryDetailsInteractor interactor;
 
-        public GetLogbookEntryDetailsHandlerTests()
+        public GetLogbookEntryDetailsInteractorTests()
         {
             A.CallTo(() => repository.FindByIdAsync(A<Guid>._))
                 .ReturnsLazily(call => Task.FromResult(
@@ -34,7 +34,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                             }
                         : null));
 
-            handler = new GetLogbookEntryDetailsHandler(logger, repository);
+            interactor = new GetLogbookEntryDetailsInteractor(logger, repository);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         {
             var request = new GetLogbookEntryDetails(validId);
 
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await interactor.Handle(request, CancellationToken.None);
 
             result.Payload.Should().NotBeNull();
             result.IsSuccessful.Should().BeTrue();
@@ -55,7 +55,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         {
             var request = new GetLogbookEntryDetails(new Guid("D6401A2A-1C89-4CFD-8436-53D071B1673C"));
 
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await interactor.Handle(request, CancellationToken.None);
 
             result.Payload.Should().BeNull();
             result.IsSuccessful.Should().BeFalse();
