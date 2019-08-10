@@ -11,11 +11,11 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Logbook.SummaryListUseCase
 {
     [UsedImplicitly]
-    internal class SummaryListLogbookEntriesHandler : IRequestHandler<SummaryListLogbookEntries, UseCaseResult<IEnumerable<LogbookEntry>>>
+    internal class SummaryListLogbookEntriesInteractor : IRequestHandler<SummaryListLogbookEntries, UseCaseResult<IEnumerable<LogbookEntry>>>
     {
         private readonly ILogbookEntryRepository logbookEntryRepository;
 
-        public SummaryListLogbookEntriesHandler([NotNull] ILogbookEntryRepository logbookEntryRepository)
+        public SummaryListLogbookEntriesInteractor([NotNull] ILogbookEntryRepository logbookEntryRepository)
         {
             this.logbookEntryRepository = logbookEntryRepository ?? throw new ArgumentNullException(nameof(logbookEntryRepository));
         }
