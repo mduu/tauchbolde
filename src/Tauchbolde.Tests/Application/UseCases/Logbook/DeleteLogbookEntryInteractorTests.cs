@@ -12,15 +12,15 @@ using Xunit;
 
 namespace Tauchbolde.Tests.Application.UseCases.Logbook
 {
-    public class DeleteLogbookEntryHandlerTests
+    public class DeleteLogbookEntryInteractorTests
     {
         private readonly Guid validLogbookEntryId = new Guid("C77B50BF-614B-4CC7-B611-3A240E0D5D80");
-        private readonly ILogger<DeleteLogbookEntryHandler> logger = A.Fake<ILogger<DeleteLogbookEntryHandler>>();
+        private readonly ILogger<DeleteLogbookEntryInteractor> logger = A.Fake<ILogger<DeleteLogbookEntryInteractor>>();
         private readonly ILogbookEntryRepository repository = A.Fake<ILogbookEntryRepository>();
         private readonly LogbookEntry validLogbookEntry;
-        private readonly DeleteLogbookEntryHandler handler;
+        private readonly DeleteLogbookEntryInteractor interactor;
 
-        public DeleteLogbookEntryHandlerTests()
+        public DeleteLogbookEntryInteractorTests()
         {
             
             validLogbookEntry = CreateValidLogbookEntry();
@@ -34,7 +34,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                             : null);
                 });
             
-            handler = new DeleteLogbookEntryHandler(logger, repository);
+            interactor = new DeleteLogbookEntryInteractor(logger, repository);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         {
             var request = new DeleteLogbookEntry(validLogbookEntryId);
             
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await interactor.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
             validLogbookEntry.UncommittedDomainEvents.Should()
@@ -56,7 +56,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         {
             var request = new DeleteLogbookEntry(new Guid("5988D38B-AB1E-4EA4-BFC3-593605553A62"));
             
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await interactor.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeFalse();
             result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(DeleteLogbookEntry.LogbookEntryId));
