@@ -14,14 +14,14 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
 {
     [UsedImplicitly]
-    public class NewLogbookEntryHandler : IRequestHandler<NewLogbookEntry, UseCaseResult<LogbookEntry>>
+    public class NewLogbookEntryInteractor : IRequestHandler<NewLogbookEntry, UseCaseResult<LogbookEntry>>
     {
-        private readonly ILogger<NewLogbookEntryHandler> logger;
+        private readonly ILogger<NewLogbookEntryInteractor> logger;
         private readonly ILogbookEntryRepository repository;
         private readonly IPhotoService photoService;
 
-        public NewLogbookEntryHandler(
-            [NotNull] ILogger<NewLogbookEntryHandler> logger,
+        public NewLogbookEntryInteractor(
+            [NotNull] ILogger<NewLogbookEntryInteractor> logger,
             [NotNull] ILogbookEntryRepository repository,
             [NotNull] IPhotoService photoService)
         {

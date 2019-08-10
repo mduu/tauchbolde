@@ -12,18 +12,18 @@ using Xunit;
 
 namespace Tauchbolde.Tests.Application.UseCases.Logbook
 {
-    public class NewLogbookEntryHandlerTests
+    public class NewLogbookEntryInteractorTests
     {
-        private readonly NewLogbookEntryHandler handler;
+        private readonly NewLogbookEntryInteractor interactor;
         private readonly ILogbookEntryRepository logbookEntryRepository;
         private readonly IPhotoService service;
 
-        public NewLogbookEntryHandlerTests()
+        public NewLogbookEntryInteractorTests()
         {
-            var logger = A.Fake<ILogger<NewLogbookEntryHandler>>();
+            var logger = A.Fake<ILogger<NewLogbookEntryInteractor>>();
             logbookEntryRepository = A.Fake<ILogbookEntryRepository>();
             service = A.Fake<IPhotoService>();
-            handler = new NewLogbookEntryHandler(logger, logbookEntryRepository, service);
+            interactor = new NewLogbookEntryInteractor(logger, logbookEntryRepository, service);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         {
             var request = CreateNewLogbookEntryRequest();
             
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await interactor.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
             result.Payload.Id.Should().NotBeEmpty();
@@ -54,7 +54,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                 null, 
                 null);
             
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await interactor.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
         }
