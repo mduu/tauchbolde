@@ -11,18 +11,18 @@ using Xunit;
 
 namespace Tauchbolde.Tests.Application.UseCases.Logbook
 {
-    public class PublishLogEntryHandlerTests
+    public class PublishLogEntryInteractorTests
     {
         private static readonly Guid ValidLogbookEntryId = new Guid("0D8C32AD-0C6B-4A39-A054-456ECE524F2A");
-        private readonly PublishLogbookEntryHandler publishLogbookEntryHandler;
+        private readonly PublishLogbookEntryInteractor publishLogbookEntryInteractor;
         private readonly ILogbookEntryRepository dataAccess;
         private readonly PublishLogbookEntry request = new PublishLogbookEntry(ValidLogbookEntryId);
 
-        public PublishLogEntryHandlerTests()
+        public PublishLogEntryInteractorTests()
         {
-            var logger = A.Fake<ILogger<PublishLogbookEntryHandler>>();
+            var logger = A.Fake<ILogger<PublishLogbookEntryInteractor>>();
             dataAccess = A.Fake<ILogbookEntryRepository>();
-            publishLogbookEntryHandler = new PublishLogbookEntryHandler(logger, dataAccess);
+            publishLogbookEntryInteractor = new PublishLogbookEntryInteractor(logger, dataAccess);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                 .ReturnsLazily(() =>
                     Task.FromResult(new LogbookEntry {Id = ValidLogbookEntryId}));
             
-            var result = await publishLogbookEntryHandler.Handle(request, new CancellationToken());
+            var result = await publishLogbookEntryInteractor.Handle(request, new CancellationToken());
 
             result.Should().BeTrue();
             A.CallTo(() => dataAccess.UpdateAsync(
@@ -47,7 +47,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                 .ReturnsLazily(() =>
                     Task.FromResult<LogbookEntry>(null));
             
-            var result = await publishLogbookEntryHandler.Handle(request, new CancellationToken());
+            var result = await publishLogbookEntryInteractor.Handle(request, new CancellationToken());
 
             result.Should().BeFalse();
             A.CallTo(() => dataAccess.UpdateAsync(
@@ -64,7 +64,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
             A.CallTo(() => dataAccess.UpdateAsync(A<LogbookEntry>._))
                 .Throws<InvalidOperationException>();
 
-            var result = await publishLogbookEntryHandler.Handle(request, new CancellationToken());
+            var result = await publishLogbookEntryInteractor.Handle(request, new CancellationToken());
                 
             result.Should().BeFalse();
             A.CallTo(() => dataAccess.UpdateAsync(
