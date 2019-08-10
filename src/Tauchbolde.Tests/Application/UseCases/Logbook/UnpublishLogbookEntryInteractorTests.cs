@@ -11,15 +11,15 @@ using Xunit;
 
 namespace Tauchbolde.Tests.Application.UseCases.Logbook
 {
-    public class UnpublishLogbookEntryHandlerTests
+    public class UnpublishLogbookEntryInteractorTests
     {
         private readonly Guid validLogbookEntryId = new Guid("EA07BF09-C77E-4198-B180-A1FCD43CDEAC");
-        private readonly UnpublishLogbookEntryHandler handler;
+        private readonly UnpublishLogbookEntryInteractor interactor;
         private readonly ILogbookEntryRepository repository;
 
-        public UnpublishLogbookEntryHandlerTests()
+        public UnpublishLogbookEntryInteractorTests()
         {
-            var logger = A.Fake<ILogger<UnpublishLogbookEntryHandler>>();
+            var logger = A.Fake<ILogger<UnpublishLogbookEntryInteractor>>();
             
             repository = A.Fake<ILogbookEntryRepository>();
             A.CallTo(() => repository.FindByIdAsync(A<Guid>._))
@@ -29,7 +29,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                         : null
                 ));
             
-            handler = new UnpublishLogbookEntryHandler(logger, repository);
+            interactor = new UnpublishLogbookEntryInteractor(logger, repository);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         {
             UnpublishLogbookEntry request = new UnpublishLogbookEntry(validLogbookEntryId);
             
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await interactor.Handle(request, CancellationToken.None);
 
             result.Should().BeTrue();
             A.CallTo(() => repository.UpdateAsync(
@@ -51,7 +51,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         {
             UnpublishLogbookEntry request = new UnpublishLogbookEntry(new Guid("8A2BD418-1936-4BCD-8AC5-A1732DD0998A"));
             
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await interactor.Handle(request, CancellationToken.None);
 
             result.Should().BeFalse();
             A.CallTo(() => repository.UpdateAsync(A<LogbookEntry>.That.Matches(l => l.Id == validLogbookEntryId)))

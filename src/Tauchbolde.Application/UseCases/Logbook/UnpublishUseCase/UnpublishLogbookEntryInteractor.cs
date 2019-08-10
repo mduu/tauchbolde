@@ -9,13 +9,13 @@ using Tauchbolde.Application.DataGateways;
 namespace Tauchbolde.Application.UseCases.Logbook.UnpublishUseCase
 {
     [UsedImplicitly]
-    internal class UnpublishLogbookEntryHandler : IRequestHandler<UnpublishLogbookEntry, bool>
+    internal class UnpublishLogbookEntryInteractor : IRequestHandler<UnpublishLogbookEntry, bool>
     {
-        private readonly ILogger<UnpublishLogbookEntryHandler> logger;
+        private readonly ILogger<UnpublishLogbookEntryInteractor> logger;
         private readonly ILogbookEntryRepository dataAccess;
         
-        public UnpublishLogbookEntryHandler(
-            [NotNull] ILogger<UnpublishLogbookEntryHandler> logger,
+        public UnpublishLogbookEntryInteractor(
+            [NotNull] ILogger<UnpublishLogbookEntryInteractor> logger,
             [NotNull] ILogbookEntryRepository dataAccess)
         {
             this.dataAccess = dataAccess ?? throw new ArgumentNullException(nameof(dataAccess));
