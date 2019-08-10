@@ -11,12 +11,12 @@ using Tauchbolde.SharedKernel.Extensions;
 namespace Tauchbolde.Application.UseCases.Event.NewCommentUseCase
 {
     [UsedImplicitly]
-    public class NewCommentHandler : IRequestHandler<NewComment, UseCaseResult>
+    public class NewCommentInteractor : IRequestHandler<NewComment, UseCaseResult>
     {
         private readonly IEventRepository eventRepository;
         private readonly ICommentRepository commentRepository;
 
-        public NewCommentHandler([NotNull] IEventRepository eventRepository, [NotNull] ICommentRepository commentRepository)
+        public NewCommentInteractor([NotNull] IEventRepository eventRepository, [NotNull] ICommentRepository commentRepository)
         {
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             this.commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));

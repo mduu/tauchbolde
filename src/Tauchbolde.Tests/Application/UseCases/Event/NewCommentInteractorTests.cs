@@ -11,15 +11,15 @@ using Xunit;
 
 namespace Tauchbolde.Tests.Application.UseCases.Event
 {
-    public class NewCommentHandlerTests
+    public class NewCommentInteractorTests
     {
         private readonly Guid validEventId = new Guid("6BE85F8D-3898-488C-92A9-D979648B742B");
         private readonly Guid validAuthorId = new Guid("E072BCB8-36E6-4E36-A241-31E4DDB14435");
         private readonly IEventRepository eventRepository = A.Fake<IEventRepository>();
         private readonly ICommentRepository commentRepository = A.Fake<ICommentRepository>();
-        private readonly NewCommentHandler handler;
+        private readonly NewCommentInteractor interactor;
 
-        public NewCommentHandlerTests()
+        public NewCommentInteractorTests()
         {
             A.CallTo(() => eventRepository.FindByIdAsync(A<Guid>._))
                 .ReturnsLazily(call => Task.FromResult(
@@ -28,7 +28,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
                         : null
                     ));
 
-            handler = new NewCommentHandler(eventRepository, commentRepository);
+            interactor = new NewCommentInteractor(eventRepository, commentRepository);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         {
             var request = new NewComment(validEventId, validAuthorId, "The answer is 42!");
             
-            var useCaseResult = await handler.Handle(request, CancellationToken.None);
+            var useCaseResult = await interactor.Handle(request, CancellationToken.None);
 
             useCaseResult.Should().NotBeNull();
             useCaseResult.IsSuccessful.Should().BeTrue();
@@ -51,7 +51,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
                 validAuthorId, 
                 "The answer is 42!");
             
-            var useCaseResult = await handler.Handle(request, CancellationToken.None);
+            var useCaseResult = await interactor.Handle(request, CancellationToken.None);
 
             useCaseResult.Should().NotBeNull();
             useCaseResult.IsSuccessful.Should().BeFalse();
@@ -66,7 +66,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             A.CallTo(() => commentRepository.InsertAsync(A<Comment>._))
                 .Invokes(() => throw new InvalidOperationException());
             
-            var useCaseResult = await handler.Handle(request, CancellationToken.None);
+            var useCaseResult = await interactor.Handle(request, CancellationToken.None);
 
             useCaseResult.Should().NotBeNull();
             useCaseResult.IsSuccessful.Should().BeFalse();
