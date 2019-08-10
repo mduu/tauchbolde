@@ -11,12 +11,12 @@ using Xunit;
 
 namespace Tauchbolde.Tests.Application.UseCases.Logbook
 {
-    public class ListAllLogbookEntriesHandlerTests
+    public class ListAllLogbookEntriesInteractorTests
     {
         private readonly ILogbookEntryRepository repository = A.Fake<ILogbookEntryRepository>();
-        private readonly ListAllLogbookEntriesHandler handler;
+        private readonly ListAllLogbookEntriesInteractor interactor;
 
-        public ListAllLogbookEntriesHandlerTests()
+        public ListAllLogbookEntriesInteractorTests()
         {
             A.CallTo(() => repository.GetAllEntriesAsync(false))
                 .ReturnsLazily(call => Task.FromResult(new List<LogbookEntry>
@@ -31,7 +31,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                     new LogbookEntry { Id = new Guid("12818D43-F0BF-4762-8A7E-F1023B81FEA4") },
                 } as ICollection<LogbookEntry>));
             
-            handler = new ListAllLogbookEntriesHandler(repository);
+            interactor = new ListAllLogbookEntriesInteractor(repository);
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         {
             var request = new ListAllLogbookEntries(false);
             
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await interactor.Handle(request, CancellationToken.None);
 
             result.Payload.Should().HaveCount(1);
         }
@@ -49,7 +49,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         {
             var request = new ListAllLogbookEntries(true);
             
-            var result = await handler.Handle(request, CancellationToken.None);
+            var result = await interactor.Handle(request, CancellationToken.None);
 
             result.Payload.Should().HaveCount(2);
         }
