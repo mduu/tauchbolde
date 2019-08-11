@@ -71,31 +71,6 @@ namespace Tauchbolde.Tests.Application.OldDomainServices.Notifications
         [Theory]
         [InlineData(false, 1)]
         [InlineData(true, 2)]
-        public async Task NotifyForCanceledEventAsync(bool sendOwnNotifications, int expectedNotificationInserts)
-        {
-            // Arrange
-            var currentUser = CreateCurrentUser(sendOwnNotifications);
-            var evt = new Event
-            {
-                Id = new Guid("b4de413a-7d40-4319-80b3-517d22a9247d"),
-                Name = "Test Event",
-                OrganisatorId = johnDiverId,
-                Organisator = currentUser,
-            };
-            var notificationRepo = CreateNotificationRepo();
-            var notificationService = CreateNotificationService(notificationRepo, sendOwnNotifications);
-
-            // Act
-            await notificationService.NotifyForCanceledEventAsync(evt, currentUser);
-
-            // Assert
-            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._))
-                .MustHaveHappened(expectedNotificationInserts, Times.Exactly);
-        }
-
-        [Theory]
-        [InlineData(false, 1)]
-        [InlineData(true, 2)]
         public async Task NotifyForEventCommentAsync(bool sendOwnNotifications, int expectedNotificationInserts)
         {
             // Arrange

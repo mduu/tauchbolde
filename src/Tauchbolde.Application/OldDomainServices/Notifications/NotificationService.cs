@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Application.DataGateways;
-using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
@@ -72,32 +71,6 @@ namespace Tauchbolde.Application.OldDomainServices.Notifications
                 changedEvent,
                 recipients,
                 NotificationType.EditEvent,
-                message,
-                currentUser);
-        }
-
-        /// <inheritdoc />
-        public async Task NotifyForCanceledEventAsync(
-            [NotNull] Event canceledEvent,
-            [CanBeNull] Diver currentUser)
-        {
-            if (canceledEvent == null) throw new ArgumentNullException(nameof(canceledEvent));
-
-            // Recipients all Tauchbolde that did not yet "decline" the Event already
-            var declinedParticipants =
-                await participantRepository.GetParticipantsForEventByStatusAsync(canceledEvent.Id,
-                    ParticipantStatus.Declined);
-            var recipients = (await diverRepository.GetAllTauchboldeUsersAsync())
-                .Where(u => declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
-                .ToList();
-
-            var message =
-                $"Aktivität '{canceledEvent.Name}' ({canceledEvent.StartEndTimeAsString}) wurde abgesagt von {canceledEvent.Organisator.Realname}.";
-
-            await InsertNotification(
-                canceledEvent,
-                recipients,
-                NotificationType.CancelEvent,
                 message,
                 currentUser);
         }
