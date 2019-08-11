@@ -15,15 +15,13 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
     public class NewLogbookEntryInteractorTests
     {
         private readonly NewLogbookEntryInteractor interactor;
-        private readonly ILogbookEntryRepository logbookEntryRepository;
-        private readonly IPhotoService service;
 
         public NewLogbookEntryInteractorTests()
         {
             var logger = A.Fake<ILogger<NewLogbookEntryInteractor>>();
-            logbookEntryRepository = A.Fake<ILogbookEntryRepository>();
-            service = A.Fake<IPhotoService>();
-            interactor = new NewLogbookEntryInteractor(logger, logbookEntryRepository, service);
+            var logbookEntryRepository = A.Fake<ILogbookEntryRepository>();
+            var photoService = A.Fake<IPhotoService>();
+            interactor = new NewLogbookEntryInteractor(logger, logbookEntryRepository, photoService);
         }
 
         [Fact]
@@ -34,8 +32,6 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
             var result = await interactor.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
-            result.Payload.Id.Should().NotBeEmpty();
-            result.Payload.Title.Should().Be(request.Title);
         }
 
         [Fact]

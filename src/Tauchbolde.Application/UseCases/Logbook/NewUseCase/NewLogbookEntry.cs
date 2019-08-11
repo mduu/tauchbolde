@@ -2,12 +2,11 @@ using System;
 using System.IO;
 using JetBrains.Annotations;
 using MediatR;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
 {
-    public class NewLogbookEntry : IRequest<UseCaseResult<LogbookEntry>>
+    public class NewLogbookEntry : IRequest<UseCaseResult>
     {
         public NewLogbookEntry(Guid authorDiverId,
             [NotNull] string title,

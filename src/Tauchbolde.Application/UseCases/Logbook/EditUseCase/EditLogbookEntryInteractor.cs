@@ -14,7 +14,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
 {
     [UsedImplicitly]
-    internal class EditLogbookEntryInteractor : IRequestHandler<EditLogbookEntry, UseCaseResult<LogbookEntry>>
+    internal class EditLogbookEntryInteractor : IRequestHandler<EditLogbookEntry, UseCaseResult>
     {
         private readonly ILogger<EditLogbookEntryInteractor> logger;
         private readonly IPhotoService photoService;
@@ -30,7 +30,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<UseCaseResult<LogbookEntry>> Handle([NotNull] EditLogbookEntry request,
+        public async Task<UseCaseResult> Handle([NotNull] EditLogbookEntry request,
             CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
@@ -74,7 +74,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
             logger.LogInformation(
                 "LogbookEntry with ID [{id}] and title [{title}] editeted successfully.",
              existingLogbookEntry.Id, existingLogbookEntry.Title);
-            return UseCaseResult<LogbookEntry>.Success(existingLogbookEntry);
+            return UseCaseResult.Success();
         }
     }
 }

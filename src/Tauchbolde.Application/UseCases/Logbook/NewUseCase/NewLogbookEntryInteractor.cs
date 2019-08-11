@@ -14,7 +14,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
 {
     [UsedImplicitly]
-    public class NewLogbookEntryInteractor : IRequestHandler<NewLogbookEntry, UseCaseResult<LogbookEntry>>
+    public class NewLogbookEntryInteractor : IRequestHandler<NewLogbookEntry, UseCaseResult>
     {
         private readonly ILogger<NewLogbookEntryInteractor> logger;
         private readonly ILogbookEntryRepository repository;
@@ -30,7 +30,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
             this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
         }
         
-        public async Task<UseCaseResult<LogbookEntry>> Handle([NotNull] NewLogbookEntry request, CancellationToken cancellationToken)
+        public async Task<UseCaseResult> Handle([NotNull] NewLogbookEntry request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             
@@ -63,7 +63,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
             var newLogbookEntry = await repository.InsertAsync(logbookEntry);
             
             logger.LogInformation("New LogbookEntry for [{title}] created with Id [{id}]", request.Title, newLogbookEntry.Id);
-            return UseCaseResult<LogbookEntry>.Success(logbookEntry);
+            return UseCaseResult.Success();
         }
     }
 }
