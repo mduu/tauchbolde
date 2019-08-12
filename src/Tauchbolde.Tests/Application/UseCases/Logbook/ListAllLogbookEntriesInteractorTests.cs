@@ -7,6 +7,8 @@ using FluentAssertions;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
+using Tauchbolde.InterfaceAdapters.TextFormatting;
 using Xunit;
 
 namespace Tauchbolde.Tests.Application.UseCases.Logbook
@@ -14,6 +16,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
     public class ListAllLogbookEntriesInteractorTests
     {
         private readonly ILogbookEntryRepository repository = A.Fake<ILogbookEntryRepository>();
+        private readonly MvcListLogbookPresenter presenter = new MvcListLogbookPresenter(true, new MarkdownDigFormatter());
         private readonly ListAllLogbookEntriesInteractor interactor;
 
         public ListAllLogbookEntriesInteractorTests()
@@ -37,21 +40,25 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         [Fact]
         public async Task Handle_DontIncludeUnpublished()
         {
-            var request = new ListAllLogbookEntries(false);
+            var request = new ListAllLogbookEntries(false, presenter);
             
             var result = await interactor.Handle(request, CancellationToken.None);
 
-            result.Payload.Should().HaveCount(1);
+            result.IsSuccessful.Should().BeTrue();
+            var viewModel = presenter.GetViewModel();
+            viewModel.LogbookItems.Should().HaveCount(1);
         }
 
         [Fact]
         public async Task Handle_IncludeUnpublished()
         {
-            var request = new ListAllLogbookEntries(true);
+            var request = new ListAllLogbookEntries(true, presenter);
             
             var result = await interactor.Handle(request, CancellationToken.None);
 
-            result.Payload.Should().HaveCount(2);
+            result.IsSuccessful.Should().BeTrue();
+            var viewModel = presenter.GetViewModel();
+            viewModel.LogbookItems.Should().HaveCount(2);
         }
     }
 }

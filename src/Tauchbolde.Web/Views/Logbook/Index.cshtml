@@ -1,4 +1,4 @@
-﻿@model Tauchbolde.Web.Models.Logbook.LogbookListViewModel
+﻿@model Tauchbolde.InterfaceAdapters.Logbook.ListAll.LogbookListViewModel
 @{
     ViewBag.Title = "Logbuch";
     Layout = "_Layout";
@@ -11,10 +11,10 @@
 </div>
 
 <div class="row">
-    @foreach (var logbookEntry in Model.AllEntries)
+    @foreach (var logbookItem in Model.LogbookItems)
     {
         <div class="col-lg-3 col-md-4 col-sm-12">
-            <vc:logbook-entry-card logbook-entry="logbookEntry" allow-edit="Model.AllowEdit">
+            <vc:logbook-entry-card logbook-item="@logbookItem">
             </vc:logbook-entry-card>
         </div>
     }

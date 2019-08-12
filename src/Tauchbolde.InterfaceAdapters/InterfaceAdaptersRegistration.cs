@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Application.Services.Notifications;
+using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
 using Tauchbolde.InterfaceAdapters.MailHtmlFormatting;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
 

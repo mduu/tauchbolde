@@ -1,5 +1,4 @@
-@model Tauchbolde.Web.Models.ViewComponentModels.LogbookCardViewModel
-@inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
+@model Tauchbolde.InterfaceAdapters.Logbook.ListAll.LogbookListViewModel.LogbookItemViewModel
 
 <style>
     .logbook-entry {
@@ -58,7 +57,7 @@
         <div id="image-placeholder"></div>
     }
     <h4>@Model.Title</h4>
-    <div class="logbook-entry-content">@TextFormatting.FormatText(Model.TeaserText)</div>
+    <div class="logbook-entry-content">@Html.Raw(Model.TeaserText)</div>
     <div class="spacer"></div>
     <div class="logbook-entry-actions">
         <a class="btn btn-primary" asp-controller="Logbook" asp-action="Detail" asp-route-id="@Model.LogbookEntryId">Mehr ...</a>

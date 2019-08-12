@@ -1,17 +1,16 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
 using Tauchbolde.Application.DataGateways;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Application.UseCases.Logbook.ListAllUseCase
 {
     [UsedImplicitly]
-    internal class ListAllLogbookEntriesInteractor : IRequestHandler<ListAllLogbookEntries, UseCaseResult<IEnumerable<LogbookEntry>>>
+    internal class ListAllLogbookEntriesInteractor : IRequestHandler<ListAllLogbookEntries, UseCaseResult>
     {
         private readonly ILogbookEntryRepository logbookEntryRepository;
 
@@ -20,11 +19,17 @@ namespace Tauchbolde.Application.UseCases.Logbook.ListAllUseCase
             this.logbookEntryRepository = logbookEntryRepository ?? throw new ArgumentNullException(nameof(logbookEntryRepository));
         }
         
-        public async Task<UseCaseResult<IEnumerable<LogbookEntry>>> Handle([NotNull] ListAllLogbookEntries request, CancellationToken cancellationToken)
+        public async Task<UseCaseResult> Handle([NotNull] ListAllLogbookEntries request, CancellationToken cancellationToken)
         {
             var allEntries = await logbookEntryRepository.GetAllEntriesAsync(request.IncludeUnpublished);
             
-            return UseCaseResult<IEnumerable<LogbookEntry>>.Success(allEntries);
+            var output = new ListAllLogbookEntriesOutputPort(allEntries.Select(l => 
+                new ListAllLogbookEntriesOutputPort.LogbookItem(
+                    l.Id, l.Title, l.TeaserText, l.TeaserImageThumb, l.IsPublished, l.Text)));
+            
+            await request.Presenter.PresentAsync(output);
+            
+            return UseCaseResult.Success();
         }
     }
 }

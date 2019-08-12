@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -19,9 +17,10 @@ using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
 using Tauchbolde.Application.UseCases.Logbook.NewUseCase;
 using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
 using Tauchbolde.Application.UseCases.Logbook.UnpublishUseCase;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Helpers;
 using Tauchbolde.Domain.ValueObjects;
+using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
+using Tauchbolde.InterfaceAdapters.TextFormatting;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
 
@@ -32,35 +31,35 @@ namespace Tauchbolde.Web.Controllers
         [NotNull] private readonly IPhotoService photoService;
         [NotNull] private readonly ILogger<LogbookController> logger;
         [NotNull] private readonly IMediator mediator;
+        [NotNull] private readonly ITextFormatter textFormatter;
 
         public LogbookController(
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] IPhotoService photoService,
             [NotNull] IDiverService diverService,
             [NotNull] ILogger<LogbookController> logger,
-            [NotNull] IMediator mediator)
+            [NotNull] IMediator mediator,
+            [NotNull] ITextFormatter textFormatter)
             : base(userManager, diverService)
         {
             this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
         }
 
         // GET /
         public async Task<IActionResult> Index()
         {
             var allowEdit = await GetAllowEdit();
-            var allLogbookEntries = await mediator.Send(new ListAllLogbookEntries(allowEdit));
-            if (!allLogbookEntries.IsSuccessful)
+            var presenter = new MvcListLogbookPresenter(allowEdit, textFormatter);
+            var interactorResult = await mediator.Send(new ListAllLogbookEntries(allowEdit, presenter));
+            if (!interactorResult.IsSuccessful)
             {
                 ShowErrorMessage("Fehler beim Abfragen aller Logbucheinträge!");
             }
-            
-            var model = new LogbookListViewModel(
-                allLogbookEntries.Payload?.ToList() ?? new List<LogbookEntry>(),
-                allowEdit);
 
-            return View(model);
+            return View(presenter.GetViewModel());
         }
 
         // GET /detail/x
