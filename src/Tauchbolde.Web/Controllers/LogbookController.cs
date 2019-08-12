@@ -17,10 +17,12 @@ using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
 using Tauchbolde.Application.UseCases.Logbook.NewUseCase;
 using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
 using Tauchbolde.Application.UseCases.Logbook.UnpublishUseCase;
+using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Helpers;
 using Tauchbolde.Domain.ValueObjects;
 using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
+using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.Logbook;
 
@@ -234,10 +236,13 @@ namespace Tauchbolde.Web.Controllers
             {
                 return null;
             }
-
             var allowEdit = await GetAllowEdit();
 
-            return new LogbookDetailViewModel
+            return CreateLogbookDetailViewModel(allowEdit, logbookEntry);
+        }
+
+        private LogbookDetailViewModel CreateLogbookDetailViewModel(bool allowEdit, UseCaseResult<LogbookEntry> logbookEntry) =>
+            new LogbookDetailViewModel
             {
                 AllowEdit = allowEdit,
                 Id = logbookEntry.Payload.Id,
@@ -276,7 +281,6 @@ namespace Tauchbolde.Web.Controllers
                     ? Url.Action("Delete", new {id = logbookEntry.Payload.Id})
                     : null,
             };
-        }
 
         private async Task<LogbookEditViewModel> CreateLogbookEditViewModelAsync(Guid logbookEntryId)
         {
