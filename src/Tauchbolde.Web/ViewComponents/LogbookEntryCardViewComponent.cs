@@ -1,15 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Domain;
-using Tauchbolde.Domain.Entities;
-using Tauchbolde.Web.Models.ViewComponentModels;
+using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
 
 namespace Tauchbolde.Web.ViewComponents
 {
     public class LogbookEntryCardViewComponent: ViewComponent
     {
-        public IViewComponentResult Invoke(LogbookEntry logbookEntry, bool allowEdit)
-        {
-            return View(new LogbookCardViewModel(logbookEntry));
-        }
+        public IViewComponentResult Invoke(LogbookListViewModel.LogbookItemViewModel logbookItem)
+            => View(logbookItem);
     }
 }

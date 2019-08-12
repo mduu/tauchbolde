@@ -7,7 +7,7 @@ using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
 {
-    public class EditLogbookEntry : IRequest<UseCaseResult<LogbookEntry>>
+    public class EditLogbookEntry : IRequest<UseCaseResult>
     {
         public EditLogbookEntry(Guid logbookEntryId,
             Guid editorDiverId,

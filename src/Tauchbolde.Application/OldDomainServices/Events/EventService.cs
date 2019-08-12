@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Notifications;
-using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Entities;
 
@@ -86,40 +85,7 @@ namespace Tauchbolde.Application.OldDomainServices.Events
 
             return eventToStore;
         }
-
-        /// <inheritdoc/>
-        public async Task<Comment> AddCommentAsync(Guid eventId, string commentToAdd, Diver authorDiver)
-        {
-            if (eventId == Guid.Empty) { throw new ArgumentException("Empty Guid not allowed as Event-Id!", nameof(eventId)); }
-            if (authorDiver == null) throw new ArgumentNullException(nameof(authorDiver));
-
-            if (!string.IsNullOrWhiteSpace(commentToAdd))
-            {
-                var evt = await eventRepository.FindByIdAsync(eventId);
-                if (evt == null)
-                {
-                    throw new InvalidOperationException($"Event with Id [{eventId.ToString("G")}] not found!");
-                }
-
-                var comment = new Comment
-                {
-                    Id = Guid.NewGuid(),
-                    AuthorId = authorDiver.Id,
-                    CreateDate = DateTime.Now,
-                    EventId = evt.Id,
-                    Text = commentToAdd,
-                };
-
-                await commentRepository.InsertAsync(comment);
-                await notificationService.NotifyForEventCommentAsync(comment, evt, authorDiver);
-                TrackEvent("COMMENT-INSERT", comment);
-
-                return comment;
-            }
-
-            return null;
-        }
-
+        
         /// <inheritdoc/>
         public async Task<Comment> EditCommentAsync(Guid commentId, string commentText, Diver currentUser)
         {

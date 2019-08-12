@@ -25,7 +25,7 @@ namespace Tauchbolde.Application
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             
-            services.AddMediatR(typeof(PublishLogbookEntryHandler));
+            services.AddMediatR(typeof(PublishLogbookEntryInteractor));
 
             services.AddScoped<IClock, Clock>();
             services.AddSingleton<IMimeMapping, MimeMapping>();
@@ -33,6 +33,7 @@ namespace Tauchbolde.Application
             services.AddScoped<INotificationPublisher, NotificationPublisher>();
             services.AddTransient<INotificationSender, NotificationSender>();
             services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
+            services.AddTransient<IRecipientsBuilder, RecipientsBuilder>();
 
             services.AddTransient<IPhotoService, PhotoService>();
 

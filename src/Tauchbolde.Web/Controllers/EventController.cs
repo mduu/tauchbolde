@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.Domain.Types;
+using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
 
@@ -20,23 +24,26 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class EventController : AppControllerBase
     {
-        private readonly ApplicationDbContext context;
-        private readonly IParticipationService participationService;
-        private readonly IEventService eventService;
+        [NotNull] private readonly ApplicationDbContext context;
+        [NotNull] private readonly IParticipationService participationService;
+        [NotNull] private readonly IEventService eventService;
         [NotNull] private readonly IDiverService diverService;
+        [NotNull] private readonly IMediator mediator;
 
         public EventController(
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ApplicationDbContext context,
             [NotNull] IParticipationService participationService,
             [NotNull] IEventService eventService,
-            [NotNull] IDiverService diverService)
-        :base(userManager, diverService)
+            [NotNull] IDiverService diverService,
+            [NotNull] IMediator mediator)
+            : base(userManager, diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
             this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         // GET: Event
@@ -71,7 +78,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 Event = detailsForEvent,
                 CurrentDiver = currentDiver,
-                BuddyTeamNames = GetBuddyTeamNames(),   
+                BuddyTeamNames = GetBuddyTeamNames(),
                 AllowEdit = allowEdit,
                 ChangeParticipantViewModel = new ChangeParticipantViewModel
                 {
@@ -149,13 +156,13 @@ namespace Tauchbolde.Web.Controllers
                     var persistedEvent = await eventService.UpsertEventAsync(evt, currentDiver);
                     await context.SaveChangesAsync();
 
-                    return RedirectToAction("Details", new { persistedEvent.Id });
+                    return RedirectToAction("Details", new {persistedEvent.Id});
                 }
                 catch (Exception ex)
                 {
                     ModelState.AddModelError("", "Unable to save changes. " +
-                        "Try again, and if the problem persists " +
-                         $"see your system administrator. Message: {ex.Message}, {ex.InnerException?.Message}");
+                                                 "Try again, and if the problem persists " +
+                                                 $"see your system administrator. Message: {ex.Message}, {ex.InnerException?.Message}");
                     model.BuddyTeamNames = GetBuddyTeamNames();
                     return View(model);
                 }
@@ -170,7 +177,7 @@ namespace Tauchbolde.Web.Controllers
                     return NotFound("Event does not exists!");
                 }
 
-                viewModel = new EventEditViewModel { OriginalEvent = detailsForEvent };
+                viewModel = new EventEditViewModel {OriginalEvent = detailsForEvent};
             }
             else
             {
@@ -189,7 +196,8 @@ namespace Tauchbolde.Web.Controllers
         /// <seealso cref="ChangeParticipantViewModel"/>
         /// <seealso cref="IParticipationService"/>
         [HttpPost]
-        public async Task<ActionResult> ChangeParticipation([Bind(Prefix = "ChangeParticipantViewModel")]ChangeParticipantViewModel model)
+        public async Task<ActionResult> ChangeParticipation([Bind(Prefix = "ChangeParticipantViewModel")]
+            ChangeParticipantViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -202,7 +210,7 @@ namespace Tauchbolde.Web.Controllers
                 await participationService.ChangeParticipationAsync(currentUser, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
                 await context.SaveChangesAsync();
 
-                return RedirectToAction("Details", new { id = model.EventId });
+                return RedirectToAction("Details", new {id = model.EventId});
             }
 
             return await Details(model.EventId);
@@ -230,27 +238,30 @@ namespace Tauchbolde.Web.Controllers
         /// <param name="newCommentText">The text to add as a comment.</param>
         public async Task<IActionResult> AddComment(Guid eventId, string newCommentText)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
-                if (currentUser == null)
-                {
-                    return StatusCode(400, "No current user would be found!");
-                }
-
-                var comment = await eventService.AddCommentAsync(eventId, newCommentText, currentUser);
-                if (comment != null)
-                {
-                    await context.SaveChangesAsync();
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Fehler beim Speichern des Kommentares!");
-                }
-
+                return RedirectToAction("Details", new {id = eventId});
+            }
+            
+            var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
+            if (currentUser == null)
+            {
+                return StatusCode(400, "No current user would be found!");
             }
 
-            return RedirectToAction("Details", new { id = eventId });
+            var comment = await mediator.Send(new NewComment(eventId, currentUser.Id, newCommentText));
+            if (!comment.IsSuccessful)
+            {
+                ShowErrorMessage(
+                    comment.ResultCategory == ResultCategory.NotFound
+                        ? "Fehler beim Speichern des neuen Kommentares: Aktivität nicht gefunden!"
+                        : "Fehler beim Speichern des neuen Kommentares!");
+
+                return RedirectToAction("Details", "Event", new {Id = eventId});
+            }
+
+            ShowSuccessMessage("Kommentar erfolgreich gespeichert.");
+            return RedirectToAction("Details", new {id = eventId});
         }
 
         [HttpPost]
@@ -273,10 +284,9 @@ namespace Tauchbolde.Web.Controllers
                 {
                     ModelState.AddModelError("", "Fehler beim Speichern des Kommentares!");
                 }
-
             }
 
-            return RedirectToAction("Details", new { id = eventId });
+            return RedirectToAction("Details", new {id = eventId});
         }
 
         [HttpPost]
@@ -294,12 +304,12 @@ namespace Tauchbolde.Web.Controllers
                 await context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Details", new { id = deleteEventId });
+            return RedirectToAction("Details", new {id = deleteEventId});
         }
 
         private static IEnumerable<SelectListItem> GetBuddyTeamNames()
         {
-            return BuddyTeamNames.Names.Select(n => new SelectListItem { Text = n });
+            return BuddyTeamNames.Names.Select(n => new SelectListItem {Text = n});
         }
     }
 }
