@@ -23,7 +23,7 @@ namespace Tauchbolde.Tests.Application.OldDomainServices.Notifications
 
         public HtmlNotificationFormatterTests()
         {
-            var urlGenerator1 = A.Fake<IUrlGenerator>();
+            var urlGenerator1 = A.Fake<IAbsoluteUrlGenerator>();
             A.CallTo(() => urlGenerator1.GenerateEventUrl(A<string>._, A<Guid>._))
                 .ReturnsLazily(call => $"{call.Arguments[0]}event/1");
             

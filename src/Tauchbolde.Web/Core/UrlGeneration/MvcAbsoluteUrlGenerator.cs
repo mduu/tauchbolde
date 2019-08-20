@@ -1,31 +1,20 @@
 ﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Tauchbolde.InterfaceAdapters;
 
-namespace Tauchbolde.Web.Core
+namespace Tauchbolde.Web.Core.UrlGeneration
 {
     /// <summary>
-    /// Implement <see cref="IUrlGenerator"/> using IUrlHelper from ASP.Net MVC.
+    /// Implement <see cref="IAbsoluteUrlGenerator"/> using IUrlHelper from ASP.Net MVC.
     /// </summary>
-    public class MvcUrlGenerator : IUrlGenerator
+    public class MvcAbsoluteUrlGenerator : MvcUrlGeneratorBase, IAbsoluteUrlGenerator
     {
-        private readonly IUrlHelperFactory urlHelperFactory;
-        private readonly IActionContextAccessor actionContextAccessor;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:Tauchbolde.Web.Core.MvcUrlGenerator"/> class.
-        /// </summary>
-        /// <param name="urlHelperFactory">URL helper factory.</param>
-        /// <param name="actionContextAccessor">Action context.</param>
-        public MvcUrlGenerator(
+        public MvcAbsoluteUrlGenerator(
             IUrlHelperFactory urlHelperFactory,
             IActionContextAccessor actionContextAccessor)
+            : base(urlHelperFactory, actionContextAccessor)
         {
-            this.urlHelperFactory = urlHelperFactory ?? throw new ArgumentNullException(nameof(urlHelperFactory));
-            this.actionContextAccessor =
-                actionContextAccessor ?? throw new ArgumentNullException(nameof(actionContextAccessor));
         }
 
         /// <inheritdoc />
@@ -58,8 +47,7 @@ namespace Tauchbolde.Web.Core
 
         private Uri GetControllerActionUri(string baseUrl, string actionName, string controllerName, object routeValues)
         {
-            var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
-            var relativeActionUrl = urlHelper.Action(actionName, controllerName, routeValues);
+            var relativeActionUrl = base.GetControllerActionUri(actionName, controllerName, routeValues);
 
             return new Uri(new Uri(baseUrl), relativeActionUrl);
         }

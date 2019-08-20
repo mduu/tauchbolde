@@ -3,8 +3,6 @@ using System.IO;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Tauchbolde.Web.Services;
-using Tauchbolde.Web.Core;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Tauchbolde.Application;
@@ -16,8 +14,12 @@ using Tauchbolde.Driver.ImageSharp;
 using Tauchbolde.Driver.PhotoStorage;
 using Tauchbolde.Driver.SmtpEmail;
 using Tauchbolde.InterfaceAdapters;
+using Tauchbolde.InterfaceAdapters.Logbook.Details;
 using Tauchbolde.SharedKernel;
+using Tauchbolde.Web.Services;
+using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Core.TextFormatting;
+using Tauchbolde.Web.Core.UrlGeneration;
 
 namespace Tauchbolde.Web
 {
@@ -47,7 +49,9 @@ namespace Tauchbolde.Web
             DataAccessServices.RegisterServices(services);
             
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddSingleton<IUrlGenerator, MvcUrlGenerator>();
+            services.AddSingleton<IAbsoluteUrlGenerator, MvcAbsoluteUrlGenerator>();
+            services.AddSingleton<IRelativeUrlGenerator, MvcRelativeUrlGenerator>();
+            services.AddSingleton<ILogbookDetailsUrlGenerator, MvcLogbookDetailsUrlGenerator>();
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddSingleton<IAvatarPathProvider, AvatarPathProvider>();

@@ -1,9 +1,8 @@
-using System.Threading.Tasks;
+using Tauchbolde.Application.Core;
 
 namespace Tauchbolde.Application.UseCases.Logbook.ListAllUseCase
 {
-    public interface IListLogbookEntriesPresenter
+    public interface IListLogbookEntriesPresenter : IPresenter<ListAllLogbookEntriesOutputPort>
     {
-        Task PresentAsync(ListAllLogbookEntriesOutputPort output);
     }
 }

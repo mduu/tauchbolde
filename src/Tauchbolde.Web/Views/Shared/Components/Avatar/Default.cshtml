@@ -16,17 +16,14 @@
         default:
             throw new ArgumentOutOfRangeException();
     }
-    var emailAddress = "";
-    if (Model?.Diver?.User != null)
-    {
-        emailAddress = Model.Diver.User.Email;
-    }
+    var emailAddress = Model?.DiverEmail ?? "";
 }
-@if (!string.IsNullOrWhiteSpace(Model.Diver?.AvatarId))
+
+@if (!string.IsNullOrWhiteSpace(Model.AvatarId))
 {
     <img class="@cssClass"
          style="width: @(avatarSize)px; height: @(avatarSize)px;"
-         src="@Url.Action("GetAvatar", "UserProfile", new { avatarId = Model.Diver.AvatarId })" />
+         src="@Url.Action("GetAvatar", "UserProfile", new { avatarId = Model.AvatarId })" />
 }
 else if (!string.IsNullOrWhiteSpace(emailAddress))
 {

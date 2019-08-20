@@ -1,4 +1,4 @@
-@model Tauchbolde.Web.Models.Logbook.LogbookEditViewModel
+@model Tauchbolde.InterfaceAdapters.Logbook.Edit.LogbookEditViewModel
 
 @{
     ViewBag.Title = Model.Id.HasValue ? "Logbucheintrag bearbeiten" : "Neuer Logbucheintrag erfassen";
@@ -10,7 +10,8 @@
 
 <h2>@ViewBag.Title</h2>
 
-<form asp-action="Edit" role="form" class="form-horizontal" method="post" enctype="multipart/form-data" >
+<form asp-action="Edit" role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
     <div class="container">
         
         <div asp-validation-summary="All" class="text-danger"></div>
