@@ -14,18 +14,18 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
 {
     public class HtmlListFormatter : IHtmlListFormatter
     {
-        [NotNull] private readonly IUrlGenerator urlGenerator;
+        [NotNull] private readonly IAbsoluteUrlGenerator absoluteUrlGenerator;
         [NotNull] private readonly INotificationTypeInfos notificationTypeInfos;
         [NotNull] private readonly ITextFormatter textFormatter;
         [NotNull] private readonly IOptions<SmtpSenderConfiguration> smtpSenderConfiguration;
 
         public HtmlListFormatter(
-            [NotNull] IUrlGenerator urlGenerator,
+            [NotNull] IAbsoluteUrlGenerator absoluteUrlGenerator,
             [NotNull] INotificationTypeInfos notificationTypeInfos,
             [NotNull] ITextFormatter textFormatter,
             [NotNull] IOptions<SmtpSenderConfiguration> smtpSenderConfiguration)
         {
-            this.urlGenerator = urlGenerator ?? throw new ArgumentNullException(nameof(urlGenerator));
+            this.absoluteUrlGenerator = absoluteUrlGenerator ?? throw new ArgumentNullException(nameof(absoluteUrlGenerator));
             this.notificationTypeInfos = notificationTypeInfos ?? throw new ArgumentNullException(nameof(notificationTypeInfos));
             this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
             this.smtpSenderConfiguration = smtpSenderConfiguration ?? throw new ArgumentNullException(nameof(smtpSenderConfiguration));
@@ -73,7 +73,7 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
         {
             if (eventId != null && eventId != Guid.Empty)
             {
-                var eventUrl = urlGenerator.GenerateEventUrl(
+                var eventUrl = absoluteUrlGenerator.GenerateEventUrl(
                     smtpSenderConfiguration.Value.RootUrl,
                     eventId.Value);
 
@@ -86,7 +86,7 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
         {
             if (logbookEntryId != null && logbookEntryId != Guid.Empty)
             {
-                var logbookEntryUrl = urlGenerator.GenerateLogbookEntryUrl(
+                var logbookEntryUrl = absoluteUrlGenerator.GenerateLogbookEntryUrl(
                     smtpSenderConfiguration.Value.RootUrl,
                     logbookEntryId.Value);
 

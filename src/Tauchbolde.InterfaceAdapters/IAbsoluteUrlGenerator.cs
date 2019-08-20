@@ -4,7 +4,7 @@ using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.InterfaceAdapters
 {
-    public interface IUrlGenerator
+    public interface IAbsoluteUrlGenerator
     {
         /// <summary>
         /// Generates the absolute URL to an event.

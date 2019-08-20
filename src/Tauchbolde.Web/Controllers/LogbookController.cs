@@ -17,14 +17,13 @@ using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
 using Tauchbolde.Application.UseCases.Logbook.NewUseCase;
 using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
 using Tauchbolde.Application.UseCases.Logbook.UnpublishUseCase;
-using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.Helpers;
 using Tauchbolde.Domain.ValueObjects;
+using Tauchbolde.InterfaceAdapters;
+using Tauchbolde.InterfaceAdapters.Logbook.Details;
+using Tauchbolde.InterfaceAdapters.Logbook.Edit;
 using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
-using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core;
-using Tauchbolde.Web.Models.Logbook;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -34,6 +33,8 @@ namespace Tauchbolde.Web.Controllers
         [NotNull] private readonly ILogger<LogbookController> logger;
         [NotNull] private readonly IMediator mediator;
         [NotNull] private readonly ITextFormatter textFormatter;
+        private readonly IRelativeUrlGenerator relativeUrlGenerator;
+        [NotNull] private readonly ILogbookDetailsUrlGenerator logbookDetailsUrlGenerator;
 
         public LogbookController(
             [NotNull] UserManager<IdentityUser> userManager,
@@ -41,13 +42,17 @@ namespace Tauchbolde.Web.Controllers
             [NotNull] IDiverService diverService,
             [NotNull] ILogger<LogbookController> logger,
             [NotNull] IMediator mediator,
-            [NotNull] ITextFormatter textFormatter)
+            [NotNull] ITextFormatter textFormatter,
+            [NotNull] IRelativeUrlGenerator relativeUrlGenerator,
+            [NotNull] ILogbookDetailsUrlGenerator logbookDetailsUrlGenerator)
             : base(userManager, diverService)
         {
             this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
+            this.relativeUrlGenerator = relativeUrlGenerator ?? throw new ArgumentNullException(nameof(relativeUrlGenerator));
+            this.logbookDetailsUrlGenerator = logbookDetailsUrlGenerator ?? throw new ArgumentNullException(nameof(logbookDetailsUrlGenerator));
         }
 
         // GET /
@@ -67,13 +72,15 @@ namespace Tauchbolde.Web.Controllers
         // GET /detail/x
         public async Task<IActionResult> Detail(Guid id)
         {
-            var model = await CreateLogbookViewModelAsync(id);
-            if (model == null)
+            var allowEdit = await GetAllowEdit();
+            var presenter = new MvcLogbookDetailsPresenter(relativeUrlGenerator, logbookDetailsUrlGenerator);
+            var interactorResult = await mediator.Send(new GetLogbookEntryDetails(id, presenter, allowEdit));
+            if (!interactorResult.IsSuccessful)
             {
-                return NotFound();
+                ShowErrorMessage("Fehler beim laden der Daten des Logbucheintrages!");
             }
 
-            return View(model);
+            return View(presenter.GetViewModel());
         }
 
         // GET /new
@@ -81,10 +88,7 @@ namespace Tauchbolde.Web.Controllers
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public IActionResult New()
         {
-            var model = new LogbookEditViewModel
-            {
-                CreatedAt = DateTime.Now
-            };
+            var model = new LogbookEditViewModel(null, false, null, "", null, "", null, DateTime.Now);
 
             return View("Edit", model);
         }
@@ -94,23 +98,33 @@ namespace Tauchbolde.Web.Controllers
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var model = await CreateLogbookEditViewModelAsync(id);
-            if (model == null)
+            var presenter = new MvcLogbookEditDetailsPresenter();
+            var interactorResult = await mediator.Send(new GetLogbookEntryDetails(id, presenter, true));
+            if (!interactorResult.IsSuccessful)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            return View("Edit", model);
+            return View("Edit", presenter.GetViewModel());
         }
 
         // POST
         [HttpPost]
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
-        public async Task<IActionResult> Edit(LogbookEditViewModel model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(LogbookEditEditModel model)
         {
             if (!ModelState.IsValid)
             {
-                return View("Edit", model);
+                return View("Edit", new LogbookEditViewModel(
+                    model.Id,
+                    model.IsFavorite,
+                    model.TeaserImage,
+                    model.Title,
+                    model.Teaser,
+                    model.Text,
+                    model.ExternalPhotoAlbumUrl,
+                    model.CreatedAt));
             }
 
             Stream teaserImageStream = null;
@@ -227,79 +241,6 @@ namespace Tauchbolde.Web.Controllers
             }
 
             return File(photo.Content, photo.ContentType, photo.Identifier.Filename);
-        }
-
-        private async Task<LogbookDetailViewModel> CreateLogbookViewModelAsync(Guid logbookEntryId)
-        {
-            var logbookEntry = await mediator.Send(new GetLogbookEntryDetails(logbookEntryId));
-            if (logbookEntry == null || logbookEntry.Payload == null || !logbookEntry.IsSuccessful)
-            {
-                return null;
-            }
-            var allowEdit = await GetAllowEdit();
-
-            return CreateLogbookDetailViewModel(allowEdit, logbookEntry);
-        }
-
-        private LogbookDetailViewModel CreateLogbookDetailViewModel(bool allowEdit, UseCaseResult<LogbookEntry> logbookEntry) =>
-            new LogbookDetailViewModel
-            {
-                AllowEdit = allowEdit,
-                Id = logbookEntry.Payload.Id,
-                Title = logbookEntry.Payload.Title,
-                Teaser = logbookEntry.Payload.TeaserText,
-                Text = logbookEntry.Payload.Text,
-                ExternalPhotoAlbumUrl = logbookEntry.Payload.ExternalPhotoAlbumUrl,
-                TeaserImageUrl = Url.Action("Photo", "Logbook", new {photoId = logbookEntry.Payload.TeaserImage}),
-                TeaserThumbImageUrl = Url.Action("Photo", "Logbook", new {photoId = logbookEntry.Payload.TeaserImageThumb}),
-                EventTitle = logbookEntry.Payload.EventId != null && logbookEntry.Payload.Event != null
-                    ? logbookEntry.Payload.Event.Name
-                    : null,
-                EventUrl = logbookEntry.Payload.EventId != null
-                    ? Url.Action("Details", "Event", new {id = logbookEntry.Payload.EventId})
-                    : null,
-                IsFavorite = logbookEntry.Payload.IsFavorite,
-                IsPublished = logbookEntry.Payload.IsPublished,
-                OriginalAuthor = logbookEntry.Payload.OriginalAuthor,
-                OriginalAuthorName = logbookEntry.Payload.OriginalAuthor.Realname,
-                CreatedAt = logbookEntry.Payload.CreatedAt.ToStringSwissDateTime(),
-                EditorAuthor = logbookEntry.Payload.EditorAuthor,
-                EditorAuthorName = logbookEntry.Payload.EditorAuthorId != null && logbookEntry.Payload.EditorAuthor != null
-                    ? logbookEntry.Payload.EditorAuthor.Realname
-                    : null,
-                EditedAt = logbookEntry.Payload.ModifiedAt.ToStringSwissDateTime(),
-                EditUrl = allowEdit
-                    ? Url.Action("Edit", new {id = logbookEntry.Payload.Id})
-                    : null,
-                PublishUrl = allowEdit
-                    ? Url.Action("Publish", new {id = logbookEntry.Payload.Id})
-                    : null,
-                UnpublishUrl = allowEdit
-                    ? Url.Action("Unpublish", new {id = logbookEntry.Payload.Id})
-                    : null,
-                DeleteUrl = allowEdit
-                    ? Url.Action("Delete", new {id = logbookEntry.Payload.Id})
-                    : null,
-            };
-
-        private async Task<LogbookEditViewModel> CreateLogbookEditViewModelAsync(Guid logbookEntryId)
-        {
-            var logbookEntry = await mediator.Send(new GetLogbookEntryDetails(logbookEntryId));
-            if (logbookEntry == null || logbookEntry.Payload == null || !logbookEntry.IsSuccessful)
-            {
-                return null;
-            }
-
-            return new LogbookEditViewModel
-            {
-                Id = logbookEntry.Payload.Id,
-                CreatedAt = logbookEntry.Payload.CreatedAt,
-                Text = logbookEntry.Payload.Text,
-                Title = logbookEntry.Payload.Title,
-                Teaser = logbookEntry.Payload.TeaserText,
-                IsFavorite = logbookEntry.Payload.IsFavorite,
-                ExternalPhotoAlbumUrl = logbookEntry.Payload.ExternalPhotoAlbumUrl,
-            };
         }
 
         private async Task<bool> GetAllowEdit() => await GetTauchboldOrAdmin();
