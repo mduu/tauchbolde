@@ -50,5 +50,12 @@ namespace Tauchbolde.Domain.Entities
         [Display(Name = "Kommentar")]
         [Required]
         public string Text { get; set; }
+
+        public void Edit(Guid authorId, string text)
+        {
+            AuthorId = authorId;
+            Text = text;
+            ModifiedDate = DateTime.Now;
+        }
     }
 }
