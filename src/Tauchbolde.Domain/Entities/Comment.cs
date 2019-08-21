@@ -56,6 +56,7 @@ namespace Tauchbolde.Domain.Entities
             AuthorId = authorId;
             Text = text;
             ModifiedDate = DateTime.Now;
+            RaiseDomainEvent(new EditCommentEvent(Id, EventId, AuthorId, DateTime.Now, Text));
         }
     }
 }
