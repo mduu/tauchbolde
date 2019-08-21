@@ -6,22 +6,22 @@ using MediatR;
 using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Events.LogbookEntry;
 
-namespace Tauchbolde.Application.Policies.LogbookEntryPublished
+namespace Tauchbolde.Application.Policies.Logbook.LogbookEntryCreated
 {
     [UsedImplicitly]
-    public class LogTelemetryLogbookEntryPublishedPolicy : INotificationHandler<LogbookEntryPublishedEvent>
+    public class LogTelemetryLogbookEntryCreatedPolicy : INotificationHandler<LogbookEntryCreatedEvent>
     {
         private readonly ITelemetryService telemetryService;
 
-        public LogTelemetryLogbookEntryPublishedPolicy([NotNull] ITelemetryService telemetryService)
+        public LogTelemetryLogbookEntryCreatedPolicy([NotNull] ITelemetryService telemetryService)
         {
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
         }
         
 #pragma warning disable 1998
-        public async Task Handle([NotNull] LogbookEntryPublishedEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(LogbookEntryCreatedEvent notification, CancellationToken cancellationToken)
         {
-            telemetryService.TrackEvent(TelemetryEventNames.LogbookEntryPublished, notification);
+            telemetryService.TrackEvent(TelemetryEventNames.LogbookEntryCreated, notification);
         }
 #pragma warning restore 1998
     }

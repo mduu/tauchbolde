@@ -16,4 +16,8 @@
         <ProjectReference Include="..\Tauchbolde.Domain\Tauchbolde.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Policies\Logbook" />
+    </ItemGroup>
+
 </Project>

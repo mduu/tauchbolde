@@ -6,7 +6,7 @@ using MediatR;
 using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Events.LogbookEntry;
 
-namespace Tauchbolde.Application.Policies.LogbookEntryDeleted
+namespace Tauchbolde.Application.Policies.Logbook.LogbookEntryDeleted
 {
     [UsedImplicitly]
     public class LogTelemetryLogbookDeletedPolicy : INotificationHandler<LogbookEntryDeletedEvent>

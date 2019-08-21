@@ -8,7 +8,7 @@ using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Events.LogbookEntry;
 using Tauchbolde.Domain.Types;
 
-namespace Tauchbolde.Application.Policies.LogbookEntryPublished
+namespace Tauchbolde.Application.Policies.Logbook.LogbookEntryPublished
 {
     [UsedImplicitly]
     public class PublishNewLogbookEntryNotificationPolicy : INotificationHandler<LogbookEntryPublishedEvent>
