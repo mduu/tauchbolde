@@ -8,7 +8,7 @@ using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.Domain.Types;
 
-namespace Tauchbolde.Application.Policies.EventCommentEdited
+namespace Tauchbolde.Application.Policies.Event.EventCommentEdited
 {
     [UsedImplicitly]
     internal class PublishEditEventCommentNotificationPolicy : INotificationHandler<EditCommentEvent>

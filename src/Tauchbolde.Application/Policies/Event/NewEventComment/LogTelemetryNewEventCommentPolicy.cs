@@ -6,7 +6,7 @@ using MediatR;
 using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Events.Event;
 
-namespace Tauchbolde.Application.Policies.NewEventComment
+namespace Tauchbolde.Application.Policies.Event.NewEventComment
 {
     [UsedImplicitly]
     public class LogTelemetryNewEventCommentPolicy : INotificationHandler<NewEventCommentEvent>

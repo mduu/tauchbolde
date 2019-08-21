@@ -8,7 +8,7 @@ using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.Domain.Types;
 
-namespace Tauchbolde.Application.Policies.NewEventComment
+namespace Tauchbolde.Application.Policies.Event.NewEventComment
 {
     [UsedImplicitly]
     internal class PublishNewEventCommentNotificationPolicy : INotificationHandler<NewEventCommentEvent>
