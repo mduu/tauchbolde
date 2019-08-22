@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.SharedKernel;
+using Tauchbolde.SharedKernel.Services;
 
 namespace Tauchbolde.Domain.Entities
 {
@@ -23,7 +24,7 @@ namespace Tauchbolde.Domain.Entities
             EventId = eventId;
             AuthorId = authorId;
             Text = text;
-            CreateDate = DateTime.Now;
+            CreateDate = SystemClock.Now;
             
             RaiseDomainEvent(new NewEventCommentEvent(EventId, Id, authorId, DateTime.UtcNow, text));
         }
@@ -50,5 +51,12 @@ namespace Tauchbolde.Domain.Entities
         [Display(Name = "Kommentar")]
         [Required]
         public string Text { get; set; }
+
+        public void Edit(string text)
+        {
+            Text = text;
+            ModifiedDate = SystemClock.Now;
+            RaiseDomainEvent(new EditCommentEvent(Id, EventId, AuthorId, DateTime.Now, Text));
+        }
     }
 }

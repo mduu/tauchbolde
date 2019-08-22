@@ -6,7 +6,7 @@ using MediatR;
 using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Events.LogbookEntry;
 
-namespace Tauchbolde.Application.Policies.LogbookEntryUnpublished
+namespace Tauchbolde.Application.Policies.Logbook.LogbookEntryUnpublished
 {
     [UsedImplicitly]
     public class LogTelemetryLogbookEntryUnpublishedPolicy : INotificationHandler<LogbookEntryUnpublishedEvent>

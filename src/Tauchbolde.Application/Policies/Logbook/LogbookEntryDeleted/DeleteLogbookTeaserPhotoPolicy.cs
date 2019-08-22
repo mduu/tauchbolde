@@ -8,7 +8,7 @@ using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Domain.Events.LogbookEntry;
 using Tauchbolde.Domain.ValueObjects;
 
-namespace Tauchbolde.Application.Policies.LogbookEntryDeleted
+namespace Tauchbolde.Application.Policies.Logbook.LogbookEntryDeleted
 {
     [UsedImplicitly]
     public class DeleteLogbookTeaserPhotoPolicy : INotificationHandler<LogbookEntryDeletedEvent>

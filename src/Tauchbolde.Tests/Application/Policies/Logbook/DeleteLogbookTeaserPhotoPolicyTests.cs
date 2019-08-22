@@ -2,13 +2,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
-using Tauchbolde.Application.Policies.LogbookEntryDeleted;
+using Tauchbolde.Application.Policies.Logbook.LogbookEntryDeleted;
 using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Domain.Events.LogbookEntry;
 using Tauchbolde.Domain.ValueObjects;
 using Xunit;
 
-namespace Tauchbolde.Tests.Application.Policies
+namespace Tauchbolde.Tests.Application.Policies.Logbook
 {
     public class DeleteLogbookTeaserPhotoPolicyTests
     {

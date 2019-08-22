@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.SharedKernel.Services;
 using Xunit;
 
 namespace Tauchbolde.Tests.Domain.Entities
@@ -12,10 +13,11 @@ namespace Tauchbolde.Tests.Domain.Entities
         [Fact]
         public void AddNewComment_Success()
         {
+            var currentTime = new DateTime(2019, 8, 21, 8, 0, 0, 0);
+            SystemClock.SetTime(currentTime);
             var evt = new Event { Id = validEventId };
             var authorId = new Guid("F39AB6D9-7374-4481-AD66-5946FDBBDA0A");
             var text = "Test comment!";
-            var now = DateTime.UtcNow;
             
             var newComment = evt.AddNewComment(authorId, text);
 
@@ -24,7 +26,7 @@ namespace Tauchbolde.Tests.Domain.Entities
             newComment.AuthorId.Should().Be(authorId);
             newComment.EventId.Should().Be(evt.Id);
             newComment.Text.Should().Be(text);
-            newComment.CreateDate.Should().BeAfter(now);
+            newComment.CreateDate.Should().Be(currentTime);
             newComment.ModifiedDate.Should().BeNull();
             evt.Comments.Should().ContainSingle(c => c.Id == newComment.Id);
         }

@@ -85,37 +85,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
 
             return eventToStore;
         }
-        
-        /// <inheritdoc/>
-        public async Task<Comment> EditCommentAsync(Guid commentId, string commentText, Diver currentUser)
-        {
-            if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
-            if (currentUser == null) { throw new ArgumentNullException(nameof(currentUser)); }
-
-            var comment = await commentRepository.FindByIdAsync(commentId);
-            if (comment == null)
-            {
-                throw new InvalidOperationException($"Could not find comment with ID [{commentId:D}]");
-            }
-
-            if (comment.AuthorId != currentUser.Id)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            comment.Text = commentText;
-
-            var parentEvent = await eventRepository.FindByIdAsync(comment.EventId);
-            if (parentEvent == null)
-            {
-                throw new InvalidOperationException($"Could not find event for comment with ID=[{comment.EventId:D}]");
-            }
-
-            await notificationService.NotifyForEventCommentAsync(comment, parentEvent, currentUser);
-            TrackEvent("COMMENT-UPDATE", comment);
-
-            return comment;
-        }
 
         /// <inheritdoc />
         public async Task DeleteCommentAsync(Guid commentId, Diver currentUser)
