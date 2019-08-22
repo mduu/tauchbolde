@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Application.UseCases.Event.EditCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
@@ -267,23 +268,21 @@ namespace Tauchbolde.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditComment(Guid eventId, Guid commentId, string commentText)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
-                if (currentUser == null)
-                {
-                    return StatusCode(400, "No current user would be found!");
-                }
+                return RedirectToAction("Details", new {id = eventId});
+            }
+            
+            var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
+            if (currentUser == null)
+            {
+                return StatusCode(400, "No current user would be found!");
+            }
 
-                var comment = await eventService.EditCommentAsync(commentId, commentText, currentUser);
-                if (comment != null)
-                {
-                    await context.SaveChangesAsync();
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Fehler beim Speichern des Kommentares!");
-                }
+            var interactorResult = await mediator.Send(new EditComment(commentId, commentText));
+            if (!interactorResult.IsSuccessful)
+            {
+                ShowErrorMessage("Fehler beim Speichern des Kommentares!");
             }
 
             return RedirectToAction("Details", new {id = eventId});
