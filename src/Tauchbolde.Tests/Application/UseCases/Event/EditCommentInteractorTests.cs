@@ -39,9 +39,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         public async Task Handle_Success()
         {
             // Arrange
-            var newAuthorId = new Guid("B6691056-FEFF-44EE-8FE1-A23565CD25E6");
             var newText = "a new comment";
-            var request = new EditComment(validCommentId, newAuthorId, newText);
+            var request = new EditComment(validCommentId, newText);
 
             // Act
             var result = await interactor.Handle(request, CancellationToken.None);
@@ -51,7 +50,6 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             A.CallTo(() => commentRepository.UpdateAsync(
                     A<Comment>.That.Matches(c =>
                         c.Id.ToString("B") == validCommentId.ToString("B") &&
-                        c.AuthorId == newAuthorId &&
                         c.Text == newText)))
                 .MustHaveHappenedOnceExactly();
         }
@@ -62,7 +60,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             // Arrange
             var newAuthorId = new Guid("B6691056-FEFF-44EE-8FE1-A23565CD25E6");
             var newText = "a new comment";
-            var request = new EditComment(new Guid("212B73C2-452E-4E1E-B3D7-C3DF6154C85E"), newAuthorId, newText);
+            var request = new EditComment(new Guid("212B73C2-452E-4E1E-B3D7-C3DF6154C85E"), newText);
 
             // Act
             var result = await interactor.Handle(request, CancellationToken.None);
@@ -79,7 +77,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             // Arrange
             var newAuthorId = new Guid("B6691056-FEFF-44EE-8FE1-A23565CD25E6");
             var newText = "a new comment";
-            var request = new EditComment(validCommentId, newAuthorId, newText);
+            var request = new EditComment(validCommentId, newText);
             A.CallTo(() => commentRepository.UpdateAsync(A<Comment>._))
                 .Invokes(() => throw new InvalidOperationException());
 

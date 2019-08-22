@@ -33,7 +33,7 @@ namespace Tauchbolde.Application.UseCases.Event.EditCommentUseCase
                 });
             }
 
-            comment.Edit(request.AuthorId, request.Text);
+            comment.Edit(request.Text);
 
             try
             {
