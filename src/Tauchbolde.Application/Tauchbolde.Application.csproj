@@ -17,7 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Policies\Event" />
       <Folder Include="Policies\Logbook" />
     </ItemGroup>
 
