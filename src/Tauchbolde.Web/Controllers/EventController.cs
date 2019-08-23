@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Application.UseCases.Event.DeleteCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.EditCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core;
@@ -291,18 +291,23 @@ namespace Tauchbolde.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteComment(Guid deleteEventId, Guid deleteCommentId)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
-                if (currentUser == null)
-                {
-                    return StatusCode(400, "No curren user would be found!");
-                }
-
-                await eventService.DeleteCommentAsync(deleteCommentId, currentUser);
-                await context.SaveChangesAsync();
+                return RedirectToAction("Details", new {id = deleteEventId});
+            }
+            
+            var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
+            if (currentUser == null)
+            {
+                return StatusCode(400, "No curren user would be found!");
             }
 
+            var result = await mediator.Send(new DeleteComment(deleteCommentId, currentUser.Id));
+            if (!result.IsSuccessful)
+            {
+                ShowErrorMessage("Fehler beim Löschen des Kommentars!");
+            }
+            
             return RedirectToAction("Details", new {id = deleteEventId});
         }
 
