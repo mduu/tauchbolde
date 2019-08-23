@@ -3,9 +3,9 @@ using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Domain.Events.Event
 {
-    public class DeleteCommentEvent : DomainEventBase
+    public class CommentDeletedEvent : DomainEventBase
     {
-        public DeleteCommentEvent(Guid commentId)
+        public CommentDeletedEvent(Guid commentId)
         {
             CommentId = commentId;
         }

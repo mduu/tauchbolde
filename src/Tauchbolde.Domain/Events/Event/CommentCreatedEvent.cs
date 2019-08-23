@@ -4,9 +4,9 @@ using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Domain.Events.Event
 {
-    public class EditCommentEvent : DomainEventBase
+    public class CommentCreatedEvent : DomainEventBase
     {
-        public EditCommentEvent(Guid commentId, Guid eventId, Guid authorId, DateTimeOffset time, [NotNull] string text)
+        public CommentCreatedEvent(Guid eventId, Guid commentId, Guid authorId, DateTimeOffset time, [NotNull] string text)
         {
             if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Value cannot be null or whitespace.", nameof(text));
             
@@ -17,8 +17,8 @@ namespace Tauchbolde.Domain.Events.Event
             Time = time;
         }
 
-        public Guid CommentId { get; }
         public Guid EventId { get; }
+        public Guid CommentId { get; }
         public Guid AuthorId { get; }
         public string Text { get; }
         public DateTimeOffset Time { get; }
