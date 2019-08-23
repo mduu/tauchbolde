@@ -58,5 +58,10 @@ namespace Tauchbolde.Domain.Entities
             ModifiedDate = SystemClock.Now;
             RaiseDomainEvent(new EditCommentEvent(Id, EventId, AuthorId, DateTime.Now, Text));
         }
+
+        public void Delete()
+        {
+            RaiseDomainEvent(new DeleteCommentEvent(Id));
+        }
     }
 }
