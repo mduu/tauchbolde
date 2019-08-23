@@ -12,6 +12,5 @@ namespace Tauchbolde.Application.OldDomainServices.Notifications
         Task NotifyForNewEventAsync(Event newEvent, Diver currentUser);
         Task NotifyForChangedEventAsync(Event changedEvent, Diver currentUser);
         Task NotifyForChangedParticipationAsync(Participant participant, Diver participatingDiver, Guid eventId);
-        Task NotifyForEventCommentAsync(Comment comment, Event evt, Diver author);
     }
 }
