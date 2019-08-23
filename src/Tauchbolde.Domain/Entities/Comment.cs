@@ -26,7 +26,7 @@ namespace Tauchbolde.Domain.Entities
             Text = text;
             CreateDate = SystemClock.Now;
             
-            RaiseDomainEvent(new NewEventCommentEvent(EventId, Id, authorId, DateTime.UtcNow, text));
+            RaiseDomainEvent(new CommentCreatedEvent(EventId, Id, authorId, DateTime.UtcNow, text));
         }
         
         [Display(Name = "Anlass ID")]
@@ -56,7 +56,12 @@ namespace Tauchbolde.Domain.Entities
         {
             Text = text;
             ModifiedDate = SystemClock.Now;
-            RaiseDomainEvent(new EditCommentEvent(Id, EventId, AuthorId, DateTime.Now, Text));
+            RaiseDomainEvent(new CommentEditedEvent(Id, EventId, AuthorId, DateTime.Now, Text));
+        }
+
+        public void Delete()
+        {
+            RaiseDomainEvent(new CommentDeletedEvent(Id));
         }
     }
 }

@@ -40,8 +40,8 @@ namespace Tauchbolde.Tests.Domain.Entities
             comment.Text.Should().Be("a new text");
             comment.ModifiedDate.Should().Be(modifiedTime);
             comment.UncommittedDomainEvents.Should().ContainSingle(e =>
-                ((EditCommentEvent) e).Text == "a new text" &&
-                ((EditCommentEvent) e).CommentId == validCommentId);
+                ((CommentEditedEvent) e).Text == "a new text" &&
+                ((CommentEditedEvent) e).CommentId == validCommentId);
         }
     }
 }

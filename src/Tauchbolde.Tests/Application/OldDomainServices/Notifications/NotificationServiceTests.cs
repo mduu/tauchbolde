@@ -71,37 +71,6 @@ namespace Tauchbolde.Tests.Application.OldDomainServices.Notifications
         [Theory]
         [InlineData(false, 1)]
         [InlineData(true, 2)]
-        public async Task NotifyForEventCommentAsync(bool sendOwnNotifications, int expectedNotificationInserts)
-        {
-            // Arrange
-            var author = CreateCurrentUser(sendOwnNotifications);
-            var comment = new Comment
-            {
-                Id = new Guid("b4de413a-7d40-4319-80b3-517d22a9247d"),
-                Text = "Test Event",
-                AuthorId = johnDiverId,
-                Author = author,
-            };
-            var evt = new Event
-            {
-                Id = new Guid("A1F9DC5E-82FE-4129-B9C3-B29E6348A47D"),
-                Name = "Testevent",
-                Description = "A test event."
-            };
-            var notificationRepo = CreateNotificationRepo();
-            var notificationService = CreateNotificationService(notificationRepo, sendOwnNotifications);
-
-            // Act
-            await notificationService.NotifyForEventCommentAsync(comment, evt, author);
-
-            // Assert
-            A.CallTo(() => notificationRepo.InsertAsync(A<Notification>._))
-                .MustHaveHappened(expectedNotificationInserts, Times.Exactly);
-        }
-
-        [Theory]
-        [InlineData(false, 1)]
-        [InlineData(true, 2)]
         public async Task NotifyForChangedParticipationAsync(bool sendOwnNotifications, int expectedNotificationInserts)
         {
             // Arrange

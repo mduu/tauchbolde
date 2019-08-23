@@ -113,7 +113,6 @@ namespace Tauchbolde.Tests.Application.OldDomainServices
         {
             return new EventService(CreateNotificationService(),
                 CreateEventRepositoryFake(evt),
-                A.Fake<ICommentRepository>(),
                 A.Fake<ITelemetryService>());
         }
 

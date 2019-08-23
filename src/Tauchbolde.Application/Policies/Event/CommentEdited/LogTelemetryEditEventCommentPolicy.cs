@@ -6,10 +6,10 @@ using MediatR;
 using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Events.Event;
 
-namespace Tauchbolde.Application.Policies.Event.EventCommentEdited
+namespace Tauchbolde.Application.Policies.Event.CommentEdited
 {
     [UsedImplicitly]
-    internal class LogTelemetryEditEventCommentPolicy : INotificationHandler<EditCommentEvent>
+    internal class LogTelemetryEditEventCommentPolicy : INotificationHandler<CommentEditedEvent>
     {
         [NotNull] private readonly ITelemetryService telemetryService;
 
@@ -19,7 +19,7 @@ namespace Tauchbolde.Application.Policies.Event.EventCommentEdited
         }
 
 #pragma warning disable 1998
-        public async Task Handle([NotNull] EditCommentEvent notification, CancellationToken cancellationToken)
+        public async Task Handle([NotNull] CommentEditedEvent notification, CancellationToken cancellationToken)
         {
             if (notification == null) throw new ArgumentNullException(nameof(notification));
             

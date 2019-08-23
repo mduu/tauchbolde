@@ -137,29 +137,7 @@ namespace Tauchbolde.Application.OldDomainServices.Notifications
                 message,
                 participant.ParticipatingDiver);
         }
-
-        /// <inheritdoc />
-        public async Task NotifyForEventCommentAsync(
-            [NotNull] Comment comment,
-            [NotNull] Event evt,
-            [NotNull] Diver author)
-        {
-            if (comment == null) throw new ArgumentNullException(nameof(comment));
-            if (evt == null) throw new ArgumentNullException(nameof(evt));
-            if (author == null) throw new ArgumentNullException(nameof(author));
-
-            var recipients = await GetAllTauchboldeButDeclinedParticipantsAsync(author.Id, comment.EventId);
-            var message =
-                $"Neuer Kommentar von '{author.Realname}' für Event '{evt.Name}' ({evt.StartEndTimeAsString}): {comment.Text}";
-
-            await InsertNotification(
-                evt,
-                recipients,
-                NotificationType.Commented,
-                message,
-                author);
-        }
-
+        
         private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(
             Guid currentDiverId,
             Guid eventId)

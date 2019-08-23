@@ -25,13 +25,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
         Task<Event> UpsertEventAsync(Event eventToUpsert, Diver currentUser);
 
         /// <summary>
-        /// Deletes a comment async.
-        /// </summary>
-        /// <param name="commentId">Id of the comment to delete.</param>
-        /// <param name="currentUser">Current user.</param>
-        Task DeleteCommentAsync(Guid commentId, Diver currentUser);
-
-        /// <summary>
         /// Gets upcoming and recent events.
         /// </summary>
         /// <returns>Upcoming and recent events.</returns>

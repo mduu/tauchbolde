@@ -14,19 +14,16 @@ namespace Tauchbolde.Application.OldDomainServices.Events
     {
         private readonly INotificationService notificationService;
         private readonly IEventRepository eventRepository;
-        private readonly ICommentRepository commentRepository;
         private readonly ITelemetryService telemetryService;
 
-        public EventService(INotificationService notificationService,
+        public EventService(
+            INotificationService notificationService,
             IEventRepository eventRepository,
-            ICommentRepository commentRepository,
             ITelemetryService telemetryService)
         {
             this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
-            this.commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
-
         }
 
         /// <inheritdoc />
@@ -84,27 +81,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
             }
 
             return eventToStore;
-        }
-
-        /// <inheritdoc />
-        public async Task DeleteCommentAsync(Guid commentId, Diver currentUser)
-        {
-            if (commentId == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(commentId)); }
-            if (currentUser == null) throw new ArgumentNullException(nameof(currentUser));
-
-            var comment = await commentRepository.FindByIdAsync(commentId);
-            if (comment == null)
-            {
-                throw new InvalidOperationException($"Could not find comment with ID [{commentId:D}] for deletion!");
-            }
-
-            if (comment.AuthorId != currentUser.Id)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            TrackEvent("COMMENT-DELETE", comment);
-            await commentRepository.DeleteAsync(comment);
         }
 
         /// <inheritdoc />
@@ -174,23 +150,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
                     {"EventName", eventToTrack.Name},
                     {"StartEnd", eventToTrack.StartEndTimeAsString},
                     {"OrganisatorId", eventToTrack.OrganisatorId.ToString("B")}
-                });
-        }
-
-        private void TrackEvent(string name, Comment commentToTrack)
-        {
-            if (commentToTrack == null) { throw new ArgumentNullException(nameof(commentToTrack)); }
-
-            telemetryService.TrackEvent(
-                name,
-                new Dictionary<string, string>
-                {
-                    {"EventId", commentToTrack.EventId.ToString("B")},
-                    {"CommentId", commentToTrack.Id.ToString("B")},
-                    {"AuthorId", commentToTrack.AuthorId.ToString("B")},
-                    {"Text", commentToTrack.Text},
-                    {"CreateDate", commentToTrack.CreateDate.ToString("O")},
-                    {"ModifiedDate", commentToTrack.ModifiedDate?.ToString("O") ?? ""}
                 });
         }
     }

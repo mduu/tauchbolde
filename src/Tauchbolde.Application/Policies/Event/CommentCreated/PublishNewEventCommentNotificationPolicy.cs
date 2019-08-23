@@ -8,10 +8,10 @@ using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.Domain.Types;
 
-namespace Tauchbolde.Application.Policies.Event.NewEventComment
+namespace Tauchbolde.Application.Policies.Event.CommentCreated
 {
     [UsedImplicitly]
-    internal class PublishNewEventCommentNotificationPolicy : INotificationHandler<NewEventCommentEvent>
+    internal class PublishNewEventCommentNotificationPolicy : INotificationHandler<CommentCreatedEvent>
     {
         [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly IEventRepository eventRepository;
@@ -30,7 +30,7 @@ namespace Tauchbolde.Application.Policies.Event.NewEventComment
             this.recipientsBuilder = recipientsBuilder ?? throw new ArgumentNullException(nameof(recipientsBuilder));
         }
         
-        public async Task Handle([NotNull] NewEventCommentEvent notification, CancellationToken cancellationToken)
+        public async Task Handle([NotNull] CommentCreatedEvent notification, CancellationToken cancellationToken)
         {
             if (notification == null) throw new ArgumentNullException(nameof(notification));
 
