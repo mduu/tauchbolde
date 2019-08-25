@@ -26,7 +26,8 @@ namespace Tauchbolde.Application.Services.Notifications
             this.dataAccess = dataAccess ?? throw new ArgumentNullException(nameof(dataAccess));
         }
 
-        public async Task PublishAsync(NotificationType notificationType,
+        public async Task PublishAsync(
+            NotificationType notificationType,
             string message,
             IEnumerable<Diver> recipients,
             Diver currentDiver = null,
