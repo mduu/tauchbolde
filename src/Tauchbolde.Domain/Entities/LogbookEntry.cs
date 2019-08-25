@@ -136,8 +136,8 @@ namespace Tauchbolde.Domain.Entities
             if (photoIdentifiers != null && (photoIdentifiers.OriginalPhotoIdentifier != null ||
                                              photoIdentifiers.ThumbnailPhotoIdentifier != null))
             {
-                TeaserImage = photoIdentifiers?.OriginalPhotoIdentifier?.Serialze();
-                TeaserImageThumb = photoIdentifiers?.ThumbnailPhotoIdentifier?.Serialze();
+                TeaserImage = photoIdentifiers.OriginalPhotoIdentifier?.Serialze();
+                TeaserImageThumb = photoIdentifiers.ThumbnailPhotoIdentifier?.Serialze();
             }
             
             RaiseDomainEvent(new LogbookEntryEditedEvent(Id, Title));
