@@ -208,7 +208,14 @@ namespace Tauchbolde.Web.Controllers
                     return StatusCode(400, "No current user would be found!");
                 }
 
-                await participationService.ChangeParticipationAsync(currentUser, model.EventId, model.Status, model.CountPeople, model.Note, model.BuddyTeamName);
+                await participationService.ChangeParticipationAsync(
+                    currentUser,
+                    model.EventId,
+                    model.Status,
+                    model.CountPeople,
+                    model.Note,
+                    model.BuddyTeamName);
+                
                 await context.SaveChangesAsync();
 
                 return RedirectToAction("Details", new {id = model.EventId});
