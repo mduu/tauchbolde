@@ -54,7 +54,7 @@ namespace Tauchbolde.Application.Policies.Event.ParticipationChanged
 
             var participant = await GetParticipantAsync(notification);
             var eventName = await GetEventNameAsync(participant.EventId);
-            var diverRealName = GetDiverRealNameAsync(participant.ParticipatingDiverId);
+            var diverRealName = await GetDiverRealNameAsync(participant.ParticipatingDiverId);
             var noteText = !string.IsNullOrWhiteSpace(participant.Note)
                 ? $"Notiz: {participant.Note}"
                 : "";
@@ -84,7 +84,7 @@ namespace Tauchbolde.Application.Policies.Event.ParticipationChanged
             if (result == null)
             {
                 logger.LogError("Diver with ID {id} not found!", diverId);
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Diver not found!");
             }
 
             return result.Realname ?? "Unbekannt";
@@ -96,7 +96,7 @@ namespace Tauchbolde.Application.Policies.Event.ParticipationChanged
             if (result == null)
             {
                 logger.LogError("Participant with ID {id} not found.", notification.ParticipationId);
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Participant not found!");
             }
             
             return result;
@@ -108,7 +108,7 @@ namespace Tauchbolde.Application.Policies.Event.ParticipationChanged
             if (result == null)
             {
                 logger.LogError("Event with ID {id} not found!", eventId);
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Event not found!");
             }
             
             return result.Name;
