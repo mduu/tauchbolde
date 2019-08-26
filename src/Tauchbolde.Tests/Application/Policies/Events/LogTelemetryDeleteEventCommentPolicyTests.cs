@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
+using FluentAssertions;
 using Tauchbolde.Application.Policies.Event.CommentDeleted;
 using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Events.Event;
@@ -33,5 +34,16 @@ namespace Tauchbolde.Tests.Application.Policies.Events
             A.CallTo(() => telemetryService.TrackEvent(TelemetryEventNames.DeleteEventComment, notification))
                 .MustHaveHappenedOnceExactly();
         }
+        
+        [Fact]
+        public async Task Handle_NullNotification_MustFail()
+        {
+            // Act
+            Func<Task> act = async () => await policy.Handle(null, CancellationToken.None);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>();
+        }
+
     }
 }
