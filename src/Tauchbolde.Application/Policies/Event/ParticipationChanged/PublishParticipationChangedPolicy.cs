@@ -61,10 +61,10 @@ namespace Tauchbolde.Application.Policies.Event.ParticipationChanged
 
             var messageBuilder = new Dictionary<ParticipantStatus, Func<string>>
             {
-                {ParticipantStatus.None, () => $"{diverRealName} weiss nicht ob Er/Sie an '{eventName}' teil nimmt. {noteText}"},
-                {ParticipantStatus.Accepted, () => $"{diverRealName} nimmt an '{eventName}' teil. {noteText}"},
-                {ParticipantStatus.Declined, () => $"{diverRealName} hat für '{eventName}' abgesagt. {noteText}"},
-                {ParticipantStatus.Tentative, () => $"{diverRealName} nimmt eventuell an '{eventName}' teil. {noteText}"}
+                {ParticipantStatus.None, () => $"{diverRealName} weiss nicht ob Er/Sie an '{eventName}' teil nimmt. {noteText}".Trim()},
+                {ParticipantStatus.Accepted, () => $"{diverRealName} nimmt an '{eventName}' teil. {noteText}".Trim()},
+                {ParticipantStatus.Declined, () => $"{diverRealName} hat für '{eventName}' abgesagt. {noteText}".Trim()},
+                {ParticipantStatus.Tentative, () => $"{diverRealName} nimmt eventuell an '{eventName}' teil. {noteText}".Trim()}
             };
 
             var recipients = await recipientsBuilder.GetAllTauchboldeButDeclinedParticipantsAsync(

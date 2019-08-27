@@ -55,7 +55,8 @@ namespace Tauchbolde.Tests.Application.Policies.Events
                     (Guid) call.Arguments[0] == validEventId
                         ? new Event
                         {
-                            Id = validEventId
+                            Id = validEventId,
+                            Name = "Testevent",
                         }
                         : null
                 ));
@@ -80,11 +81,11 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         }
 
         [Theory]
-        [InlineData(ParticipantStatus.Accepted, NotificationType.Accepted)]
-        [InlineData(ParticipantStatus.Declined, NotificationType.Declined)]
-        [InlineData(ParticipantStatus.Tentative, NotificationType.Tentative)]
-        [InlineData(ParticipantStatus.None, NotificationType.Neutral)]
-        public async Task Handle_Success(ParticipantStatus status, NotificationType expectedNotificationType)
+        [InlineData(ParticipantStatus.Accepted, NotificationType.Accepted, "John Doe nimmt an 'Testevent' teil.")]
+        [InlineData(ParticipantStatus.Declined, NotificationType.Declined, "John Doe hat für 'Testevent' abgesagt.")]
+        [InlineData(ParticipantStatus.Tentative, NotificationType.Tentative, "John Doe nimmt eventuell an 'Testevent' teil.")]
+        [InlineData(ParticipantStatus.None, NotificationType.Neutral, "John Doe weiss nicht ob Er/Sie an 'Testevent' teil nimmt.")]
+        public async Task Handle_Success(ParticipantStatus status, NotificationType expectedNotificationType, string expectedMessage)
         {
             // Arrange
             var notification = new ParticipationChangedEvent(
@@ -108,6 +109,16 @@ namespace Tauchbolde.Tests.Application.Policies.Events
                         : null
                 ));
 
+            var recordedMessage = "";
+            A.CallTo(() => notificationPublisher.PublishAsync(
+                expectedNotificationType,
+                A<string>.That.Matches(m =>
+                    !string.IsNullOrWhiteSpace(m)),
+                A<IEnumerable<Diver>>.That.Matches(l => l.Count() == 2),
+                A<Diver>._,
+                validEventId,
+                null)).Invokes(call => recordedMessage = (string) call.Arguments[1]);
+
             // Act
             await policy.Handle(notification, CancellationToken.None);
 
@@ -121,6 +132,7 @@ namespace Tauchbolde.Tests.Application.Policies.Events
                     validEventId,
                     null))
                 .MustHaveHappenedOnceExactly();
+            recordedMessage.Should().Be(expectedMessage);
         }
 
         [Fact]
