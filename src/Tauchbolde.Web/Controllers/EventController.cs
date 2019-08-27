@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase;
 using Tauchbolde.Application.UseCases.Event.DeleteCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.EditCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
@@ -200,28 +201,35 @@ namespace Tauchbolde.Web.Controllers
         public async Task<ActionResult> ChangeParticipation([Bind(Prefix = "ChangeParticipantViewModel")]
             ChangeParticipantViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
-                if (currentUser == null)
-                {
-                    return StatusCode(400, "No current user would be found!");
-                }
+                return await Details(model.EventId);
+            }
 
-                await participationService.ChangeParticipationAsync(
-                    currentUser,
+            var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
+            if (currentUser == null)
+            {
+                return StatusCode(400, "No current user would be found!");
+            }
+
+            var result = await mediator.Send(
+                new ChangeParticipation(
+                    currentUser.User.UserName,
                     model.EventId,
                     model.Status,
                     model.CountPeople,
                     model.Note,
-                    model.BuddyTeamName);
-                
-                await context.SaveChangesAsync();
+                    model.BuddyTeamName
+                ));
 
-                return RedirectToAction("Details", new {id = model.EventId});
+            if (!result.IsSuccessful)
+            {
+                return result.ResultCategory == ResultCategory.NotFound
+                    ? NotFound()
+                    : StatusCode(500);
             }
 
-            return await Details(model.EventId);
+            return RedirectToAction("Details", new {id = model.EventId});
         }
 
         /// <summary>
@@ -250,7 +258,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 return RedirectToAction("Details", new {id = eventId});
             }
-            
+
             var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
             if (currentUser == null)
             {
@@ -279,7 +287,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 return RedirectToAction("Details", new {id = eventId});
             }
-            
+
             var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
             if (currentUser == null)
             {
@@ -302,7 +310,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 return RedirectToAction("Details", new {id = deleteEventId});
             }
-            
+
             var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
             if (currentUser == null)
             {
@@ -314,7 +322,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 ShowErrorMessage("Fehler beim Löschen des Kommentars!");
             }
-            
+
             return RedirectToAction("Details", new {id = deleteEventId});
         }
 
