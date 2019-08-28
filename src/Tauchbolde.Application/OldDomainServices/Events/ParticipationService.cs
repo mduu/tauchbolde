@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Notifications;
@@ -31,23 +30,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
             if (eventId == Guid.Empty) throw new ArgumentNullException(nameof(eventId));
 
             return await participantRepository.GetParticipationForEventAndUserAsync(user, eventId);
-        }
-
-        private void TrackEvent(string name, Participant participantToTrack)
-        {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-            if (participantToTrack == null) throw new ArgumentNullException(nameof(participantToTrack));
-
-            telemetryService.TrackEvent(
-                name,
-                new Dictionary<string, string>
-                {
-                    { "ParticipantId", participantToTrack.Id.ToString("B") },
-                    { "ParticipatingDiverId", participantToTrack.ParticipatingDiver.Id.ToString("B")},
-                    { "Status", participantToTrack.Status.ToString() },
-                    { "CountPeople", participantToTrack.CountPeople.ToString() },
-                    { "Note", participantToTrack.Note },
-                });
         }
     }
 }
