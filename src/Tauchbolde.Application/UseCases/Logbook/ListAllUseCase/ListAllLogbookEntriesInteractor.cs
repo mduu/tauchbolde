@@ -27,7 +27,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.ListAllUseCase
                 new ListAllLogbookEntriesOutputPort.LogbookItem(
                     l.Id, l.Title, l.TeaserText, l.TeaserImageThumb, l.IsPublished, l.Text)));
             
-            await request.Presenter.PresentAsync(output);
+            request.OutputPort.Output(output);
             
             return UseCaseResult.Success();
         }

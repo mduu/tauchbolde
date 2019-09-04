@@ -16,7 +16,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
     public class ListAllLogbookEntriesInteractorTests
     {
         private readonly ILogbookEntryRepository repository = A.Fake<ILogbookEntryRepository>();
-        private readonly MvcListLogbookPresenter presenter = new MvcListLogbookPresenter(true, new MarkdownDigFormatter());
+        private readonly MvcListLogbookOutputPort outputPort = new MvcListLogbookOutputPort(true, new MarkdownDigFormatter());
         private readonly ListAllLogbookEntriesInteractor interactor;
 
         public ListAllLogbookEntriesInteractorTests()
@@ -40,24 +40,24 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         [Fact]
         public async Task Handle_DontIncludeUnpublished()
         {
-            var request = new ListAllLogbookEntries(false, presenter);
+            var request = new ListAllLogbookEntries(false, outputPort);
             
             var result = await interactor.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
-            var viewModel = presenter.GetViewModel();
+            var viewModel = outputPort.GetViewModel();
             viewModel.LogbookItems.Should().HaveCount(1);
         }
 
         [Fact]
         public async Task Handle_IncludeUnpublished()
         {
-            var request = new ListAllLogbookEntries(true, presenter);
+            var request = new ListAllLogbookEntries(true, outputPort);
             
             var result = await interactor.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
-            var viewModel = presenter.GetViewModel();
+            var viewModel = outputPort.GetViewModel();
             viewModel.LogbookItems.Should().HaveCount(2);
         }
     }

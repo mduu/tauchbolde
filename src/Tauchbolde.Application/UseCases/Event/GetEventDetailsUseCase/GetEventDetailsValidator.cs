@@ -9,7 +9,8 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
         public GetEventDetailsValidator()
         {
             RuleFor(e => e.EventId).NotEmpty();
-            RuleFor(e => e.Presenter).NotNull();
+            RuleFor(e => e.OutputPort).NotNull();
+            RuleFor(e => e.CurrentUserName).NotEmpty();
         }
     }
 }

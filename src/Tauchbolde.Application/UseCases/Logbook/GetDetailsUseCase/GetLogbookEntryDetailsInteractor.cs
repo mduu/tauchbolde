@@ -63,7 +63,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase
                 details.CreatedAt,
                 details.ModifiedAt);
 
-            await request.Presenter.PresentAsync(output);
+            request.OutputPort.Output(output);
 
             logger.LogDebug("Got details for LogbookEntry [{id}] successful", request.LogbookEntryId);
 

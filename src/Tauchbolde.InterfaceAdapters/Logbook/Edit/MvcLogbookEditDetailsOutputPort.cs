@@ -4,11 +4,11 @@ using Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase;
 
 namespace Tauchbolde.InterfaceAdapters.Logbook.Edit
 {
-    public class MvcLogbookEditDetailsPresenter : ILogbookDetailPresenter
+    public class MvcLogbookEditDetailsOutputPort : ILogbookDetailOutputPort
     {
         private LogbookEditViewModel viewModel;
 
-        public async Task PresentAsync(GetLogbookEntryDetailOutput interactorOutput)
+        public async void Output(GetLogbookEntryDetailOutput interactorOutput)
         {
             if (interactorOutput == null) throw new ArgumentNullException(nameof(interactorOutput));
             

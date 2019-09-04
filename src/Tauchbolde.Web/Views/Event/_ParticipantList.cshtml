@@ -1,7 +1,5 @@
-﻿@using Tauchbolde.Domain
-@using Tauchbolde.Domain.Types
-@using Tauchbolde.Web.Models.EventViewModels
-@model EventViewModel
+﻿@using Tauchbolde.Domain.Types
+@model Tauchbolde.InterfaceAdapters.Event.Details.EventParticipationViewModel
 
 <style>
     .event-participationlist {
@@ -36,38 +34,38 @@
     }
 </style>
 
-@if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Accepted))
+@if (Model.Participants.Any(p => p.Status == ParticipantStatus.Accepted))
 {
     <section class="event-participationlist event-participationlist-accepted row">
         <h5 class="participation-subheader">Angemeldet:</h5>
-        @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
+        @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
         {
             <div class="row">
-                <vc:participant-component participant="participant"/>
+                <vc:participant-component participant="@participant"/>
             </div>
         }
     </section>
 }
-@if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Tentative))
+@if (Model.Participants.Any(p => p.Status == ParticipantStatus.Tentative))
 {
     <section class="event-participationlist event-participationlist-tentative row">
         <h4 class="participation-subheader">Weiss noch nicht:</h4>
-        @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Tentative))
+        @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Tentative))
         {
             <div class="row">
-                <vc:participant-component participant="participant"/>
+                <vc:participant-component participant="@participant"/>
             </div>
         }
     </section>
 }
-@if (Model.Event.Participants.Any(p => p.Status == ParticipantStatus.Declined))
+@if (Model.Participants.Any(p => p.Status == ParticipantStatus.Declined))
 {
     <section class="event-participationlist event-participationlist-declined row">
         <h5 class="participation-subheader">Kann leider nicht:</h5>
-        @foreach (var participant in Model.Event.Participants.Where(p => p.Status == ParticipantStatus.Declined))
+        @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Declined))
         {
             <div class="row">
-                <vc:participant-component participant="participant"/>
+                <vc:participant-component participant="@participant"/>
             </div>
         }
     </section>

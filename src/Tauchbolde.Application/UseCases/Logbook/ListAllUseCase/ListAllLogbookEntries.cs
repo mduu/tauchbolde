@@ -7,13 +7,13 @@ namespace Tauchbolde.Application.UseCases.Logbook.ListAllUseCase
 {
     public class ListAllLogbookEntries : IRequest<UseCaseResult>
     {
-        public ListAllLogbookEntries(bool includeUnpublished, [NotNull] IListLogbookEntriesPresenter presenter)
+        public ListAllLogbookEntries(bool includeUnpublished, [NotNull] IListLogbookEntriesOutputPort outputPort)
         {
             IncludeUnpublished = includeUnpublished;
-            Presenter = presenter ?? throw new ArgumentNullException(nameof(presenter));
+            OutputPort = outputPort ?? throw new ArgumentNullException(nameof(outputPort));
         }
 
         public bool IncludeUnpublished { get; }
-        [NotNull] public IListLogbookEntriesPresenter Presenter { get; }
+        [NotNull] public IListLogbookEntriesOutputPort OutputPort { get; }
     }
 }

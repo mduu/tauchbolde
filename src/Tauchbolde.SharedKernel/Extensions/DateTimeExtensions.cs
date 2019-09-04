@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Tauchbolde.Domain.Helpers
+namespace Tauchbolde.SharedKernel.Extensions
 {
     public static class DateTimeExtensions
     {
@@ -25,5 +25,13 @@ namespace Tauchbolde.Domain.Helpers
 
         public static string ToStringSwissDateTime(this DateTime? dateTime)
             => dateTime.HasValue ? dateTime.Value.ToStringSwissDateTime() : "";
+
+        public static string FormatTimeRange(this DateTime startTime, DateTime? endTime)
+            => endTime != null
+            ? startTime.Date == endTime.Value.Date
+                ? $"{startTime.ToStringSwissDate()} - {endTime.Value.ToStringSwissTime()}"
+                : $"{startTime.ToStringSwissDate()} - {endTime.ToStringSwissDate()}"
+            : $"{startTime.ToStringSwissDateTime()}";
+        
     }
 }

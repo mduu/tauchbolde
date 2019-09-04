@@ -15,8 +15,9 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         {
             // Arrange
             var obj = new GetEventDetails(
-                new Guid("06001232-6A1B-4F2D-AD15-80DA03A4E5E6"),
-                A.Fake<IEventDetailsPresenter>());
+                new Guid("06001232-6A1B-4F2D-AD15-80DA03A4E5E6"), 
+                A.Fake<IEventDetailsOutputPort>(),
+                "john.doe");
             
             // Act
             var result = validator.Validate(obj);
@@ -30,8 +31,9 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         {
             // Arrange
             var obj = new GetEventDetails(
-                Guid.Empty,
-                A.Fake<IEventDetailsPresenter>());
+                Guid.Empty, 
+                A.Fake<IEventDetailsOutputPort>(),
+                "john.doe");
             
             // Act
             var result = validator.Validate(obj);
@@ -48,8 +50,9 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             // ReSharper disable once AssignNullToNotNullAttribute
             // ReSharper disable once ObjectCreationAsStatement
             Action act = () => new GetEventDetails(
-                new Guid("06001232-6A1B-4F2D-AD15-80DA03A4E5E6"),
-                null);
+                new Guid("06001232-6A1B-4F2D-AD15-80DA03A4E5E6"), 
+                null,
+                "john.doe");
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
