@@ -56,7 +56,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 
             // Assert
             act.Should().Throw<ArgumentNullException>()
-                .Which.ParamName.Should().Be("presenter");
+                .Which.ParamName.Should().Be("outputPort");
         }
     }
 }
