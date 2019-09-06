@@ -2,7 +2,7 @@ var Tauchbolde;
 (function (Tauchbolde) {
     var Events;
     (function (Events) {
-        var ParticipationViewModel = (function () {
+        var ParticipationViewModel = /** @class */ (function () {
             function ParticipationViewModel(formElement, changeUrl) {
                 var _this = this;
                 this.formElement = formElement;
@@ -19,10 +19,10 @@ var Tauchbolde;
                     e.preventDefault();
                     var participantData = {
                         eventid: _this.formElement.find("#eventId").val(),
-                        status: _this.formElement.find("#status").val(),
-                        note: _this.formElement.find("#note").val(),
-                        buddyteamname: _this.formElement.find("#buddyTeam"),
-                        countpeople: _this.formElement.find("#CountPeople")
+                        status: _this.formElement.find("#Participations_CurrentUserStatus").val(),
+                        note: _this.formElement.find("#Participations_CurrentUserNote").val(),
+                        buddyteamname: _this.formElement.find("#Participations_CurrentUserBuddyTeamName"),
+                        countpeople: _this.formElement.find("#Participations_CurrentUserCountPeople")
                     };
                     $.post({
                         url: changeUrl,
@@ -37,4 +37,3 @@ var Tauchbolde;
         Events.ParticipationViewModel = ParticipationViewModel;
     })(Events = Tauchbolde.Events || (Tauchbolde.Events = {}));
 })(Tauchbolde || (Tauchbolde = {}));
-//# sourceMappingURL=ParticipationViewModel.js.map

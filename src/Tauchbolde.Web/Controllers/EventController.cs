@@ -71,24 +71,6 @@ namespace Tauchbolde.Web.Controllers
                 return NotFound();
             }
 
-//            var existingParticipation = await participationService.GetExistingParticipationAsync(currentDiver, id);
-//            var allowEdit = detailsForEvent.OrganisatorId == currentDiver.Id;
-//            var model = new EventViewModel
-//            {
-//                Event = detailsForEvent,
-//                CurrentDiver = currentDiver,
-//                BuddyTeamNames = GetBuddyTeamNames(),
-//                AllowEdit = allowEdit,
-//                ChangeParticipantViewModel = new ChangeParticipantViewModel
-//                {
-//                    EventId = detailsForEvent.Id,
-//                    Note = existingParticipation?.Note,
-//                    CountPeople = existingParticipation?.CountPeople ?? 1,
-//                    Status = existingParticipation?.Status ?? ParticipantStatus.None,
-//                    BuddyTeamName = existingParticipation?.BuddyTeamName,
-//                }
-//            };
-
             return View(presenter.GetViewModel());
         }
 
@@ -213,10 +195,10 @@ namespace Tauchbolde.Web.Controllers
                 new ChangeParticipation(
                     currentUser.User.UserName,
                     model.EventId,
-                    model.Status,
-                    model.CountPeople,
-                    model.Note,
-                    model.BuddyTeamName
+                    model.CurrentUserStatus,
+                    model.CurrentUserCountPeople,
+                    model.CurrentUserNote,
+                    model.CurrentUserBuddyTeamName
                 ));
 
             if (!result.IsSuccessful)

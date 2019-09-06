@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Tauchbolde.Domain;
 using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.Web.Models.EventViewModels
@@ -11,13 +10,13 @@ namespace Tauchbolde.Web.Models.EventViewModels
         public Guid EventId { get; set; }
 
         [Required]
-        public int CountPeople { get; set; }
+        public int CurrentUserCountPeople { get; set; }
 
-        public string Note { get; set; }
+        public string CurrentUserNote { get; set; }
 
         [Required]
-        public ParticipantStatus Status { get; set; }
+        public ParticipantStatus CurrentUserStatus { get; set; }
 
-        public string BuddyTeamName { get; set; }
+        public string CurrentUserBuddyTeamName { get; set; }
     }
 }
