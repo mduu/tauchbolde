@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
 
         public GetEventDetailsInteractor(
             [NotNull] ILogger<GetEventDetailsInteractor> logger,
-            [NotNull] IEventRepository eventRepository, 
+            [NotNull] IEventRepository eventRepository,
             [NotNull] IDiverRepository diverRepository,
             [NotNull] IParticipantRepository participantRepository)
         {
@@ -30,7 +31,7 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
         }
-        
+
         public async Task<UseCaseResult> Handle([NotNull] GetEventDetails request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
@@ -41,7 +42,7 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
                 logger.LogError("No Diver instance found for current user [{username}]!", request.CurrentUserName);
                 return UseCaseResult.Fail();
             }
-            
+
             var evt = await eventRepository.FindByIdAsync(request.EventId);
             if (evt == null)
             {
@@ -63,15 +64,15 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
                 evt.EndTime,
                 evt.Canceled,
                 evt.Deleted,
-                evt.Participants.Select(p => new ParticipantOutput(
+                evt.Participants?.Select(p => new ParticipantOutput(
                     p.ParticipatingDiver.Fullname,
                     p.ParticipatingDiver.User.Email,
                     p.ParticipatingDiver.AvatarId,
                     p.BuddyTeamName,
                     p.Status,
                     p.CountPeople,
-                    p.Note)),
-                evt.Comments.Select(c => new CommentOutput(
+                    p.Note)) ?? new List<ParticipantOutput>(),
+                evt.Comments?.Select(c => new CommentOutput(
                     c.Id,
                     c.AuthorId,
                     c.Author.Fullname,
@@ -81,13 +82,13 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
                     c.ModifiedDate,
                     c.Text,
                     c.AuthorId == currentDiver.Id,
-                    c.AuthorId == currentDiver.Id)),
+                    c.AuthorId == currentDiver.Id)) ?? new List<CommentOutput>(),
                 evt.OrganisatorId == currentDiver.Id,
                 currentUserParticipation?.Status ?? ParticipantStatus.None,
-                currentUserParticipation.Note,
-                currentUserParticipation.BuddyTeamName,
-                currentUserParticipation.CountPeople));
-            
+                currentUserParticipation?.Note ?? "",
+                currentUserParticipation?.BuddyTeamName ?? "",
+                currentUserParticipation?.CountPeople ?? 1));
+
             return UseCaseResult.Success();
         }
     }
