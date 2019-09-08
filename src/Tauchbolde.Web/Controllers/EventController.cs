@@ -229,7 +229,10 @@ namespace Tauchbolde.Web.Controllers
                     : StatusCode(500);
             }
 
-            return File(presenter.GetIcalStream(), "text/calendar");
+            return File(
+                presenter.GetIcalStream(), 
+                "text/calendar",
+                presenter.GetDownloadFilename());
         }
 
         /// <summary>

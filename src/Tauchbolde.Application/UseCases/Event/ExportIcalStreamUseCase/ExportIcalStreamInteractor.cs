@@ -45,8 +45,9 @@ namespace Tauchbolde.Application.UseCases.Event.ExportIcalStreamUseCase
                         .CreateTime(request.CreateTime)
                         .StartTime(evt.StartTime)
                         .EndTime(evt.EndTime)
-                        .Build()));
-            
+                        .Build(),
+                    evt.Name));
+
             telemetryService.TrackEvent(TelemetryEventNames.IcalRequested, request);
 
             return UseCaseResult.Success();
