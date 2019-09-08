@@ -12,7 +12,7 @@ using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 using Xunit;
 
-namespace Tauchbolde.Tests.Application.OldDomainServices.Notifications
+namespace Tauchbolde.Tests.Application.Services.Notifications
 {
     public class NotificationSenderTests
     {
