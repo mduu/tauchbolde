@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-using ApprovalTests;
-using ApprovalTests.Namers;
-using ApprovalTests.Reporters;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.DataGateways;
@@ -33,37 +27,6 @@ namespace Tauchbolde.Tests.Application.OldDomainServices
                 Firstname = "John",
                 Lastname = "Doe"
             };
-        }
-
-        [Theory]
-        [UseReporter(typeof(DiffReporter))]
-        [InlineData("StartEnd", "2018/12/13 19:00:00", "2018/12/13 23:00:00")]
-        [InlineData("Start", "2018/12/13 19:00:00", null)]
-        [InlineData("StartEndMultiDay", "2018/12/13 19:00:00", "2018/12/15 23:00:00")]
-        public async Task CreateIcalForEventAsync(string name, string startTime, string endTime)
-        {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfoByIetfLanguageTag("en-US");
-            using (ApprovalResults.ForScenario(name))
-            {
-                // ARRANGE
-                var start = DateTimeOffset.ParseExact(startTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
-                var end = endTime != null
-                    ? (DateTimeOffset?)DateTimeOffset.ParseExact(endTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture)
-                    : null;
-
-                var evt = CreateEvent(start, end);
-                var eventService = CreateEventService(evt);
-                var createDateTime = new DateTime(2018, 9, 13, 8, 0, 0);
-
-                // ACT
-                var icalStream = await eventService.CreateIcalForEventAsync(eventId, createDateTime);
-
-                // ASSERT
-                var reader = new StreamReader(icalStream);
-                var icalText = reader.ReadToEnd();
-
-                Approvals.Verify(icalText);
-            }
         }
 
         [Fact]

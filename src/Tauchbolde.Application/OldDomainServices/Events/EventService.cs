@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Notifications;
@@ -24,18 +22,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
             this.notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
-        }
-
-        /// <inheritdoc />
-        public async Task<Stream> CreateIcalForEventAsync(Guid eventId, DateTime? createTime = null)
-        {
-            var evt = await eventRepository.FindByIdAsync(eventId);
-            if (evt == null)
-            {
-                throw new InvalidOperationException($"Event with ID [{eventId}] not found!");
-            }
-
-            return CreateIcalStream(evt, createTime);
         }
 
         /// <inheritdoc />
@@ -94,49 +80,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
         /// <inheritdoc />
         public async Task<Event> GetByIdAsync(Guid eventId)
             => await eventRepository.FindByIdAsync(eventId);
-
-        private Stream CreateIcalStream(Event evt, DateTimeOffset? createTime = null)
-        {
-            var sb = new StringBuilder();
-            const string dateFormat = "yyyyMMddTHHmmssZ";
-            var createAt = createTime != null
-                ? createTime.Value
-                : DateTimeOffset.Now;
-            var createAtString = createAt.ToString(dateFormat);
-
-            sb.AppendLine("BEGIN:VCALENDAR");
-            sb.AppendLine("PRODID:-//Tauchbolde//TauchboldeWebsite//EN");
-            sb.AppendLine("VERSION:2.0");
-            sb.AppendLine("METHOD:PUBLISH");
-
-
-            var evtEndTime = evt.EndTime ?? evt.StartTime.AddHours(4);
-            var dtStart = evt.StartTime.ToLocalTime();
-            var dtEnd = evtEndTime.ToLocalTime();
-
-            sb.AppendLine("BEGIN:VEVENT");
-            sb.AppendLine("DTSTART:" + dtStart.ToString(dateFormat));
-            sb.AppendLine("DTEND:" + dtEnd.ToString(dateFormat));
-            sb.AppendLine("DTSTAMP:" + createAtString);
-            sb.AppendLine("UID:" + evt.Id);
-            sb.AppendLine("CREATED:" + createAtString);
-            sb.AppendLine("X-ALT-DESC;FMTTYPE=text/html:" + evt.Description);
-            sb.AppendLine("DESCRIPTION:" + evt.Description);
-            sb.AppendLine("LAST-MODIFIED:" + createAtString);
-            sb.AppendLine("LOCATION:" + evt.Location);
-            sb.AppendLine("SEQUENCE:0");
-            sb.AppendLine("STATUS:CONFIRMED");
-            sb.AppendLine("SUMMARY:" + evt.Name);
-            sb.AppendLine("TRANSP:OPAQUE");
-            sb.AppendLine("END:VEVENT");
-            sb.AppendLine("END:VCALENDAR");
-
-            var calendarBytes = Encoding.UTF8.GetBytes(sb.ToString());
-
-            TrackEvent("EVENT-ICAL", evt);
-
-            return new MemoryStream(calendarBytes);
-        }
 
         private void TrackEvent(string name, Event eventToTrack)
         {
