@@ -13,11 +13,13 @@ using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase;
 using Tauchbolde.Application.UseCases.Event.DeleteCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.EditCommentUseCase;
+using Tauchbolde.Application.UseCases.Event.ExportIcalStreamUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
+using Tauchbolde.InterfaceAdapters.Event;
 using Tauchbolde.InterfaceAdapters.Event.Details;
 using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core;
@@ -29,7 +31,6 @@ namespace Tauchbolde.Web.Controllers
     public class EventController : AppControllerBase
     {
         [NotNull] private readonly ApplicationDbContext context;
-        [NotNull] private readonly IParticipationService participationService;
         [NotNull] private readonly IEventService eventService;
         [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly IMediator mediator;
@@ -37,14 +38,12 @@ namespace Tauchbolde.Web.Controllers
         public EventController(
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ApplicationDbContext context,
-            [NotNull] IParticipationService participationService,
             [NotNull] IEventService eventService,
             [NotNull] IDiverService diverService,
             [NotNull] IMediator mediator)
             : base(userManager, diverService)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.participationService = participationService ?? throw new ArgumentNullException(nameof(participationService));
             this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -221,9 +220,19 @@ namespace Tauchbolde.Web.Controllers
                 return BadRequest("Invalid Event!");
             }
 
-            var stream = await eventService.CreateIcalForEventAsync(id);
+            var presenter = new ExportIcalPresenter();
+            var useCaseResult = await mediator.Send(new ExportIcalStream(id, presenter));
+            if (!useCaseResult.IsSuccessful)
+            {
+                return useCaseResult.ResultCategory == ResultCategory.NotFound
+                    ? NotFound()
+                    : StatusCode(500);
+            }
 
-            return File(stream, "text/calendar");
+            return File(
+                presenter.GetIcalStream(), 
+                "text/calendar",
+                presenter.GetDownloadFilename());
         }
 
         /// <summary>

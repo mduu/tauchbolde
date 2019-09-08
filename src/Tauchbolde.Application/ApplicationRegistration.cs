@@ -51,7 +51,6 @@ namespace Tauchbolde.Application
         {
             // TODO The goal is to remove all these old "domain services"
             
-            services.AddTransient<IParticipationService, ParticipationService>();
             services.AddTransient<IEventService, EventService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IDiverService, DiversService>();
