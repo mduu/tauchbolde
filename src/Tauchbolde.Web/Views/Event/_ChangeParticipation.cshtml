@@ -5,27 +5,31 @@
     <form id="ChangeParticipantForm" asp-action="ChangeParticipation" asp-antiforgery="true">
         <input type="hidden" asp-for="@Model.Participations.EventId" Value="@Model.EventId"/>
         <div class="well">
-            <div class="form-group">
-                <label asp-for="@Model.Participations.CurrentUserStatus"></label>
-                <select class="form-control" asp-for="@Model.Participations.CurrentUserStatus" asp-items="Html.GetEnumSelectList<ParticipantStatus>()"></select>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="@Model.Participations.CurrentUserStatus"></label>
+                    <select class="form-control" asp-for="@Model.Participations.CurrentUserStatus" asp-items="Html.GetEnumSelectList<ParticipantStatus>()"></select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="@Model.Participations.CurrentUserBuddyTeamName">Buddy-Team</label>
+                    <select
+                        class="form-control"
+                        asp-for="@Model.Participations.CurrentUserBuddyTeamName"
+                        value asp-items="@Model.Participations.BuddyTeamNames.Select(n => new SelectListItem(n, n))">
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="@Model.Participations.CurrentUserNote">Notiz</label>
+                    <input type="text" class="form-control" placeholder="Notiz" asp-for="@Model.Participations.CurrentUserNote">
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="@Model.Participations.CurrentUserCountPeople">Anzahl Personen</label>
+                    <input type="number" class="form-control" step="1" min="1" asp-for="@Model.Participations.CurrentUserCountPeople">
+                </div>
+                <div class="col-xs-12">
+                    <input class="btn btn-success" type="submit" value="Speichern"/>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="@Model.Participations.CurrentUserBuddyTeamName">Buddy-Team</label>
-                <select
-                    class="form-control"
-                    asp-for="@Model.Participations.CurrentUserBuddyTeamName"
-                    value asp-items="@Model.Participations.BuddyTeamNames.Select(n => new SelectListItem(n, n))">
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Participations.CurrentUserNote">Notiz</label>
-                <input type="text" class="form-control" placeholder="Notiz" asp-for="@Model.Participations.CurrentUserNote">
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Participations.CurrentUserCountPeople">Anzahl Personen</label>
-                <input type="number" class="form-control" step="1" min="1" asp-for="@Model.Participations.CurrentUserCountPeople">
-            </div>
-            <input class="btn btn-success" type="submit" value="Speichern"/>
         </div>
     </form>
 </div>
