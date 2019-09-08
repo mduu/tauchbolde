@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Tauchbolde.Application.OldDomainServices.Notifications;
 using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Entities;
 
