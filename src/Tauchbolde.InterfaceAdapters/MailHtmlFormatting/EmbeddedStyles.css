@@ -1,5 +1,6 @@
 body {
     font-family: Helvetica, sans-serif;
+    color: #030303;
 }
 
 .list {
@@ -9,24 +10,30 @@ body {
 
 .timestamp {
     font-size: small;
-    color: #9d9d9d;
     float: right;
 }
 
 .list li {
-    border: #0d87e9 1px solid;
-    border-left: #0d87e9 10px solid;
+    background-color: #0d87e9;
     margin-bottom: 10px;
-    padding: 5px;
-    background-color: white;
+    padding: 10px;
+    color: #fff;
+    border-radius: 5px;
 }
 
 .list li.Declined {
-    border-color: #e51c23;
+    background-color: #e51c23;
 }
 
 .list li.Accepted {
-    border-color: #4caf50;
+    background-color: #4caf50;
+}
+
+.list li a,
+.list li a:visited,
+.list li a:hover,
+.list li a:active {
+    color: #fff;
 }
 
 .message-type {
