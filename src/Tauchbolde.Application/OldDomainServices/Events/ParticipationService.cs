@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Notifications;
-using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.Application.OldDomainServices.Events
 {
@@ -33,73 +30,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
             if (eventId == Guid.Empty) throw new ArgumentNullException(nameof(eventId));
 
             return await participantRepository.GetParticipationForEventAndUserAsync(user, eventId);
-        }
-
-        /// <inheritdoc />
-        public async Task<Participant> ChangeParticipationAsync(
-            Diver user,
-            Guid eventId,
-            ParticipantStatus status,
-            int numberOfPeople,
-            string note,
-            string buddyTeamName)
-        {
-            if (user == null) { throw new ArgumentNullException(nameof(user)); }
-            if (eventId == Guid.Empty) { throw new ArgumentNullException(nameof(eventId)); }
-            if (numberOfPeople < 0) { throw new ArgumentOutOfRangeException(nameof(numberOfPeople)); }
-
-            var participant = await participantRepository.GetParticipationForEventAndUserAsync(user, eventId);
-            var isNew = participant == null;
-            if (isNew)
-            {
-                participant = new Participant
-                {
-                    Id = Guid.NewGuid(),
-                    EventId = eventId,
-                };
-
-            }
-
-            participant.Status = status;
-            participant.ParticipatingDiver = user;
-            participant.BuddyTeamName = buddyTeamName;
-            participant.Note = note;
-            participant.CountPeople = numberOfPeople;
-
-            if (isNew)
-            {
-                await participantRepository.InsertAsync(participant);
-            }
-            else
-            {
-                await participantRepository.UpdateAsync(participant);
-            }
-
-            await notificationService.NotifyForChangedParticipationAsync(
-                participant,
-                user,
-                eventId);
-            
-            TrackEvent("CHANGE-PARTICIPATION", participant);
-
-            return participant;
-        }
-        
-        private void TrackEvent(string name, Participant participantToTrack)
-        {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-            if (participantToTrack == null) throw new ArgumentNullException(nameof(participantToTrack));
-
-            telemetryService.TrackEvent(
-                name,
-                new Dictionary<string, string>
-                {
-                    { "ParticipantId", participantToTrack.Id.ToString("B") },
-                    { "ParticipatingDiverId", participantToTrack.ParticipatingDiver.Id.ToString("B")},
-                    { "Status", participantToTrack.Status.ToString() },
-                    { "CountPeople", participantToTrack.CountPeople.ToString() },
-                    { "Note", participantToTrack.Note },
-                });
         }
     }
 }

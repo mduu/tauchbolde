@@ -6,9 +6,9 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.Helpers;
 using Tauchbolde.Driver.SmtpEmail;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
+using Tauchbolde.SharedKernel.Extensions;
 
 namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
 {
@@ -66,7 +66,7 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
         private void AddContextUrl(StringBuilder htmlBuilder, Notification notification)
         {
             AddEventUrl(htmlBuilder, notification.EventId);
-            AddLogbookEntryUrl(htmlBuilder, notification?.LogbookEntryId);
+            AddLogbookEntryUrl(htmlBuilder, notification.LogbookEntryId);
         }
 
         private void AddEventUrl(StringBuilder htmlBuilder, Guid? eventId)

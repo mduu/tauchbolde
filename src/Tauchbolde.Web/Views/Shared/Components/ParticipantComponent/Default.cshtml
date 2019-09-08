@@ -1,20 +1,19 @@
-﻿@using Tauchbolde.Web.Models.ViewComponentModels
-@model ParticipantViewModel
+﻿@model Tauchbolde.InterfaceAdapters.Event.Details.EventParticipantViewModel
 
 <div style="margin: 3px 0;">
     <span style="margin-left: 18px"></span>
 
-    <span title="@Model.Name">
-        <vc:avatar diver-email="@Model.Diver.User.Email" avatar-id="@Model.Diver.AvatarId" avatar-size="Small" />
+    <span title="@Model.UserName">
+        <vc:avatar diver-email="@Model.UserEmail" avatar-id="@Model.UserAvatarId" avatar-size="Small" />
     </span>
     <span class="event-participationlist-name" style="padding-left: 5px;">
-        <strong>@Model.Name</strong>
+        <strong>@Model.UserName</strong>
     </span>
     <span class="badge" title="Anzahl Personen: @Model.CountPeople">
         @Model.CountPeople
     </span>
-    @if (!string.IsNullOrWhiteSpace(Model.Notes))
+    @if (!string.IsNullOrWhiteSpace(Model.Note))
     {
-        <mark style="margin-left: 10px;">@Model.Notes</mark>
+        <mark style="margin-left: 10px;">@Model.Note</mark>
     }
 </div>

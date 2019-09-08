@@ -80,17 +80,17 @@ namespace Tauchbolde.Domain.Entities
         [DisplayName("Publiziert")]
         public bool IsPublished { get; internal set; }
 
-        public Guid? EditorAuthorId { get; internal set; }
+        public Guid? EditorAuthorId { [UsedImplicitly] get; internal set; }
 
-        public Diver EditorAuthor { get; internal set; }
+        public Diver EditorAuthor { get; [UsedImplicitly] internal set; }
 
-        [Required] public Guid OriginalAuthorId { get; internal set; }
+        [Required] public Guid OriginalAuthorId { get; [UsedImplicitly] private set; }
 
         public Diver OriginalAuthor { get; internal set; }
+        
+        public Guid? EventId { get; private set; }
 
-        public Guid? EventId { get; internal set; }
-
-        public Event Event { get; internal set; }
+        public Event Event { get; [UsedImplicitly] internal set; }
 
         public void Publish()
         {
@@ -136,8 +136,8 @@ namespace Tauchbolde.Domain.Entities
             if (photoIdentifiers != null && (photoIdentifiers.OriginalPhotoIdentifier != null ||
                                              photoIdentifiers.ThumbnailPhotoIdentifier != null))
             {
-                TeaserImage = photoIdentifiers?.OriginalPhotoIdentifier?.Serialze();
-                TeaserImageThumb = photoIdentifiers?.ThumbnailPhotoIdentifier?.Serialze();
+                TeaserImage = photoIdentifiers.OriginalPhotoIdentifier?.Serialze();
+                TeaserImageThumb = photoIdentifiers.ThumbnailPhotoIdentifier?.Serialze();
             }
             
             RaiseDomainEvent(new LogbookEntryEditedEvent(Id, Title));

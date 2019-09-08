@@ -1,22 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Domain;
-using Tauchbolde.Domain.Entities;
-using Tauchbolde.Web.Models.ViewComponentModels;
+using Tauchbolde.InterfaceAdapters.Event.Details;
 
 namespace Tauchbolde.Web.ViewComponents
 {
     public class ParticipantComponent: ViewComponent
     {
-        public IViewComponentResult Invoke(Participant participant)
+        public IViewComponentResult Invoke(EventParticipantViewModel participant)
         {
-            return View(new ParticipantViewModel
-            {
-                Diver = participant.ParticipatingDiver,
-                Name = participant.ParticipatingDiver.Firstname,
-                CountPeople = participant.CountPeople,
-                Notes = participant.Note,
-                Status = participant.Status,
-            });
+            return View(participant);
         }
     }
 }

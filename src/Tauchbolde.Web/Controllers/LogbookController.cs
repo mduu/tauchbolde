@@ -59,7 +59,7 @@ namespace Tauchbolde.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var allowEdit = await GetAllowEdit();
-            var presenter = new MvcListLogbookPresenter(allowEdit, textFormatter);
+            var presenter = new MvcListLogbookOutputPort(allowEdit, textFormatter);
             var interactorResult = await mediator.Send(new ListAllLogbookEntries(allowEdit, presenter));
             if (!interactorResult.IsSuccessful)
             {
@@ -73,7 +73,7 @@ namespace Tauchbolde.Web.Controllers
         public async Task<IActionResult> Detail(Guid id)
         {
             var allowEdit = await GetAllowEdit();
-            var presenter = new MvcLogbookDetailsPresenter(relativeUrlGenerator, logbookDetailsUrlGenerator);
+            var presenter = new MvcLogbookDetailsOutputPort(relativeUrlGenerator, logbookDetailsUrlGenerator);
             var interactorResult = await mediator.Send(new GetLogbookEntryDetails(id, presenter, allowEdit));
             if (!interactorResult.IsSuccessful)
             {
@@ -98,7 +98,7 @@ namespace Tauchbolde.Web.Controllers
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var presenter = new MvcLogbookEditDetailsPresenter();
+            var presenter = new MvcLogbookEditDetailsOutputPort();
             var interactorResult = await mediator.Send(new GetLogbookEntryDetails(id, presenter, true));
             if (!interactorResult.IsSuccessful)
             {

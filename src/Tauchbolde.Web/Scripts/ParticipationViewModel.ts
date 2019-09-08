@@ -22,10 +22,10 @@
 
                 const participantData = {
                     eventid: this.formElement.find("#eventId").val(),
-                    status: this.formElement.find("#status").val(),
-                    note: this.formElement.find("#note").val(),
-                    buddyteamname: this.formElement.find("#buddyTeam"),
-                    countpeople: this.formElement.find("#CountPeople")
+                    status: this.formElement.find("#Participations_CurrentUserStatus").val(),
+                    note: this.formElement.find("#Participations_CurrentUserNote").val(),
+                    buddyteamname: this.formElement.find("#Participations_CurrentUserBuddyTeamName"),
+                    countpeople: this.formElement.find("#Participations_CurrentUserCountPeople")
                 };
 
                 $.post({

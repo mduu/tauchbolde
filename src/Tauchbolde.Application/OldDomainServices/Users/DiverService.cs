@@ -79,7 +79,7 @@ namespace Tauchbolde.Application.OldDomainServices.Users
             diver.SkypeId = profile.SkypeId;
             diver.MobilePhone = profile.MobilePhone;
 
-            diverRepository.UpdateAsync(diver);
+            await diverRepository.UpdateAsync(diver);
         }
 
         /// <inheritdoc/>

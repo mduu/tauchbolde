@@ -9,15 +9,15 @@ namespace Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase
     public class GetLogbookEntryDetails : IRequest<UseCaseResult>
     {
 
-        public GetLogbookEntryDetails(Guid logbookEntryId, [NotNull] ILogbookDetailPresenter presenter, bool allowEdit)
+        public GetLogbookEntryDetails(Guid logbookEntryId, [NotNull] ILogbookDetailOutputPort outputPort, bool allowEdit)
         {
             LogbookEntryId = logbookEntryId;
-            Presenter = presenter ?? throw new ArgumentNullException(nameof(presenter));
+            OutputPort = outputPort ?? throw new ArgumentNullException(nameof(outputPort));
             AllowEdit = allowEdit;
         }
         
         public Guid LogbookEntryId { get; }
-        public ILogbookDetailPresenter Presenter { get; }
+        public ILogbookDetailOutputPort OutputPort { get; }
         public bool AllowEdit { get; }
     }
 }

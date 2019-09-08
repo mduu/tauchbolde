@@ -1,9 +1,8 @@
-﻿@using Tauchbolde.Web.Models.EventViewModels
-@model EventViewModel
+﻿@model Tauchbolde.InterfaceAdapters.Event.Details.EventViewModel
 
 <div class="panel-body">
     <form id="AddComment" asp-action="AddComment" asp-antiforgery="true">
-        <input type="hidden" id="eventId" name="eventId" Value="@Model.Event.Id" />
+        <input type="hidden" id="eventId" name="eventId" Value="@Model.EventId" />
         <textarea id="newCommentText" name="newCommentText" rows="3" style=" width: 100%"></textarea>
         <input class="btn btn-primary" type="submit" value="Kommentar speichern" />
         <vc:markdown-help-link />

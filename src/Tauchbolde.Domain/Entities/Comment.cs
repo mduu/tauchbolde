@@ -7,7 +7,6 @@ using Tauchbolde.SharedKernel.Services;
 
 namespace Tauchbolde.Domain.Entities
 {
-    // TODO Make setter internal as soon as all use-cases are migrated
     public class Comment : EntityBase
     {
         internal Comment()
@@ -31,7 +30,7 @@ namespace Tauchbolde.Domain.Entities
         
         [Display(Name = "Anlass ID")]
         public Guid EventId { get; internal set; }
-        public Event Event { get; internal set; }
+        public Event Event { get; [UsedImplicitly] internal set; }
         
         [Display(Name = "Autor ID")]
         [Required]
@@ -39,18 +38,18 @@ namespace Tauchbolde.Domain.Entities
 
         [Display(Name = "Autor")]
         [Required]
-        public Diver Author { get; internal set; }
+        public Diver Author { get; [UsedImplicitly] internal set; }
 
         [Display(Name = "Geschrieben um")]
         [Required]
         public DateTime CreateDate { get; internal set; }
 
         [Display(Name = "Geändert um")]
-        public DateTime? ModifiedDate { get; internal set; }
+        public DateTime? ModifiedDate { get; private set; }
 
         [Display(Name = "Kommentar")]
         [Required]
-        public string Text { get; set; }
+        public string Text { get; internal set; }
 
         public void Edit(string text)
         {

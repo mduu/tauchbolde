@@ -3,7 +3,8 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Application.Services.Notifications;
-using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
+using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
+using Tauchbolde.InterfaceAdapters.Event.Details;
 using Tauchbolde.InterfaceAdapters.MailHtmlFormatting;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
 
@@ -25,6 +26,7 @@ namespace Tauchbolde.InterfaceAdapters
             services.AddTransient<IHtmlListFormatter, HtmlListFormatter>();
             services.AddTransient<IHtmlHeaderFormatter, HtmlHeaderFormatter>();
             services.AddTransient<IHtmlFooterFormatter, HtmlFooterFormatter>();
+            services.AddTransient<IEventDetailsOutputPort, MvcEventDetailPresenter>();
         }
     }
 }

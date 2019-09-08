@@ -15,7 +15,7 @@ using Tauchbolde.InterfaceAdapters.MailHtmlFormatting;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
 using Xunit;
 
-namespace Tauchbolde.Tests.Application.OldDomainServices.Notifications
+namespace Tauchbolde.Tests.Application.Services.Notifications
 {
     public class HtmlNotificationFormatterTests
     {

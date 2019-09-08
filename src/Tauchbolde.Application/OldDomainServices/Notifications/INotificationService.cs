@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Application.OldDomainServices.Notifications
@@ -11,6 +10,5 @@ namespace Tauchbolde.Application.OldDomainServices.Notifications
     {
         Task NotifyForNewEventAsync(Event newEvent, Diver currentUser);
         Task NotifyForChangedEventAsync(Event changedEvent, Diver currentUser);
-        Task NotifyForChangedParticipationAsync(Participant participant, Diver participatingDiver, Guid eventId);
     }
 }

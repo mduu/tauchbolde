@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Application.DataGateways;
@@ -17,24 +16,16 @@ namespace Tauchbolde.Application.OldDomainServices.Notifications
     {
         [NotNull] private readonly INotificationRepository notificationRepository;
         [NotNull] private readonly IDiverRepository diverRepository;
-        [NotNull] private readonly IEventRepository eventRepository;
-        [NotNull] private readonly IParticipantRepository participantRepository;
         [NotNull] private readonly ITelemetryService telemetryService;
 
         public NotificationService(
             [NotNull] INotificationRepository notificationRepository,
             [NotNull] IDiverRepository diverRepository,
-            [NotNull] IParticipantRepository participantRepository,
-            [NotNull] IEventRepository eventRepository,
             [NotNull] ITelemetryService telemetryService)
         {
-            this.notificationRepository = notificationRepository ??
-                                          throw new ArgumentNullException(nameof(notificationRepository));
+            this.notificationRepository = notificationRepository ?? throw new ArgumentNullException(nameof(notificationRepository));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
-            this.participantRepository =
-                participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
-            this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
         }
 
         /// <inheritdoc />
@@ -73,86 +64,6 @@ namespace Tauchbolde.Application.OldDomainServices.Notifications
                 NotificationType.EditEvent,
                 message,
                 currentUser);
-        }
-
-        /// <inheritdoc />
-        public async Task NotifyForChangedParticipationAsync(
-            [NotNull] Participant participant,
-            [NotNull] Diver participatingDiver,
-            Guid eventId)
-        {
-            if (participant == null) throw new ArgumentNullException(nameof(participant));
-            if (participatingDiver == null) throw new ArgumentNullException(nameof(participatingDiver));
-            if (eventId == null) throw new ArgumentNullException(nameof(eventId));
-
-            var recipients =
-                await GetAllTauchboldeButDeclinedParticipantsAsync(participatingDiver.Id, participant.EventId);
-            var evt = await eventRepository.FindByIdAsync(eventId);
-
-            var mapping =
-                new Dictionary<ParticipantStatus, ( Func<string> msgFactory, NotificationType notificationType)>
-                {
-                    {
-                        ParticipantStatus.None,
-                        (
-                            () => $"{participatingDiver.Realname ?? "Unbekannt"} weiss nicht ob Er/Sie an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil nimmt.",
-                            NotificationType.Neutral
-                        )
-                    },
-                    {
-                        ParticipantStatus.Accepted,
-                        (
-                            () => $"{participatingDiver.Realname ?? "Unbekannt"} nimmt an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil.",
-                            NotificationType.Accepted
-                        )
-                    },
-                    {
-                        ParticipantStatus.Declined,
-                        (
-                            () => $"{participatingDiver.Realname ?? "Unbekannt"} hat für die Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) abgesagt.",
-                            NotificationType.Declined
-                        )
-                    },
-                    {
-                        ParticipantStatus.Tentative,
-                        (
-                            () => $"{participatingDiver.Realname ?? "Unbekannt"} nimmt eventuell an der Aktivität '{evt.Name}' ({evt.StartEndTimeAsString}) teil.",
-                            NotificationType.Tentative
-                        )
-                    }
-                };
-
-            var message = mapping[participant.Status].msgFactory();
-            NotificationType notificationType = mapping[participant.Status].notificationType;
-
-            if (!string.IsNullOrWhiteSpace(participant.Note))
-            {
-                message = $"{message}: {participant.Note}";
-            }
-
-            await InsertNotification(
-                evt,
-                recipients,
-                notificationType,
-                message,
-                participant.ParticipatingDiver);
-        }
-        
-        private async Task<List<Diver>> GetAllTauchboldeButDeclinedParticipantsAsync(
-            Guid currentDiverId,
-            Guid eventId)
-        {
-            var declinedParticipants =
-                (await participantRepository.GetParticipantsForEventByStatusAsync(eventId, ParticipantStatus.Declined))
-                .Where(p => p.ParticipatingDiver.Id != currentDiverId);
-
-            var result = (await diverRepository
-                    .GetAllTauchboldeUsersAsync())
-                .Where(u =>
-                    declinedParticipants.All(p => p.ParticipatingDiver.Id != u.Id))
-                .ToList();
-
-            return result;
         }
 
         private async Task InsertNotification(

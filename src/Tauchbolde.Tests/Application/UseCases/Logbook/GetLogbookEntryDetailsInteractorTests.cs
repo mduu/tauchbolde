@@ -22,7 +22,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         private readonly ILogbookDetailsUrlGenerator detailsUrlGenerator = A.Fake<ILogbookDetailsUrlGenerator>();
         private readonly ILogger<GetLogbookEntryDetailsInteractor> logger = A.Fake<ILogger<GetLogbookEntryDetailsInteractor>>();
         private readonly GetLogbookEntryDetailsInteractor interactor;
-        private readonly MvcLogbookDetailsPresenter presenter;
+        private readonly MvcLogbookDetailsOutputPort outputPort;
 
         public GetLogbookEntryDetailsInteractorTests()
         {
@@ -45,26 +45,26 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                             }
                         : null));
 
-            presenter = new MvcLogbookDetailsPresenter(relativeUrlGenerator, detailsUrlGenerator);
+            outputPort = new MvcLogbookDetailsOutputPort(relativeUrlGenerator, detailsUrlGenerator);
             interactor = new GetLogbookEntryDetailsInteractor(logger, repository);
         }
 
         [Fact]
         public async Task Handle_Success()
         {
-            var request = new GetLogbookEntryDetails(validId, presenter, false);
+            var request = new GetLogbookEntryDetails(validId, outputPort, false);
 
             var result = await interactor.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
-            presenter.GetViewModel().Should().NotBeNull();
-            presenter.GetViewModel().Id.Should().Be(validId);
+            outputPort.GetViewModel().Should().NotBeNull();
+            outputPort.GetViewModel().Id.Should().Be(validId);
         }
 
         [Fact]
         public async Task Handle_NotFound()
         {
-            var request = new GetLogbookEntryDetails(new Guid("D6401A2A-1C89-4CFD-8436-53D071B1673C"), presenter, false);
+            var request = new GetLogbookEntryDetails(new Guid("D6401A2A-1C89-4CFD-8436-53D071B1673C"), outputPort, false);
 
             var result = await interactor.Handle(request, CancellationToken.None);
 

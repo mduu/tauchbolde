@@ -9,7 +9,7 @@ using Tauchbolde.Domain.Events.Event;
 namespace Tauchbolde.Application.Policies.Event.CommentCreated
 {
     [UsedImplicitly]
-    public class LogTelemetryNewEventCommentPolicy : INotificationHandler<CommentCreatedEvent>
+    internal class LogTelemetryNewEventCommentPolicy : INotificationHandler<CommentCreatedEvent>
     {
         private readonly ITelemetryService telemetryService;
 

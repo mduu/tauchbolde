@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
@@ -13,14 +12,14 @@ namespace Tauchbolde.Tests.InterfaceAdapters.Logbook
     public class MvcListLogbookPresenterTests
     {
         private readonly ITextFormatter textFormatter = A.Fake<ITextFormatter>();
-        private readonly MvcListLogbookPresenter presenter;
+        private readonly MvcListLogbookOutputPort outputPort;
 
         public MvcListLogbookPresenterTests()
         {
             A.CallTo(() => textFormatter.GetHtmlText(A<string>._))
                 .ReturnsLazily(call => $"{(string)call.Arguments[0]}_formatted");
 
-            presenter = new MvcListLogbookPresenter(false, textFormatter);
+            outputPort = new MvcListLogbookOutputPort(false, textFormatter);
         }
 
         [Theory]
@@ -31,10 +30,10 @@ namespace Tauchbolde.Tests.InterfaceAdapters.Logbook
         [InlineData("teaser", null, "teaser_formatted")]
         [InlineData("", "", "")]
         [InlineData("", null, null)]
-        public async Task Present_Success(string teaserText, string text, string expectedTeaser)
+        public void Present_Success(string teaserText, string text, string expectedTeaser)
         {
             // Act
-            await presenter.PresentAsync(new ListAllLogbookEntriesOutputPort(
+            outputPort.Output(new ListAllLogbookEntriesOutputPort(
                 new[]
                 {
                     new ListAllLogbookEntriesOutputPort.LogbookItem(
@@ -47,19 +46,19 @@ namespace Tauchbolde.Tests.InterfaceAdapters.Logbook
                 }));
 
             // Assert
-            var model = presenter.GetViewModel();
+            var model = outputPort.GetViewModel();
             model.LogbookItems.Single().TeaserText.Should().Be(expectedTeaser);
         }
 
         [Fact]
-        public async Task Present_ThrowIfNullInput()
+        public void Present_ThrowIfNullInput()
         {
             // Act
             // ReSharper disable once AssignNullToNotNullAttribute
-            Func<Task> act = async () => await presenter.PresentAsync(null);
+            Action act = () => outputPort.Output(null);
 
             // Assert
-            await act.Should().ThrowAsync<ArgumentNullException>();
+            act.Should().Throw<ArgumentNullException>();
         }
     }
 }

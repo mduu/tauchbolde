@@ -1,33 +1,35 @@
-﻿@using Tauchbolde.Web.Models.EventViewModels
-@inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
-@model EventViewModel
+﻿@inject Tauchbolde.Web.Core.TextFormatting.ITextFormattingHelper TextFormatting
+@model Tauchbolde.InterfaceAdapters.Event.Details.EventViewModel
 
-@foreach (var comment in Model.Event.Comments.OrderBy(c => c.CreateDate))
+@foreach (var comment in Model.Comments)
 {
     <div class="col-md-12">
         <div class="panel panel-primary">
 
             <div class="panel-body">
                 <div>
-                    <vc:avatar diver-email="@comment.Author.User.Email" avatar-id="@comment.Author.AvatarId" avatar-size="Small" />
-                    <strong>@comment.Author.Fullname</strong>
-                    <small> &mdash; @comment.CreateDate.ToString("dd.MM.yyyy HH:mm") @(comment.ModifiedDate.HasValue ? ("Geändert: " + comment.ModifiedDate.Value.ToString("dd.MM.yyyy HH:mm")) : "")</small>
+                    <vc:avatar diver-email="@comment.CommentAuthorEmail" avatar-id="@comment.CommentAuthorAvatarId" avatar-size="Small"/>
+                    <strong>@comment.CommentAuthorFullname</strong>
+                    <small> &mdash; @comment.CreatedTime @(comment.ModifiedTime != null ? "Geändert: " + comment.ModifiedTime : "")</small>
                     @* ReSharper disable twice UnknownCssClass *@
-                    @if (comment.AuthorId == Model.CurrentDiver.Id)
+                    @if (comment.EditAllowed)
                     {
                         <button class="btn btn-default btn-xs editCommentBtn"
-                                data-commentId="@comment.Id"
-                                data-commentText="@comment.Text">
+                                data-commentId="@comment.CommentId"
+                                data-commentText="@comment.">
                             <span class="glyphicon glyphicon-pencil"
-                                  data-commentId="@comment.Id"
+                                  data-commentId="@comment.CommentId"
                                   data-commentText="@comment.Text">
                             </span>
                         </button>
+                    }
+                    @if (comment.DeleteAllowed)
+                    {
                         <button class="btn btn-default btn-xs deleteCommentBtn"
-                                data-commentId="@comment.Id"
+                                data-commentId="@comment.CommentId"
                                 data-commentText="@comment.Text">
                             <span class="glyphicon glyphicon-trash"
-                                  data-commentId="@comment.Id"
+                                  data-commentId="@comment.CommentId"
                                   data-commentText="@comment.Text">
                             </span>
                         </button>
@@ -49,7 +51,7 @@
     
             modal.find('#commentId').val(commentId);
             modal.find('#commentText').val(commentText);
-            modal.find('#eventId').val('@Model.Event.Id');
+            modal.find('#eventId').val('@Model.EventId');
     
             modal.modal('show');
         });
@@ -64,7 +66,7 @@
             const modal = $('#commentDeleteModal');
     
             modal.find('#deleteCommentId').val(commentId);
-            modal.find('#deleteEventId').val('@Model.Event.Id');
+            modal.find('#deleteEventId').val('@Model.EventId');
             modal.find('#deleteCommentText').text(commentText);
     
             modal.modal('show');

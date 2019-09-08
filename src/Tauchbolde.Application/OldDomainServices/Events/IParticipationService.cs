@@ -1,23 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.Application.OldDomainServices.Events
 {
     public interface IParticipationService
     {
-        /// <summary>
-        /// Changes the participation for the given <paramref name="user"/> in event with <paramref name="eventId"/>.
-        /// </summary>
-        Task<Participant> ChangeParticipationAsync(
-            Diver user,
-            Guid eventId,
-            ParticipantStatus status,
-            int numberOfPeople,
-            string note,
-            string buddyTeamName);
-
         /// <summary>
         /// Gets the existing participation status for a user and event.
         /// </summary>

@@ -1,0 +1,21 @@
+using System;
+using JetBrains.Annotations;
+using MediatR;
+using Tauchbolde.SharedKernel;
+
+namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
+{
+    public class GetEventDetails : IRequest<UseCaseResult>
+    {
+        public GetEventDetails(Guid eventId, [NotNull] IEventDetailsOutputPort outputPort, string currentUserName)
+        {
+            EventId = eventId;
+            OutputPort = outputPort ?? throw new ArgumentNullException(nameof(outputPort));
+            CurrentUserName = currentUserName;
+        }
+
+        public Guid EventId { get; }
+        public IEventDetailsOutputPort OutputPort { get; }
+        public string CurrentUserName { get; }
+    }
+}

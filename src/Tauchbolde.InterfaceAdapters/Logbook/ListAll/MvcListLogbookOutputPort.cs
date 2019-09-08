@@ -7,20 +7,20 @@ using Tauchbolde.InterfaceAdapters.TextFormatting;
 
 namespace Tauchbolde.InterfaceAdapters.Logbook.ListAll
 {
-    public class MvcListLogbookPresenter : IListLogbookEntriesPresenter
+    public class MvcListLogbookOutputPort : IListLogbookEntriesOutputPort
     {
         private const int TeaserLength = 250;
         private readonly bool allowEdit;
         private readonly ITextFormatter textFormatter;
         private LogbookListViewModel viewModel;
 
-        public MvcListLogbookPresenter(bool allowEdit, [NotNull] ITextFormatter textFormatter)
+        public MvcListLogbookOutputPort(bool allowEdit, [NotNull] ITextFormatter textFormatter)
         {
             this.allowEdit = allowEdit;
             this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
         }
         
-        public async Task PresentAsync([NotNull] ListAllLogbookEntriesOutputPort output)
+        public void Output([NotNull] ListAllLogbookEntriesOutputPort output)
         {
             if (output == null) throw new ArgumentNullException(nameof(output));
             

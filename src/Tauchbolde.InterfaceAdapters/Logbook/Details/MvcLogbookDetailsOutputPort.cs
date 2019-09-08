@@ -1,18 +1,17 @@
 using System;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase;
-using Tauchbolde.Domain.Helpers;
+using Tauchbolde.SharedKernel.Extensions;
 
 namespace Tauchbolde.InterfaceAdapters.Logbook.Details
 {
-    public class MvcLogbookDetailsPresenter : ILogbookDetailPresenter
+    public class MvcLogbookDetailsOutputPort : ILogbookDetailOutputPort
     {
         private readonly IRelativeUrlGenerator relativeUrlGenerator;
         private readonly ILogbookDetailsUrlGenerator detailsUrlGenerator;
         private LogbookDetailViewModel viewModel;
 
-        public MvcLogbookDetailsPresenter(
+        public MvcLogbookDetailsOutputPort(
             [NotNull] IRelativeUrlGenerator relativeUrlGenerator,
             [NotNull] ILogbookDetailsUrlGenerator detailsUrlGenerator)
         {
@@ -20,7 +19,7 @@ namespace Tauchbolde.InterfaceAdapters.Logbook.Details
             this.detailsUrlGenerator = detailsUrlGenerator ?? throw new ArgumentNullException(nameof(detailsUrlGenerator));
         }
         
-        public async Task PresentAsync([NotNull] GetLogbookEntryDetailOutput interactorOutput)
+        public void Output([NotNull] GetLogbookEntryDetailOutput interactorOutput)
         {
             if (interactorOutput == null) throw new ArgumentNullException(nameof(interactorOutput));
 
