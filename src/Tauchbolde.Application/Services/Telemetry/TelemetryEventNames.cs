@@ -11,5 +11,6 @@ namespace Tauchbolde.Application.Services.Telemetry
         public const string EditEventComment = nameof(EditEventComment);
         public const string DeleteEventComment = nameof(DeleteEventComment);
         public const string ParticipationChanged = nameof(ParticipationChanged);
+        public const string IcalRequested = nameof(IcalRequested);
     }
 }
