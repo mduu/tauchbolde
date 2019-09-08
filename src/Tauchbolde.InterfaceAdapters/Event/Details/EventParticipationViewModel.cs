@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using Tauchbolde.Domain.Types;
 
@@ -28,10 +29,9 @@ namespace Tauchbolde.InterfaceAdapters.Event.Details
         public Guid EventId { get; }
         [NotNull] public IEnumerable<string> BuddyTeamNames { get; }
         [NotNull] public IEnumerable<EventParticipantViewModel> Participants { get; }
-        
-        public ParticipantStatus CurrentUserStatus { get; }
-        public string CurrentUserNote { get; }
-        public int CurrentUserCountPeople { get; }
-        public string CurrentUserBuddyTeamName { get; }
+        [Display(Name = "Anmeldestatus")] public ParticipantStatus CurrentUserStatus { get; }
+        [Display(Name = "Bemerkung")] public string CurrentUserNote { get; }
+        [Display(Name = "Anzahl Personen")] public int CurrentUserCountPeople { get; }
+        [Display(Name = "Buddy-Team")] public string CurrentUserBuddyTeamName { get; }
     }
 }
