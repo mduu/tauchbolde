@@ -75,7 +75,7 @@ namespace Tauchbolde.Application.OldDomainServices.Events
             }
             else
             {
-                eventRepository.UpdateAsync(eventToStore);
+                await eventRepository.UpdateAsync(eventToStore);
                 await notificationService.NotifyForChangedEventAsync(eventToStore, currentUser);
                 TrackEvent("EVENT-UPDATE", eventToStore);
             }
