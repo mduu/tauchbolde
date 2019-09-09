@@ -31,7 +31,7 @@ namespace Tauchbolde.Tests.Application.Services
         [InlineData("StartEnd", "2018/12/13 19:00:00", "2018/12/13 23:00:00")]
         [InlineData("Start", "2018/12/13 19:00:00", null)]
         [InlineData("StartEndMultiDay", "2018/12/13 19:00:00", "2018/12/15 23:00:00")]
-        public void Test(string name, string startTime, string endTime)
+        public void Build_Success(string name, string startTime, string endTime)
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfoByIetfLanguageTag("en-US");
             using (ApprovalResults.ForScenario(name))

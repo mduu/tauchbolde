@@ -38,6 +38,7 @@ namespace Tauchbolde.Application.UseCases.Event.ExportIcalStreamUseCase
                 new ExportIcalStreamOutput(
                     new IcalBuilder()
                         .Id(evt.Id)
+                        .TitlePrefix("🐠")
                         .Title(evt.Name)
                         .Description(evt.Description)
                         .Location(evt.Location)
