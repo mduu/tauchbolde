@@ -28,18 +28,18 @@ namespace Tauchbolde.Tests.Application.Services
         }
         
         [Theory]
-        [InlineData("StartEnd", "2018/12/13 19:00:00", "2018/12/13 23:00:00")]
-        [InlineData("Start", "2018/12/13 19:00:00", null)]
-        [InlineData("StartEndMultiDay", "2018/12/13 19:00:00", "2018/12/15 23:00:00")]
+        [InlineData("StartEnd", "2018/12/13 19:00:00 +01:00", "2018/12/13 23:00:00 +01:00")]
+        [InlineData("Start", "2018/12/13 19:00:00 +01:00", null)]
+        [InlineData("StartEndMultiDay", "2018/12/13 19:00:00 +01:00", "2018/12/15 23:00:00 +01:00")]
         public void Build_Success(string name, string startTime, string endTime)
         {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfoByIetfLanguageTag("en-US");
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfoByIetfLanguageTag("de-CH");
             using (ApprovalResults.ForScenario(name))
             {
                 // Arrange
-                var start = DateTimeOffset.ParseExact(startTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture);
+                var start = DateTimeOffset.ParseExact(startTime, "yyyy/MM/dd HH:mm:ss zzz", CultureInfo.InvariantCulture);
                 var end = endTime != null
-                    ? (DateTimeOffset?)DateTimeOffset.ParseExact(endTime, "yyyy/MM/dd HH:mm:ss", CultureInfo.InvariantCulture)
+                    ? (DateTimeOffset?)DateTimeOffset.ParseExact(endTime, "yyyy/MM/dd HH:mm:ss zzz", CultureInfo.InvariantCulture)
                     : null;
                 builder
                     .StartTime(start.ToUniversalTime().DateTime)
