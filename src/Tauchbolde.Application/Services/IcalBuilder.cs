@@ -6,6 +6,7 @@ namespace Tauchbolde.Application.Services
 {
     internal class IcalBuilder
     {
+        private string titlePrefix = "";
         private DateTime? createTime;
         private DateTime startTime;
         private DateTime? endTime;
@@ -15,6 +16,12 @@ namespace Tauchbolde.Application.Services
         private string location;
         private string meetingPoint;
 
+        public IcalBuilder TitlePrefix(string titlePrefix)
+        {
+            this.titlePrefix = titlePrefix;
+            return this;
+        }
+
         public IcalBuilder CreateTime(DateTime? createTime = null)
         {
             this.createTime = createTime;
@@ -23,13 +30,13 @@ namespace Tauchbolde.Application.Services
 
         public IcalBuilder StartTime(DateTime startTime)
         {
-            this.startTime = startTime;
+            this.startTime = new DateTime(startTime.Ticks, DateTimeKind.Local);
             return this;
         }
 
         public IcalBuilder EndTime(DateTime? endTime)
         {
-            this.endTime = endTime;
+            this.endTime = endTime.HasValue ? new DateTime(endTime.Value.Ticks, DateTimeKind.Local) : (DateTime?) null;
             return this;
         }
 
@@ -65,39 +72,42 @@ namespace Tauchbolde.Application.Services
 
         public Stream Build()
         {
-            var sb = new StringBuilder();
-            const string dateFormat = "yyyyMMddTHHmmssZ";
+            const string dateFormat = "yyyyMMddTHHmmss";
             var createAt = createTime ?? DateTimeOffset.Now;
             var createAtString = createAt.ToString(dateFormat);
             var evtEndTime = endTime ?? startTime.AddHours(3);
-            var dtStart = startTime.ToLocalTime();
-            var dtEnd = evtEndTime.ToLocalTime();
             var desc = !string.IsNullOrWhiteSpace(meetingPoint)
-                ? $"Treffpunkt: {meetingPoint}" + Environment.NewLine + description
+                ? $"Treffpunkt: {meetingPoint}\\n" + description
                 : description;
-            
+            desc = desc
+                .Replace("\n", @"\\n")
+                .Replace(",", @"\,")
+                .Replace("_", "")
+                .Replace("*", "");
+
+            var sb = new StringBuilder();
             sb.AppendLine("BEGIN:VCALENDAR");
             sb.AppendLine("PRODID:-//Tauchbolde//TauchboldeWebsite//EN");
             sb.AppendLine("VERSION:2.0");
             sb.AppendLine("METHOD:PUBLISH");
 
             sb.AppendLine("BEGIN:VEVENT");
-            sb.AppendLine("DTSTART:" + dtStart.ToString(dateFormat));
-            sb.AppendLine("DTEND:" + dtEnd.ToString(dateFormat));
+            sb.AppendLine("DTSTART:" + startTime.ToString(dateFormat));
+            sb.AppendLine("DTEND:" + evtEndTime.ToString(dateFormat));
             sb.AppendLine("DTSTAMP:" + createAtString);
             sb.AppendLine("UID:" + id);
             sb.AppendLine("CREATED:" + createAtString);
-            sb.AppendLine("X-ALT-DESC;FMTTYPE=text/html:" + desc);
             sb.AppendLine("DESCRIPTION:" + desc);
             sb.AppendLine("LAST-MODIFIED:" + createAtString);
             sb.AppendLine("LOCATION:" + location);
             sb.AppendLine("SEQUENCE:0");
             sb.AppendLine("STATUS:CONFIRMED");
-            sb.AppendLine("SUMMARY:" + title);
+            sb.AppendLine("X-ALT-DESC;FMTTYPE=text/html:" + titlePrefix + title);
+            sb.AppendLine("SUMMARY:" + titlePrefix + title);
             sb.AppendLine("TRANSP:OPAQUE");
             sb.AppendLine("END:VEVENT");
-            sb.AppendLine("END:VCALENDAR");
 
+            sb.AppendLine("END:VCALENDAR");
             return new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString()));
         }
     }
