@@ -16,7 +16,7 @@ namespace Tauchbolde.Application.Policies.Event.ParticipationChanged
     [UsedImplicitly]
     internal class PublishParticipationChangedPolicy : INotificationHandler<ParticipationChangedEvent>
     {
-        private readonly ILogger logger;
+        [NotNull] private readonly ILogger logger;
         [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly IEventRepository eventRepository;
         [NotNull] private readonly IParticipantRepository participantRepository;
