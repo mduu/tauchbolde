@@ -22,12 +22,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
         Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync();
 
         /// <summary>
-        /// Gets upcoming events.
-        /// </summary>
-        /// <returns>Upcoming events.</returns>
-        Task<ICollection<Event>> GetUpcomingEventsAsync();
-
-        /// <summary>
         /// Get the event with all details by its ID.
         /// </summary>
         /// <param name="eventId">The <see cref="Event.Id"/> of the event </param>

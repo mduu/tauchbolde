@@ -74,10 +74,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
             => await eventRepository.GetUpcomingAndRecentEventsAsync();
 
         /// <inheritdoc />
-        public async Task<ICollection<Event>> GetUpcomingEventsAsync()
-            => await eventRepository.GetUpcomingEventsAsync();
-
-        /// <inheritdoc />
         public async Task<Event> GetByIdAsync(Guid eventId)
             => await eventRepository.FindByIdAsync(eventId);
 
