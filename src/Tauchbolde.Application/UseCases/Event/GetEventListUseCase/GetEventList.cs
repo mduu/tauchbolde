@@ -12,6 +12,6 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventListUseCase
             OutputPort = outputPort ?? throw new ArgumentNullException(nameof(outputPort));
         }
 
-        public IEventListOutputPort OutputPort { get; }
+        [NotNull] public IEventListOutputPort OutputPort { get; }
     }
 }
