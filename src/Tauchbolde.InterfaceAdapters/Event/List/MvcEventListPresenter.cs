@@ -4,14 +4,14 @@ using Tauchbolde.SharedKernel.Extensions;
 
 namespace Tauchbolde.InterfaceAdapters.Event.List
 {
-    public class EventListPresenter : IEventListOutputPort
+    public class MvcEventListPresenter : IEventListOutputPort
     {
-        private EventListViewModel viewModel;
+        private MvcEventListViewModel viewModel;
         
         public void Output(GetEventListOutput interactorOutput)
         {
-            viewModel = new EventListViewModel(
-                interactorOutput.Rows.Select(r => new EventListViewModel.RowViewModel(
+            viewModel = new MvcEventListViewModel(
+                interactorOutput.Rows.Select(r => new MvcEventListViewModel.RowViewModel(
                     r.EventId,
                     r.StartTime.FormatTimeRange(r.EndTime),
                     r.Title,
@@ -20,6 +20,6 @@ namespace Tauchbolde.InterfaceAdapters.Event.List
                 )));
         }
 
-        public EventListViewModel GetViewModel() => viewModel;
+        public MvcEventListViewModel GetViewModel() => viewModel;
     }
 }

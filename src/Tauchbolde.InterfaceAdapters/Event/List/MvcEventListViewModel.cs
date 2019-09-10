@@ -5,9 +5,9 @@ using JetBrains.Annotations;
 
 namespace Tauchbolde.InterfaceAdapters.Event.List
 {
-    public class EventListViewModel
+    public class MvcEventListViewModel
     {
-        public EventListViewModel([NotNull] IEnumerable<RowViewModel> rows)
+        public MvcEventListViewModel([NotNull] IEnumerable<RowViewModel> rows)
         {
             Rows = rows ?? throw new ArgumentNullException(nameof(rows));
         }

@@ -54,7 +54,7 @@ namespace Tauchbolde.Web.Controllers
         // GET: Event
         public async Task<ActionResult> Index()
         {
-            var presenter = new EventListPresenter();
+            var presenter = new MvcEventListPresenter();
             var useCaseResult = await mediator.Send(new GetEventList(presenter));
             if (!useCaseResult.IsSuccessful)
             {

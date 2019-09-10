@@ -4,7 +4,11 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
+using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
+using Tauchbolde.Application.UseCases.Event.GetRecentAndUpcomingEventsUseCase;
 using Tauchbolde.InterfaceAdapters.Event.Details;
+using Tauchbolde.InterfaceAdapters.Event.List;
+using Tauchbolde.InterfaceAdapters.Event.RecentAndUpcomingEvents;
 using Tauchbolde.InterfaceAdapters.MailHtmlFormatting;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
 
@@ -27,6 +31,8 @@ namespace Tauchbolde.InterfaceAdapters
             services.AddTransient<IHtmlHeaderFormatter, HtmlHeaderFormatter>();
             services.AddTransient<IHtmlFooterFormatter, HtmlFooterFormatter>();
             services.AddTransient<IEventDetailsOutputPort, MvcEventDetailPresenter>();
+            services.AddTransient<IEventListOutputPort, MvcEventListPresenter>();
+            services.AddTransient<IRecentAndUpcomingEventsOutputPort, MvcRecentAndUpcomingEventsPresenter>();
         }
     }
 }
