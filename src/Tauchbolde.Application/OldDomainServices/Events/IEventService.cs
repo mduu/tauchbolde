@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Tauchbolde.Domain.Entities;
 
@@ -14,12 +13,6 @@ namespace Tauchbolde.Application.OldDomainServices.Events
         /// <param name="currentUser">The current users diver record.</param>
         /// <returns>The inserted or updated <see cref="Event"/>.</returns>
         Task<Event> UpsertEventAsync(Event eventToUpsert, Diver currentUser);
-
-        /// <summary>
-        /// Gets upcoming and recent events.
-        /// </summary>
-        /// <returns>Upcoming and recent events.</returns>
-        Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync();
 
         /// <summary>
         /// Get the event with all details by its ID.
