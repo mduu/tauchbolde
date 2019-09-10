@@ -6,12 +6,16 @@ namespace Tauchbolde.InterfaceAdapters.Event.RecentAndUpcomingEvents
 {
     public class MvcRecentAndUpcomingEventsViewModel
     {
-        public MvcRecentAndUpcomingEventsViewModel([NotNull] IEnumerable<Row> rows)
+        public MvcRecentAndUpcomingEventsViewModel(
+            [NotNull] IEnumerable<Row> recentEvents,
+            [NotNull] IEnumerable<Row> upcomingEvents)
         {
-            Rows = rows ?? throw new ArgumentNullException(nameof(rows));
+            RecentEvents = recentEvents ?? throw new ArgumentNullException(nameof(recentEvents));
+            UpcomingEvents = upcomingEvents ?? throw new ArgumentNullException(nameof(upcomingEvents));
         }
 
-        public IEnumerable<Row> Rows { get; }
+        public IEnumerable<Row> RecentEvents { get; }
+        public IEnumerable<Row> UpcomingEvents { get; }
         
         public class Row
         {
