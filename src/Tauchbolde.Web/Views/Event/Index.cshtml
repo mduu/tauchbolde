@@ -1,4 +1,4 @@
-﻿@model Tauchbolde.Web.Models.EventViewModels.EventListViewModel
+﻿@model Tauchbolde.InterfaceAdapters.Event.List.EventListViewModel
 @{
     ViewBag.Title = "Aktivitäten";
     Layout = "_Layout";
@@ -19,19 +19,19 @@
     <table class="table table-hover">
         <tr>
             <th></th>
-            <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().StartTime)</th>
-            <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Name)</th>
-            <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().Location)</th>
-            <th>@Html.DisplayNameFor(m => m.UpcommingEvents.First().MeetingPoint)</th>
+            <th>@Html.DisplayNameFor(m => m.Rows.First().StartEndTime)</th>
+            <th>@Html.DisplayNameFor(m => m.Rows.First().Title)</th>
+            <th>@Html.DisplayNameFor(m => m.Rows.First().Location)</th>
+            <th>@Html.DisplayNameFor(m => m.Rows.First().MeetingPoint)</th>
         </tr>
-        @foreach (var upcommingEvent in Model.UpcommingEvents)
+        @foreach (var upcommingEvent in Model.Rows)
         {
             <tr>
                 <td>
-                    <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@upcommingEvent.Id"><span class="glyphicon glyphicon-search"></span></a>
+                    <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@upcommingEvent.EventId"><span class="glyphicon glyphicon-search"></span></a>
                 </td>
-                <td>@upcommingEvent.StartEndTimeAsString</td>
-                <td>@upcommingEvent.Name</td>
+                <td>@upcommingEvent.StartEndTime</td>
+                <td>@upcommingEvent.Title</td>
                 <td>@upcommingEvent.Location</td>
                 <td>@upcommingEvent.MeetingPoint</td>
             </tr>
