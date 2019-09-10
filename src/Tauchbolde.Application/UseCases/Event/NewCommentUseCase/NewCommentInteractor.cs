@@ -11,7 +11,7 @@ using Tauchbolde.SharedKernel.Extensions;
 namespace Tauchbolde.Application.UseCases.Event.NewCommentUseCase
 {
     [UsedImplicitly]
-    public class NewCommentInteractor : IRequestHandler<NewComment, UseCaseResult>
+    internal class NewCommentInteractor : IRequestHandler<NewComment, UseCaseResult>
     {
         private readonly IEventRepository eventRepository;
         private readonly ICommentRepository commentRepository;

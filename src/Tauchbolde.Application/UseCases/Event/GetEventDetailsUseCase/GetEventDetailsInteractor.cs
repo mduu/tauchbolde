@@ -13,7 +13,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
 {
     [UsedImplicitly]
-    public class GetEventDetailsInteractor : IRequestHandler<GetEventDetails, UseCaseResult>
+    internal class GetEventDetailsInteractor : IRequestHandler<GetEventDetails, UseCaseResult>
     {
         [NotNull] private readonly ILogger logger;
         [NotNull] private readonly IEventRepository eventRepository;

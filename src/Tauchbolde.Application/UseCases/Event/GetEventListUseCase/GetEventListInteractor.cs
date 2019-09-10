@@ -10,7 +10,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Event.GetEventListUseCase
 {
     [UsedImplicitly]
-    public class GetEventListInteractor : IRequestHandler<GetEventList, UseCaseResult>
+    internal class GetEventListInteractor : IRequestHandler<GetEventList, UseCaseResult>
     {
         private readonly IEventRepository repository;
         

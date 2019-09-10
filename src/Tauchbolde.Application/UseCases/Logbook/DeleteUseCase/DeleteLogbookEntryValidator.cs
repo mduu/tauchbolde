@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace Tauchbolde.Application.UseCases.Logbook.DeleteUseCase
 {
-    public class DeleteLogbookEntryValidator : AbstractValidator<DeleteLogbookEntry>
+    internal class DeleteLogbookEntryValidator : AbstractValidator<DeleteLogbookEntry>
     {
         public DeleteLogbookEntryValidator()
         {

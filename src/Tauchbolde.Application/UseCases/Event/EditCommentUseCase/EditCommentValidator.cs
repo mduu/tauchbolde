@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace Tauchbolde.Application.UseCases.Event.EditCommentUseCase
 {
     [UsedImplicitly]
-    public class EditCommentValidator : AbstractValidator<EditComment>
+    internal class EditCommentValidator : AbstractValidator<EditComment>
     {
         public EditCommentValidator()
         {

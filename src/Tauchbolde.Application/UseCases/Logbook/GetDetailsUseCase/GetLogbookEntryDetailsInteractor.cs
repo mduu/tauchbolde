@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentValidation.Results;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -12,7 +11,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase
 {
     [UsedImplicitly]
-    public class GetLogbookEntryDetailsInteractor : IRequestHandler<GetLogbookEntryDetails, UseCaseResult>
+    internal class GetLogbookEntryDetailsInteractor : IRequestHandler<GetLogbookEntryDetails, UseCaseResult>
     {
         [NotNull] private readonly ILogger<GetLogbookEntryDetailsInteractor> logger;
         [NotNull] private readonly ILogbookEntryRepository repository;

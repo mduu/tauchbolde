@@ -10,7 +10,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Event.DeleteCommentUseCase
 {
     [UsedImplicitly]
-    public class DeleteCommentInteractor : IRequestHandler<DeleteComment, UseCaseResult>
+    internal class DeleteCommentInteractor : IRequestHandler<DeleteComment, UseCaseResult>
     {
         [NotNull] private readonly ICommentRepository repository;
 

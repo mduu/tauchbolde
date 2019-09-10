@@ -14,7 +14,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
 {
     [UsedImplicitly]
-    public class NewLogbookEntryInteractor : IRequestHandler<NewLogbookEntry, UseCaseResult>
+    internal class NewLogbookEntryInteractor : IRequestHandler<NewLogbookEntry, UseCaseResult>
     {
         private readonly ILogger<NewLogbookEntryInteractor> logger;
         private readonly ILogbookEntryRepository repository;

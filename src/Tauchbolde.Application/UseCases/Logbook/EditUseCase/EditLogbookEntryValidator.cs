@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
 {
     [UsedImplicitly]
-    public class EditLogbookEntryValidator : AbstractValidator<EditLogbookEntry>
+    internal class EditLogbookEntryValidator : AbstractValidator<EditLogbookEntry>
     {
         public EditLogbookEntryValidator()
         {

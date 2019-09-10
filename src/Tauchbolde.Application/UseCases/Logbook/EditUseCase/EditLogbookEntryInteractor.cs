@@ -6,7 +6,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.PhotoStores;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Domain.ValueObjects;
 using Tauchbolde.SharedKernel;
