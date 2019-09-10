@@ -176,9 +176,6 @@ namespace Tauchbolde.Web.Controllers
         /// <summary>
         /// Changes the participant state of a user.
         /// </summary>
-        /// <param name="model">The data to change.</param>
-        /// <seealso cref="ChangeParticipantViewModel"/>
-        /// <seealso cref="IParticipationService"/>
         [HttpPost]
         public async Task<ActionResult> ChangeParticipation([Bind(Prefix = "Participations")]
             ChangeParticipantViewModel model)
