@@ -6,6 +6,7 @@ namespace Tauchbolde.Application.UseCases.Event.EditEventUseCase
     {
         public EditEventValidator()
         {
+            RuleFor(e => e.CurrentUserName).NotEmpty();
             RuleFor(e => e.EventId).NotEmpty();
             RuleFor(e => e.EndTime).GreaterThan(e => e.StartTime).When(e => e.EndTime.HasValue);
             RuleFor(e => e.Title).NotEmpty();

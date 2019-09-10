@@ -8,6 +8,7 @@ namespace Tauchbolde.Application.UseCases.Event.EditEventUseCase
     public class EditEvent : IRequest<UseCaseResult>
     {
         public EditEvent(
+            [NotNull] string currentUserName,
             Guid eventId,
             DateTime startTime,
             DateTime? endTime,
@@ -23,8 +24,10 @@ namespace Tauchbolde.Application.UseCases.Event.EditEventUseCase
             Location = location ?? throw new ArgumentNullException(nameof(location));
             MeetingPoint = meetingPoint ?? throw new ArgumentNullException(nameof(meetingPoint));
             Description = description ?? throw new ArgumentNullException(nameof(description));
+            CurrentUserName = currentUserName ?? throw new ArgumentNullException(nameof(currentUserName));
         }
 
+        public string CurrentUserName { get; }
         public Guid EventId { get; }
         public DateTime StartTime { get; }
         public DateTime? EndTime { get; }
