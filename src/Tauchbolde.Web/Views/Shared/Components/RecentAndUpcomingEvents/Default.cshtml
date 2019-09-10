@@ -1,13 +1,8 @@
-@using Tauchbolde.Web.Models.ViewComponentModels
-@model RecentAndUpcomingEventsViewModel
-@{
-    var upcomingEvents = Model.RecentEvents.Where(e => e.StartTime > DateTime.Now).ToList();
-    var recentEvents = Model.RecentEvents.OrderByDescending(e => e.StartTime).Where(e => e.StartTime < DateTime.Now).ToList();
-}
+@model Tauchbolde.InterfaceAdapters.Event.RecentAndUpcomingEvents.MvcRecentAndUpcomingEventsViewModel
 <section>
     <div class="panel panel-default">
         <div class="panel-heading">Bevorstehend</div>
-        @if (!upcomingEvents.Any())
+        @if (!Model.UpcomingEvents.Any())
         {
             <div class="panel-footer">Nichts geplant</div>
         }
@@ -19,11 +14,17 @@
                     <th>Was</th>
                 </tr>
                 <tbody></tbody>
-                @foreach (var e in upcomingEvents)
+                @foreach (var e in Model.UpcomingEvents)
                 {
                     <tr>
-                        <td width="170px"><a class="text-default" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
-                        <td><a class="text-default" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id"><strong>@e.Name</strong></a></td>
+                        <td width="170px">
+                            <a class="text-default" asp-action="Details" asp-controller="Event" asp-route-id="@e.EventId">@e.StartEndTime </a>
+                        </td>
+                        <td>
+                            <a class="text-default" asp-action="Details" asp-controller="Event" asp-route-id="@e.EventId">
+                                <strong>@e.Title</strong>
+                            </a>
+                        </td>
                     </tr>
                 }
             </table>
@@ -33,7 +34,7 @@
 <section>
     <div class="panel panel-default">
         <div class="panel-heading">Vergangen</div>
-        @if (!recentEvents.Any())
+        @if (!Model.RecentEvents.Any())
         {
             <div class="panel-footer">Nichts</div>
         }
@@ -45,11 +46,17 @@
                     <th>Was</th>
                 </tr>
                 <tbody></tbody>
-                @foreach (var e in recentEvents)
+                @foreach (var e in Model.RecentEvents)
                 {
                     <tr>
-                        <td width="170px"><a class="text-muted" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id">@e.StartEndTimeAsString </a></td>
-                        <td><a class="text-muted" asp-action="Details" asp-controller="Event" asp-route-id="@e.Id"><strong>@e.Name</strong></a></td>
+                        <td width="170px">
+                            <a class="text-muted" asp-action="Details" asp-controller="Event" asp-route-id="@e.EventId">@e.StartEndTime </a>
+                        </td>
+                        <td>
+                            <a class="text-muted" asp-action="Details" asp-controller="Event" asp-route-id="@e.EventId">
+                                <strong>@e.Title</strong>
+                            </a>
+                        </td>
                     </tr>
                 }
             </table>

@@ -15,12 +15,14 @@ using Tauchbolde.Application.UseCases.Event.DeleteCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.EditCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.ExportIcalStreamUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
+using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.InterfaceAdapters.Event;
 using Tauchbolde.InterfaceAdapters.Event.Details;
+using Tauchbolde.InterfaceAdapters.Event.List;
 using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
@@ -52,12 +54,14 @@ namespace Tauchbolde.Web.Controllers
         // GET: Event
         public async Task<ActionResult> Index()
         {
-            var model = new EventListViewModel
+            var presenter = new MvcEventListPresenter();
+            var useCaseResult = await mediator.Send(new GetEventList(presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                UpcommingEvents = await eventService.GetUpcomingEventsAsync(),
-            };
+                return StatusCode(500);
+            }
 
-            return View(model);
+            return View(presenter.GetViewModel());
         }
 
         // GET: Event/Details/5
@@ -172,9 +176,6 @@ namespace Tauchbolde.Web.Controllers
         /// <summary>
         /// Changes the participant state of a user.
         /// </summary>
-        /// <param name="model">The data to change.</param>
-        /// <seealso cref="ChangeParticipantViewModel"/>
-        /// <seealso cref="IParticipationService"/>
         [HttpPost]
         public async Task<ActionResult> ChangeParticipation([Bind(Prefix = "Participations")]
             ChangeParticipantViewModel model)

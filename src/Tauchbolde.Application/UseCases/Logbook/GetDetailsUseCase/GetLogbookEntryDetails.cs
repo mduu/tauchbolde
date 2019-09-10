@@ -1,7 +1,6 @@
 using System;
 using JetBrains.Annotations;
 using MediatR;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase
