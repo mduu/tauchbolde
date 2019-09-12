@@ -10,7 +10,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase
 {
     [UsedImplicitly]
-    public class ChangeParticipationInteractor : IRequestHandler<ChangeParticipation, UseCaseResult>
+    internal class ChangeParticipationInteractor : IRequestHandler<ChangeParticipation, UseCaseResult>
     {
         private readonly IDiverRepository diverRepository;
         private readonly IParticipantRepository participantRepository;

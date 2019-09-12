@@ -12,7 +12,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Logbook.DeleteUseCase
 {
     [UsedImplicitly]
-    public class DeleteLogbookEntryInteractor : IRequestHandler<DeleteLogbookEntry, UseCaseResult>
+    internal class DeleteLogbookEntryInteractor : IRequestHandler<DeleteLogbookEntry, UseCaseResult>
     {
         private readonly ILogger<DeleteLogbookEntryInteractor> logger;
         private readonly ILogbookEntryRepository repository;

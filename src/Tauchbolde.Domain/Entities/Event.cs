@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
+using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.SharedKernel;
 using Tauchbolde.SharedKernel.Extensions;
 
@@ -41,11 +43,11 @@ namespace Tauchbolde.Domain.Entities
         [Display(Name = "Endzeit")]
         public DateTime? EndTime { get; [UsedImplicitly] set; }
 
-        [Display(Name ="Abgesagt")]
+        [Display(Name = "Abgesagt")]
         [Required]
         public bool Canceled { get; [UsedImplicitly] set; }
 
-        [Display(Name ="Gelöscht")]
+        [Display(Name = "Gelöscht")]
         [Required]
         public bool Deleted { get; [UsedImplicitly] set; }
 
@@ -66,6 +68,35 @@ namespace Tauchbolde.Domain.Entities
             Comments.Add(newComment);
 
             return newComment;
+        }
+
+        public bool Edit(
+            Guid currentDiverId,
+            [NotNull] string title,
+            [NotNull] string description,
+            [NotNull] string location,
+            [NotNull] string meetingPoint,
+            DateTime startTime,
+            DateTime? endTime)
+        {
+            var logger = new Logger<Event>(new LoggerFactory());
+
+            if (currentDiverId != OrganisatorId)
+            {
+                logger.LogError("Edit event is only allowed for organizers! User [{userId}] is not the organizer of event [{eventId}]!", currentDiverId, Id);
+                return false;
+            }
+
+            Name = title ?? throw new ArgumentNullException(nameof(title));
+            Description = description ?? throw new ArgumentNullException(nameof(description));
+            Location = location ?? throw new ArgumentNullException(nameof(location));
+            MeetingPoint = meetingPoint ?? throw new ArgumentNullException(nameof(meetingPoint));
+            StartTime = startTime;
+            EndTime = endTime;
+
+            RaiseDomainEvent(new EventEditedEvent(Id));
+
+            return true;
         }
     }
 }

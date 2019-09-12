@@ -11,7 +11,7 @@ using Tauchbolde.SharedKernel.Extensions;
 namespace Tauchbolde.Application.UseCases.Event.EditCommentUseCase
 {
     [UsedImplicitly]
-    public class EditCommentInteractor : IRequestHandler<EditComment, UseCaseResult>
+    internal class EditCommentInteractor : IRequestHandler<EditComment, UseCaseResult>
     {
         private readonly ICommentRepository commentRepository;
 

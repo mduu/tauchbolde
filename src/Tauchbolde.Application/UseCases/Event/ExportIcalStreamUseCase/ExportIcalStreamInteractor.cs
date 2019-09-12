@@ -11,7 +11,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Event.ExportIcalStreamUseCase
 {
     [UsedImplicitly]
-    public class ExportIcalStreamInteractor : IRequestHandler<ExportIcalStream, UseCaseResult>
+    internal class ExportIcalStreamInteractor : IRequestHandler<ExportIcalStream, UseCaseResult>
     {
         [NotNull] private readonly IEventRepository repository;
         [NotNull] private readonly ITelemetryService telemetryService;

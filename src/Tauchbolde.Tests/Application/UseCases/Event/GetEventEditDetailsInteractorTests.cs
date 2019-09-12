@@ -1,0 +1,141 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using FakeItEasy;
+using FluentAssertions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase;
+using Tauchbolde.Domain.Entities;
+using Tauchbolde.SharedKernel;
+using Xunit;
+
+namespace Tauchbolde.Tests.Application.UseCases.Event
+{
+    public class GetEventEditDetailsInteractorTests
+    {
+        private readonly string validUserName = "john.doe";
+        private readonly Guid validDiverId = new Guid("591FC123-5F37-42BC-B7A9-0A1E86C22C7C");
+        private readonly Guid validEventId = new Guid("125EB70A-69D7-4B9E-8ADB-D0A8FAA10BAA");
+        private readonly GetEventEditDetailsInteractor interactor;
+        private readonly ILogger<GetEventEditDetailsInteractor> logger = A.Fake<ILogger<GetEventEditDetailsInteractor>>();
+        private readonly IEventRepository eventRepository = A.Fake<IEventRepository>();
+        private readonly IDiverRepository diverRepository = A.Fake<IDiverRepository>();
+        private readonly IEventEditDetailsOutputPort outputPort = A.Fake<IEventEditDetailsOutputPort>();
+
+        public GetEventEditDetailsInteractorTests()
+        {
+            A.CallTo(() => diverRepository.FindByUserNameAsync(A<string>._))
+                .ReturnsLazily(call => Task.FromResult(
+                    (string) call.Arguments[0] == validUserName
+                        ? CreateDiverJohnDoe()
+                        : null));
+
+            A.CallTo(() => eventRepository.FindByIdAsync(A<Guid>._))
+                .ReturnsLazily(call => Task.FromResult(
+                    (Guid) call.Arguments[0] == validEventId
+                        ? new Tauchbolde.Domain.Entities.Event
+                        {
+                            Id = validEventId,
+                            Name = "Test Event",
+                            Location = "",
+                            MeetingPoint = "",
+                            Description = "",
+                            OrganisatorId = validDiverId,
+                            Organisator = CreateDiverJohnDoe()
+                        }
+                        : null));
+
+            interactor = new GetEventEditDetailsInteractor(logger, eventRepository, diverRepository);
+        }
+
+        [Fact]
+        public async Task Handle_Success()
+        {
+            // Arrange
+            var request = new GetEventEditDetails(validUserName, validEventId, outputPort);
+
+            // Act
+            var result = await interactor.Handle(request, CancellationToken.None);
+
+            // Assert
+            result.IsSuccessful.Should().BeTrue();
+            A.CallTo(() => outputPort.Output(A<EventEditDetailsOutput>._))
+                .MustHaveHappenedOnceExactly();
+        }
+        
+        [Fact]
+        public async Task Handle_InvalidDiverId_MustFail()
+        {
+            // Arrange
+            var request = new GetEventEditDetails("jane.doe", validEventId, outputPort);
+
+            // Act
+            var result = await interactor.Handle(request, CancellationToken.None);
+
+            // Assert
+            result.IsSuccessful.Should().BeFalse();
+            result.ResultCategory.Should().Be(ResultCategory.NotFound);
+            A.CallTo(() => outputPort.Output(A<EventEditDetailsOutput>._))
+                .MustNotHaveHappened();
+        }
+        
+        [Fact]
+        public async Task Handle_InvalidEventId_MustFail()
+        {
+            // Arrange
+            var request = new GetEventEditDetails(validUserName, new Guid("C2B9BB52-BFB0-4B43-965C-C23B4598722B"), outputPort);
+
+            // Act
+            var result = await interactor.Handle(request, CancellationToken.None);
+
+            // Assert
+            result.IsSuccessful.Should().BeFalse();
+            result.ResultCategory.Should().Be(ResultCategory.NotFound);
+            A.CallTo(() => outputPort.Output(A<EventEditDetailsOutput>._))
+                .MustNotHaveHappened();
+        }
+        
+        [Fact]
+        public async Task Handle_NotOrganisatorUser_MustFail()
+        {
+            // Arrange
+            var request = new GetEventEditDetails("jane.doe", validEventId, outputPort);
+            A.CallTo(() => diverRepository.FindByUserNameAsync("jane.doe"))
+                .ReturnsLazily(() => Task.FromResult(new Diver
+                {
+                    Id = new Guid("F9D10AB9-A076-448A-9391-755122FC01B8")
+                }));
+
+            // Act
+            var result = await interactor.Handle(request, CancellationToken.None);
+
+            // Assert
+            result.IsSuccessful.Should().BeFalse();
+            result.ResultCategory.Should().Be(ResultCategory.AccessDenied);
+            A.CallTo(() => outputPort.Output(A<EventEditDetailsOutput>._))
+                .MustNotHaveHappened();
+        }
+
+        [Fact]
+        public void Handle_NullRequest_MustThrow()
+        {
+            // Act
+            // ReSharper disable once AssignNullToNotNullAttribute
+            Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+        }
+
+        private Diver CreateDiverJohnDoe() =>
+            new Diver
+            {
+                Id = validDiverId,
+                Fullname = "John Doe",
+                User = new IdentityUser(validUserName) {Email = "john.doe@company.com"},
+                AvatarId = "johns_avatar"
+            };
+    }
+}

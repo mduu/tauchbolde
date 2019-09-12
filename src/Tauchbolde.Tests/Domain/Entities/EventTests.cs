@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.SharedKernel.Services;
 using Xunit;
 
@@ -42,6 +43,65 @@ namespace Tauchbolde.Tests.Domain.Entities
             Func<Comment> act = () => evt.AddNewComment(authorId, text);
 
             act.Should().Throw<ArgumentException>();
+        }
+
+        [Fact]
+        public void Edit_Success()
+        {
+            // Arrange
+            var organisatorId = new Guid("62C42B1F-B457-4449-B326-7FD9AAB50EB3");
+            var evt = new Event
+            {
+                Id = validEventId,
+                OrganisatorId = organisatorId
+            };
+            var startTime = new DateTime(2019, 9, 10, 22, 56, 0);
+            var endTime = new DateTime(2019, 9, 10, 23, 30, 0);
+      
+            // Act
+            var result = evt.Edit(
+                organisatorId,
+                "The Title",
+                "The Description",
+                "location",
+                "meetingpoint",
+                startTime,
+                endTime);
+
+            // Assert
+            result.Should().BeTrue();
+            evt.Name.Should().Be("The Title");
+            evt.Description.Should().Be("The Description");
+            evt.Location.Should().Be("location");
+            evt.MeetingPoint.Should().Be("meetingpoint");
+            evt.StartTime.Should().Be(startTime);
+            evt.EndTime.Should().Be(endTime);
+            evt.UncommittedDomainEvents.Should().ContainSingle(e => e.GetType() == typeof(EventEditedEvent));
+        }
+
+        [Fact]
+        public void Edit_NotOrganisator_MustFail()
+        {
+            // Arrange
+            var organisatorId = new Guid("62C42B1F-B457-4449-B326-7FD9AAB50EB3");
+            var evt = new Event
+            {
+                Id = validEventId,
+                OrganisatorId = organisatorId
+            };
+            
+            // Act
+            var result = evt.Edit(
+                new Guid("D0D59385-CE0A-465E-80E8-74B0619D921F"), 
+                "The Title",
+                "The Description",
+                "location",
+                "meetingpoint",
+                new DateTime(2019, 9, 10, 22, 56, 0),
+                new DateTime(2019, 9, 10, 23, 30, 0));
+
+            // Assert
+            result.Should().BeFalse();
         }
     }
 }

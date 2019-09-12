@@ -10,7 +10,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Event.GetRecentAndUpcomingEventsUseCase
 {
     [UsedImplicitly]
-    public class GetRecentAndUpcomingEventsInteractor : IRequestHandler<GetRecentAndUpcomingEvents, UseCaseResult>
+    internal class GetRecentAndUpcomingEventsInteractor : IRequestHandler<GetRecentAndUpcomingEvents, UseCaseResult>
     {
         [NotNull] private readonly IEventRepository repository;
 
