@@ -17,5 +17,5 @@ We use Entity Framework Core to manage and access our database. Currently we run
 
 ## Create SQL migration scrip
 
-1. Open a terminal and navigate to `/src/Tauchbolde.DataAccess' folder.
+1. Open a terminal and navigate to `/src/Tauchbolde.DataAccess` folder.
 1. Execute: `dotnet ef migrations script -i  -o ../../sql/update_to_latest.sql -s ../Tauchbolde.Web`.
