@@ -686,3 +686,11 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190913191859_change_namespaces')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190913191859_change_namespaces', N'2.2.6-servicing-10079');
+END;
+
+GO
+
