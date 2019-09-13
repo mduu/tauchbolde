@@ -69,7 +69,7 @@ namespace Tauchbolde.Application.Policies.Event.ParticipationChanged
 
             var recipients = await recipientsBuilder.GetAllTauchboldeButDeclinedParticipantsAsync(
                 participant.ParticipatingDiverId,
-                notification.EventId);
+                participant.EventId);
 
             await notificationPublisher.PublishAsync(
                 mapParticipationStatusToNotificationType[participant.Status],

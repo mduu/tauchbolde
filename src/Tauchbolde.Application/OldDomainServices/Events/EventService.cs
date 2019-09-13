@@ -42,8 +42,11 @@ namespace Tauchbolde.Application.OldDomainServices.Events
             }
             else
             {
-                eventToStore = new Event { Id = Guid.NewGuid() };
-                eventToStore.OrganisatorId = eventToUpsert.OrganisatorId;
+                eventToStore = new Event
+                {
+                    Id = Guid.NewGuid(),
+                    OrganisatorId = eventToUpsert.OrganisatorId
+                };
             }
 
             eventToStore.Name = eventToUpsert.Name;
