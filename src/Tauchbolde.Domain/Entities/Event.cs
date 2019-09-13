@@ -13,6 +13,29 @@ namespace Tauchbolde.Domain.Entities
     // TODO Change setters and ctor() to internal
     public class Event : EntityBase
     {
+        public Event() // TODO Make internal
+        {
+        }
+        
+        public Event(
+            [NotNull] string name,
+            [NotNull] string description,
+            [NotNull] string location,
+            [NotNull] string meetingPoint,
+            DateTime startTime,
+            DateTime? endTime,
+            Guid organisatorId)
+        {
+            Id = Guid.NewGuid();
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Description = description ?? throw new ArgumentNullException(nameof(description));
+            Location = location ?? throw new ArgumentNullException(nameof(location));
+            MeetingPoint = meetingPoint ?? throw new ArgumentNullException(nameof(meetingPoint));
+            StartTime = startTime;
+            EndTime = endTime;
+            OrganisatorId = organisatorId;
+        }
+
         [Display(Name = "Name")]
         [Required]
         public string Name { get; [UsedImplicitly] set; }

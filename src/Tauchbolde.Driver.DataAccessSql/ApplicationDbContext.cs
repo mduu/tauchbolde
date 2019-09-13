@@ -38,15 +38,13 @@ namespace Tauchbolde.Driver.DataAccessSql
 
         public override int SaveChanges()
         {
-            var result = base.SaveChanges();
-            DispatchDomainEventsForSuccessfullySavedEntities();
-            return result;
+            throw new InvalidOperationException("Use only the SaveChangesAsync() because synchronous saving is not supported!");
         }
 
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
         {
             var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-            DispatchDomainEventsForSuccessfullySavedEntities();
+            await DispatchDomainEventsForSuccessfullySavedEntities();
             return result;
         }
         
@@ -62,7 +60,7 @@ namespace Tauchbolde.Driver.DataAccessSql
             builder.ApplyConfiguration(new ParticipantDataConfiguration());
         }
         
-        private void DispatchDomainEventsForSuccessfullySavedEntities()
+        private async Task DispatchDomainEventsForSuccessfullySavedEntities()
         {
             var entitiesWithEvents = ChangeTracker.Entries<EntityBase>()
                 .Select(e => e.Entity)
@@ -75,7 +73,7 @@ namespace Tauchbolde.Driver.DataAccessSql
                 entity.UncommittedDomainEvents.Clear();
                 foreach (var domainEvent in events)
                 {
-                    mediator.Publish(domainEvent);
+                    await mediator.Publish(domainEvent);
                 }
             }
         }
