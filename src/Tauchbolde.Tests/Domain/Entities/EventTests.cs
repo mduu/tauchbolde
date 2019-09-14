@@ -10,6 +10,36 @@ namespace Tauchbolde.Tests.Domain.Entities
     public class EventTests
     {
         private readonly Guid validEventId = new Guid("D71FA752-2663-4197-831D-F241585F5CD5");
+        private readonly Guid validOrganizatorId = new Guid("4A4FC8D3-6DC6-4348-8B32-B5FB9C7D9D61");
+
+        [Fact]
+        public void Ctor_NewEvent_Success()
+        {
+            // Act
+            var newEvent = new Event(
+                "The Name",
+                "The Description",
+                "The Location",
+                "The MeetingPoint",
+                new DateTime(2019,
+                    9,
+                    15,
+                    14,
+                    0,
+                    0),
+                null,
+                validOrganizatorId);
+            
+            // Arrange
+            newEvent.Id.Should().NotBeEmpty();
+            newEvent.Name.Should().Be("The Name");
+            newEvent.Description.Should().Be("The Description");
+            newEvent.Location.Should().Be("The Location");
+            newEvent.MeetingPoint.Should().Be("The MeetingPoint");
+            newEvent.StartTime.Should().Be(new DateTime(2019, 9, 15, 14, 0, 0));
+            newEvent.OrganisatorId.Should().Be(validOrganizatorId);
+            newEvent.UncommittedDomainEvents.Should().ContainSingle(e => e.GetType() == typeof(EventCreatedEvent));
+        }
 
         [Fact]
         public void AddNewComment_Success()

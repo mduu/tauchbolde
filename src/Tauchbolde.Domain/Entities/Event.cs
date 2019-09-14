@@ -34,6 +34,8 @@ namespace Tauchbolde.Domain.Entities
             StartTime = startTime;
             EndTime = endTime;
             OrganisatorId = organisatorId;
+
+            RaiseDomainEvent(new EventCreatedEvent(Id));
         }
 
         [Display(Name = "Name")]
