@@ -2,6 +2,7 @@ namespace Tauchbolde.Application.Services.Telemetry
 {
     public static class TelemetryEventNames
     {
+        public const string NewEvent = nameof(NewEvent);
         public const string EditEvent = nameof(EditEvent);
         public const string NewEventComment = nameof(NewEventComment);
         public const string EditEventComment = nameof(EditEventComment);
