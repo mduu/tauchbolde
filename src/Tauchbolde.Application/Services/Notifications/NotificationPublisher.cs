@@ -14,16 +14,16 @@ namespace Tauchbolde.Application.Services.Notifications
     {
         [NotNull] private readonly IEventRepository eventRepository;
         [NotNull] private readonly ILogbookEntryRepository logbookEntryRepository;
-        [NotNull] private readonly INotificationRepository dataAccess;
+        [NotNull] private readonly INotificationRepository notificationRepository;
 
         public NotificationPublisher(
             [NotNull] IEventRepository eventRepository,
             [NotNull] ILogbookEntryRepository logbookEntryRepository,
-            [NotNull] INotificationRepository dataAccess)
+            [NotNull] INotificationRepository notificationRepository)
         {
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             this.logbookEntryRepository = logbookEntryRepository ?? throw new ArgumentNullException(nameof(logbookEntryRepository));
-            this.dataAccess = dataAccess ?? throw new ArgumentNullException(nameof(dataAccess));
+            this.notificationRepository = notificationRepository ?? throw new ArgumentNullException(nameof(notificationRepository));
         }
 
         public async Task PublishAsync(
@@ -57,14 +57,15 @@ namespace Tauchbolde.Application.Services.Notifications
                     LogbookEntry = relatedLogbookEntry,
                 };
                 
-                await dataAccess.InsertAsync(newNotification);
+                await notificationRepository.InsertAsync(newNotification);
             }
         }
 
         private static IEnumerable<Diver> GetRelevantRecipients(IEnumerable<Diver> recipients, Diver currentDiver) =>
             recipients
-                .Where(r => currentDiver != null &&
-                            !currentDiver.SendOwnNoticiations &&
-                            currentDiver.Id == r.Id);
+                .Where(r =>
+                    currentDiver == null ||
+                    currentDiver.Id == r.Id ||
+                    currentDiver.SendOwnNoticiations);
     }
 }
