@@ -13,11 +13,12 @@ using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase;
 using Tauchbolde.Application.UseCases.Event.DeleteCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.EditCommentUseCase;
+using Tauchbolde.Application.UseCases.Event.EditEventUseCase;
 using Tauchbolde.Application.UseCases.Event.ExportIcalStreamUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
-using Tauchbolde.Driver.DataAccessSql;
+using Tauchbolde.Application.UseCases.Event.NewEventUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.InterfaceAdapters.Event;
@@ -32,20 +33,17 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class EventController : AppControllerBase
     {
-        [NotNull] private readonly ApplicationDbContext context;
         [NotNull] private readonly IEventService eventService;
         [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly IMediator mediator;
 
         public EventController(
             [NotNull] UserManager<IdentityUser> userManager,
-            [NotNull] ApplicationDbContext context,
             [NotNull] IEventService eventService,
             [NotNull] IDiverService diverService,
             [NotNull] IMediator mediator)
             : base(userManager, diverService)
         {
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -99,8 +97,6 @@ namespace Tauchbolde.Web.Controllers
 
             var model = new EventEditViewModel
             {
-                OriginalEvent = detailsForEvent,
-                BuddyTeamNames = GetBuddyTeamNames(),
                 Id = detailsForEvent?.Id ?? Guid.Empty,
                 Name = detailsForEvent?.Name ?? "",
                 Location = detailsForEvent?.Location ?? "",
@@ -114,71 +110,93 @@ namespace Tauchbolde.Web.Controllers
             return View(model);
         }
 
+
         // POST: Event/Edit/5
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, EventEditViewModel model)
+        public async Task<ActionResult> Edit(Guid id, EventEditModel model)
         {
-            if (ModelState.IsValid)
-            {
-                try
+            var currentDiver = await GetDiverForCurrentUserAsync();
+
+            EventEditViewModel CreateViewModelFromEditModel(EventEditModel editModel) =>
+                new EventEditViewModel
                 {
-                    var currentDiver = await GetDiverForCurrentUserAsync();
-                    var evt = new Event
+                    Id = id,
+                    Name = editModel.Name,
+                    Description = editModel.Description,
+                    Location = editModel.Location,
+                    MeetingPoint = editModel.MeetingPoint,
+                    StartTime = editModel.StartTime,
+                    EndTime = editModel.EndTime,
+                    Organisator = currentDiver.Fullname
+                };
+
+            ActionResult CreateGeneralEditErrorResult(Exception ex = null)
+            {
+                ModelState.AddModelError("",
+                    "Unable to save changes. " +
+                    "Try again, and if the problem persists " +
+                    $"see your system administrator. Message: {ex?.Message}, {ex?.InnerException?.Message}");
+                return View(CreateViewModelFromEditModel(model));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(CreateViewModelFromEditModel(model));
+            }
+
+            try
+            {
+                var isNew = id == Guid.Empty;
+                if (isNew)
+                {
+                    var newResult = await mediator.Send(
+                        new NewEvent(
+                            GetCurrentUserName(),
+                            model.StartTime, 
+                            model.EndTime,
+                            model.Name,
+                            model.Location,
+                            model.MeetingPoint,
+                            model.Description));
+
+                    if (!newResult.IsSuccessful)
                     {
-                        Id = model.Id,
-                        Name = model.Name,
-                        StartTime = model.StartTime,
-                        EndTime = model.EndTime,
-                        Description = model.Description,
-                        Location = model.Location,
-                        MeetingPoint = model.MeetingPoint,
-                        OrganisatorId = currentDiver.Id,
-                    };
+                        return CreateGeneralEditErrorResult();
+                    }
 
-                    var persistedEvent = await eventService.UpsertEventAsync(evt, currentDiver);
-                    await context.SaveChangesAsync();
-
-                    return RedirectToAction("Details", new {persistedEvent.Id});
+                    id = newResult.Payload;
                 }
-                catch (Exception ex)
+                else
                 {
-                    ModelState.AddModelError("", "Unable to save changes. " +
-                                                 "Try again, and if the problem persists " +
-                                                 $"see your system administrator. Message: {ex.Message}, {ex.InnerException?.Message}");
-                    model.BuddyTeamNames = GetBuddyTeamNames();
-                    return View(model);
+                    var editResult = await mediator.Send(
+                        new EditEvent(
+                            GetCurrentUserName(),
+                            id,
+                            model.StartTime,
+                            model.EndTime,
+                            model.Name,
+                            model.Location,
+                            model.MeetingPoint,
+                            model.Description));
+
+                    if (!editResult.IsSuccessful)
+                    {
+                        return CreateGeneralEditErrorResult();
+                    }
                 }
-            }
 
-            EventEditViewModel viewModel;
-            if (id != Guid.Empty)
+                return RedirectToAction("Details", new {id});
+            }
+            catch (Exception ex)
             {
-                var detailsForEvent = await eventService.GetByIdAsync(id);
-                if (detailsForEvent == null)
-                {
-                    return NotFound("Event does not exists!");
-                }
-
-                viewModel = new EventEditViewModel {OriginalEvent = detailsForEvent};
+                return CreateGeneralEditErrorResult(ex);
             }
-            else
-            {
-                viewModel = model;
-            }
-
-            viewModel.BuddyTeamNames = GetBuddyTeamNames();
-
-            return View(viewModel);
         }
 
-        /// <summary>
-        /// Changes the participant state of a user.
-        /// </summary>
         [HttpPost]
-        public async Task<ActionResult> ChangeParticipation([Bind(Prefix = "Participations")]
-            ChangeParticipantViewModel model)
+        public async Task<ActionResult> ChangeParticipation([Bind(Prefix = "Participations")] ChangeParticipantViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -230,10 +248,7 @@ namespace Tauchbolde.Web.Controllers
                     : StatusCode(500);
             }
 
-            return File(
-                presenter.GetIcalStream(), 
-                "text/calendar",
-                presenter.GetDownloadFilename());
+            return File(presenter.GetIcalStream(), "text/calendar", presenter.GetDownloadFilename());
         }
 
         /// <summary>

@@ -1,19 +1,13 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Tauchbolde.Web.Models.EventViewModels
 {
-    public class EventEditViewModel
+    public class EventEditModel
     {
-        [Display(Name = "ID")]
-        public Guid Id { get; set; }
-
         [Display(Name = "Name")]
         [Required]
         public string Name { get; set; }
-
-        [Display(Name = "Organisator")]
-        public string Organisator { get; set; }
 
         [Display(Name = "Ort / TP")]
         public string Location { get; set; }
