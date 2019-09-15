@@ -38,10 +38,19 @@
 {
     <section class="event-participationlist event-participationlist-accepted row">
         <h5 class="participation-subheader">Angemeldet:</h5>
-        @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Accepted))
+        @foreach (var participant in Model.Participants.Where(p => p.Status == ParticipantStatus.Accepted).GroupBy(p => p.BuddyTeamName))
         {
-            <div class="row">
-                <vc:participant-component participant="@participant"/>
+            <div>
+                @if (participant.Key != BuddyTeamNames.Names.FirstOrDefault())
+                {
+                    <label>Buddy-Team: <strong>@participant.Key</strong></label>
+                }
+                @foreach (var p in participant)
+                {
+                    <div class="row">
+                        <vc:participant-component participant="@p"/>
+                    </div>
+                }
             </div>
         }
     </section>
