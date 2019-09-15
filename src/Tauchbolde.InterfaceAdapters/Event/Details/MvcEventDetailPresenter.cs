@@ -37,16 +37,18 @@ namespace Tauchbolde.InterfaceAdapters.Event.Details
                 new EventParticipationViewModel(
                     interactorOutput.EventId,
                     BuddyTeamNames.Names,
-                    interactorOutput.Participants.Select(p => new EventParticipantViewModel(
-                        p.Name,
-                        p.Email,
-                        p.AvatarId,
-                        p.BuddyTeamName,
-                        p.Status.ToString(),
-                        p.Status,
-                        p.Note,
-                        p.CountPeople
-                    )),
+                    interactorOutput.Participants
+                        .OrderBy(p => p.BuddyTeamName)
+                        .Select(p => new EventParticipantViewModel(
+                            p.Name,
+                            p.Email,
+                            p.AvatarId,
+                            p.BuddyTeamName,
+                            p.Status.ToString(),
+                            p.Status,
+                            p.Note,
+                            p.CountPeople
+                        )),
                     interactorOutput.CurrentUserStatus,
                     interactorOutput.CurrentUserNote,
                     interactorOutput.CurrentUserBuddyTeamName,
