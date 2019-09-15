@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Application.OldDomainServices.Users;
-using Tauchbolde.Domain;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 
@@ -65,9 +64,14 @@ namespace Tauchbolde.Web.Core
         [NotNull]
         protected async Task<Diver> GetDiverForCurrentUserAsync()
         {
-            return User?.Identity?.Name != null
+            return GetCurrentUserName() != null
                 ? await diverService.FindByUserNameAsync(User.Identity.Name)
                 : null;
+        }
+
+        protected string GetCurrentUserName()
+        {
+            return User?.Identity?.Name;
         }
 
         /// <summary>
