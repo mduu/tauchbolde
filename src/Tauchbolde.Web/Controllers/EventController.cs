@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase;
@@ -20,7 +17,6 @@ using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.NewEventUseCase;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.Types;
 using Tauchbolde.InterfaceAdapters.Event;
 using Tauchbolde.InterfaceAdapters.Event.Details;
 using Tauchbolde.InterfaceAdapters.Event.List;
@@ -328,11 +324,6 @@ namespace Tauchbolde.Web.Controllers
             }
 
             return RedirectToAction("Details", new {id = deleteEventId});
-        }
-
-        private static IEnumerable<SelectListItem> GetBuddyTeamNames()
-        {
-            return BuddyTeamNames.Names.Select(n => new SelectListItem {Text = n});
         }
     }
 }
