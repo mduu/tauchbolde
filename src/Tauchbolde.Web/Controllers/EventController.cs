@@ -13,12 +13,14 @@ using Tauchbolde.Application.UseCases.Event.EditCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.EditEventUseCase;
 using Tauchbolde.Application.UseCases.Event.ExportIcalStreamUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
+using Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.NewEventUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.InterfaceAdapters.Event;
 using Tauchbolde.InterfaceAdapters.Event.Details;
+using Tauchbolde.InterfaceAdapters.Event.EditDetails;
 using Tauchbolde.InterfaceAdapters.Event.List;
 using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core;
@@ -75,35 +77,24 @@ namespace Tauchbolde.Web.Controllers
         // GET: Event/Edit/5
         public async Task<ActionResult> Edit(Guid? id)
         {
-            Event detailsForEvent = null;
-            if (id.HasValue)
+            if (!id.HasValue)
             {
-                detailsForEvent = await eventService.GetByIdAsync(id.Value);
-                if (detailsForEvent == null)
+                return View();
+            }
+
+            var presenter = new MvcEventEditDetailsPresenter();
+            var useCaseResult = await mediator.Send(new GetEventEditDetails(GetCurrentUserName(), id.Value, presenter));
+            if (!useCaseResult.IsSuccessful)
+            {
+                if (useCaseResult.ResultCategory == ResultCategory.NotFound)
                 {
-                    return BadRequest("Event does not exists!");
+                    return NotFound();
                 }
+
+                return StatusCode(500);
             }
-
-            var currentUser = await GetDiverForCurrentUserAsync();
-            if (currentUser == null)
-            {
-                return BadRequest();
-            }
-
-            var model = new EventEditViewModel
-            {
-                Id = detailsForEvent?.Id ?? Guid.Empty,
-                Name = detailsForEvent?.Name ?? "",
-                Location = detailsForEvent?.Location ?? "",
-                MeetingPoint = detailsForEvent?.MeetingPoint ?? "",
-                Description = detailsForEvent?.Description ?? "",
-                Organisator = (detailsForEvent?.Organisator ?? currentUser).User.UserName,
-                StartTime = detailsForEvent?.StartTime ?? DateTime.Today.AddDays(1).AddHours(19),
-                EndTime = detailsForEvent?.EndTime,
-            };
-
-            return View(model);
+            
+            return View(presenter.GetViewModel());
         }
 
 

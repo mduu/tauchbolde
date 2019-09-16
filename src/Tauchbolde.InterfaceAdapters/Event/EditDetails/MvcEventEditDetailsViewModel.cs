@@ -31,14 +31,34 @@ namespace Tauchbolde.InterfaceAdapters.Event.EditDetails
         }
 
         public Guid EventId { get; }
-        [NotNull] [Display(Name = "Organisator")] public string OrganizatorName { get; }
+
+        [NotNull]
+        [Display(Name = "Organisator")]
+        public string OrganizatorName { get; }
+
         [NotNull] public string OrganizatorEmail { get; }
         [CanBeNull] public string OrganizatorAvatarId { get; }
-        [NotNull] [Display(Name = "Startet um")] public string StartTime { get; }
-        [CanBeNull] [Display(Name = "Endet um")] public string EndTime { get; }
-        [NotNull] [Display(Name = "Aktivitätstitel")] public string Title { get; }
+
+        [NotNull]
+        [Display(Name = "Startet um")]
+        public string StartTime { get; }
+
+        [CanBeNull]
+        [Display(Name = "Endet um")]
+        public string EndTime { get; }
+
+        [NotNull]
+        [Display(Name = "Aktivitätstitel")]
+        public string Title { get; }
+
         [NotNull] [Display(Name = "Ort / TP")] public string Location { get; }
-        [NotNull] [Display(Name = "Treffpunkt")] public string MeetingPoint { get; }
-        [NotNull] [Display(Name = "Beschreibung")] public string Description { get; }
+
+        [NotNull]
+        [Display(Name = "Treffpunkt")]
+        public string MeetingPoint { get; }
+
+        [NotNull]
+        [Display(Name = "Beschreibung")]
+        public string Description { get; }
     }
 }
