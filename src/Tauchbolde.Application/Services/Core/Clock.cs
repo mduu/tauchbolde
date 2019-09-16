@@ -4,9 +4,9 @@ namespace Tauchbolde.Application.Services.Core
 {
     internal class Clock : IClock
     {
-        public DateTimeOffset Now()
+        public DateTime Now()
         {
-            return DateTimeOffset.UtcNow;
+            return DateTime.UtcNow;
         }
-    }
+    }        
 }
