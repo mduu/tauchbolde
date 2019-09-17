@@ -94,7 +94,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         }
 
         [Fact]
-        public async Task Handle_EventIdNotFound_MustFail()
+        public async Task Handle_EventIdNotFound_MustCreateNewEvent()
         {
             // Arrange
             var request = CreateEditEvent(eventId: new Guid("3FA9F128-A5A7-47A8-83D6-83BDF5A77A92"));
@@ -103,8 +103,11 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             var result = await interactor.Handle(request, CancellationToken.None);
 
             // Assert
-            result.IsSuccessful.Should().BeFalse();
-            result.ResultCategory.Should().Be(ResultCategory.NotFound);
+            result.IsSuccessful.Should().BeTrue();
+            A.CallTo(() => eventRepository.InsertAsync(A<Tauchbolde.Domain.Entities.Event>._))
+                .MustHaveHappenedOnceExactly();
+            A.CallTo(() => eventRepository.UpdateAsync(A<Tauchbolde.Domain.Entities.Event>._))
+                .MustNotHaveHappened();
         }
 
         [Fact]
@@ -113,7 +116,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             // Act
             // ReSharper disable once AssignNullToNotNullAttribute
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
-            
+
             // Assert
             act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
         }
@@ -126,7 +129,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             string title = "Test edited Event",
             string location = "New Location",
             string meetingPoint = "New MeetingPoint",
-            string description = "New Description") => 
+            string description = "New Description") =>
             new EditEvent(
                 currentUserName ?? validUserName,
                 eventId ?? validEventId,

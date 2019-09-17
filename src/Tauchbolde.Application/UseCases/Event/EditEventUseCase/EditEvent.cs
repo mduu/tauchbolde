@@ -5,7 +5,7 @@ using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Application.UseCases.Event.EditEventUseCase
 {
-    public class EditEvent : IRequest<UseCaseResult>
+    public class EditEvent : IRequest<UseCaseResult<Guid>>
     {
         public EditEvent(
             [NotNull] string currentUserName,

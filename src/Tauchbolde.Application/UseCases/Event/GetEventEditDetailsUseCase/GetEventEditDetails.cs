@@ -9,7 +9,7 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase
     {
         public GetEventEditDetails(
             [NotNull] string currentUserName,
-            Guid eventId,
+            Guid? eventId,
             [NotNull] IEventEditDetailsOutputPort outputPort)
         {
             CurrentUserName = currentUserName ?? throw new ArgumentNullException(nameof(currentUserName));
@@ -18,7 +18,7 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase
         }
 
         [NotNull] public string CurrentUserName { get; }
-        public Guid EventId { get; }
+        public Guid? EventId { get; }
         [NotNull] public IEventEditDetailsOutputPort OutputPort { get; }
     }
 }

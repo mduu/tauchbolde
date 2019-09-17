@@ -6,7 +6,6 @@ using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
-using Tauchbolde.Application.UseCases.Event.GetEventNewDetailsUseCase;
 using Tauchbolde.Application.UseCases.Event.GetRecentAndUpcomingEventsUseCase;
 using Tauchbolde.InterfaceAdapters.Event.Details;
 using Tauchbolde.InterfaceAdapters.Event.EditDetails;
@@ -37,7 +36,6 @@ namespace Tauchbolde.InterfaceAdapters
             services.AddTransient<IEventListOutputPort, MvcEventListPresenter>();
             services.AddTransient<IRecentAndUpcomingEventsOutputPort, MvcRecentAndUpcomingEventsPresenter>();
             services.AddTransient<IEventEditDetailsOutputPort, MvcEventEditDetailsPresenter>();
-            services.AddTransient<IGetEventNewDetailsOutputPort, MvcEventNewDetailsPresenter>();
         }
     }
 }
