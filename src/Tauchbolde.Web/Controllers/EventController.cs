@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase;
 using Tauchbolde.Application.UseCases.Event.DeleteCommentUseCase;
@@ -17,12 +16,12 @@ using Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.NewEventUseCase;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.InterfaceAdapters.Event;
 using Tauchbolde.InterfaceAdapters.Event.Details;
 using Tauchbolde.InterfaceAdapters.Event.EditDetails;
 using Tauchbolde.InterfaceAdapters.Event.List;
 using Tauchbolde.SharedKernel;
+using Tauchbolde.SharedKernel.Extensions;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
 
@@ -31,18 +30,15 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class EventController : AppControllerBase
     {
-        [NotNull] private readonly IEventService eventService;
         [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly IMediator mediator;
 
         public EventController(
             [NotNull] UserManager<IdentityUser> userManager,
-            [NotNull] IEventService eventService,
             [NotNull] IDiverService diverService,
             [NotNull] IMediator mediator)
             : base(userManager, diverService)
         {
-            this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
@@ -106,18 +102,18 @@ namespace Tauchbolde.Web.Controllers
         {
             var currentDiver = await GetDiverForCurrentUserAsync();
 
-            EventEditViewModel CreateViewModelFromEditModel(EventEditModel editModel) =>
-                new EventEditViewModel
-                {
-                    Id = id,
-                    Name = editModel.Name,
-                    Description = editModel.Description,
-                    Location = editModel.Location,
-                    MeetingPoint = editModel.MeetingPoint,
-                    StartTime = editModel.StartTime,
-                    EndTime = editModel.EndTime,
-                    Organisator = currentDiver.Fullname
-                };
+            MvcEventEditDetailsViewModel CreateViewModelFromEditModel(EventEditModel editModel) =>
+                new MvcEventEditDetailsViewModel(
+                    id,
+                    currentDiver.Fullname,
+                    currentDiver.User.Email,
+                    currentDiver.AvatarId,
+                    editModel.StartTime.ToStringSwissDateTime(),
+                    editModel.EndTime?.ToStringSwissDateTime() ?? "",
+                    editModel.Name,
+                    editModel.Location,
+                    editModel.MeetingPoint,
+                    editModel.Description);
 
             ActionResult CreateGeneralEditErrorResult(Exception ex = null)
             {
