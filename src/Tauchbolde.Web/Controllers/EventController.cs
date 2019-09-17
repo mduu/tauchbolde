@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase;
 using Tauchbolde.Application.UseCases.Event.DeleteCommentUseCase;
@@ -13,14 +12,15 @@ using Tauchbolde.Application.UseCases.Event.EditCommentUseCase;
 using Tauchbolde.Application.UseCases.Event.EditEventUseCase;
 using Tauchbolde.Application.UseCases.Event.ExportIcalStreamUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
+using Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
-using Tauchbolde.Application.UseCases.Event.NewEventUseCase;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.InterfaceAdapters.Event;
 using Tauchbolde.InterfaceAdapters.Event.Details;
+using Tauchbolde.InterfaceAdapters.Event.EditDetails;
 using Tauchbolde.InterfaceAdapters.Event.List;
 using Tauchbolde.SharedKernel;
+using Tauchbolde.SharedKernel.Extensions;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
 
@@ -29,18 +29,15 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class EventController : AppControllerBase
     {
-        [NotNull] private readonly IEventService eventService;
         [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly IMediator mediator;
 
         public EventController(
             [NotNull] UserManager<IdentityUser> userManager,
-            [NotNull] IEventService eventService,
             [NotNull] IDiverService diverService,
             [NotNull] IMediator mediator)
             : base(userManager, diverService)
         {
-            this.eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
@@ -75,35 +72,19 @@ namespace Tauchbolde.Web.Controllers
         // GET: Event/Edit/5
         public async Task<ActionResult> Edit(Guid? id)
         {
-            Event detailsForEvent = null;
-            if (id.HasValue)
+            var presenter = new MvcEventEditDetailsPresenter();
+            var useCaseResult = await mediator.Send(new GetEventEditDetails(GetCurrentUserName(), id, presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                detailsForEvent = await eventService.GetByIdAsync(id.Value);
-                if (detailsForEvent == null)
+                if (useCaseResult.ResultCategory == ResultCategory.NotFound)
                 {
-                    return BadRequest("Event does not exists!");
+                    return NotFound();
                 }
+
+                return StatusCode(500);
             }
 
-            var currentUser = await GetDiverForCurrentUserAsync();
-            if (currentUser == null)
-            {
-                return BadRequest();
-            }
-
-            var model = new EventEditViewModel
-            {
-                Id = detailsForEvent?.Id ?? Guid.Empty,
-                Name = detailsForEvent?.Name ?? "",
-                Location = detailsForEvent?.Location ?? "",
-                MeetingPoint = detailsForEvent?.MeetingPoint ?? "",
-                Description = detailsForEvent?.Description ?? "",
-                Organisator = (detailsForEvent?.Organisator ?? currentUser).User.UserName,
-                StartTime = detailsForEvent?.StartTime ?? DateTime.Today.AddDays(1).AddHours(19),
-                EndTime = detailsForEvent?.EndTime,
-            };
-
-            return View(model);
+            return View(presenter.GetViewModel());
         }
 
 
@@ -111,79 +92,59 @@ namespace Tauchbolde.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, EventEditModel model)
+        public async Task<ActionResult> Edit(Guid id, MvcEventEditDetailsViewModel model)
         {
-            var currentDiver = await GetDiverForCurrentUserAsync();
-
-            EventEditViewModel CreateViewModelFromEditModel(EventEditModel editModel) =>
-                new EventEditViewModel
-                {
-                    Id = id,
-                    Name = editModel.Name,
-                    Description = editModel.Description,
-                    Location = editModel.Location,
-                    MeetingPoint = editModel.MeetingPoint,
-                    StartTime = editModel.StartTime,
-                    EndTime = editModel.EndTime,
-                    Organisator = currentDiver.Fullname
-                };
-
             ActionResult CreateGeneralEditErrorResult(Exception ex = null)
             {
                 ModelState.AddModelError("",
                     "Unable to save changes. " +
                     "Try again, and if the problem persists " +
                     $"see your system administrator. Message: {ex?.Message}, {ex?.InnerException?.Message}");
-                return View(CreateViewModelFromEditModel(model));
+                return View(model);
+            }
+
+            if (!DateTime.TryParse(model.StartTime, out var startDateTime))
+            {
+                ModelState.AddModelError(nameof(model.StartTime), "Ungültiges Datum!");
+            }
+
+            DateTime? endDateTime = null;
+            if (model.EndTime != null)
+            {
+                if (DateTime.TryParse(model.EndTime, out var eTime))
+                {
+                    endDateTime = eTime;
+                }
+                else
+                {
+                    ModelState.AddModelError(nameof(model.EndTime), "Ungültige Endzeit!");
+                }
             }
 
             if (!ModelState.IsValid)
             {
-                return View(CreateViewModelFromEditModel(model));
+                return View(model);
             }
 
             try
             {
-                var isNew = id == Guid.Empty;
-                if (isNew)
+                var editResult = await mediator.Send(
+                    new EditEvent(
+                        GetCurrentUserName(),
+                        id,
+                        startDateTime,
+                        endDateTime,
+                        model.Title,
+                        model.Location,
+                        model.MeetingPoint,
+                        model.Description));
+
+                if (!editResult.IsSuccessful)
                 {
-                    var newResult = await mediator.Send(
-                        new NewEvent(
-                            GetCurrentUserName(),
-                            model.StartTime, 
-                            model.EndTime,
-                            model.Name,
-                            model.Location,
-                            model.MeetingPoint,
-                            model.Description));
-
-                    if (!newResult.IsSuccessful)
-                    {
-                        return CreateGeneralEditErrorResult();
-                    }
-
-                    id = newResult.Payload;
-                }
-                else
-                {
-                    var editResult = await mediator.Send(
-                        new EditEvent(
-                            GetCurrentUserName(),
-                            id,
-                            model.StartTime,
-                            model.EndTime,
-                            model.Name,
-                            model.Location,
-                            model.MeetingPoint,
-                            model.Description));
-
-                    if (!editResult.IsSuccessful)
-                    {
-                        return CreateGeneralEditErrorResult();
-                    }
+                    return CreateGeneralEditErrorResult();
                 }
 
-                return RedirectToAction("Details", new {id});
+                return RedirectToAction("Details", new { id = editResult.Payload});
             }
             catch (Exception ex)
             {

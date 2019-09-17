@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
@@ -23,6 +24,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         private readonly IEventRepository eventRepository = A.Fake<IEventRepository>();
         private readonly IDiverRepository diverRepository = A.Fake<IDiverRepository>();
         private readonly IEventEditDetailsOutputPort outputPort = A.Fake<IEventEditDetailsOutputPort>();
+        private readonly IClock clock = A.Fake<IClock>();
 
         public GetEventEditDetailsInteractorTests()
         {
@@ -47,7 +49,9 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
                         }
                         : null));
 
-            interactor = new GetEventEditDetailsInteractor(logger, eventRepository, diverRepository);
+            A.CallTo(() => clock.Now()).Returns(new DateTime(2019, 9, 1, 19, 0, 0));
+
+            interactor = new GetEventEditDetailsInteractor(logger, eventRepository, diverRepository, clock);
         }
 
         [Fact]
@@ -82,7 +86,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         }
         
         [Fact]
-        public async Task Handle_InvalidEventId_MustFail()
+        public async Task Handle_InvalidEventId_MustReturnNew()
         {
             // Arrange
             var request = new GetEventEditDetails(validUserName, new Guid("C2B9BB52-BFB0-4B43-965C-C23B4598722B"), outputPort);
@@ -91,10 +95,9 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             var result = await interactor.Handle(request, CancellationToken.None);
 
             // Assert
-            result.IsSuccessful.Should().BeFalse();
-            result.ResultCategory.Should().Be(ResultCategory.NotFound);
+            result.IsSuccessful.Should().BeTrue();
             A.CallTo(() => outputPort.Output(A<EventEditDetailsOutput>._))
-                .MustNotHaveHappened();
+                .MustHaveHappenedOnceExactly();
         }
         
         [Fact]

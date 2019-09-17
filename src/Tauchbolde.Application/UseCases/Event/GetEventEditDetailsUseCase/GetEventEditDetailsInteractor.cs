@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase
@@ -17,15 +18,18 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase
         [NotNull] private readonly ILogger logger;
         [NotNull] private readonly IEventRepository eventRepository;
         [NotNull] private readonly IDiverRepository diverRepository;
+        [NotNull] private readonly IClock clock;
 
         public GetEventEditDetailsInteractor(
             [NotNull] ILogger<GetEventEditDetailsInteractor> logger,
             [NotNull] IEventRepository eventRepository,
-            [NotNull] IDiverRepository diverRepository)
+            [NotNull] IDiverRepository diverRepository,
+            [NotNull] IClock clock)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
+            this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
         }
 
         public async Task<UseCaseResult> Handle([NotNull] GetEventEditDetails request, CancellationToken cancellationToken)
@@ -39,11 +43,26 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase
                 return UseCaseResult.NotFound();
             }
 
-            var evt = await eventRepository.FindByIdAsync(request.EventId);
+            var evt = request.EventId.HasValue
+                ? await eventRepository.FindByIdAsync(request.EventId.Value)
+                : null;
+            
             if (evt == null)
             {
-                logger.LogError("Event with ID [{id}] not found!", request.EventId);
-                return UseCaseResult.NotFound();
+                request.OutputPort?.Output(
+                    new EventEditDetailsOutput(
+                        Guid.NewGuid(),
+                        "",
+                        "",
+                        "5 Minuten vorher am TP",
+                        "",
+                        clock.Now().Date.AddDays(1).AddHours(19),
+                        null,
+                        diver.Fullname,
+                        diver.User.Email,
+                        diver.AvatarId));
+                
+                return UseCaseResult.Success();
             }
 
             if (diver.Id != evt.OrganisatorId)

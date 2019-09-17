@@ -30,15 +30,34 @@ namespace Tauchbolde.InterfaceAdapters.Event.EditDetails
             Description = description ?? throw new ArgumentNullException(nameof(description));
         }
 
-        public Guid EventId { get; }
-        [NotNull] [Display(Name = "Organisator")] public string OrganizatorName { get; }
-        [NotNull] public string OrganizatorEmail { get; }
-        [CanBeNull] public string OrganizatorAvatarId { get; }
-        [NotNull] [Display(Name = "Startet um")] public string StartTime { get; }
-        [CanBeNull] [Display(Name = "Endet um")] public string EndTime { get; }
-        [NotNull] [Display(Name = "Aktivitätstitel")] public string Title { get; }
-        [NotNull] [Display(Name = "Ort / TP")] public string Location { get; }
-        [NotNull] [Display(Name = "Treffpunkt")] public string MeetingPoint { get; }
-        [NotNull] [Display(Name = "Beschreibung")] public string Description { get; }
+        [UsedImplicitly]
+        public MvcEventEditDetailsViewModel()
+        {
+        }
+
+        public Guid EventId { get; set; }
+
+        [Display(Name = "Organisator")]
+        public string OrganizatorName { get; set; }
+
+        public string OrganizatorEmail { get; set; }
+        public string OrganizatorAvatarId { get; set; }
+
+        [Display(Name = "Startet um")]
+        public string StartTime { get; set; }
+
+        [Display(Name = "Endet um")]
+        public string EndTime { get; set; }
+
+        [Display(Name = "Aktivitätstitel")]
+        public string Title { get; set; }
+
+        [Display(Name = "Ort / TP")] public string Location { get; set; }
+
+        [Display(Name = "Treffpunkt")]
+        public string MeetingPoint { get; set; }
+
+        [Display(Name = "Beschreibung")]
+        public string Description { get; set; }
     }
 }

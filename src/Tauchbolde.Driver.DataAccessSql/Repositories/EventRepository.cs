@@ -25,7 +25,7 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         /// <inheritdoc />>
         public async Task<List<Event>> GetUpcomingEventsAsync()
         {
-            return await CreateQueryForStartingAt(clock.Now().DateTime)
+            return await CreateQueryForStartingAt(clock.Now())
                 .Include(e => e.Comments)
                     .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
@@ -35,7 +35,7 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
 
 
         public async Task<ICollection<Event>> GetUpcomingAndRecentEventsAsync() =>
-            await CreateQueryForStartingAt(clock.Now().AddDays(-30).DateTime)
+            await CreateQueryForStartingAt(clock.Now().AddDays(-30))
                 .Include(e => e.Comments)
                 .ThenInclude(c => c.Author)
                 .Include(e => e.Participants)
