@@ -137,7 +137,11 @@ namespace Tauchbolde.Web
                     .WithOrigins("https://twitter.com"));
             });
 
-            services.AddMvc(options => { options.Filters.Add(typeof(BuildNumberFilter)); })
+            services.AddMvc(options =>
+                {
+                    options.Filters.Add(typeof(BuildNumberFilter));
+                    options.Filters.Add(typeof(CurrentUserInformationFilter));
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling =

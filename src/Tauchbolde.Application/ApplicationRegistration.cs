@@ -27,6 +27,7 @@ namespace Tauchbolde.Application
             services.AddMediatR(typeof(PublishLogbookEntryInteractor));
 
             services.AddScoped<IClock, Clock>();
+            services.AddScoped<ICurrentUserInformation, CurrentUserInformation>();
             services.AddSingleton<IMimeMapping, MimeMapping>();
             
             services.AddScoped<INotificationPublisher, NotificationPublisher>();
