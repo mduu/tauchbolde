@@ -28,6 +28,7 @@ namespace Tauchbolde.Application
 
             services.AddScoped<IClock, Clock>();
             services.AddScoped<ICurrentUserInformation, CurrentUserInformation>();
+            services.AddScoped<ICurrentUser, CurrentUser>();
             services.AddSingleton<IMimeMapping, MimeMapping>();
             
             services.AddScoped<INotificationPublisher, NotificationPublisher>();
