@@ -225,7 +225,7 @@ namespace Tauchbolde.Web.Controllers
                 return StatusCode(400, "No current user would be found!");
             }
 
-            var comment = await mediator.Send(new NewComment(eventId, currentUser.Id, newCommentText));
+            var comment = await mediator.Send(new NewComment(eventId, newCommentText));
             if (!comment.IsSuccessful)
             {
                 ShowErrorMessage(

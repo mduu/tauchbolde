@@ -9,7 +9,6 @@ namespace Tauchbolde.Application.UseCases.Event.NewCommentUseCase
         public NewCommentValidator()
         {
             RuleFor(u => u.EventId).NotEmpty();
-            RuleFor(u => u.AuthorId).NotEmpty();
             RuleFor(u => u.Text).NotEmpty();
         }
     }
