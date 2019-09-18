@@ -5,7 +5,6 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Application.OldDomainServices;
 using Tauchbolde.Application.OldDomainServices.Avatar;
-using Tauchbolde.Application.OldDomainServices.Events;
 using Tauchbolde.Application.OldDomainServices.Notifications;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services;
@@ -51,7 +50,6 @@ namespace Tauchbolde.Application
         {
             // TODO The goal is to remove all these old "domain services"
             
-            services.AddTransient<IEventService, EventService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IDiverService, DiversService>();
             services.AddTransient<IMassMailService, MassMailService>();

@@ -20,7 +20,6 @@ using Tauchbolde.InterfaceAdapters.Event.Details;
 using Tauchbolde.InterfaceAdapters.Event.EditDetails;
 using Tauchbolde.InterfaceAdapters.Event.List;
 using Tauchbolde.SharedKernel;
-using Tauchbolde.SharedKernel.Extensions;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
 
