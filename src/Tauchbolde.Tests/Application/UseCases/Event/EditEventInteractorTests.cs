@@ -25,7 +25,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 
         public EditEventInteractorTests()
         {
-            A.CallTo(() => currentUser.GetCurrentDiver())
+            A.CallTo(() => currentUser.GetCurrentDiverAsync())
                 .ReturnsLazily(() => Task.FromResult(
                     new Diver {Id = validOrganizatorId}
                 ));
@@ -65,7 +65,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         {
             // Arrange
             var request = CreateEditEvent();
-            A.CallTo(() => currentUser.GetCurrentDiver())
+            A.CallTo(() => currentUser.GetCurrentDiverAsync())
                 .ReturnsLazily(() => Task.FromResult(
                     new Diver {Id = new Guid("07E86139-3F98-46B3-94AD-AF427B6933AC")}));
 
@@ -81,7 +81,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         public async Task Handle_DiverIdNotFound_MustFail()
         {
             // Arrange
-            A.CallTo(() => currentUser.GetCurrentDiver()).ReturnsLazily(() => Task.FromResult<Diver>(null));
+            A.CallTo(() => currentUser.GetCurrentDiverAsync()).ReturnsLazily(() => Task.FromResult<Diver>(null));
             var request = CreateEditEvent();
 
             // Act

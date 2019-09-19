@@ -22,7 +22,7 @@ namespace Tauchbolde.Application.Services.Core
 
         public string Username => currentUserInformation.UserName;
 
-        public async Task<Diver> GetCurrentDiver()
+        public async Task<Diver> GetCurrentDiverAsync()
         {
             if (string.IsNullOrWhiteSpace(currentUserInformation.UserName))
             {

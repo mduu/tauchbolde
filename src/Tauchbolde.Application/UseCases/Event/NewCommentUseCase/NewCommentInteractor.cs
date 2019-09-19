@@ -32,7 +32,7 @@ namespace Tauchbolde.Application.UseCases.Event.NewCommentUseCase
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var author = await currentUser.GetCurrentDiver();
+            var author = await currentUser.GetCurrentDiverAsync();
 
             var evt = await eventRepository.FindByIdAsync(request.EventId);
             if (evt == null)

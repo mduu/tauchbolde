@@ -30,7 +30,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
                         : null
                     ));
 
-            A.CallTo(() => currentUser.GetCurrentDiver())
+            A.CallTo(() => currentUser.GetCurrentDiverAsync())
                 .ReturnsLazily(() => Task.FromResult(
                     new Diver
                     {

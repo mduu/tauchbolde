@@ -52,7 +52,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 
             A.CallTo(() => clock.Now()).Returns(new DateTime(2019, 9, 1, 19, 0, 0));
 
-            A.CallTo(() => currentUser.GetCurrentDiver())
+            A.CallTo(() => currentUser.GetCurrentDiverAsync())
                 .ReturnsLazily(() => Task.FromResult(
                     new Diver
                     {
@@ -86,7 +86,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         public async Task Handle_InvalidDiverId_MustFail()
         {
             // Arrange
-            A.CallTo(() => currentUser.GetCurrentDiver())
+            A.CallTo(() => currentUser.GetCurrentDiverAsync())
                 .ReturnsLazily(() => Task.FromResult<Diver>(null));
             var request = new GetEventEditDetails(validEventId, outputPort);
 
@@ -120,7 +120,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         {
             // Arrange
             var request = new GetEventEditDetails(validEventId, outputPort);
-            A.CallTo(() => currentUser.GetCurrentDiver())
+            A.CallTo(() => currentUser.GetCurrentDiverAsync())
                 .ReturnsLazily(() => Task.FromResult(
                     new Diver
                     {

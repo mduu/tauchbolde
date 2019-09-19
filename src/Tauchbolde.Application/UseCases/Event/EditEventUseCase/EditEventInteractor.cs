@@ -31,7 +31,7 @@ namespace Tauchbolde.Application.UseCases.Event.EditEventUseCase
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var currentDiver = await currentUser.GetCurrentDiver();
+            var currentDiver = await currentUser.GetCurrentDiverAsync();
             if (currentDiver == null)
             {
                 logger.LogError("No diver record found for username [{username}]!", currentUser.Username);
