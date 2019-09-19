@@ -5,6 +5,7 @@ namespace Tauchbolde.Application.Services.Core
 {
     internal interface ICurrentUser
     {
+        string Username { get; }
         Task<Diver> GetCurrentDiver();
     }
 }

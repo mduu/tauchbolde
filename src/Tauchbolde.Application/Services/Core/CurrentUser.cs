@@ -20,6 +20,8 @@ namespace Tauchbolde.Application.Services.Core
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
 
+        public string Username => currentUserInformation.UserName;
+
         public async Task<Diver> GetCurrentDiver()
         {
             if (string.IsNullOrWhiteSpace(currentUserInformation.UserName))
