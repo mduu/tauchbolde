@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
 
@@ -12,28 +13,28 @@ namespace Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase
     [UsedImplicitly]
     internal class ChangeParticipationInteractor : IRequestHandler<ChangeParticipation, UseCaseResult>
     {
-        private readonly IDiverRepository diverRepository;
         private readonly IParticipantRepository participantRepository;
+        private readonly ICurrentUser currentUser;
 
         public ChangeParticipationInteractor(
-            [NotNull] IDiverRepository diverRepository,
-            [NotNull] IParticipantRepository participantRepository)
+            [NotNull] IParticipantRepository participantRepository,
+            [NotNull] ICurrentUser currentUser)
         {
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
+            this.currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
         }
         
         public async Task<UseCaseResult> Handle([NotNull] ChangeParticipation request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var diver = await diverRepository.FindByUserNameAsync(request.Username);
-            var participant = await participantRepository.GetParticipationForEventAndUserAsync(diver, request.EventId);
+            var currentDiver = await currentUser.GetCurrentDiverAsync();
+            var participant = await participantRepository.GetParticipationForEventAndUserAsync(currentDiver, request.EventId);
             if (participant == null)
             {
                 participant = new Participant(
                     request.EventId,
-                    diver.Id,
+                    currentDiver.Id,
                     request.Status,
                     request.BuddyTeamName,
                     request.NumberOfPeople,

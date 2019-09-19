@@ -158,15 +158,8 @@ namespace Tauchbolde.Web.Controllers
                 return await Details(model.EventId);
             }
 
-            var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
-            if (currentUser == null)
-            {
-                return StatusCode(400, "No current user would be found!");
-            }
-
             var result = await mediator.Send(
                 new ChangeParticipation(
-                    currentUser.User.UserName,
                     model.EventId,
                     model.CurrentUserStatus,
                     model.CurrentUserCountPeople,
