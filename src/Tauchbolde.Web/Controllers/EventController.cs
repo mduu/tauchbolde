@@ -129,7 +129,6 @@ namespace Tauchbolde.Web.Controllers
             {
                 var editResult = await mediator.Send(
                     new EditEvent(
-                        GetCurrentUserName(),
                         id,
                         startDateTime,
                         endDateTime,
