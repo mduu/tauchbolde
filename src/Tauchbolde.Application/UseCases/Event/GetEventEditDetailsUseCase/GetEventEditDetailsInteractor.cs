@@ -17,29 +17,29 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase
     {
         [NotNull] private readonly ILogger logger;
         [NotNull] private readonly IEventRepository eventRepository;
-        [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly IClock clock;
+        [NotNull] private readonly ICurrentUser currentUser;
 
         public GetEventEditDetailsInteractor(
             [NotNull] ILogger<GetEventEditDetailsInteractor> logger,
             [NotNull] IEventRepository eventRepository,
-            [NotNull] IDiverRepository diverRepository,
-            [NotNull] IClock clock)
+            [NotNull] IClock clock,
+            [NotNull] ICurrentUser currentUser)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.clock = clock ?? throw new ArgumentNullException(nameof(clock));
+            this.currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
         }
 
         public async Task<UseCaseResult> Handle([NotNull] GetEventEditDetails request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var diver = await diverRepository.FindByUserNameAsync(request.CurrentUserName);
+            var diver = await currentUser.GetCurrentDiver();
             if (diver == null)
             {
-                logger.LogError("Diver with Name [{username}] not found!", request.CurrentUserName);
+                logger.LogError("Diver with Name [{username}] not found!", currentUser.Username);
                 return UseCaseResult.NotFound();
             }
 
@@ -49,7 +49,7 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase
             
             if (evt == null)
             {
-                request.OutputPort?.Output(
+                request.OutputPort.Output(
                     new EventEditDetailsOutput(
                         Guid.NewGuid(),
                         "",
@@ -67,7 +67,7 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase
 
             if (diver.Id != evt.OrganisatorId)
             {
-                logger.LogError("Diver [{username}] is not allowed to edit event with ID [{id}]!", request.CurrentUserName, request.EventId);
+                logger.LogError("Diver [{username}] is not allowed to edit event with ID [{id}]!", currentUser.Username, request.EventId);
                 return UseCaseResult.Fail(
                     new List<ValidationFailure>
                     {

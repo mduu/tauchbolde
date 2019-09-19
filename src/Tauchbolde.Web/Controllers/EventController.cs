@@ -72,7 +72,7 @@ namespace Tauchbolde.Web.Controllers
         public async Task<ActionResult> Edit(Guid? id)
         {
             var presenter = new MvcEventEditDetailsPresenter();
-            var useCaseResult = await mediator.Send(new GetEventEditDetails(GetCurrentUserName(), id, presenter));
+            var useCaseResult = await mediator.Send(new GetEventEditDetails(id, presenter));
             if (!useCaseResult.IsSuccessful)
             {
                 if (useCaseResult.ResultCategory == ResultCategory.NotFound)
