@@ -58,7 +58,7 @@ namespace Tauchbolde.Web.Controllers
         public async Task<ActionResult> Details(Guid id)
         {
             var presenter = new MvcEventDetailPresenter();
-            var result = await mediator.Send(new GetEventDetails(id, presenter, User.Identity.Name));
+            var result = await mediator.Send(new GetEventDetails(id, presenter));
             if (!result.IsSuccessful)
             {
                 return NotFound();
