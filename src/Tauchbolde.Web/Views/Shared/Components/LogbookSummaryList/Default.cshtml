@@ -18,13 +18,13 @@
 {
     <div class="media">
         <div class="media-left">
-            <a href="@Url.Action("Detail", "Logbook", new {Id = logbookEntry.Id})">
+            <a href="@Url.Action("Detail", "Logbook", new {logbookEntry.Id})">
                 @if (!string.IsNullOrWhiteSpace(logbookEntry.TeaserImageThumb))
                 {
                     <img
                         class="media-object logbook-teaser-image img-rounded"
                         style="background: url(@Url.Action("Photo", "Logbook", new {photoId = logbookEntry.TeaserImageThumb})) center center no-repeat; background-size:  cover"
-                        alt="">
+                        alt="" src="">
                 }
                 else
                 {
@@ -35,7 +35,7 @@
         <div class="media-body">
             <h4 class="media-heading">@logbookEntry.Title</h4>
             @TextFormatting.FormatText(logbookEntry.TeaserText)
-            <a href="@Url.Action("Detail", "Logbook", new {Id = logbookEntry.Id})">Weiterlesen...</a>
+            <a href="@Url.Action("Detail", "Logbook", new {logbookEntry.Id})">Weiterlesen...</a>
         </div>
     </div>
     <hr/>
