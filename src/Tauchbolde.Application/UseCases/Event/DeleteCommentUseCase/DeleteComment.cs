@@ -6,13 +6,11 @@ namespace Tauchbolde.Application.UseCases.Event.DeleteCommentUseCase
 {
     public class DeleteComment : IRequest<UseCaseResult>
     {
-        public DeleteComment(Guid commentId, Guid currentUserId)
+        public DeleteComment(Guid commentId)
         {
             CommentId = commentId;
-            CurrentUserId = currentUserId;
         }
 
         public Guid CommentId { get; }
-        public Guid CurrentUserId { get; }
     }
 }

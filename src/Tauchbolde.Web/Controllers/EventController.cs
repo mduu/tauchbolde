@@ -269,7 +269,7 @@ namespace Tauchbolde.Web.Controllers
                 return StatusCode(400, "No curren user would be found!");
             }
 
-            var result = await mediator.Send(new DeleteComment(deleteCommentId, currentUser.Id));
+            var result = await mediator.Send(new DeleteComment(deleteCommentId));
             if (!result.IsSuccessful)
             {
                 ShowErrorMessage("Fehler beim Löschen des Kommentars!");
