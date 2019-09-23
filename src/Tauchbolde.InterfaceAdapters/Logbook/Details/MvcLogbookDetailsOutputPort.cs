@@ -7,8 +7,8 @@ namespace Tauchbolde.InterfaceAdapters.Logbook.Details
 {
     public class MvcLogbookDetailsOutputPort : ILogbookDetailOutputPort
     {
-        private readonly IRelativeUrlGenerator relativeUrlGenerator;
-        private readonly ILogbookDetailsUrlGenerator detailsUrlGenerator;
+        [NotNull] private readonly IRelativeUrlGenerator relativeUrlGenerator;
+        [NotNull] private readonly ILogbookDetailsUrlGenerator detailsUrlGenerator;
         private LogbookDetailViewModel viewModel;
 
         public MvcLogbookDetailsOutputPort(
