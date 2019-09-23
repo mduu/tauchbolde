@@ -7,15 +7,13 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
 {
     public class GetEventDetails : IRequest<UseCaseResult>
     {
-        public GetEventDetails(Guid eventId, [NotNull] IEventDetailsOutputPort outputPort, string currentUserName)
+        public GetEventDetails(Guid eventId, [NotNull] IEventDetailsOutputPort outputPort)
         {
             EventId = eventId;
             OutputPort = outputPort ?? throw new ArgumentNullException(nameof(outputPort));
-            CurrentUserName = currentUserName;
         }
 
         public Guid EventId { get; }
         public IEventDetailsOutputPort OutputPort { get; }
-        public string CurrentUserName { get; }
     }
 }

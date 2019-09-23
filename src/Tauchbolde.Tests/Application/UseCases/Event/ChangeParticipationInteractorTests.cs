@@ -4,26 +4,29 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
+using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;
 
 namespace Tauchbolde.Tests.Application.UseCases.Event
 {
     public class ChangeParticipationInteractorTests
     {
-        private const string ValidUserName = "jon.doe";
         private readonly Guid validEventId = new Guid("03A09D19-4DCB-41D7-B997-9C84E9B386FE");
         private readonly Guid validParticipantId = new Guid("D9A6A368-1129-404C-9A2D-8285B7A44D6D");
-        private readonly Guid validDiverId = new Guid("EE4200E6-CAB4-488B-B84E-135782A35606");
-        private readonly IDiverRepository diverRepository = A.Fake<IDiverRepository>();
         private readonly IParticipantRepository participantRepository = A.Fake<IParticipantRepository>();
         private readonly ChangeParticipationInteractor interactor;
+        private readonly ICurrentUser currentUser = A.Fake<ICurrentUser>();
 
         public ChangeParticipationInteractorTests()
         {
-            interactor = new ChangeParticipationInteractor(diverRepository, participantRepository);
+            A.CallTo(() => currentUser.Username).Returns(DiverFactory.JohnDoeUserName);
+            A.CallTo(() => currentUser.GetCurrentDiverAsync()).ReturnsLazily(DiverFactory.CreateJohnDoe);
+            
+            interactor = new ChangeParticipationInteractor(participantRepository, currentUser);
         }
 
         [Fact]
@@ -76,7 +79,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             return new Participant
             {
                 Id = validParticipantId,
-                ParticipatingDiverId = validDiverId,
+                ParticipatingDiverId = DiverFactory.JohnDoeDiverId,
                 EventId = validEventId,
                 Status = ParticipantStatus.None,
                 CountPeople = 1,
@@ -84,8 +87,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         }
 
         private ChangeParticipation CreateValidChangeParticipationRequest() =>
-            new ChangeParticipation(ValidUserName,
-                validEventId,
+            new ChangeParticipation(validEventId,
                 ParticipantStatus.Accepted,
                 1,
                 null,

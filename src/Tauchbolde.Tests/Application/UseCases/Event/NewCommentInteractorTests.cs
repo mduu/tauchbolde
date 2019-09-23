@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
@@ -18,6 +19,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         private readonly IEventRepository eventRepository = A.Fake<IEventRepository>();
         private readonly ICommentRepository commentRepository = A.Fake<ICommentRepository>();
         private readonly NewCommentInteractor interactor;
+        private readonly ICurrentUser currentUser = A.Fake<ICurrentUser>();
 
         public NewCommentInteractorTests()
         {
@@ -28,13 +30,21 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
                         : null
                     ));
 
-            interactor = new NewCommentInteractor(eventRepository, commentRepository);
+            A.CallTo(() => currentUser.GetCurrentDiverAsync())
+                .ReturnsLazily(() => Task.FromResult(
+                    new Diver
+                    {
+                        Id = validAuthorId,
+                        Fullname = "John Doe"
+                    }));
+
+            interactor = new NewCommentInteractor(eventRepository, commentRepository, currentUser);
         }
 
         [Fact]
         public async Task Handle_Success()
         {
-            var request = new NewComment(validEventId, validAuthorId, "The answer is 42!");
+            var request = new NewComment(validEventId, "The answer is 42!");
             
             var useCaseResult = await interactor.Handle(request, CancellationToken.None);
 
@@ -47,8 +57,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         public async Task Handle_InvalidEventId()
         {
             var request = new NewComment(
-                new Guid("15D08C24-FD8F-43E8-989E-69B98E8257B0"),
-                validAuthorId, 
+                new Guid("15D08C24-FD8F-43E8-989E-69B98E8257B0"), 
                 "The answer is 42!");
             
             var useCaseResult = await interactor.Handle(request, CancellationToken.None);
@@ -62,7 +71,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         [Fact]
         public async Task Handle_ErrorWhileInserting()
         {
-            var request = new NewComment(validEventId, validAuthorId, "The answer is 42!");
+            var request = new NewComment(validEventId, "The answer is 42!");
             A.CallTo(() => commentRepository.InsertAsync(A<Comment>._))
                 .Invokes(() => throw new InvalidOperationException());
             

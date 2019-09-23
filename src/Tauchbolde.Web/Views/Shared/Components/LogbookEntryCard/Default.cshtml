@@ -49,7 +49,7 @@
     @if (!string.IsNullOrWhiteSpace(Model.TeaserImageUrl))
     {
         <a asp-controller="Logbook" asp-action="Detail" asp-route-id="@Model.LogbookEntryId">
-            <img src="@Url.Action("Photo", "Logbook", new {photoId = Model.TeaserImageUrl})"/>
+            <img src="@Url.Action("Photo", "Logbook", new {photoId = Model.TeaserImageUrl})" alt=""/>
         </a>
     }
     else

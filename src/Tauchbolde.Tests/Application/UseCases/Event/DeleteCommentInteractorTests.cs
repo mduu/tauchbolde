@@ -34,7 +34,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         public async Task Handle_Success()
         {
             // Arrange
-            var request = new DeleteComment(validCommentId, validUserId);
+            var request = new DeleteComment(validCommentId);
             
             // Act
             var result = await interactor.Handle(request, CancellationToken.None);
@@ -49,7 +49,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         public async Task Handle_NotFound()
         {
             // Arrange
-            var request = new DeleteComment(new Guid("3BE6DCBE-D46D-472D-890E-FE99700830EB"), validUserId);
+            var request = new DeleteComment(new Guid("3BE6DCBE-D46D-472D-890E-FE99700830EB"));
             
             // Act
             var result = await interactor.Handle(request, CancellationToken.None);

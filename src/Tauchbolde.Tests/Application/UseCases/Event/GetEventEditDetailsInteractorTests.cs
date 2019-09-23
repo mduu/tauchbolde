@@ -25,6 +25,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         private readonly IDiverRepository diverRepository = A.Fake<IDiverRepository>();
         private readonly IEventEditDetailsOutputPort outputPort = A.Fake<IEventEditDetailsOutputPort>();
         private readonly IClock clock = A.Fake<IClock>();
+        private readonly ICurrentUser currentUser = A.Fake<ICurrentUser>();
 
         public GetEventEditDetailsInteractorTests()
         {
@@ -51,14 +52,26 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 
             A.CallTo(() => clock.Now()).Returns(new DateTime(2019, 9, 1, 19, 0, 0));
 
-            interactor = new GetEventEditDetailsInteractor(logger, eventRepository, diverRepository, clock);
+            A.CallTo(() => currentUser.GetCurrentDiverAsync())
+                .ReturnsLazily(() => Task.FromResult(
+                    new Diver
+                    {
+                        Id = validDiverId,
+                        Fullname = "Joe Doe",
+                        User = new IdentityUser("joe.doe")
+                        {
+                            Email = "joe.doe@company.com"
+                        }
+                    }));
+
+            interactor = new GetEventEditDetailsInteractor(logger, eventRepository, clock, currentUser);
         }
 
         [Fact]
         public async Task Handle_Success()
         {
             // Arrange
-            var request = new GetEventEditDetails(validUserName, validEventId, outputPort);
+            var request = new GetEventEditDetails(validEventId, outputPort);
 
             // Act
             var result = await interactor.Handle(request, CancellationToken.None);
@@ -68,12 +81,14 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             A.CallTo(() => outputPort.Output(A<EventEditDetailsOutput>._))
                 .MustHaveHappenedOnceExactly();
         }
-        
+
         [Fact]
         public async Task Handle_InvalidDiverId_MustFail()
         {
             // Arrange
-            var request = new GetEventEditDetails("jane.doe", validEventId, outputPort);
+            A.CallTo(() => currentUser.GetCurrentDiverAsync())
+                .ReturnsLazily(() => Task.FromResult<Diver>(null));
+            var request = new GetEventEditDetails(validEventId, outputPort);
 
             // Act
             var result = await interactor.Handle(request, CancellationToken.None);
@@ -84,12 +99,12 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             A.CallTo(() => outputPort.Output(A<EventEditDetailsOutput>._))
                 .MustNotHaveHappened();
         }
-        
+
         [Fact]
         public async Task Handle_InvalidEventId_MustReturnNew()
         {
             // Arrange
-            var request = new GetEventEditDetails(validUserName, new Guid("C2B9BB52-BFB0-4B43-965C-C23B4598722B"), outputPort);
+            var request = new GetEventEditDetails(new Guid("C2B9BB52-BFB0-4B43-965C-C23B4598722B"), outputPort);
 
             // Act
             var result = await interactor.Handle(request, CancellationToken.None);
@@ -99,17 +114,19 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             A.CallTo(() => outputPort.Output(A<EventEditDetailsOutput>._))
                 .MustHaveHappenedOnceExactly();
         }
-        
+
         [Fact]
         public async Task Handle_NotOrganisatorUser_MustFail()
         {
             // Arrange
-            var request = new GetEventEditDetails("jane.doe", validEventId, outputPort);
-            A.CallTo(() => diverRepository.FindByUserNameAsync("jane.doe"))
-                .ReturnsLazily(() => Task.FromResult(new Diver
-                {
-                    Id = new Guid("F9D10AB9-A076-448A-9391-755122FC01B8")
-                }));
+            var request = new GetEventEditDetails(validEventId, outputPort);
+            A.CallTo(() => currentUser.GetCurrentDiverAsync())
+                .ReturnsLazily(() => Task.FromResult(
+                    new Diver
+                    {
+                        Id = new Guid("F9D10AB9-A076-448A-9391-755122FC01B8"),
+                        Fullname = "Jane Doe",
+                    }));
 
             // Act
             var result = await interactor.Handle(request, CancellationToken.None);

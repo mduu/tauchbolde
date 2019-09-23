@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.SharedKernel;
 
@@ -17,29 +18,29 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
     {
         [NotNull] private readonly ILogger logger;
         [NotNull] private readonly IEventRepository eventRepository;
-        [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly IParticipantRepository participantRepository;
+        [NotNull] private readonly ICurrentUser currentUser;
 
         public GetEventDetailsInteractor(
             [NotNull] ILogger<GetEventDetailsInteractor> logger,
             [NotNull] IEventRepository eventRepository,
-            [NotNull] IDiverRepository diverRepository,
-            [NotNull] IParticipantRepository participantRepository)
+            [NotNull] IParticipantRepository participantRepository,
+            [NotNull] ICurrentUser currentUser)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.eventRepository = eventRepository ?? throw new ArgumentNullException(nameof(eventRepository));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.participantRepository = participantRepository ?? throw new ArgumentNullException(nameof(participantRepository));
+            this.currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
         }
 
         public async Task<UseCaseResult> Handle([NotNull] GetEventDetails request, CancellationToken cancellationToken)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var currentDiver = await diverRepository.FindByUserNameAsync(request.CurrentUserName);
+            var currentDiver = await currentUser.GetCurrentDiverAsync();
             if (currentDiver == null)
             {
-                logger.LogError("No Diver instance found for current user [{username}]!", request.CurrentUserName);
+                logger.LogError("No Diver instance found for current user [{username}]!", currentUser.Username);
                 return UseCaseResult.Fail();
             }
 

@@ -20,7 +20,6 @@ using Tauchbolde.InterfaceAdapters.Event.Details;
 using Tauchbolde.InterfaceAdapters.Event.EditDetails;
 using Tauchbolde.InterfaceAdapters.Event.List;
 using Tauchbolde.SharedKernel;
-using Tauchbolde.SharedKernel.Extensions;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models.EventViewModels;
 
@@ -59,7 +58,7 @@ namespace Tauchbolde.Web.Controllers
         public async Task<ActionResult> Details(Guid id)
         {
             var presenter = new MvcEventDetailPresenter();
-            var result = await mediator.Send(new GetEventDetails(id, presenter, User.Identity.Name));
+            var result = await mediator.Send(new GetEventDetails(id, presenter));
             if (!result.IsSuccessful)
             {
                 return NotFound();
@@ -73,7 +72,7 @@ namespace Tauchbolde.Web.Controllers
         public async Task<ActionResult> Edit(Guid? id)
         {
             var presenter = new MvcEventEditDetailsPresenter();
-            var useCaseResult = await mediator.Send(new GetEventEditDetails(GetCurrentUserName(), id, presenter));
+            var useCaseResult = await mediator.Send(new GetEventEditDetails(id, presenter));
             if (!useCaseResult.IsSuccessful)
             {
                 if (useCaseResult.ResultCategory == ResultCategory.NotFound)
@@ -130,7 +129,6 @@ namespace Tauchbolde.Web.Controllers
             {
                 var editResult = await mediator.Send(
                     new EditEvent(
-                        GetCurrentUserName(),
                         id,
                         startDateTime,
                         endDateTime,
@@ -160,15 +158,8 @@ namespace Tauchbolde.Web.Controllers
                 return await Details(model.EventId);
             }
 
-            var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
-            if (currentUser == null)
-            {
-                return StatusCode(400, "No current user would be found!");
-            }
-
             var result = await mediator.Send(
                 new ChangeParticipation(
-                    currentUser.User.UserName,
                     model.EventId,
                     model.CurrentUserStatus,
                     model.CurrentUserCountPeople,
@@ -226,7 +217,7 @@ namespace Tauchbolde.Web.Controllers
                 return StatusCode(400, "No current user would be found!");
             }
 
-            var comment = await mediator.Send(new NewComment(eventId, currentUser.Id, newCommentText));
+            var comment = await mediator.Send(new NewComment(eventId, newCommentText));
             if (!comment.IsSuccessful)
             {
                 ShowErrorMessage(
@@ -278,7 +269,7 @@ namespace Tauchbolde.Web.Controllers
                 return StatusCode(400, "No curren user would be found!");
             }
 
-            var result = await mediator.Send(new DeleteComment(deleteCommentId, currentUser.Id));
+            var result = await mediator.Send(new DeleteComment(deleteCommentId));
             if (!result.IsSuccessful)
             {
                 ShowErrorMessage("Fehler beim Löschen des Kommentars!");

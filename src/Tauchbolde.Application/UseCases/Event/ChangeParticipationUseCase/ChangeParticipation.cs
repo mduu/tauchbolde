@@ -8,15 +8,12 @@ namespace Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase
 {
     public class ChangeParticipation : IRequest<UseCaseResult>
     {
-        public ChangeParticipation(
-            [NotNull] string username,
-            Guid eventId,
+        public ChangeParticipation(Guid eventId,
             ParticipantStatus status,
             int numberOfPeople,
             string note,
             string buddyTeamName)
         {
-            Username = username ?? throw new ArgumentNullException(nameof(username));
             EventId = eventId;
             Status = status;
             NumberOfPeople = numberOfPeople;
@@ -24,7 +21,6 @@ namespace Tauchbolde.Application.UseCases.Event.ChangeParticipationUseCase
             BuddyTeamName = buddyTeamName;
         }
 
-        [NotNull] public string Username { get; }
         public Guid EventId { get; }
         public ParticipantStatus Status { get; }
         public int NumberOfPeople { get; }

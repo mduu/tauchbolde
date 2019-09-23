@@ -90,24 +90,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             result.IsValid.Should().BeFalse();
             result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(editEvent.Location));
         }
-
-        [Fact]
-        public void Validate_EmptyCurrentUSerName_MustBeInvalid()
-        {
-            // Arrange
-            var editEvent = CreateEditEvent(currentUserName: "");
-
-            // Act
-            var result = validator.Validate(editEvent);
-
-            // Assert
-            result.IsValid.Should().BeFalse();
-            result.Errors.Should().ContainSingle(e => e.PropertyName == nameof(editEvent.CurrentUserName));
-        }
-
-        private static EditEvent CreateEditEvent(
-            string currentUserName = "john.doe",
-            DateTime? startTime = null,
+        
+        private static EditEvent CreateEditEvent(DateTime? startTime = null,
             string description = "",
             string meetingPoint = "",
             string location = "Some Place",
@@ -115,7 +99,6 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             DateTime? endTime = null,
             Guid? eventId = null) =>
             new EditEvent(
-                currentUserName,
                 eventId ?? new Guid("E68A9C75-A4D8-43D8-8052-CFD400DB52E5"),
                 startTime ?? DateTime.Today,
                 endTime,

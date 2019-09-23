@@ -10,7 +10,6 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase
         {
             RuleFor(e => e.EventId).NotEmpty();
             RuleFor(e => e.OutputPort).NotNull();
-            RuleFor(e => e.CurrentUserName).NotEmpty();
         }
     }
 }
