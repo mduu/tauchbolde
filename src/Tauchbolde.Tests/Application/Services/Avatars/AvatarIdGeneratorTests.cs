@@ -2,10 +2,10 @@
 using System.IO;
 using System.Reflection;
 using FluentAssertions;
-using Tauchbolde.Application.OldDomainServices.Avatar;
+using Tauchbolde.Application.Services.Avatars;
 using Xunit;
 
-namespace Tauchbolde.Tests.Application.OldDomainServices.Avatar
+namespace Tauchbolde.Tests.Application.Services.Avatars
 {
     public class AvatarIdGeneratorTests
     {

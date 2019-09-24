@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Tauchbolde.Application.OldDomainServices.Avatar
+namespace Tauchbolde.Application.Services.Avatars
 {
     /// <summary>
     /// Standard implementation of <see cref="IAvatarIdGenerator"/>.
@@ -13,7 +13,7 @@ namespace Tauchbolde.Application.OldDomainServices.Avatar
         private readonly IAvatarPathProvider avatarPathProvider;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:Tauchbolde.Application.OldDomainServices.Avatar.AvatarIdGenerator"/> class.
+        /// Initializes a new instance of the <see cref="T:Tauchbolde.Application.Services.Avatars.AvatarIdGenerator"/> class.
         /// </summary>
         /// <param name="avatarPathProvider">Avatar path provider.</param>
         public AvatarIdGenerator(IAvatarPathProvider avatarPathProvider)

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Tauchbolde.Application.Services;
 
-namespace Tauchbolde.Application.OldDomainServices.Avatar
+namespace Tauchbolde.Application.Services.Avatars
 {
 
     public class AvatarStore : IAvatarStore
