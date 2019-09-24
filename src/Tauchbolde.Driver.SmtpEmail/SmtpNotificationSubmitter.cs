@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Tauchbolde.Application.OldDomainServices.Notifications;
 using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Entities;
 

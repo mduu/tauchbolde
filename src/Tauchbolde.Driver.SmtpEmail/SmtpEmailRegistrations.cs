@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Tauchbolde.Application.OldDomainServices.Notifications;
 using Tauchbolde.Application.Services.Notifications;
 
 namespace Tauchbolde.Driver.SmtpEmail
