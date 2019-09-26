@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.InterfaceAdapters;
@@ -23,6 +24,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         private readonly ILogger<GetLogbookEntryDetailsInteractor> logger = A.Fake<ILogger<GetLogbookEntryDetailsInteractor>>();
         private readonly GetLogbookEntryDetailsInteractor interactor;
         private readonly MvcLogbookDetailsOutputPort outputPort;
+        private readonly ICurrentUser currentUser = A.Fake<ICurrentUser>();
 
         public GetLogbookEntryDetailsInteractorTests()
         {
@@ -46,13 +48,13 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                         : null));
 
             outputPort = new MvcLogbookDetailsOutputPort(relativeUrlGenerator, detailsUrlGenerator);
-            interactor = new GetLogbookEntryDetailsInteractor(logger, repository);
+            interactor = new GetLogbookEntryDetailsInteractor(logger, repository, currentUser);
         }
 
         [Fact]
         public async Task Handle_Success()
         {
-            var request = new GetLogbookEntryDetails(validId, outputPort, false);
+            var request = new GetLogbookEntryDetails(validId, outputPort);
 
             var result = await interactor.Handle(request, CancellationToken.None);
 
@@ -64,7 +66,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         [Fact]
         public async Task Handle_NotFound()
         {
-            var request = new GetLogbookEntryDetails(new Guid("D6401A2A-1C89-4CFD-8436-53D071B1673C"), outputPort, false);
+            var request = new GetLogbookEntryDetails(new Guid("D6401A2A-1C89-4CFD-8436-53D071B1673C"), outputPort);
 
             var result = await interactor.Handle(request, CancellationToken.None);
 

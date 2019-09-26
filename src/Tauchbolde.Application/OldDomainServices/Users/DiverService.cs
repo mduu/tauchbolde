@@ -32,22 +32,6 @@ namespace Tauchbolde.Application.OldDomainServices.Users
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
         
-        /// <inheritdoc />
-        public async Task<ICollection<Diver>> GetAllRegisteredDiversAsync()
-            => await diverRepository.GetAllDiversAsync();
-
-        /// <inheritdoc />
-        public async Task<Diver> FindByUserNameAsync(string username) => 
-            await diverRepository.FindByUserNameAsync(username);
-
-        /// <inheritdoc/>
-        public async Task<ICollection<Diver>> GetMembersAsync() 
-            => await diverRepository.GetAllTauchboldeUsersAsync();
-
-        /// <inheritdoc/>
-        public async Task<Diver> GetMemberAsync(string userName)
-            => await diverRepository.FindByUserNameAsync(userName);
-
         /// <inheritdoc/>
         public async Task<Diver> GetMemberAsync(Guid diverId)
         {

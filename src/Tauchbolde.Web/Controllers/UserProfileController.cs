@@ -9,38 +9,42 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using JetBrains.Annotations;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Avatars;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Driver.DataAccessSql;
-using Tauchbolde.Domain;
 using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Web.Controllers
 {
+    // TODO Convert these actions into proper use-case interactors and presenters
     [Route("/profil")]
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class UserProfileController : AppControllerBase
     {
-        private readonly ApplicationDbContext context;
-        private readonly IDiverService diverService;
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly IMimeMapping mimeMapping;
-        private readonly IAvatarStore avatarStore;
+        [NotNull] private readonly ApplicationDbContext context;
+        [NotNull] private readonly IDiverService diverService;
+        [NotNull] private readonly UserManager<IdentityUser> userManager;
+        [NotNull] private readonly IMimeMapping mimeMapping;
+        [NotNull] private readonly IAvatarStore avatarStore;
+        [NotNull] private readonly ICurrentUser currentUser;
 
         public UserProfileController(
-            ApplicationDbContext context,
-            IDiverService diverService,
-            UserManager<IdentityUser> userManager,
-            IMimeMapping mimeMapping,
-            IAvatarStore avatarStore)
-            : base(userManager, diverService)
+            [NotNull] ApplicationDbContext context,
+            [NotNull] IDiverService diverService,
+            [NotNull] UserManager<IdentityUser> userManager,
+            [NotNull] IMimeMapping mimeMapping,
+            [NotNull] IAvatarStore avatarStore,
+            [NotNull] ICurrentUser currentUser)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.mimeMapping = mimeMapping ?? throw new ArgumentNullException(nameof(mimeMapping));
             this.avatarStore = avatarStore ?? throw new ArgumentNullException(nameof(avatarStore));
+            this.currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
         }
 
         // GET: /profil/<id>
@@ -204,17 +208,14 @@ namespace Tauchbolde.Web.Controllers
 
             public Diver CurrentDiver { get; }
             public bool CurrentDiverIsAdmin { get; }
-            public Diver Member { get; set; }
-            public bool HasWriteAccess =>
-                Member.Id == CurrentDiver.Id || CurrentDiverIsAdmin;
-
-
+            public Diver Member { get; }
+            public bool HasWriteAccess =>  Member.Id == CurrentDiver.Id || CurrentDiverIsAdmin;
         }
 
         private async Task<MemberContext> GetMemberContextAsync(Guid diverId)
         {
-            var currentDiver = await GetDiverForCurrentUserAsync();
-            var isAdmin = await GetIsAdmin();
+            var currentDiver = await currentUser.GetCurrentDiverAsync();
+            var isAdmin = await currentUser.GetIsAdminAsync();
             var member = await diverService.GetMemberAsync(diverId);
 
             return new MemberContext(currentDiver, isAdmin, member);

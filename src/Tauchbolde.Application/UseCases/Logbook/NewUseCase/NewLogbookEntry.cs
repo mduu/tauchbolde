@@ -8,7 +8,7 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
 {
     public class NewLogbookEntry : IRequest<UseCaseResult>
     {
-        public NewLogbookEntry(Guid authorDiverId,
+        public NewLogbookEntry(
             [NotNull] string title,
             [NotNull] string teaser,
             [NotNull] string text,
@@ -28,13 +28,11 @@ namespace Tauchbolde.Application.UseCases.Logbook.NewUseCase
             TeaserImageContentType = teaserImageContentType;
             ExternalPhotoAlbumUrl = externalPhotoAlbumUrl;
             RelatedEventId = relatedEventId;
-            AuthorDiverId = authorDiverId;
         }
 
         [NotNull] public string Title { get; }
         [NotNull] public string Teaser { get; }
         [NotNull] public string Text { get; }
-        public Guid AuthorDiverId { get; }
         public bool IsFavorite { get; }
         [CanBeNull] public Stream TeaserImage { get; }
         [CanBeNull] public string TeaserImageFileName { get; }

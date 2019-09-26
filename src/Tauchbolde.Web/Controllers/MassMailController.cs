@@ -6,32 +6,31 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Web.Models.MassMail;
 using Microsoft.AspNetCore.Identity;
+using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices;
-using Tauchbolde.Application.OldDomainServices.Users;
 
 namespace Tauchbolde.Web.Controllers
 {
-
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class MassMailController : AppControllerBase
     {
         private readonly IMassMailService massMailService;
-        [NotNull] private readonly IDiverService diverService;
+        [NotNull] private readonly IDiverRepository diverRepository;
 
         public MassMailController(
             IMassMailService massMailService,
             UserManager<IdentityUser> userManager,
-            [NotNull] IDiverService diverService)
-            : base (userManager, diverService)
+            [NotNull] IDiverRepository diverRepository)
         {
             this.massMailService = massMailService ?? throw new System.ArgumentNullException(nameof(massMailService));
-            this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
+            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
 
         // GET: /MassMail/
         public async Task<IActionResult> Index()
         {
-            var tauchbolde = await diverService.GetMembersAsync();
+            // TODO Convert this to a usecase interactor and presenter
+            var tauchbolde = await diverRepository.GetAllTauchboldeUsersAsync();
 
             return base.View(new MassMailViewModel
             {

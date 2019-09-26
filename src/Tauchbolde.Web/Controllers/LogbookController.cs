@@ -5,10 +5,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Application.UseCases.Logbook.DeleteUseCase;
 using Tauchbolde.Application.UseCases.Logbook.EditUseCase;
@@ -30,25 +27,19 @@ namespace Tauchbolde.Web.Controllers
     public class LogbookController : AppControllerBase
     {
         [NotNull] private readonly IPhotoService photoService;
-        [NotNull] private readonly ILogger<LogbookController> logger;
         [NotNull] private readonly IMediator mediator;
         [NotNull] private readonly ITextFormatter textFormatter;
         private readonly IRelativeUrlGenerator relativeUrlGenerator;
         [NotNull] private readonly ILogbookDetailsUrlGenerator logbookDetailsUrlGenerator;
 
         public LogbookController(
-            [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] IPhotoService photoService,
-            [NotNull] IDiverService diverService,
-            [NotNull] ILogger<LogbookController> logger,
             [NotNull] IMediator mediator,
             [NotNull] ITextFormatter textFormatter,
             [NotNull] IRelativeUrlGenerator relativeUrlGenerator,
             [NotNull] ILogbookDetailsUrlGenerator logbookDetailsUrlGenerator)
-            : base(userManager, diverService)
         {
             this.photoService = photoService ?? throw new ArgumentNullException(nameof(photoService));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
             this.relativeUrlGenerator = relativeUrlGenerator ?? throw new ArgumentNullException(nameof(relativeUrlGenerator));
@@ -58,9 +49,8 @@ namespace Tauchbolde.Web.Controllers
         // GET /
         public async Task<IActionResult> Index()
         {
-            var allowEdit = await GetAllowEdit();
-            var presenter = new MvcListLogbookOutputPort(allowEdit, textFormatter);
-            var interactorResult = await mediator.Send(new ListAllLogbookEntries(allowEdit, presenter));
+            var presenter = new MvcListLogbookOutputPort(textFormatter);
+            var interactorResult = await mediator.Send(new ListAllLogbookEntries(presenter));
             if (!interactorResult.IsSuccessful)
             {
                 ShowErrorMessage("Fehler beim Abfragen aller Logbucheinträge!");
@@ -72,9 +62,8 @@ namespace Tauchbolde.Web.Controllers
         // GET /detail/x
         public async Task<IActionResult> Detail(Guid id)
         {
-            var allowEdit = await GetAllowEdit();
             var presenter = new MvcLogbookDetailsOutputPort(relativeUrlGenerator, logbookDetailsUrlGenerator);
-            var interactorResult = await mediator.Send(new GetLogbookEntryDetails(id, presenter, allowEdit));
+            var interactorResult = await mediator.Send(new GetLogbookEntryDetails(id, presenter));
             if (!interactorResult.IsSuccessful)
             {
                 ShowErrorMessage("Fehler beim laden der Daten des Logbucheintrages!");
@@ -99,7 +88,7 @@ namespace Tauchbolde.Web.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var presenter = new MvcLogbookEditDetailsOutputPort();
-            var interactorResult = await mediator.Send(new GetLogbookEntryDetails(id, presenter, true));
+            var interactorResult = await mediator.Send(new GetLogbookEntryDetails(id, presenter));
             if (!interactorResult.IsSuccessful)
             {
                 return NotFound();
@@ -138,16 +127,9 @@ namespace Tauchbolde.Web.Controllers
                 teaserImageContentType = model.TeaserImage.ContentType;
             }
 
-            var currentDiver = await GetDiverForCurrentUserAsync();
-            if (currentDiver == null)
-            {
-                return BadRequest();
-            }
-
             if (!model.Id.HasValue)
             {
                 await mediator.Send(new NewLogbookEntry(
-                    currentDiver.Id,
                     model.Title,
                     model.Teaser,
                     model.Text,
@@ -155,14 +137,12 @@ namespace Tauchbolde.Web.Controllers
                     teaserImageStream,
                     teaserImageFilename,
                     teaserImageContentType,
-                    model.ExternalPhotoAlbumUrl,
-                    null));
+                    model.ExternalPhotoAlbumUrl));
             }
             else
             {
                 await mediator.Send(new EditLogbookEntry(
                     model.Id.Value,
-                    currentDiver.Id,
                     model.Title,
                     model.Teaser,
                     model.Text,
@@ -242,7 +222,5 @@ namespace Tauchbolde.Web.Controllers
 
             return File(photo.Content, photo.ContentType, photo.Identifier.Filename);
         }
-
-        private async Task<bool> GetAllowEdit() => await GetTauchboldOrAdmin();
     }
 }

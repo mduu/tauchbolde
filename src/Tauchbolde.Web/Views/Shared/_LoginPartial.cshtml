@@ -1,11 +1,10 @@
 @using Microsoft.AspNetCore.Identity
-@using Tauchbolde.Application.OldDomainServices.Users
-@using Tauchbolde.Domain
+@using Tauchbolde.Application.DataGateways
 @using Tauchbolde.Domain.Entities
 @using Tauchbolde.Domain.Types
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@inject IDiverService DiverService
+@inject IDiverRepository DiverRepository
 @{
     var isAdmin = false;
     var userName = "";
@@ -18,11 +17,11 @@
         userName = UserManager.GetUserName(User);
         if (!string.IsNullOrWhiteSpace(userName))
         {
-            diver = await DiverService.FindByUserNameAsync(userName);
+            diver = await DiverRepository.FindByUserNameAsync(userName);
         }
     }
 }
-@if (SignInManager.IsSignedIn(User))
+@if (SignInManager.IsSignedIn(User) && diver != null)
 {
     <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
