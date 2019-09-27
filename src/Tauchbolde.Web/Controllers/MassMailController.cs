@@ -4,38 +4,33 @@ using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Tauchbolde.Web.Models.MassMail;
-using Microsoft.AspNetCore.Identity;
-using Tauchbolde.Application.DataGateways;
-using Tauchbolde.Application.OldDomainServices;
+using MediatR;
+using Tauchbolde.Application.UseCases.Administration;
+using Tauchbolde.InterfaceAdapters.Administration.GetMassMailDetails;
 
 namespace Tauchbolde.Web.Controllers
 {
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class MassMailController : AppControllerBase
     {
-        private readonly IMassMailService massMailService;
-        [NotNull] private readonly IDiverRepository diverRepository;
+        [NotNull] private readonly IMediator mediator;
 
-        public MassMailController(
-            IMassMailService massMailService,
-            UserManager<IdentityUser> userManager,
-            [NotNull] IDiverRepository diverRepository)
+        public MassMailController([NotNull] IMediator mediator)
         {
-            this.massMailService = massMailService ?? throw new System.ArgumentNullException(nameof(massMailService));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         // GET: /MassMail/
         public async Task<IActionResult> Index()
         {
-            // TODO Convert this to a usecase interactor and presenter
-            var tauchbolde = await diverRepository.GetAllTauchboldeUsersAsync();
-
-            return base.View(new MassMailViewModel
+            var presenter = new MvcGetMassMailDetailsPresenter();
+            var useCaseResult = await mediator.Send(new GetMassMailDetails(presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                TauchboldeEmailReceiver = massMailService.CreateReceiverString(tauchbolde)
-            });
+                ShowErrorMessage("Fehler beim ermitteln der Mitgliederdaten!");
+            }
+
+            return base.View(presenter.GetViewModel());
         }
     }
 }
