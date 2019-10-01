@@ -1,11 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using Tauchbolde.Application.OldDomainServices.Users;
-using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.Web.Core
 {
@@ -14,20 +8,11 @@ namespace Tauchbolde.Web.Core
     /// </summary>
     public abstract class AppControllerBase: Controller
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly IDiverService diverService;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Tauchbolde.Web.Core.AppControllerBase"/> class.
         /// </summary>
-        /// <param name="userManager">User manager.</param>
-        /// <param name="diverService"></param>
-        protected AppControllerBase(
-            UserManager<IdentityUser> userManager,
-            IDiverService diverService)
+        protected AppControllerBase()
         {
-            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
         }
 
         /// <summary>
@@ -56,46 +41,5 @@ namespace Tauchbolde.Web.Core
         {
              TempData["warning_message"] = message;
         }
-
-        /// <summary>
-        /// Gets the diver for the currently logged in user.
-        /// </summary>
-        /// <returns>The diver for current user.</returns>
-        [NotNull]
-        protected async Task<Diver> GetDiverForCurrentUserAsync()
-        {
-            return GetCurrentUserName() != null
-                ? await diverService.FindByUserNameAsync(User.Identity.Name)
-                : null;
-        }
-
-        protected string GetCurrentUserName()
-        {
-            return User?.Identity?.Name;
-        }
-
-        /// <summary>
-        /// Returns <c>true</c> if the <paramref name="diver"/> is an administrator;
-        /// otherwise <c>false</c> is returned.
-        /// </summary>
-        /// <returns>The is admin.</returns>
-        protected async Task<bool> GetIsAdmin()
-        {
-            var diver = await GetDiverForCurrentUserAsync();
-            return diver != null && await userManager.IsInRoleAsync(diver.User, Rolenames.Administrator);
-        }
-        
-        /// <summary>
-        /// Returns <c>true</c> if the <paramref name="diver"/> id s Tauchbold member.
-        /// </summary>
-        /// <returns><c>True</c> if the <paramref name="diver"/> id s Tauchbold member; otherwise <c>False</c> is returned.</returns>
-        protected async Task<bool> GetIsTauchbold()
-        {
-            var diver = await GetDiverForCurrentUserAsync();
-            return diver != null && await userManager.IsInRoleAsync(diver.User, Rolenames.Tauchbold);
-        }
-
-        protected async Task<bool> GetTauchboldOrAdmin()
-            => await GetIsTauchbold() || await GetIsAdmin();
     }
 }

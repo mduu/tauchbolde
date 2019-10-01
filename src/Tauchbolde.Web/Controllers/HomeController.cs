@@ -3,14 +3,14 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.Web.Models;
-using Tauchbolde.Web.Models.AboutViewModels;
 using Microsoft.AspNetCore.Identity;
-using Tauchbolde.Web.Models.HomeViewModels;
-using Tauchbolde.Web.Core;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
-using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Web.Core;
+using Tauchbolde.Web.Models;
+using Tauchbolde.Web.Models.AboutViewModels;
+using Tauchbolde.Web.Models.HomeViewModels;
+using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Driver.SmtpEmail;
 
@@ -18,26 +18,23 @@ namespace Tauchbolde.Web.Controllers
 {
     public class HomeController : AppControllerBase
     {
-        [NotNull] private readonly IDiverService diverService;
+        [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly UserManager<IdentityUser> userManager;
         [NotNull] private readonly IAppEmailSender emailSender;
         
         public HomeController(
-            [NotNull] IDiverService diverService,
+            [NotNull] IDiverRepository diverRepository,
             [NotNull] UserManager<IdentityUser> userManager,
-            [NotNull] IAppEmailSender emailSender) : base (userManager, diverService)
+            [NotNull] IAppEmailSender emailSender)
         {
-            this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
+            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
 
         [EnableCors("AllowTwitter")]
-        public IActionResult Index()
-        {
-            return View();
-        }
-        
+        public IActionResult Index() => View();
+
         [Authorize]
         [HttpGet]
         public IActionResult Logout()
@@ -52,7 +49,7 @@ namespace Tauchbolde.Web.Controllers
 
             if (User?.Identity != null && !string.IsNullOrWhiteSpace(User.Identity.Name))
             {
-                var currentDiver = await diverService.FindByUserNameAsync(User.Identity.Name);
+                var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
                 if (currentDiver != null)
                 {
                     isTauchbold = await userManager.IsInRoleAsync(currentDiver.User, Rolenames.Tauchbold);
@@ -61,7 +58,7 @@ namespace Tauchbolde.Web.Controllers
         
             var model = new AboutViewModel
             {
-                Members = await diverService.GetMembersAsync(),
+                Members = await diverRepository.GetAllTauchboldeUsersAsync(),
                 IsTauchbold = isTauchbold,
             };
 
@@ -95,8 +92,7 @@ namespace Tauchbolde.Web.Controllers
                     emailSender.SendAsync(
                         "Webmaster",
                         "marc@marcduerst.com",
-
-                         "Tauchbolde Kontaktformular",
+                        "Tauchbolde Kontaktformular",
                         model.Text,
                         model.YourEmail,
                         model.YourName);
@@ -109,15 +105,9 @@ namespace Tauchbolde.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

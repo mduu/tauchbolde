@@ -1,4 +1,4 @@
-﻿namespace Tauchbolde.Application.OldDomainServices.Avatar
+﻿namespace Tauchbolde.Application.Services.Avatars
 {
     /// <summary>
     /// Provides path information for storing and accessing avatars.

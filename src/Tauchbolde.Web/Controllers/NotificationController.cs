@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Tauchbolde.Application.OldDomainServices.Notifications;
 using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Driver.DataAccessSql;
 
@@ -11,16 +10,16 @@ namespace Tauchbolde.Web.Controllers
 {
     public class NotificationController : Controller
     {
-        private readonly ILogger logger;
+        [NotNull] private readonly ILogger logger;
         [NotNull] private readonly ApplicationDbContext context;
-        private readonly INotificationFormatter formatter;
-        private readonly INotificationSubmitter submitter;
-        private readonly INotificationSender notificationSender;
+        [NotNull] private readonly INotificationFormatter formatter;
+        [NotNull] private readonly INotificationSubmitter submitter;
+        [NotNull] private readonly INotificationSender notificationSender;
 
         public NotificationController(
             [NotNull] ApplicationDbContext context,
             [NotNull] ILoggerFactory loggerFactory,
-            [NotNull] INotificationSender sender,
+            [NotNull] INotificationSender notificationSender,
             [NotNull] INotificationFormatter formatter,
             [NotNull] INotificationSubmitter submitter)
         {
@@ -32,7 +31,7 @@ namespace Tauchbolde.Web.Controllers
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.formatter = formatter ?? throw new ArgumentNullException(nameof(formatter));
             this.submitter = submitter ?? throw new ArgumentNullException(nameof(submitter));
-            notificationSender = sender ?? throw new ArgumentNullException(nameof(sender));
+            this.notificationSender = notificationSender ?? throw new ArgumentNullException(nameof(notificationSender));
 
             logger = loggerFactory.CreateLogger<NotificationController>();
         }

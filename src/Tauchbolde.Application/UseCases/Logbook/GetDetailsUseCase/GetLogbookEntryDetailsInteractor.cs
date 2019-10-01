@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
 
@@ -15,13 +16,16 @@ namespace Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase
     {
         [NotNull] private readonly ILogger<GetLogbookEntryDetailsInteractor> logger;
         [NotNull] private readonly ILogbookEntryRepository repository;
+        [NotNull] private readonly ICurrentUser currentUser;
 
         public GetLogbookEntryDetailsInteractor(
             [NotNull] ILogger<GetLogbookEntryDetailsInteractor> logger,
-            [NotNull] ILogbookEntryRepository repository)
+            [NotNull] ILogbookEntryRepository repository,
+            [NotNull] ICurrentUser currentUser)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
         }
 
         public async Task<UseCaseResult> Handle([NotNull] GetLogbookEntryDetails request,
@@ -39,10 +43,12 @@ namespace Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase
                     nameof(GetLogbookEntryDetails.LogbookEntryId),
                     request.LogbookEntryId);
             }
+
+            var allowEdit = await currentUser.GetIsTauchboldOrAdminAsync();
             
             var output = new GetLogbookEntryDetailOutput(
                 details.Id,
-                request.AllowEdit,
+                allowEdit,
                 details.Title,
                 details.TeaserText,
                 details.Text,

@@ -1,7 +1,7 @@
 ﻿using System;
-using Tauchbolde.Application.OldDomainServices.Avatar;
+using Tauchbolde.Application.Services.Avatars;
 
-namespace Tauchbolde.Tests.Application.OldDomainServices.Avatar
+namespace Tauchbolde.Tests.Application.Services.Avatars
 {
     public class AvatarPathProviderMock : AvatarPathProviderBase
     {

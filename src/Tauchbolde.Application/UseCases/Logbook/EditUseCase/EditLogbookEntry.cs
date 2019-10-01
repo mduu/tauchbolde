@@ -2,15 +2,14 @@ using System;
 using System.IO;
 using JetBrains.Annotations;
 using MediatR;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
 {
     public class EditLogbookEntry : IRequest<UseCaseResult>
     {
-        public EditLogbookEntry(Guid logbookEntryId,
-            Guid editorDiverId,
+        public EditLogbookEntry(
+            Guid logbookEntryId,
             [NotNull] string title,
             [NotNull] string teaser,
             [NotNull] string text,
@@ -31,14 +30,12 @@ namespace Tauchbolde.Application.UseCases.Logbook.EditUseCase
             TeaserImageContentType = teaserImageContentType;
             ExternalPhotoAlbumUrl = externalPhotoAlbumUrl;
             RelatedEventId = relatedEventId;
-            EditorDiverId = editorDiverId;
         }
 
         public Guid LogbookEntryId { get; }
         [NotNull] public string Title { get; }
         [NotNull] public string Teaser { get; }
         [NotNull] public string Text { get; }
-        public Guid EditorDiverId { get; }
         public bool IsFavorite { get; }
         [CanBeNull] public Stream TeaserImage { get; }
         [CanBeNull] public string TeaserImageFileName { get; }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Tauchbolde.Application;
-using Tauchbolde.Application.OldDomainServices.Avatar;
+using Tauchbolde.Application.Services.Avatars;
 using Tauchbolde.Application.Services.PhotoStores;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Driver.ApplicationInsights;

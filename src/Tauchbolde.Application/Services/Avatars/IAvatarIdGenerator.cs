@@ -1,4 +1,4 @@
-﻿namespace Tauchbolde.Application.OldDomainServices.Avatar
+﻿namespace Tauchbolde.Application.Services.Avatars
 {
     /// <summary>
     /// Generates new Avatar-ID's.

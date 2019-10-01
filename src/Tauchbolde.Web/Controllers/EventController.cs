@@ -28,16 +28,13 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class EventController : AppControllerBase
     {
-        [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly IMediator mediator;
 
         public EventController(
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] IDiverService diverService,
             [NotNull] IMediator mediator)
-            : base(userManager, diverService)
         {
-            this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
@@ -210,13 +207,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 return RedirectToAction("Details", new {id = eventId});
             }
-
-            var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
-            if (currentUser == null)
-            {
-                return StatusCode(400, "No current user would be found!");
-            }
-
+            
             var comment = await mediator.Send(new NewComment(eventId, newCommentText));
             if (!comment.IsSuccessful)
             {
@@ -240,12 +231,6 @@ namespace Tauchbolde.Web.Controllers
                 return RedirectToAction("Details", new {id = eventId});
             }
 
-            var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
-            if (currentUser == null)
-            {
-                return StatusCode(400, "No current user would be found!");
-            }
-
             var interactorResult = await mediator.Send(new EditComment(commentId, commentText));
             if (!interactorResult.IsSuccessful)
             {
@@ -261,12 +246,6 @@ namespace Tauchbolde.Web.Controllers
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("Details", new {id = deleteEventId});
-            }
-
-            var currentUser = await diverService.FindByUserNameAsync(User.Identity.Name);
-            if (currentUser == null)
-            {
-                return StatusCode(400, "No curren user would be found!");
             }
 
             var result = await mediator.Send(new DeleteComment(deleteCommentId));

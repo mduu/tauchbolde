@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using Tauchbolde.Application.OldDomainServices.Avatar;
+using Tauchbolde.Application.Services.Avatars;
 
 namespace Tauchbolde.Web.Core
 {

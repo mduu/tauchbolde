@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
@@ -10,13 +9,11 @@ namespace Tauchbolde.InterfaceAdapters.Logbook.ListAll
     public class MvcListLogbookOutputPort : IListLogbookEntriesOutputPort
     {
         private const int TeaserLength = 250;
-        private readonly bool allowEdit;
         private readonly ITextFormatter textFormatter;
         private LogbookListViewModel viewModel;
 
-        public MvcListLogbookOutputPort(bool allowEdit, [NotNull] ITextFormatter textFormatter)
+        public MvcListLogbookOutputPort([NotNull] ITextFormatter textFormatter)
         {
-            this.allowEdit = allowEdit;
             this.textFormatter = textFormatter ?? throw new ArgumentNullException(nameof(textFormatter));
         }
         
@@ -25,7 +22,7 @@ namespace Tauchbolde.InterfaceAdapters.Logbook.ListAll
             if (output == null) throw new ArgumentNullException(nameof(output));
             
             viewModel = new LogbookListViewModel(
-                allowEdit,
+                output.AllowEdit,
                 output.LogbookItems.Select(l => new LogbookListViewModel.LogbookItemViewModel(
                     l.LogbookEntryId,
                     l.Title,

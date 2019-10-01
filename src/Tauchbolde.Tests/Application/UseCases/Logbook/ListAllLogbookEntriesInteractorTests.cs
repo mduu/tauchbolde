@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.DataGateways;
+using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
@@ -16,8 +17,9 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
     public class ListAllLogbookEntriesInteractorTests
     {
         private readonly ILogbookEntryRepository repository = A.Fake<ILogbookEntryRepository>();
-        private readonly MvcListLogbookOutputPort outputPort = new MvcListLogbookOutputPort(true, new MarkdownDigFormatter());
+        private readonly MvcListLogbookOutputPort outputPort = new MvcListLogbookOutputPort(new MarkdownDigFormatter());
         private readonly ListAllLogbookEntriesInteractor interactor;
+        private readonly ICurrentUser currentUser = A.Fake<ICurrentUser>();
 
         public ListAllLogbookEntriesInteractorTests()
         {
@@ -34,13 +36,13 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
                     new LogbookEntry { Id = new Guid("12818D43-F0BF-4762-8A7E-F1023B81FEA4") },
                 } as ICollection<LogbookEntry>));
             
-            interactor = new ListAllLogbookEntriesInteractor(repository);
+            interactor = new ListAllLogbookEntriesInteractor(repository, currentUser);
         }
 
         [Fact]
         public async Task Handle_DontIncludeUnpublished()
         {
-            var request = new ListAllLogbookEntries(false, outputPort);
+            var request = new ListAllLogbookEntries(outputPort);
             
             var result = await interactor.Handle(request, CancellationToken.None);
 
@@ -52,7 +54,9 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         [Fact]
         public async Task Handle_IncludeUnpublished()
         {
-            var request = new ListAllLogbookEntries(true, outputPort);
+            var request = new ListAllLogbookEntries(outputPort);
+            A.CallTo(() => currentUser.GetIsTauchboldOrAdminAsync())
+                .ReturnsLazily(() => Task.FromResult(true));
             
             var result = await interactor.Handle(request, CancellationToken.None);
 

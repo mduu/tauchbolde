@@ -19,7 +19,7 @@ namespace Tauchbolde.Tests.InterfaceAdapters.Logbook
             A.CallTo(() => textFormatter.GetHtmlText(A<string>._))
                 .ReturnsLazily(call => $"{(string)call.Arguments[0]}_formatted");
 
-            outputPort = new MvcListLogbookOutputPort(false, textFormatter);
+            outputPort = new MvcListLogbookOutputPort(textFormatter);
         }
 
         [Theory]
@@ -43,7 +43,8 @@ namespace Tauchbolde.Tests.InterfaceAdapters.Logbook
                         "image/1.jpg",
                         true,
                         text)
-                }));
+                },
+                true));
 
             // Assert
             var model = outputPort.GetViewModel();

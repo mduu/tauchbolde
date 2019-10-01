@@ -4,39 +4,33 @@ using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
-using Tauchbolde.Web.Models.MassMail;
-using Microsoft.AspNetCore.Identity;
-using Tauchbolde.Application.OldDomainServices;
-using Tauchbolde.Application.OldDomainServices.Users;
+using MediatR;
+using Tauchbolde.Application.UseCases.Administration;
+using Tauchbolde.InterfaceAdapters.Administration.GetMassMailDetails;
 
 namespace Tauchbolde.Web.Controllers
 {
-
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class MassMailController : AppControllerBase
     {
-        private readonly IMassMailService massMailService;
-        [NotNull] private readonly IDiverService diverService;
+        [NotNull] private readonly IMediator mediator;
 
-        public MassMailController(
-            IMassMailService massMailService,
-            UserManager<IdentityUser> userManager,
-            [NotNull] IDiverService diverService)
-            : base (userManager, diverService)
+        public MassMailController([NotNull] IMediator mediator)
         {
-            this.massMailService = massMailService ?? throw new System.ArgumentNullException(nameof(massMailService));
-            this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         // GET: /MassMail/
         public async Task<IActionResult> Index()
         {
-            var tauchbolde = await diverService.GetMembersAsync();
-
-            return base.View(new MassMailViewModel
+            var presenter = new MvcGetMassMailDetailsPresenter();
+            var useCaseResult = await mediator.Send(new GetMassMailDetails(presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                TauchboldeEmailReceiver = massMailService.CreateReceiverString(tauchbolde)
-            });
+                ShowErrorMessage("Fehler beim ermitteln der Mitgliederdaten!");
+            }
+
+            return base.View(presenter.GetViewModel());
         }
     }
 }

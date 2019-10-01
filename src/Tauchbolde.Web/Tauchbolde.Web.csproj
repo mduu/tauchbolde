@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\AboutViewModels\" />
+    <Folder Include="Models\MassMail" />
     <Folder Include="Views\UserProfile\" />
     <Folder Include="Models\UserProfileModels\" />
     <Folder Include="Core\" />

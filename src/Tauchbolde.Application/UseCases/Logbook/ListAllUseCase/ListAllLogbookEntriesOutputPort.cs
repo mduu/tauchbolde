@@ -6,12 +6,16 @@ namespace Tauchbolde.Application.UseCases.Logbook.ListAllUseCase
 {
     public class ListAllLogbookEntriesOutputPort
     {
-        public ListAllLogbookEntriesOutputPort([NotNull] IEnumerable<LogbookItem> logbookItems)
+        public ListAllLogbookEntriesOutputPort(
+            [NotNull] IEnumerable<LogbookItem> logbookItems,
+            bool allowEdit)
         {
             LogbookItems = logbookItems ?? throw new ArgumentNullException(nameof(logbookItems));
+            AllowEdit = allowEdit;
         }
 
         public IEnumerable<LogbookItem> LogbookItems { get; }
+        public bool AllowEdit { get; }
         
         public class LogbookItem
         {

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Tauchbolde.Application.OldDomainServices.Avatar
+namespace Tauchbolde.Application.Services.Avatars
 {
     /// <summary>
     /// Implements base class for <see cref="IAvatarPathProvider"/>.

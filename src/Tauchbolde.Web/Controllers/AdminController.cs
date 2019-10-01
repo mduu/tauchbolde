@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
+using JetBrains.Annotations;
+using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Driver.DataAccessSql;
-using Tauchbolde.Domain;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.SharedKernel.Extensions;
@@ -20,33 +21,33 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireAdministrator)]
     public class AdminController : AppControllerBase
     {
-        private readonly ApplicationDbContext context;
-        private readonly RoleManager<IdentityRole> roleManager;
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly IDiverService diverService;
+        [NotNull] private readonly ApplicationDbContext context;
+        [NotNull] private readonly RoleManager<IdentityRole> roleManager;
+        [NotNull] private readonly UserManager<IdentityUser> userManager;
+        [NotNull] private readonly IDiverService diverService;
+        [NotNull] private readonly IDiverRepository diverRepository;
 
-        public AdminController(ApplicationDbContext context,
-            RoleManager<IdentityRole> roleManager,
-            UserManager<IdentityUser> userManager,
-            IDiverService diverService)
-            : base(userManager, diverService)
+        public AdminController(
+            [NotNull] ApplicationDbContext context,
+            [NotNull] RoleManager<IdentityRole> roleManager,
+            [NotNull] UserManager<IdentityUser> userManager,
+            [NotNull] IDiverService diverService,
+            [NotNull] IDiverRepository diverRepository)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
+            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
 
         [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
         [HttpGet]
         public async Task<IActionResult> MemberManagement()
         {
-            var profiles = (await diverService.GetAllRegisteredDiversAsync()).ToArray();
+            var profiles = (await diverRepository.GetAllDiversAsync()).ToArray();
 
             var members = new List<MemberViewModel>();
             foreach (var member in profiles)
@@ -54,7 +55,7 @@ namespace Tauchbolde.Web.Controllers
                 members.Add(await CreateMemberViewModel(member));
             }
 
-            var allMembers = await diverService.GetMembersAsync();
+            var allMembers = await diverRepository.GetAllTauchboldeUsersAsync();
             var allUsers = userManager.Users
                 .ToArray()
                 .Where(u => allMembers.All(d => d.UserId != u.Id));
@@ -97,7 +98,7 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> EditRoles(string userName)
         {
-            var member = await diverService.GetMemberAsync(userName);
+            var member = await diverRepository.FindByUserNameAsync(userName);
             if (member == null)
             {
                 return BadRequest();
@@ -116,7 +117,7 @@ namespace Tauchbolde.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditRoles(string userName, string[] roles)
         {
-            var member = await diverService.GetMemberAsync(userName);
+            var member = await diverRepository.FindByUserNameAsync(userName);
             if (member == null)
             {
                 return BadRequest();

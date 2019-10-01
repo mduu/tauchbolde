@@ -55,7 +55,6 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
   
         private static NewLogbookEntry CreateNewLogbookEntry(string title, string teaser, string text) =>
             new NewLogbookEntry(
-                new Guid("31D4B2B7-BE14-4334-A342-110FC30B62CD"),
                 title,
                 teaser,
                 text,
