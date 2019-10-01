@@ -80,12 +80,12 @@ namespace Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase
                 new EventEditDetailsOutput(
                     evt.Id,
                     evt.Name,
-                    evt.Location,
-                    evt.MeetingPoint,
-                    evt.Description,
+                    evt.Location ?? "",
+                    evt.MeetingPoint ?? "",
+                    evt.Description ?? "",
                     evt.StartTime,
                     evt.EndTime,
-                    evt.Organisator.Fullname,
+                    evt.Organisator.Fullname ?? "",
                     evt.Organisator.User.Email,
                     evt.Organisator.AvatarId));
 
