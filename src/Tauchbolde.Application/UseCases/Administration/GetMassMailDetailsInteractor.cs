@@ -25,12 +25,13 @@ namespace Tauchbolde.Application.UseCases.Administration
 
             var members = await diverRepository.GetAllTauchboldeUsersAsync();
             var output = new GetMassMailDetailsOutput(
-                members.Select(m => new GetMassMailDetailsOutput.MailRecipient(
-                    m.Fullname,
-                    m.User.Email)));
-            
+                members.Select(m =>
+                    new GetMassMailDetailsOutput.MailRecipient(
+                        m.Fullname,
+                        m.User.Email)));
+
             request.OutputPort?.Output(output);
-            
+
             return UseCaseResult.Success();
         }
     }
