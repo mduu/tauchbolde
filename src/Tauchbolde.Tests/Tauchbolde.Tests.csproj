@@ -42,7 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain" />
     <Folder Include="Web\" />
   </ItemGroup>
 

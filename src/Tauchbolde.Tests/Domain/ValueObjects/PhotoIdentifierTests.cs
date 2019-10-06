@@ -3,7 +3,7 @@ using Tauchbolde.Domain.Types;
 using Tauchbolde.Domain.ValueObjects;
 using Xunit;
 
-namespace Tauchbolde.Tests.Application.OldDomainServices.PhotoStorage
+namespace Tauchbolde.Tests.Domain.ValueObjects
 {
     public class PhotoIdentifierTests
     {
