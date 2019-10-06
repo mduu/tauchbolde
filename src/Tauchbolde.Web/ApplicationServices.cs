@@ -2,6 +2,7 @@
 using System.IO;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -53,7 +54,6 @@ namespace Tauchbolde.Web
             services.AddSingleton<IRelativeUrlGenerator, MvcRelativeUrlGenerator>();
             services.AddSingleton<ILogbookDetailsUrlGenerator, MvcLogbookDetailsUrlGenerator>();
             services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddSingleton<IAvatarPathProvider, AvatarPathProvider>();
             services.AddTransient<ITextFormattingHelper, TextFormattingHelper>();
         }

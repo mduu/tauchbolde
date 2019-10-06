@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Tauchbolde.Driver.SmtpEmail;
 
 namespace Tauchbolde.Web.Services
@@ -7,7 +8,7 @@ namespace Tauchbolde.Web.Services
     // This class is used by the application to send Email and SMS
     // when you turn on two-factor authentication in ASP.NET Identity.
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
-    public class AuthMessageSender : IEmailSender, ISmsSender
+    public class AuthMessageSender : IEmailSender
     {
         private readonly IAppEmailSender emailSender;
 
@@ -19,7 +20,8 @@ namespace Tauchbolde.Web.Services
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {
-            await emailSender.SendAsync(email, email, subject, message);
+            var s = $"Tauchbolde Website: {subject}";
+            await emailSender.SendAsync(email, email, s, message);
         }
 
         public Task SendSmsAsync(string number, string message)
