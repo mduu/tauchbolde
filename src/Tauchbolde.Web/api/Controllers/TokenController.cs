@@ -7,7 +7,7 @@ using Tauchbolde.Web.Core.TokenHandling;
 
 namespace Tauchbolde.Web.Api.Controllers
 {
-    [Route("api/token")]
+    [Route("api/v1/token")]
     public class TokenController : Controller
     {
         private readonly ILogger logger;
