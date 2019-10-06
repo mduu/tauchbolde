@@ -15,12 +15,15 @@ using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using Tauchbolde.Web.Filters;
 using System.Data.SqlClient;
+using System.Text;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.IdentityModel.Tokens;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Driver.PhotoStorage.AzureBlobStorage;
 using Tauchbolde.Driver.SmtpEmail;
+using Tauchbolde.Web.Core.TokenHandling;
 
 namespace Tauchbolde.Web
 {
@@ -103,12 +106,23 @@ namespace Tauchbolde.Web
                 options.Cookie.Name = GlobalConstants.AuthCookieName;
             });
 
-            // External authorization
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddMicrosoftAccount(options =>
                 {
                     options.ClientId = Configuration["Authentication:Microsoft:ClientId"];
                     options.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+                })
+                .AddJwtBearer("JwtBearer", jwtBearerOptions =>
+                {                        
+                    jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
+                    {                            
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration[nameof(TokenConfiguration.TokenSecurityKey)])),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true, //validate the expiration and not before values in the token
+                        ClockSkew = TimeSpan.FromMinutes(5) //5 minute tolerance for the expiration date
+                    };
                 });
 
             services.AddAuthorization(options =>
@@ -119,7 +133,7 @@ namespace Tauchbolde.Web
                 options.AddPolicy(PolicyNames.RequireTauchboldeOrAdmin, policy =>
                     policy.RequireRole(Rolenames.Administrator, Rolenames.Tauchbold));
             });
-
+            
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("de-CH");

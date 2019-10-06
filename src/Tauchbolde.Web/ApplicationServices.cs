@@ -77,7 +77,7 @@ namespace Tauchbolde.Web
 
         private static string GetTokenSecurityKey(IConfiguration configuration)
         {
-            var tokenSecurityKey = configuration["TokenSecurityKey"];
+            var tokenSecurityKey = configuration[nameof(TokenConfiguration.TokenSecurityKey)];
 
             return string.IsNullOrWhiteSpace(tokenSecurityKey)
                 ? throw new InvalidOperationException("Not 'TokenSecurityKey' configured!")
