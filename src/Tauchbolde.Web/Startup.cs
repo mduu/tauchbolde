@@ -17,6 +17,7 @@ using Tauchbolde.Web.Filters;
 using System.Data.SqlClient;
 using System.Text;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.IdentityModel.Tokens;
 using Tauchbolde.Driver.DataAccessSql;
@@ -24,6 +25,7 @@ using Tauchbolde.Domain.Types;
 using Tauchbolde.Driver.PhotoStorage.AzureBlobStorage;
 using Tauchbolde.Driver.SmtpEmail;
 using Tauchbolde.Web.Core.TokenHandling;
+using Tauchbolde.Web.Services;
 
 namespace Tauchbolde.Web
 {
@@ -41,12 +43,14 @@ namespace Tauchbolde.Web
 
         public IConfiguration Configuration { get; }
 
+        [UsedImplicitly]
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             ConfigureServices(services);
             ApplicationServices.RegisterDevelopment(services);
         }
 
+        [UsedImplicitly]
         public void ConfigureProductionServices(IServiceCollection services)
         {
             ConfigureServices(services);
@@ -161,7 +165,8 @@ namespace Tauchbolde.Web
                     options => options.SerializerSettings.ReferenceLoopHandling =
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
-
+            
+            services.AddTransient<IEmailSender, AuthMessageSender>();
             ApplicationServices.Register(services, Configuration, hostingEnvironment);
         }
 

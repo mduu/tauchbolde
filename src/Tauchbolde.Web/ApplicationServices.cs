@@ -2,7 +2,6 @@
 using System.IO;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +16,6 @@ using Tauchbolde.Driver.SmtpEmail;
 using Tauchbolde.InterfaceAdapters;
 using Tauchbolde.InterfaceAdapters.Logbook.Details;
 using Tauchbolde.SharedKernel;
-using Tauchbolde.Web.Services;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Core.TextFormatting;
 using Tauchbolde.Web.Core.TokenHandling;
@@ -54,7 +52,6 @@ namespace Tauchbolde.Web
             services.AddSingleton<IAbsoluteUrlGenerator, MvcAbsoluteUrlGenerator>();
             services.AddSingleton<IRelativeUrlGenerator, MvcRelativeUrlGenerator>();
             services.AddSingleton<ILogbookDetailsUrlGenerator, MvcLogbookDetailsUrlGenerator>();
-            services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddSingleton<IAvatarPathProvider, AvatarPathProvider>();
             services.AddTransient<ITextFormattingHelper, TextFormattingHelper>();
             services.AddSingleton(new TokenConfiguration(GetTokenSecurityKey(configuration)));
