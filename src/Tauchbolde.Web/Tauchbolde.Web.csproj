@@ -39,7 +39,6 @@
     <ProjectReference Include="..\Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\TokenHandling" />
     <Folder Include="Models\AboutViewModels\" />
     <Folder Include="Models\MassMail" />
     <Folder Include="Views\UserProfile\" />
