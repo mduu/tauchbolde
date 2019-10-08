@@ -14,14 +14,14 @@
       <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.2" PrivateAssets="All" />
-    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc.Core" Version="4.5.1" />
-    <PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" Version="2.9.1" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.6.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" PrivateAssets="All" />
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc.Core" Version="4.7.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.DependencyCollector" Version="2.11.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.ApplicationInsights.HostingStartup" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.AzureAppServicesIntegration" Version="2.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="2.2.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.2.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.3" PrivateAssets="All" />
     <PackageReference Include="Markdig" Version="0.17.1" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
