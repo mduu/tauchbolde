@@ -26,10 +26,8 @@ namespace Tauchbolde.Web.Services
         {
             var s = $"Tauchbolde Website: {subject}";
             
-            logger.LogWarning("Email would be send: Address={email};Subject={s};Message={message}");
-            
-            // TODO Prefent sending spam
-            //await emailSender.SendAsync(email, email, s, message);
+            logger.LogWarning("Sending auth. email: Address={email};Subject={s};Message={message}");
+            await emailSender.SendAsync(email, email, s, message);
         }
 
         public Task SendSmsAsync(string number, string message)
