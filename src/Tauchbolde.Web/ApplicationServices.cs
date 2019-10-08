@@ -16,9 +16,9 @@ using Tauchbolde.Driver.SmtpEmail;
 using Tauchbolde.InterfaceAdapters;
 using Tauchbolde.InterfaceAdapters.Logbook.Details;
 using Tauchbolde.SharedKernel;
-using Tauchbolde.Web.Services;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Core.TextFormatting;
+using Tauchbolde.Web.Core.TokenHandling;
 using Tauchbolde.Web.Core.UrlGeneration;
 
 namespace Tauchbolde.Web
@@ -41,37 +41,46 @@ namespace Tauchbolde.Web
             SharedKernelRegistrations.RegisterServices(services);
             ApplicationRegistration.RegisterServices(services);
             InterfaceAdaptersRegistration.RegisterServices(services);
-            
+
             PhotoStorageRegistration.RegisterServices(services, photoStoreRoot, photoStoreType);
             ApplicationInsightsRegistration.RegisterServices(services);
             ImageSharpRegistrations.RegisterServices(services);
             SmtpEmailRegistrations.RegisterServices(services);
             DataAccessServices.RegisterServices(services);
-            
+
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IAbsoluteUrlGenerator, MvcAbsoluteUrlGenerator>();
             services.AddSingleton<IRelativeUrlGenerator, MvcRelativeUrlGenerator>();
             services.AddSingleton<ILogbookDetailsUrlGenerator, MvcLogbookDetailsUrlGenerator>();
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddSingleton<IAvatarPathProvider, AvatarPathProvider>();
             services.AddTransient<ITextFormattingHelper, TextFormattingHelper>();
+            services.AddSingleton(new TokenConfiguration(GetTokenSecurityKey(configuration)));
+            services.AddTransient<ITokenGenerator, TokenGenerator>();
         }
-        
+
         public static void RegisterDevelopment(IServiceCollection services)
         {
-            if (services == null) { throw new System.ArgumentNullException(nameof(services)); }
+            if (services == null) { throw new ArgumentNullException(nameof(services)); }
 
             ApplicationRegistration.RegisterDevelopment(services);
         }
 
         public static void RegisterProduction(IServiceCollection services)
         {
-            if (services == null) { throw new System.ArgumentNullException(nameof(services)); }
+            if (services == null) { throw new ArgumentNullException(nameof(services)); }
 
             SmtpEmailRegistrations.RegisterServices(services);
         }
-        
+
+        private static string GetTokenSecurityKey(IConfiguration configuration)
+        {
+            var tokenSecurityKey = configuration[nameof(TokenConfiguration.TokenSecurityKey)];
+
+            return string.IsNullOrWhiteSpace(tokenSecurityKey)
+                ? throw new InvalidOperationException("Not 'TokenSecurityKey' configured!")
+                : tokenSecurityKey;
+        }
+
         private static string GetPhotoStoreRoot(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             var photoStoreRoot = configuration["PhotoStoreRoot"];
@@ -82,7 +91,7 @@ namespace Tauchbolde.Web
 
             return photoStoreRoot;
         }
-        
+
         private static PhotoStoreType GetPhotoStoreType(IConfiguration configuration)
         {
             var photoStoreType = PhotoStoreType.FileSystem;

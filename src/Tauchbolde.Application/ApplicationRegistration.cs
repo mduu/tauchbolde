@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Tauchbolde.Application.OldDomainServices;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Avatars;
@@ -30,6 +29,9 @@ namespace Tauchbolde.Application
             services.AddScoped<ICurrentUser, CurrentUser>();
             services.AddSingleton<IMimeMapping, MimeMapping>();
             
+            services.AddSingleton<IAvatarIdGenerator, AvatarIdGenerator>();
+            services.AddSingleton<IAvatarStore, AvatarStore>();
+
             services.AddScoped<INotificationPublisher, NotificationPublisher>();
             services.AddTransient<INotificationSender, NotificationSender>();
             services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
@@ -52,10 +54,6 @@ namespace Tauchbolde.Application
             // TODO The goal is to remove all these old "domain services"
             
             services.AddTransient<IDiverService, DiversService>();
-            services.AddTransient<IMassMailService, MassMailService>();
-            
-            services.AddSingleton<IAvatarIdGenerator, AvatarIdGenerator>();
-            services.AddSingleton<IAvatarStore, AvatarStore>();
         }
     }
 }

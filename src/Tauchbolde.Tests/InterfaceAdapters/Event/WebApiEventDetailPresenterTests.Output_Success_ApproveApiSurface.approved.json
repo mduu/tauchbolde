@@ -1,0 +1,37 @@
+﻿{
+    "title": "The Title",
+    "description": "The description",
+    "location": "The Location",
+    "meetingPoint": "The MeetingPoint",
+    "organisator": "John Doe",
+    "allowEdit": true,
+    "canceled": false,
+    "deleted": false,
+    "startTime": "2019-10-05T19:00:00.0000000",
+    "endTime": "2019-10-05T22:00:00.0000000",
+    "participants": [
+        {
+            "name": "Name",
+            "email": "Email",
+            "note": "The Note",
+            "status": "Accepted",
+            "avatarId": "AvatarId",
+            "buddyTeamName": "Team 1",
+            "countPeople": 1
+        }
+    ],
+    "comments": [
+        {
+            "commentId": "93f4fad3-425c-4447-89de-aeb25e862e02",
+            "text": "The comment text",
+            "authorId": "4f969046-7899-4fbe-8c54-1482c2bf24d0",
+            "authorEmail": "john.doe@company.com",
+            "authorName": "John Doe",
+            "authorAvatarId": "avatarId",
+            "createdTime": "2019-10-03T12:42:00.0000000",
+            "modifiedTime": "2019-10-04T13:42:00.0000000",
+            "allowEdit": true,
+            "allowDelete": true
+        }
+    ]
+}
