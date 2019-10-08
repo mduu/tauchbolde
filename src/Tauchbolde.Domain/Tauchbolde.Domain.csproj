@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="8.4.0" />
+        <PackageReference Include="FluentValidation" Version="8.5.0" />
         <PackageReference Include="FluentValidator" Version="2.0.4" />
         <PackageReference Include="MediatR" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
