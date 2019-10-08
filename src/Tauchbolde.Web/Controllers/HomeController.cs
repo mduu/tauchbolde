@@ -65,7 +65,6 @@ namespace Tauchbolde.Web.Controllers
            return View(model);
         }
 
-        [ValidateAntiForgeryToken]
         public IActionResult Contact()
         {
             var rand = new Random();
@@ -79,6 +78,7 @@ namespace Tauchbolde.Web.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Contact(ContactViewModel model)
         {
             if (ModelState.IsValid)
