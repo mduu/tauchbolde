@@ -65,6 +65,7 @@ namespace Tauchbolde.Web.Controllers
            return View(model);
         }
 
+        [ValidateAntiForgeryToken]
         public IActionResult Contact()
         {
             var rand = new Random();
