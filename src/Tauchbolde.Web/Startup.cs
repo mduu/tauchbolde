@@ -166,7 +166,7 @@ namespace Tauchbolde.Web
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
             
-            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<IEmailSender, IdentityMessageSender>();
             ApplicationServices.Register(services, Configuration, hostingEnvironment);
         }
 

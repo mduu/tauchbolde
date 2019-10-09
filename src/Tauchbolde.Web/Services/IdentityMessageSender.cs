@@ -11,15 +11,15 @@ namespace Tauchbolde.Web.Services
     // This class is used by the application to send Email and SMS
     // when you turn on two-factor authentication in ASP.NET Identity.
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
-    public class AuthMessageSender : IEmailSender
+    public class IdentityMessageSender : IEmailSender
     {
         [NotNull] private readonly IAppEmailSender emailSender;
         [NotNull] private readonly ILogger logger;
         [NotNull] private readonly ITelemetryService telemetryService;
 
-        public AuthMessageSender(
+        public IdentityMessageSender(
             [NotNull] IAppEmailSender emailSender,
-            [NotNull] ILogger<AuthMessageSender> logger,
+            [NotNull] ILogger<IdentityMessageSender> logger,
             [NotNull] ITelemetryService telemetryService)
         {
             this.emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
