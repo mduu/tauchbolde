@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
+using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Driver.SmtpEmail;
 
 namespace Tauchbolde.Web.Services
@@ -11,22 +13,29 @@ namespace Tauchbolde.Web.Services
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender
     {
-        private readonly IAppEmailSender emailSender;
-        private readonly ILogger logger;
+        [NotNull] private readonly IAppEmailSender emailSender;
+        [NotNull] private readonly ILogger logger;
+        [NotNull] private readonly ITelemetryService telemetryService;
 
         public AuthMessageSender(
-            IAppEmailSender emailSender,
-            ILogger<AuthMessageSender> logger)
+            [NotNull] IAppEmailSender emailSender,
+            [NotNull] ILogger<AuthMessageSender> logger,
+            [NotNull] ITelemetryService telemetryService)
         {
             this.emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
         }
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {
             var s = $"Tauchbolde Website: {subject}";
             
+            telemetryService.TrackEvent(
+                TelemetryEventNames.IdentityMailSent,
+                new { address = email, subject});
             logger.LogWarning("Sending auth. email: Address={email};Subject={s};Message={message}");
+            
             await emailSender.SendAsync(email, email, s, message);
         }
 
