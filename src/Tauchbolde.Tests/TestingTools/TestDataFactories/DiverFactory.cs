@@ -31,7 +31,8 @@ namespace Tauchbolde.Tests.TestingTools.TestDataFactories
                 {
                     Email = JohnDoeEmail
                 },
-                AvatarId = JohnDoeAvatarId
+                AvatarId = JohnDoeAvatarId,
+                MemberSince = new DateTime(2007, 7, 1)
             };
 
         internal static Diver CreateJaneDoe() =>
@@ -43,7 +44,8 @@ namespace Tauchbolde.Tests.TestingTools.TestDataFactories
                 {
                     Email = JaneDoeEmail
                 },
-                AvatarId = JaneDoeAvatarId
+                AvatarId = JaneDoeAvatarId,
+                MemberSince = new DateTime(2007, 8, 1)
             };
 
         internal static IEnumerable<Diver> GetTauchbolde() =>
