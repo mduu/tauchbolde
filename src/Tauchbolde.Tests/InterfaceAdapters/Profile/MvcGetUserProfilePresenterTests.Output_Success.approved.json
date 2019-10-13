@@ -1,0 +1,27 @@
+﻿{
+    "AllowEdit": true,
+    "UserId": "7023bedd-179f-4d8c-ae4b-9038b6c6bf3e",
+    "Roles": [
+        "member",
+        "admin"
+    ],
+    "Email": "john.doe@company.com",
+    "EmailUrl": "mailto:john.doe@company.com",
+    "AvatarId": "john.doe-1.jpg",
+    "Realname": "John Doe",
+    "Firstname": "John",
+    "Lastname": "Doe",
+    "MemberSince": "01.07.2007",
+    "Slogan": "My Slogan",
+    "Education": "My Education",
+    "Experience": "My Experience",
+    "MobilePhone": "+41 777 66 55",
+    "MobilePhoneUrl": "tel:+41 777 66 55",
+    "WebsiteUrl": "https://tauchbolde.ch",
+    "TwitterHandle": "@johndoe",
+    "TwitterUrl": "https://twitter.com/johndoe",
+    "FacebookId": "johndoe1",
+    "FacebookUrl": "https://facebook.com/johndoe1",
+    "SkypeId": "john.doe",
+    "SkypeUrl": "skype:john.doe"
+}
