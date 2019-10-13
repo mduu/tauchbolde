@@ -8,7 +8,8 @@ namespace Tauchbolde.SharedKernel
 {
     public class UseCaseResult
     {
-        public UseCaseResult([CanBeNull] IEnumerable<ValidationFailure> errors = null,
+        public UseCaseResult(
+            [CanBeNull] IEnumerable<ValidationFailure> errors = null,
             ResultCategory? resultCategory = null)
         {
             Errors = errors ?? Enumerable.Empty<ValidationFailure>();
@@ -23,8 +24,9 @@ namespace Tauchbolde.SharedKernel
         public static UseCaseResult Success() => new UseCaseResult();
 
         [NotNull]
-        public static UseCaseResult Fail(IEnumerable<ValidationFailure> errors = null,
-            ResultCategory? resultCategory = null)
+        public static UseCaseResult Fail(
+            IEnumerable<ValidationFailure> errors = null,
+            ResultCategory resultCategory = ResultCategory.GeneralFailure)
             => new UseCaseResult(errors, resultCategory);
 
         [NotNull]
