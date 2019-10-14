@@ -10,12 +10,16 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using JetBrains.Annotations;
+using MediatR;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Avatars;
 using Tauchbolde.Application.Services.Core;
+using Tauchbolde.Application.UseCases.Profile;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.InterfaceAdapters.Profile;
+using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Web.Controllers
 {
@@ -24,6 +28,7 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
     public class UserProfileController : AppControllerBase
     {
+        [NotNull] private readonly IMediator mediator;
         [NotNull] private readonly ApplicationDbContext context;
         [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly UserManager<IdentityUser> userManager;
@@ -32,6 +37,7 @@ namespace Tauchbolde.Web.Controllers
         [NotNull] private readonly ICurrentUser currentUser;
 
         public UserProfileController(
+            [NotNull] IMediator mediator,
             [NotNull] ApplicationDbContext context,
             [NotNull] IDiverService diverService,
             [NotNull] UserManager<IdentityUser> userManager,
@@ -39,6 +45,7 @@ namespace Tauchbolde.Web.Controllers
             [NotNull] IAvatarStore avatarStore,
             [NotNull] ICurrentUser currentUser)
         {
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
@@ -52,18 +59,16 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(Guid id)
         {
-            var memberContext = await GetMemberContextAsync(id);
-            if (memberContext.CurrentDiver == null && memberContext.Member == null)
+            var presenter = new MvcGetUserProfilePresenter();
+            var useCaseResult = await mediator.Send(new GetUserProfile(id, presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                return StatusCode(400);
+                return useCaseResult.ResultCategory == ResultCategory.NotFound
+                    ? NotFound()
+                    : StatusCode(500);
             }
-
-            return View(new ReadProfileModel
-            {
-                AllowEdit = memberContext.CurrentDiver != null && (memberContext.Member.Id == memberContext.CurrentDiver.Id || memberContext.CurrentDiverIsAdmin),
-                Profile = memberContext.Member,
-                Roles = await userManager.GetRolesAsync(memberContext.Member.User),
-            });
+            
+            return View(presenter.GetViewModel());
         }
 
         // GET: /profil/edit

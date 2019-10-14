@@ -1,7 +1,6 @@
-﻿@using Tauchbolde.SharedKernel.Extensions
-@model Tauchbolde.Web.Models.UserProfileModels.ReadProfileModel
+﻿@model Tauchbolde.InterfaceAdapters.Profile.MvcUserProfileViewModel
 @{
-    ViewBag.Title = "Profil von " + Model.Profile.Realname;
+    ViewBag.Title = $"Profil von {Model.Realname}";
     Layout = "_Layout";
 }
 <h2>
@@ -16,58 +15,58 @@
                 <label class="col-sm-3 control-label">Profilbild</label>
                 <div class="col-sm-9">
                     <!--suppress XmlUnboundNsPrefix -->
-                    <vc:avatar diver-email="@Model.Profile.User.Email" avatar-id="@Model.Profile.AvatarId" avatar-size="Medium" />
+                    <vc:avatar diver-email="@Model.Email" avatar-id="@Model.AvatarId" avatar-size="Medium" />
                     @if(Model.AllowEdit)
                     {
-                        <a class="btn btn-default btn-sm" asp-action="EditAvatar" asp-route-id="@Model.Profile.Id">Bild ändern ...</a>
+                        <a class="btn btn-default btn-sm" asp-action="EditAvatar" asp-route-id="@Model.UserId">Bild ändern ...</a>
                     }
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.Realname"></label>
+                <label class="col-sm-3 control-label" asp-for="@Model.Realname"></label>
                 <div class="col-sm-9">
-                    <p class="form-control-static">@Model.Profile.Realname</p>
+                    <p class="form-control-static">@Model.Realname</p>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.Firstname"></label>
+                <label class="col-sm-3 control-label" asp-for="@Model.Firstname"></label>
                 <div class="col-sm-9">
-                    <p class="form-control-static">@Model.Profile.Firstname</p>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.Lastname"></label>
-                <div class="col-sm-9">
-                    <p class="form-control-static">@Model.Profile.Lastname</p>
+                    <p class="form-control-static">@Model.Firstname</p>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.MemberSince"></label>
+                <label class="col-sm-3 control-label" asp-for="@Model.Lastname"></label>
                 <div class="col-sm-9">
-                    <p class="form-control-static">@Model.Profile.MemberSince.ToStringSwissDate()</p>
+                    <p class="form-control-static">@Model.Lastname</p>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.Slogan"></label>
+                <label class="col-sm-3 control-label" asp-for="@Model.MemberSince"></label>
                 <div class="col-sm-9">
-                    <p class="form-control-static" style="max-width: 300px">@Model.Profile.Slogan</p>
+                    <p class="form-control-static">@Model.MemberSince</p>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.Education"></label>
+                <label class="col-sm-3 control-label" asp-for="@Model.Slogan"></label>
                 <div class="col-sm-9">
-                    <p class="form-control-static" style="max-width: 300px">@Model.Profile.Education</p>
+                    <p class="form-control-static" style="max-width: 300px">@Model.Slogan</p>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-3 control-label" asp-for="Profile.Experience"></label>
+                <label class="col-sm-3 control-label" asp-for="@Model.Education"></label>
                 <div class="col-sm-9">
-                    <p class="form-control-static">@Model.Profile.Experience</p>
+                    <p class="form-control-static" style="max-width: 300px">@Model.Education</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label" asp-for="@Model.Experience"></label>
+                <div class="col-sm-9">
+                    <p class="form-control-static">@Model.Experience</p>
                 </div>
             </div>
 
@@ -87,85 +86,85 @@
     <div class="col-md-6">
         <fieldset>
             <legend>Kommunikation </legend>
-            @if (!string.IsNullOrWhiteSpace(Model.Profile.User.Email))
+            @if (!string.IsNullOrWhiteSpace(Model.Email))
             {
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" asp-for="Profile.User.Email"></label>
+                    <label class="col-sm-3 control-label" asp-for="Email"></label>
                     <div class="col-sm-9">
                         <p class="form-control-static">
-                            <a href="mailto:@Model.Profile.User.Email" title="Email an @Model.Profile.Realname senden">
+                            <a href="@Model.EmailUrl" title="Email an @Model.Realname senden">
                                 <span class="glyphicon glyphicon-envelope"></span>
-                                @Model.Profile.User.Email
+                                @Model.Email
                             </a>
                         </p>
                     </div>
                 </div>
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Profile.MobilePhone))
+            @if (!string.IsNullOrWhiteSpace(Model.MobilePhone))
             {
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" asp-for="Profile.MobilePhone"></label>
+                    <label class="col-sm-3 control-label" asp-for="@Model.MobilePhone"></label>
                     <div class="col-sm-9">
                         <p class="form-control-static">
-                            <a href="tel:@Model.Profile.MobilePhone" title="@(Model.Profile.Realname) anrufen">
+                            <a href="@Model.MobilePhoneUrl" title="@(Model.Realname) anrufen">
                                 <span class="glyphicon glyphicon-facetime-video"></span>
-                                @Model.Profile.MobilePhone
+                                @Model.MobilePhone
                             </a>
                         </p>
                     </div>
                 </div>
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Profile.WebsiteUrl))
+            @if (!string.IsNullOrWhiteSpace(Model.WebsiteUrl))
             {
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" asp-for="Profile.WebsiteUrl"></label>
+                    <label class="col-sm-3 control-label" asp-for="@Model.WebsiteUrl"></label>
                     <div class="col-sm-9">
                         <p class="form-control-static">
-                            <a href="@Model.Profile.WebsiteUrl" target="_blank" title="Webseite von @Model.Profile.Realname aufrufen">
+                            <a href="@Model.WebsiteUrl" target="_blank" title="Webseite von @Model.Realname aufrufen">
                                 <span class="glyphicon glyphicon-globe"></span>
-                                @Model.Profile.WebsiteUrl
+                                @Model.WebsiteUrl
                             </a>
                         </p>
                     </div>
                 </div>
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Profile.GetTwitterUrl()))
+            @if (!string.IsNullOrWhiteSpace(Model.TwitterHandle))
             {
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" asp-for="Profile.TwitterHandle"></label>
+                    <label class="col-sm-3 control-label" asp-for="@Model.TwitterHandle"></label>
                     <div class="col-sm-9">
                         <p class="form-control-static">
-                            <a href="@Model.Profile.GetTwitterUrl()" target="_blank" title="Twitter-Profil von @Model.Profile.Realname">
+                            <a href="@Model.TwitterUrl" target="_blank" title="Twitter-Profil von @Model.Realname">
                                 <span class="glyphicon glyphicon-globe"></span>
-                                @Model.Profile.GetTwitterUrl()
+                                @Model.TwitterUrl
                             </a>
                         </p>
                     </div>
                 </div>
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Profile.GetFacebookeUrl()))
+            @if (!string.IsNullOrWhiteSpace(Model.FacebookId))
             {
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" asp-for="Profile.FacebookId"></label>
+                    <label class="col-sm-3 control-label" asp-for="@Model.FacebookId"></label>
                     <div class="col-sm-9">
                         <p class="form-control-static">
-                            <a href="@Model.Profile.GetFacebookeUrl()" target="_blank" title="Facebook-Profil von @Model.Profile.Realname">
+                            <a href="@Model.FacebookUrl" target="_blank" title="Facebook-Profil von @Model.Realname">
                                 <span class="glyphicon glyphicon-globe"></span>
-                                @Model.Profile.GetFacebookeUrl()
+                                @Model.FacebookUrl
                             </a>
                         </p>
                     </div>
                 </div>
             }
-            @if (!string.IsNullOrWhiteSpace(Model.Profile.SkypeId))
+            @if (!string.IsNullOrWhiteSpace(Model.SkypeId))
             {
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" asp-for="Profile.SkypeId"></label>
+                    <label class="col-sm-3 control-label" asp-for="@Model.SkypeId"></label>
                     <div class="col-sm-9">
                         <p class="form-control-static">
-                            <a href="@Model.Profile.GetSkypeUrl()" title="Mit Skype @(Model.Profile.Realname) anrufen">
+                            <a href="@Model.SkypeUrl" title="Mit Skype @(Model.Realname) anrufen">
                                 <span class="glyphicon glyphicon-facetime-video"></span>
-                                @Model.Profile.SkypeId
+                                @Model.SkypeId
                             </a>
                         </p>
                     </div>
@@ -176,7 +175,7 @@
     <div class="col-xs-12">
     @if (Model.AllowEdit)
     {
-        <a class="btn btn-primary" title="Profil bearbeiten" asp-action="edit" asp-route-id="@Model.Profile.Id">Bearbeiten</a>
+        <a class="btn btn-primary" title="Profil bearbeiten" asp-action="edit" asp-route-id="@Model.UserId">Bearbeiten</a>
     }
     </div>
 </form>

@@ -80,6 +80,7 @@ namespace Tauchbolde.Domain.Entities
         
         public virtual ICollection<LogbookEntry> EditorAuthorOfLogbookEntries { get; set; }
 
+        [Obsolete]
         public string GetTwitterUrl()
         {
             if (string.IsNullOrWhiteSpace(TwitterHandle)) { return ""; }
@@ -94,11 +95,13 @@ namespace Tauchbolde.Domain.Entities
             return $"https://twitter.com/{twitterUrl}";
         }
 
+        [Obsolete]
         public string GetFacebookeUrl() => 
             !string.IsNullOrWhiteSpace(FacebookId) 
                 ? new Uri($"https://facebook.com/{FacebookId}" ).AbsoluteUri 
                 : "";
 
+        [Obsolete]
         public string GetSkypeUrl() =>
             !string.IsNullOrWhiteSpace(SkypeId) 
                 ? new Uri($"skype:{SkypeId}" ).AbsoluteUri
