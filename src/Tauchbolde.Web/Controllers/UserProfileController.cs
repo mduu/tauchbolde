@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using JetBrains.Annotations;
 using MediatR;
-using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Avatars;
