@@ -14,7 +14,7 @@ namespace Tauchbolde.Application.UseCases.Profile
             string realname,
             string firstname,
             string lastname,
-            DateTime memberSince,
+            DateTime? memberSince,
             string slogan,
             string education,
             string experience,
@@ -51,7 +51,7 @@ namespace Tauchbolde.Application.UseCases.Profile
         public string Realname { get; }
         public string Firstname { get; }
         public string Lastname { get; }
-        public DateTime MemberSince { get; }
+        public DateTime? MemberSince { get; }
         public string Slogan { get; }
         public string Education { get; }
         public string Experience { get; }

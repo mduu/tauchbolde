@@ -60,7 +60,7 @@ namespace Tauchbolde.Application.UseCases.Profile
                 diver.Realname,
                 diver.Firstname,
                 diver.Lastname,
-                diver.MemberSince ?? throw new InvalidOperationException("Member does not have a 'MemberSince' date!''"),
+                diver.MemberSince,
                 diver.Slogan,
                 diver.Education,
                 diver.Experience,
