@@ -48,7 +48,7 @@ namespace Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase
                 return UseCaseResult.Fail();
             }
             
-            var allowEdit = currentUserDiver?.Id == diver.Id || await currentUser.GetIsAdminAsync();
+            var allowEdit = currentUserDiver.Id == diver.Id || await currentUser.GetIsAdminAsync();
             var roles = await userManager.GetRolesAsync(diver.User);
             
             request.OutputPort?.Output(new GetUserProfileOutput(
