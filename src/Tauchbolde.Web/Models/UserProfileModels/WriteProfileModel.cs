@@ -1,5 +1,4 @@
-﻿using Tauchbolde.Domain;
-using Tauchbolde.Domain.Entities;
+﻿using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Web.Models.UserProfileModels
 {
