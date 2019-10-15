@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Web.Models.UserProfileModels;
-using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Web.Core;
 using System.Linq;
 using System.Collections.Generic;
@@ -31,7 +30,6 @@ namespace Tauchbolde.Web.Controllers
         [NotNull] private readonly IMediator mediator;
         [NotNull] private readonly ApplicationDbContext context;
         [NotNull] private readonly IDiverService diverService;
-        [NotNull] private readonly UserManager<IdentityUser> userManager;
         [NotNull] private readonly IMimeMapping mimeMapping;
         [NotNull] private readonly IAvatarStore avatarStore;
         [NotNull] private readonly ICurrentUser currentUser;
@@ -40,7 +38,6 @@ namespace Tauchbolde.Web.Controllers
             [NotNull] IMediator mediator,
             [NotNull] ApplicationDbContext context,
             [NotNull] IDiverService diverService,
-            [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] IMimeMapping mimeMapping,
             [NotNull] IAvatarStore avatarStore,
             [NotNull] ICurrentUser currentUser)
@@ -48,7 +45,6 @@ namespace Tauchbolde.Web.Controllers
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
-            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.mimeMapping = mimeMapping ?? throw new ArgumentNullException(nameof(mimeMapping));
             this.avatarStore = avatarStore ?? throw new ArgumentNullException(nameof(avatarStore));
             this.currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
