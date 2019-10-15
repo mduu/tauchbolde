@@ -15,6 +15,7 @@ using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Avatars;
 using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.UseCases.Profile;
+using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.InterfaceAdapters.Profile;

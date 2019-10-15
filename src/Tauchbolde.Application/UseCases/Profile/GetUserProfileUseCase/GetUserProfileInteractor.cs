@@ -9,7 +9,7 @@ using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Core;
 using Tauchbolde.SharedKernel;
 
-namespace Tauchbolde.Application.UseCases.Profile
+namespace Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase
 {
     [UsedImplicitly]
     internal class GetUserProfileInteractor : IRequestHandler<GetUserProfile, UseCaseResult>

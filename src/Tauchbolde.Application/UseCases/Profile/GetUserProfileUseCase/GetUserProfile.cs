@@ -2,7 +2,7 @@ using System;
 using MediatR;
 using Tauchbolde.SharedKernel;
 
-namespace Tauchbolde.Application.UseCases.Profile
+namespace Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase
 {
     public class GetUserProfile : IRequest<UseCaseResult>
     {

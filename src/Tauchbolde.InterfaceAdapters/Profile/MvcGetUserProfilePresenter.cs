@@ -2,6 +2,7 @@ using System;
 using JetBrains.Annotations;
 using Tauchbolde.Application.Core;
 using Tauchbolde.Application.UseCases.Profile;
+using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
 using Tauchbolde.InterfaceAdapters.UrlBuilders;
 using Tauchbolde.SharedKernel.Extensions;
 

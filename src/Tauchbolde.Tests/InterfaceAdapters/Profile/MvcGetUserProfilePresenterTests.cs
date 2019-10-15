@@ -4,6 +4,7 @@ using ApprovalTests.Reporters;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Tauchbolde.Application.UseCases.Profile;
+using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
 using Tauchbolde.InterfaceAdapters.Profile;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;
