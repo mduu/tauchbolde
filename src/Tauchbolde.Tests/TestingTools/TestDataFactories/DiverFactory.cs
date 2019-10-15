@@ -26,13 +26,23 @@ namespace Tauchbolde.Tests.TestingTools.TestDataFactories
             new Diver
             {
                 Id = JohnDoeDiverId,
-                Fullname = "John Doe",
+                Fullname = JohnDoeFullname,
+                Firstname = JohnDoeFirstName,
+                Lastname = JohnDoeLastName,
                 User = new IdentityUser(JohnDoeUserName)
                 {
                     Email = JohnDoeEmail
                 },
                 AvatarId = JohnDoeAvatarId,
-                MemberSince = new DateTime(2007, 7, 1)
+                MemberSince = new DateTime(2007, 7, 1),
+                Slogan = "John's Slogan",
+                Experience = ">200 Dives",
+                Education = "PADI Rescue Diver",
+                MobilePhone = "+41 444 55 66",
+                WebsiteUrl = "https://doe.com",
+                TwitterHandle = "johndoe",
+                FacebookId = "johndoe",
+                SkypeId = "johnAtSkype",
             };
 
         internal static Diver CreateJaneDoe() =>

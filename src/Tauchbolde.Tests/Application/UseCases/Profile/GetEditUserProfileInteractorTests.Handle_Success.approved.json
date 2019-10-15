@@ -1,0 +1,14 @@
+﻿{
+    "UserId": "7023bedd-179f-4d8c-ae4b-9038b6c6bf3e",
+    "Fullname": "John Doe",
+    "Firstname": "John",
+    "Lastname": "Doe",
+    "Slogan": "John's Slogan",
+    "Education": "PADI Rescue Diver",
+    "Experience": ">200 Dives",
+    "MobilePhone": "+41 444 55 66",
+    "WebsiteUrl": "https://doe.com",
+    "TwitterHandle": "johndoe",
+    "FacebookId": "johndoe",
+    "SkypeId": "johnAtSkype"
+}
