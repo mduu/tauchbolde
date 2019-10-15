@@ -7,6 +7,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.UseCases.Administration;
+using Tauchbolde.Application.UseCases.Administration.GetMessMailUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;

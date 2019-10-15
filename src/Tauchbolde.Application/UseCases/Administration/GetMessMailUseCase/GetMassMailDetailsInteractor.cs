@@ -7,7 +7,7 @@ using MediatR;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.SharedKernel;
 
-namespace Tauchbolde.Application.UseCases.Administration
+namespace Tauchbolde.Application.UseCases.Administration.GetMessMailUseCase
 {
     [UsedImplicitly]
     internal class GetMassMailDetailsInteractor : IRequestHandler<GetMassMailDetails, UseCaseResult>
