@@ -77,7 +77,6 @@ namespace Tauchbolde.Domain.Entities
         public virtual ICollection<Comment> Comments { get; set; }
 
         public virtual ICollection<LogbookEntry> OriginalAuthorOfLogbookEntries { get; set; }
-        
         public virtual ICollection<LogbookEntry> EditorAuthorOfLogbookEntries { get; set; }
 
         [Obsolete]
@@ -99,12 +98,6 @@ namespace Tauchbolde.Domain.Entities
         public string GetFacebookeUrl() => 
             !string.IsNullOrWhiteSpace(FacebookId) 
                 ? new Uri($"https://facebook.com/{FacebookId}" ).AbsoluteUri 
-                : "";
-
-        [Obsolete]
-        public string GetSkypeUrl() =>
-            !string.IsNullOrWhiteSpace(SkypeId) 
-                ? new Uri($"skype:{SkypeId}" ).AbsoluteUri
                 : "";
     }
 }
