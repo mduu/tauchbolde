@@ -43,7 +43,8 @@ namespace Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase
 
             request.OutputPort?.Output(
                 new GetEditUserProfileOutput(
-                    request.UserId,
+                    diver.Id,
+                    diver.User.UserName,
                     diver.Fullname,
                     diver.Firstname,
                     diver.Lastname,

@@ -1,12 +1,13 @@
 using System;
+using MediatR;
+using Tauchbolde.SharedKernel;
 
-namespace Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase
+namespace Tauchbolde.Application.UseCases.Profile.EditUserProfileUseCase
 {
-    public class GetEditUserProfileOutput
+    public class EditUserProfile : IRequest<UseCaseResult>
     {
-        public GetEditUserProfileOutput(
+        public EditUserProfile(
             Guid userId,
-            string username,
             string fullname,
             string firstname,
             string lastname,
@@ -20,7 +21,6 @@ namespace Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase
             string skypeId)
         {
             UserId = userId;
-            Username = username;
             Fullname = fullname;
             Firstname = firstname;
             Lastname = lastname;
@@ -35,7 +35,6 @@ namespace Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase
         }
         
         public Guid UserId { get; }
-        public string Username { get; }
         public string Fullname { get; }
         public string Firstname { get; }
         public string Lastname { get; }

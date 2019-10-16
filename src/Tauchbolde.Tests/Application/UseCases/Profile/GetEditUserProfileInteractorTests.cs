@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase;
+using Tauchbolde.SharedKernel;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;
 
@@ -47,7 +48,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Profile
                 .Invokes(call => recordedOutput = (GetEditUserProfileOutput) call.Arguments[0]);
 
             // Act
-            var result = await interactor.Handle(CreateRequest(), CancellationToken.None);
+            var result = await interactor.Handle(CreateRequest(DiverFactory.JohnDoeDiverId), CancellationToken.None);
 
             // Assert
             result.IsSuccessful.Should().BeTrue();
@@ -56,7 +57,32 @@ namespace Tauchbolde.Tests.Application.UseCases.Profile
             Approvals.VerifyJson(JsonConvert.SerializeObject(recordedOutput));
         }
 
-        private GetEditUserProfile CreateRequest() =>
-            new GetEditUserProfile(DiverFactory.JohnDoeDiverId, outputPort);
+        [Fact]
+        public async Task Handle_InvalidDiver_MustReturnNotFound()
+        {
+            // Arrange
+            
+            // Act
+            var result = await interactor.Handle(CreateRequest(DiverFactory.JaneDoeDiverId), CancellationToken.None);
+
+            // Assert
+            result.IsSuccessful.Should().BeFalse();
+            result.ResultCategory.Should().Be(ResultCategory.NotFound);
+            A.CallTo(() => outputPort.Output(A<GetEditUserProfileOutput>._))
+                .MustNotHaveHappened();
+        }
+
+        [Fact]
+        public void Handle_NullRequest_MustThrow()
+        {
+            // Act
+            // ReSharper disable once AssignNullToNotNullAttribute
+            Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+        }
+
+        private GetEditUserProfile CreateRequest(Guid diverId) => new GetEditUserProfile(diverId, outputPort);
     }
 }

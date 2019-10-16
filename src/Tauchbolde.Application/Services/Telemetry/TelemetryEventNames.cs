@@ -15,5 +15,6 @@ namespace Tauchbolde.Application.Services.Telemetry
         public const string LogbookEntryUnpublished = nameof(LogbookEntryUnpublished);
         public const string LogbookEntryDeleted = nameof(LogbookEntryDeleted);
         public const string IdentityMailSent = nameof(IdentityMailSent);
+        public const string UserProfileEdited = nameof(UserProfileEdited);
     }
 }
