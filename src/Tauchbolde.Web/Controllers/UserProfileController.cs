@@ -19,6 +19,7 @@ using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.InterfaceAdapters.Profile;
+using Tauchbolde.InterfaceAdapters.Profile.GetUserProfile;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Web.Controllers

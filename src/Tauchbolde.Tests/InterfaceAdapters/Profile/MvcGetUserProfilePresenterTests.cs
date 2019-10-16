@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Tauchbolde.Application.UseCases.Profile;
 using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
 using Tauchbolde.InterfaceAdapters.Profile;
+using Tauchbolde.InterfaceAdapters.Profile.GetUserProfile;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;
 

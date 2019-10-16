@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Tauchbolde.InterfaceAdapters.Profile
+namespace Tauchbolde.InterfaceAdapters.Profile.GetUserProfile
 {
     public class MvcUserProfileViewModel
     {
