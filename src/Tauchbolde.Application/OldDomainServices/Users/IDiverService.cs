@@ -8,7 +8,6 @@ namespace Tauchbolde.Application.OldDomainServices.Users
     public interface IDiverService
     {
         Task<Diver> GetMemberAsync(Guid diverId);
-        Task UpdateUserProfileAsync(Diver profile);
         Task UpdateRolesAsync(Diver member, ICollection<string> roles);
         Task<string> AddMembersAsync(string userName, string firstname, string lastname);
     }
