@@ -9,7 +9,7 @@ using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Core;
 using Tauchbolde.SharedKernel;
 
-namespace Tauchbolde.Application.UseCases.Profile
+namespace Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase
 {
     [UsedImplicitly]
     internal class GetUserProfileInteractor : IRequestHandler<GetUserProfile, UseCaseResult>
@@ -48,7 +48,7 @@ namespace Tauchbolde.Application.UseCases.Profile
                 return UseCaseResult.Fail();
             }
             
-            var allowEdit = currentUserDiver?.Id == diver.Id || await currentUser.GetIsAdminAsync();
+            var allowEdit = currentUserDiver.Id == diver.Id || await currentUser.GetIsAdminAsync();
             var roles = await userManager.GetRolesAsync(diver.User);
             
             request.OutputPort?.Output(new GetUserProfileOutput(

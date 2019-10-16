@@ -4,6 +4,7 @@ using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.Web.Models.EventViewModels
 {
+    // TODO Check why this is still needed
     public class ChangeParticipantViewModel
     {
         [Required]

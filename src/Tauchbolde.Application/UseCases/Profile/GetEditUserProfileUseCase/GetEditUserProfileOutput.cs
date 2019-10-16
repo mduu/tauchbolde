@@ -1,20 +1,15 @@
 using System;
-using System.Collections.Generic;
 
-namespace Tauchbolde.Application.UseCases.Profile
+namespace Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase
 {
-    public class GetUserProfileOutput
+    public class GetEditUserProfileOutput
     {
-        public GetUserProfileOutput(
-            bool allowEdit,
+        public GetEditUserProfileOutput(
             Guid userId,
-            IEnumerable<string> roles,
-            string email,
-            string avatarId,
-            string realname,
+            string username,
+            string fullname,
             string firstname,
             string lastname,
-            DateTime? memberSince,
             string slogan,
             string education,
             string experience,
@@ -24,15 +19,11 @@ namespace Tauchbolde.Application.UseCases.Profile
             string facebookId,
             string skypeId)
         {
-            AllowEdit = allowEdit;
             UserId = userId;
-            Roles = roles;
-            Email = email;
-            AvatarId = avatarId;
-            Realname = realname;
+            Username = username;
+            Fullname = fullname;
             Firstname = firstname;
             Lastname = lastname;
-            MemberSince = memberSince;
             Slogan = slogan;
             Education = education;
             Experience = experience;
@@ -42,16 +33,12 @@ namespace Tauchbolde.Application.UseCases.Profile
             FacebookId = facebookId;
             SkypeId = skypeId;
         }
-
-        public bool AllowEdit { get; }
+        
         public Guid UserId { get; }
-        public IEnumerable<string> Roles { get; }
-        public string Email { get; }
-        public string AvatarId { get; }
-        public string Realname { get; }
+        public string Username { get; }
+        public string Fullname { get; }
         public string Firstname { get; }
         public string Lastname { get; }
-        public DateTime? MemberSince { get; }
         public string Slogan { get; }
         public string Education { get; }
         public string Experience { get; }

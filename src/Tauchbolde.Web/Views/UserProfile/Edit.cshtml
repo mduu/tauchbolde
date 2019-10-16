@@ -1,16 +1,16 @@
-﻿@model Tauchbolde.Web.Models.UserProfileModels.WriteProfileModel
+﻿@model Tauchbolde.InterfaceAdapters.Profile.GetEditUserProfile.MvcEditUserProfileViewModel
 @{
-    ViewBag.Title = "Profil von " + Model.Profile.Realname + "bearbeiten";
+    ViewBag.Title = $"Profil von {Model.Fullname} bearbeiten";
     Layout = "_Layout";
 }
 <h3>
     <small>Benutzerprofil bearbeiten</small><br />
-    @Model.Profile.Realname
+    @Model.Fullname
 </h3>
 
 <form asp-action="Edit" role="form" class="form-horizontal">
-    <input type="hidden" asp-for="Profile.Id" />
-    <input type="hidden" asp-for="Profile.User.UserName" />
+    <input type="hidden" asp-for="UserId" />
+    <input type="hidden" asp-for="Username" />
     
     <div class="col-xs-12">
         @Html.ValidationSummary()
@@ -20,39 +20,39 @@
         <fieldset>
             <legend>Informationen</legend>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.Fullname"></label>
+                <label class="col-sm-4 control-label" asp-for="Fullname"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Profile.Fullname" class="form-control" required />
+                    <input asp-for="Fullname" class="form-control" required />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.Firstname"></label>
+                <label class="col-sm-4 control-label" asp-for="Firstname"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Profile.Firstname" class="form-control" required />
+                    <input asp-for="Firstname" class="form-control" required />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.Lastname"></label>
+                <label class="col-sm-4 control-label" asp-for="Lastname"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Profile.Lastname" class="form-control" required />
+                    <input asp-for="Lastname" class="form-control" required />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.Slogan"></label>
+                <label class="col-sm-4 control-label" asp-for="Slogan"></label>
                 <div class="col-sm-8">
-                    <textarea asp-for="Profile.Slogan" class="form-control" rows="2"></textarea>
+                    <textarea asp-for="Slogan" class="form-control" rows="2"></textarea>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.Education"></label>
+                <label class="col-sm-4 control-label" asp-for="Education"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Profile.Education" class="form-control" />
+                    <input asp-for="Education" class="form-control" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.Experience"></label>
+                <label class="col-sm-4 control-label" asp-for="Experience"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Profile.Experience" class="form-control" />
+                    <input asp-for="Experience" class="form-control" />
                 </div>
             </div>
         </fieldset>
@@ -61,33 +61,33 @@
         <fieldset>
             <legend>Komunikation</legend>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.MobilePhone"></label>
+                <label class="col-sm-4 control-label" asp-for="MobilePhone"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Profile.MobilePhone" class="form-control" />
+                    <input asp-for="MobilePhone" class="form-control" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.WebsiteUrl"></label>
+                <label class="col-sm-4 control-label" asp-for="WebsiteUrl"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Profile.WebsiteUrl" class="form-control" />
+                    <input asp-for="WebsiteUrl" class="form-control" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.TwitterHandle"></label>
+                <label class="col-sm-4 control-label" asp-for="TwitterHandle"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Profile.TwitterHandle" class="form-control" />
+                    <input asp-for="TwitterHandle" class="form-control" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.FacebookId"></label>
+                <label class="col-sm-4 control-label" asp-for="FacebookId"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Profile.FacebookId" class="form-control" />
+                    <input asp-for="FacebookId" class="form-control" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-4 control-label" asp-for="Profile.SkypeId"></label>
+                <label class="col-sm-4 control-label" asp-for="SkypeId"></label>
                 <div class="col-sm-8">
-                    <input asp-for="Profile.SkypeId" class="form-control" />
+                    <input asp-for="SkypeId" class="form-control" />
                 </div>
             </div>
         </fieldset>

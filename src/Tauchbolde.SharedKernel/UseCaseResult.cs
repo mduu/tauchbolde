@@ -32,6 +32,9 @@ namespace Tauchbolde.SharedKernel
         [NotNull]
         public static UseCaseResult NotFound(IEnumerable<ValidationFailure> errors = null)
             => new UseCaseResult(errors, ResultCategory.NotFound);
+        
+        [NotNull]
+        public static UseCaseResult AccessDenied() => new UseCaseResult(resultCategory: ResultCategory.AccessDenied);
 
         [NotNull]
         public static UseCaseResult ValidationFailed(IEnumerable<ValidationFailure> errors = null)

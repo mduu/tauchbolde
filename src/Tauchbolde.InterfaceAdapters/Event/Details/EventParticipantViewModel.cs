@@ -1,4 +1,3 @@
-using System;
 using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.InterfaceAdapters.Event.Details

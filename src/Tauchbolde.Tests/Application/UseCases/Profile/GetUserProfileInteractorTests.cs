@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.UseCases.Profile;
+using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;

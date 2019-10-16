@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Web.Models.UserProfileModels;
-using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Web.Core;
 using System.Linq;
 using System.Collections.Generic;
@@ -15,10 +14,13 @@ using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Avatars;
 using Tauchbolde.Application.Services.Core;
-using Tauchbolde.Application.UseCases.Profile;
+using Tauchbolde.Application.UseCases.Profile.EditUserProfileUseCase;
+using Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase;
+using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.InterfaceAdapters.Profile;
+using Tauchbolde.InterfaceAdapters.Profile.GetEditUserProfile;
+using Tauchbolde.InterfaceAdapters.Profile.GetUserProfile;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Web.Controllers
@@ -31,7 +33,6 @@ namespace Tauchbolde.Web.Controllers
         [NotNull] private readonly IMediator mediator;
         [NotNull] private readonly ApplicationDbContext context;
         [NotNull] private readonly IDiverService diverService;
-        [NotNull] private readonly UserManager<IdentityUser> userManager;
         [NotNull] private readonly IMimeMapping mimeMapping;
         [NotNull] private readonly IAvatarStore avatarStore;
         [NotNull] private readonly ICurrentUser currentUser;
@@ -40,7 +41,6 @@ namespace Tauchbolde.Web.Controllers
             [NotNull] IMediator mediator,
             [NotNull] ApplicationDbContext context,
             [NotNull] IDiverService diverService,
-            [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] IMimeMapping mimeMapping,
             [NotNull] IAvatarStore avatarStore,
             [NotNull] ICurrentUser currentUser)
@@ -48,7 +48,6 @@ namespace Tauchbolde.Web.Controllers
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
-            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.mimeMapping = mimeMapping ?? throw new ArgumentNullException(nameof(mimeMapping));
             this.avatarStore = avatarStore ?? throw new ArgumentNullException(nameof(avatarStore));
             this.currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
@@ -76,21 +75,16 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var memberContext = await GetMemberContextAsync(id);
-            if (memberContext.CurrentDiver == null && memberContext.Member == null)
+            var presenter = new MvcEditUserProfile();
+            var useCaseResult = await mediator.Send(new GetEditUserProfile(id, presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                return StatusCode(400);
+                return useCaseResult.ResultCategory == ResultCategory.NotFound 
+                    ? NotFound()
+                    : StatusCode(500);
             }
 
-            if (!memberContext.HasWriteAccess)
-            {
-                return Forbid();
-            }
-
-            return base.View(new WriteProfileModel
-            {
-                Profile = memberContext.Member,
-            });
+            return base.View(presenter.GetViewModel());
         }
         
         // GET: /avatar/marc_3.jpg
@@ -112,23 +106,43 @@ namespace Tauchbolde.Web.Controllers
         // GET: /profil/edit
         [Route("edit/{id}")]
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, WriteProfileModel model)
+        public async Task<IActionResult> Edit(Guid id, MvcEditUserProfileViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await diverService.UpdateUserProfileAsync(model.Profile);
-                await context.SaveChangesAsync();
-
-                ShowSuccessMessage("Profil wurde gespeichert.");
-                return RedirectToAction("Index", new { id = model.Profile.Id });
+                return View(model);
             }
+            
+            var useCaseResult = await mediator.Send(new EditUserProfile(
+                model.UserId,
+                model.Fullname,
+                model.Firstname,
+                model.Lastname,
+                model.Slogan,
+                model.Education,
+                model.Experience,
+                model.MobilePhone,
+                model.WebsiteUrl,
+                model.TwitterHandle,
+                model.FacebookId,
+                model.SkypeId));
 
-            ShowErrorMessage("Fehler beim Speichern aufgetreten!");
-
-            return View(new WriteProfileModel
+            if (!useCaseResult.IsSuccessful)
             {
-                Profile = model.Profile,
-            });
+                var errorMsg = new Dictionary<ResultCategory, string>
+                {
+                    {ResultCategory.AccessDenied, "Sie haben keine Berechtigung diese Benutzerdaten zu ändern!"},
+                    {ResultCategory.NotFound, "Zu bearbeitende Benutzerdaten nicht gefunden!"},
+                    {ResultCategory.GeneralFailure, "Ein Fehler beim Speichern der Benutzerdaten ist aufgetreten!"},
+                };
+
+                ShowErrorMessage(errorMsg[useCaseResult.ResultCategory]);
+                return View(model);
+            }
+                
+            ShowSuccessMessage("Profil wurde gespeichert.");
+            return RedirectToAction("Index", new { id = model.UserId });
+
         }
 
         [Route("editavatar/{id}")]
