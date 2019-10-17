@@ -165,7 +165,7 @@ namespace Tauchbolde.Web.Controllers
                 return Forbid();
             }
 
-            return base.View(new WriteProfileModel
+            return View(new WriteProfileModel
             {
                 Profile = memberContext.Member,
             });
