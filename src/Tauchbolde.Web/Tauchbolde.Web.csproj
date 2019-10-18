@@ -41,7 +41,6 @@
   <ItemGroup>
     <Folder Include="Models\AboutViewModels\" />
     <Folder Include="Views\UserProfile\" />
-    <Folder Include="Models\UserProfileModels\" />
     <Folder Include="Core\" />
     <Folder Include="Data\" />
     <Folder Include="Views\Admin\" />
