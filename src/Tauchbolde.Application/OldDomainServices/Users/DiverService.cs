@@ -41,32 +41,6 @@ namespace Tauchbolde.Application.OldDomainServices.Users
         }
 
         /// <inheritdoc/>
-        public async Task UpdateUserProfileAsync(Diver profile)
-        {
-            if (profile == null) { throw new ArgumentNullException(nameof(profile)); }
-
-            var diver = await diverRepository.FindByUserNameAsync(profile.User.UserName);
-            if (diver == null)
-            {
-                throw new InvalidOperationException("Profile (Diver) nicht gefunden!");
-            }
-
-            diver.Fullname = profile.Fullname;
-            diver.Firstname = profile.Firstname;
-            diver.Lastname = profile.Lastname;
-            diver.Education = profile.Education;
-            diver.Experience = profile.Experience;
-            diver.Slogan = profile.Slogan;
-            diver.WebsiteUrl = profile.WebsiteUrl;
-            diver.TwitterHandle = profile.TwitterHandle;
-            diver.FacebookId = profile.FacebookId;
-            diver.SkypeId = profile.SkypeId;
-            diver.MobilePhone = profile.MobilePhone;
-
-            await diverRepository.UpdateAsync(diver);
-        }
-
-        /// <inheritdoc/>
         public async Task UpdateRolesAsync(Diver member, ICollection<string> roles)
         {
             if (member == null) { throw new ArgumentNullException(nameof(member)); }

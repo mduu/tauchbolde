@@ -12,7 +12,7 @@ using Tauchbolde.SharedKernel;
 namespace Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase
 {
     [UsedImplicitly]
-    public class GetEditUserProfileInteractor : IRequestHandler<GetEditUserProfile, UseCaseResult>
+    internal class GetEditUserProfileInteractor : IRequestHandler<GetEditUserProfile, UseCaseResult>
     {
         [NotNull] private readonly ILogger<GetEditUserProfileInteractor> logger;
         [NotNull] private readonly IDiverRepository diverRepository;

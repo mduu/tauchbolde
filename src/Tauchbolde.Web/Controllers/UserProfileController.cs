@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Tauchbolde.Web.Models.UserProfileModels;
 using Tauchbolde.Web.Core;
 using System.Linq;
 using System.Collections.Generic;
@@ -15,10 +14,12 @@ using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Avatars;
 using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.UseCases.Profile.EditUserProfileUseCase;
+using Tauchbolde.Application.UseCases.Profile.GetEditAvatarUseCase;
 using Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase;
 using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.InterfaceAdapters.Profile.GetEditAvatar;
 using Tauchbolde.InterfaceAdapters.Profile.GetEditUserProfile;
 using Tauchbolde.InterfaceAdapters.Profile.GetUserProfile;
 using Tauchbolde.SharedKernel;
@@ -149,26 +150,22 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> EditAvatar(Guid id)
         {
-            if (id == Guid.Empty)
+            var presenter = new MvcGetEditAvatarPresenter();
+            var useCaseResult = await mediator.Send(new GetEditAvatar(id, presenter));
+            if (useCaseResult.IsSuccessful)
             {
-                return BadRequest();
+                return View(presenter.GetViewModel());
             }
-
-            var memberContext = await GetMemberContextAsync(id);
-            if (memberContext.CurrentDiver == null && memberContext.Member == null)
+            
+            var map = new Dictionary<ResultCategory, Func<IActionResult>>
             {
-                return StatusCode(400);
-            }
+                { ResultCategory.NotFound, NotFound },
+                { ResultCategory.AccessDenied, Forbid },
+                { ResultCategory.GeneralFailure, () => StatusCode(500) },
+            };
 
-            if (!memberContext.HasWriteAccess)
-            {
-                return Forbid();
-            }
+            return map[useCaseResult.ResultCategory]();
 
-            return base.View(new WriteProfileModel
-            {
-                Profile = memberContext.Member,
-            });
         }
 
         [Route("editavatar/{id}")]

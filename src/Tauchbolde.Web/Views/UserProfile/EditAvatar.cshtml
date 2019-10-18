@@ -1,7 +1,6 @@
-﻿@using Tauchbolde.Application.Services.Avatars
-@model Tauchbolde.Web.Models.UserProfileModels.WriteProfileModel
+﻿@model Tauchbolde.InterfaceAdapters.Profile.GetEditAvatar.MvcGetEditAvatarViewModel
 @{
-    ViewBag.Title = "Profil von " + Model.Profile.Realname + "bearbeiten";
+    ViewBag.Title = "Profil von " + Model.Realname + "bearbeiten";
     Layout = "_Layout";
 }
 
@@ -28,20 +27,20 @@
         }
 
     #img-upload {
-        width: @(AvatarConstants.SizeMd)px;
-        height: @(AvatarConstants.SizeMd)px;
+        width: @(Model.AvatarSizeMd)px;
+        height: @(Model.AvatarSizeMd)px;
     }
 
     #img-upload-small {
         margin-left: 30px;
-        width: @(AvatarConstants.SizeSm)px;
-        height: @(AvatarConstants.SizeSm)px;
+        width: @(Model.AvatarSizeSm)px;
+        height: @(Model.AvatarSizeSm)px;
     }
 </style>
 
 <h3>
     <small>Profilbild ändern</small><br />
-    @Model.Profile.Realname
+    @Model.Realname
 </h3>
 
 <form class="form" asp-antiforgery="true" asp-action="UploadAvatar" method="post" enctype="multipart/form-data">
