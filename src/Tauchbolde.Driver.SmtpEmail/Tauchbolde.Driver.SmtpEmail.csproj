@@ -9,8 +9,6 @@
     <ItemGroup>
         <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
         </Reference>
-        <Reference Include="MimeKit, Version=2.1.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814">
-        </Reference>
     </ItemGroup>
 
     <ItemGroup>
