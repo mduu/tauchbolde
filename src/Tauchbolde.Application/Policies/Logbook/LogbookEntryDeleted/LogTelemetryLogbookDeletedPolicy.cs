@@ -18,9 +18,11 @@ namespace Tauchbolde.Application.Policies.Logbook.LogbookEntryDeleted
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
         }
         
+#pragma warning disable 1998
         public async Task Handle(LogbookEntryDeletedEvent notification, CancellationToken cancellationToken)
         {
             telemetryService.TrackEvent(TelemetryEventNames.LogbookEntryDeleted, notification);
         }
+#pragma warning restore 1998
     }
 }

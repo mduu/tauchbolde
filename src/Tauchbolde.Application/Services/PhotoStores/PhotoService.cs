@@ -124,6 +124,7 @@ namespace Tauchbolde.Application.Services.PhotoStores
             return photoIdentifier;
         }
 
+#pragma warning disable 1998
         private async Task<Stream> GeneratedThumbnailAsync(
             [NotNull] Stream photoData,
             PhotoCategory photoCategory,
@@ -143,4 +144,5 @@ namespace Tauchbolde.Application.Services.PhotoStores
             return thumbnailData;
         }
     }
+#pragma warning restore 1998
 }

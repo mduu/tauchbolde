@@ -56,6 +56,7 @@ namespace Tauchbolde.Driver.PhotoStorage.FileSystemStore
         }
 
         /// <inheritdoc />
+#pragma warning disable 1998
         public async Task RemovePhotoAsync(PhotoIdentifier photoIdentifier)
         {
             if (photoIdentifier == null) throw new ArgumentNullException(nameof(photoIdentifier));
@@ -82,6 +83,7 @@ namespace Tauchbolde.Driver.PhotoStorage.FileSystemStore
                 logger.LogError($"Error deleting photo file [{filePath}] from disk!", ex, photoIdentifier);
             }
         }
+#pragma warning restore 1998
 
         /// <inheritdoc />
         public async Task<Photo> GetPhotoAsync(PhotoIdentifier photoIdentifier)
