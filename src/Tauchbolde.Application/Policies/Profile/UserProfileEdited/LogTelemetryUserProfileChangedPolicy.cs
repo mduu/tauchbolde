@@ -9,7 +9,7 @@ using Tauchbolde.Domain.Events.Diver;
 namespace Tauchbolde.Application.Policies.Profile.UserProfileEdited
 {
     [UsedImplicitly]
-    public class LogTelemetryUserProfileChangedPolicy : INotificationHandler<UserProfileEditedEvent>
+    internal class LogTelemetryUserProfileChangedPolicy : INotificationHandler<UserProfileEditedEvent>
     {
         [NotNull] private readonly ITelemetryService telemetryService;
 

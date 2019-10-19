@@ -9,7 +9,7 @@ using Tauchbolde.Domain.Events.Diver;
 namespace Tauchbolde.Application.Policies.Profile.AvatarChanged
 {
     [UsedImplicitly]
-    public class LogTelemetryAvatarChangedPolicy : INotificationHandler<UserProfileEditedEvent>
+    internal class LogTelemetryAvatarChangedPolicy : INotificationHandler<UserProfileEditedEvent>
     {
         [NotNull] private readonly ITelemetryService telemetryService;
 
