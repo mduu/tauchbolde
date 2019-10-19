@@ -31,14 +31,6 @@ namespace Tauchbolde.Application.OldDomainServices.Users
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
         }
-        
-        /// <inheritdoc/>
-        public async Task<Diver> GetMemberAsync(Guid diverId)
-        {
-            if (diverId == Guid.Empty) { throw new ArgumentException("Guid.Empty now allowed!", nameof(diverId)); }
-        
-            return await diverRepository.FindByIdAsync(diverId);            
-        }
 
         /// <inheritdoc/>
         public async Task UpdateRolesAsync(Diver member, ICollection<string> roles)
