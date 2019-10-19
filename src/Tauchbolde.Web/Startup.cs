@@ -165,7 +165,8 @@ namespace Tauchbolde.Web
                     options => options.SerializerSettings.ReferenceLoopHandling =
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
-            
+
+            services.AddApplicationInsightsTelemetry();
             services.AddTransient<IEmailSender, IdentityMessageSender>();
             ApplicationServices.Register(services, Configuration, hostingEnvironment);
         }

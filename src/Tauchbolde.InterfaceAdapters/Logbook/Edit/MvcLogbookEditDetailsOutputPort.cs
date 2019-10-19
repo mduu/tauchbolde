@@ -8,7 +8,7 @@ namespace Tauchbolde.InterfaceAdapters.Logbook.Edit
     {
         private LogbookEditViewModel viewModel;
 
-        public async void Output(GetLogbookEntryDetailOutput interactorOutput)
+        public void Output(GetLogbookEntryDetailOutput interactorOutput)
         {
             if (interactorOutput == null) throw new ArgumentNullException(nameof(interactorOutput));
             

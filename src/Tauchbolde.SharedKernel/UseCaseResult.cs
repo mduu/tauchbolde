@@ -65,7 +65,7 @@ namespace Tauchbolde.SharedKernel
             new UseCaseResult<TPayload>(payload: payload);
 
         [NotNull]
-        public new static UseCaseResult<TPayload> Fail(IEnumerable<ValidationFailure> errors = null,
+        public static UseCaseResult<TPayload> Fail(IEnumerable<ValidationFailure> errors = null,
             ResultCategory? resultCategory = null)
             => new UseCaseResult<TPayload>(errors, resultCategory: resultCategory);
 

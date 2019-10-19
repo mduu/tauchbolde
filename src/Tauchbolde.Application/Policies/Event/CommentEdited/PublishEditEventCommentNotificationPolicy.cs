@@ -7,6 +7,7 @@ using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.Domain.Types;
+using Tauchbolde.SharedKernel.Extensions;
 
 namespace Tauchbolde.Application.Policies.Event.CommentEdited
 {
@@ -41,8 +42,9 @@ namespace Tauchbolde.Application.Policies.Event.CommentEdited
             var recipients = await recipientsBuilder.GetAllTauchboldeButDeclinedParticipantsAsync(
                 author.Id, 
                 notification.EventId);
+            var startEndTimeAsString = evt.StartTime.FormatTimeRange(evt.EndTime);
             var message =
-                $"Neuer Kommentar von '{author?.Realname}' für Event '{evt?.Name}' ({evt?.StartEndTimeAsString}): {comment?.Text}";
+                $"Neuer Kommentar von '{author.Realname}' für Event '{evt.Name}' ({startEndTimeAsString}): {comment?.Text}";
 
             await notificationPublisher.PublishAsync(
                 NotificationType.Commented,
