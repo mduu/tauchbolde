@@ -20,7 +20,6 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         private readonly ILogger<EditEventInteractor> logger = A.Fake<ILogger<EditEventInteractor>>();
         private readonly EditEventInteractor interactor;
         private readonly Guid validEventId = new Guid("74FC068A-2A97-48C1-AD40-07DAB50F56E8");
-        private readonly string validUserName = "john.doe";
         private readonly Guid validOrganizatorId = new Guid("C2E349C7-E2FF-4E39-97A4-21486AF0F067");
 
         public EditEventInteractorTests()

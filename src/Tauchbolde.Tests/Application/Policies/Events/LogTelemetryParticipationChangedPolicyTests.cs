@@ -36,6 +36,7 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         }
 
         [Fact]
+#pragma warning disable 1998
         public async Task Handle_NullNotification_MustFail()
         {
             // Act
@@ -44,6 +45,7 @@ namespace Tauchbolde.Tests.Application.Policies.Events
             // Assert
             act.Should().Throw<ArgumentNullException>();
         }
+#pragma warning restore 1998
 
         private static ParticipationChangedEvent CreateValidParticipationChangedEvent() =>
             new ParticipationChangedEvent(

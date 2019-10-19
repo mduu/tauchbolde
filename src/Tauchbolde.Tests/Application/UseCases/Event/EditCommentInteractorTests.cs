@@ -89,12 +89,11 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         }
 
         [Fact]
-        public async Task Handle_NullRequestMustFail()
+        public void Handle_NullRequestMustFail()
         {
-            // Arrange
-
             // Act
-            Func<Task> act = async () => await interactor.Handle(null, CancellationToken.None);
+            // ReSharper disable once AssignNullToNotNullAttribute
+            Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
             
             // Assert
             act.Should().Throw<ArgumentNullException>();

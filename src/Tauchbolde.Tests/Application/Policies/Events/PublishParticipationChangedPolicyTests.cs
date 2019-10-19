@@ -136,7 +136,7 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         }
 
         [Fact]
-        public async Task Handle_ParticipantNotFound()
+        public void Handle_ParticipantNotFound()
         {
             // Arrange
             var notification = new ParticipationChangedEvent(
@@ -146,24 +146,24 @@ namespace Tauchbolde.Tests.Application.Policies.Events
                 ParticipantStatus.Accepted);
 
             // Act
-            Func<Task> act = async () => await policy.Handle(notification, CancellationToken.None);
+            Func<Task> act = () => policy.Handle(notification, CancellationToken.None);
 
             // Assert
             act.Should().Throw<InvalidOperationException>().WithMessage("Participant not found!");
         }
 
         [Fact]
-        public async Task Handle_NullNotificationMustFail()
+        public void Handle_NullNotificationMustFail()
         {
             // Act
-            Func<Task> act = async () => await policy.Handle(null, CancellationToken.None);
+            Func<Task> act = () => policy.Handle(null, CancellationToken.None);
 
             // Assert
             act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("notification");
         }
 
         [Fact]
-        public async Task Handle_DiverNotFound()
+        public void Handle_DiverNotFound()
         {
             // Arrange
             var notification = new ParticipationChangedEvent(
@@ -180,14 +180,14 @@ namespace Tauchbolde.Tests.Application.Policies.Events
             };
 
             // Act
-            Func<Task> act = async () => await policy.Handle(notification, CancellationToken.None);
+            Func<Task> act = () => policy.Handle(notification, CancellationToken.None);
 
             // Assert
             act.Should().Throw<InvalidOperationException>().WithMessage("Diver not found!");
         }
 
         [Fact]
-        public async Task Handle_EventNotFound()
+        public void Handle_EventNotFound()
         {
             // Arrange
             var notification = new ParticipationChangedEvent(
@@ -204,7 +204,7 @@ namespace Tauchbolde.Tests.Application.Policies.Events
             };
 
             // Act
-            Func<Task> act = async () => await policy.Handle(notification, CancellationToken.None);
+            Func<Task> act = () => policy.Handle(notification, CancellationToken.None);
 
             // Assert
             act.Should().Throw<InvalidOperationException>().WithMessage("Event not found!");
