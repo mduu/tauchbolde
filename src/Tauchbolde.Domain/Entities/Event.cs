@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.SharedKernel;
-using Tauchbolde.SharedKernel.Extensions;
 
 namespace Tauchbolde.Domain.Entities
 {
@@ -78,11 +76,6 @@ namespace Tauchbolde.Domain.Entities
 
         public virtual ICollection<Participant> Participants { get; [UsedImplicitly] set; }
         public virtual ICollection<Comment> Comments { get; [UsedImplicitly] set; } = new List<Comment>();
-
-        [Display(Name = "Datum / Zeit")]
-        [NotMapped]
-        [Obsolete]
-        public string StartEndTimeAsString => StartTime.FormatTimeRange(EndTime);
 
         public Comment AddNewComment(Guid authorId, [NotNull] string text)
         {
