@@ -9,16 +9,13 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using JetBrains.Annotations;
 using MediatR;
-using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Avatars;
-using Tauchbolde.Application.Services.Core;
+using Tauchbolde.Application.UseCases.Profile.EditAvatarUseCase;
 using Tauchbolde.Application.UseCases.Profile.EditUserProfileUseCase;
 using Tauchbolde.Application.UseCases.Profile.GetEditAvatarUseCase;
 using Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase;
 using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
-using Tauchbolde.Driver.DataAccessSql;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.InterfaceAdapters.Profile.GetEditAvatar;
 using Tauchbolde.InterfaceAdapters.Profile.GetEditUserProfile;
 using Tauchbolde.InterfaceAdapters.Profile.GetUserProfile;
@@ -32,26 +29,17 @@ namespace Tauchbolde.Web.Controllers
     public class UserProfileController : AppControllerBase
     {
         [NotNull] private readonly IMediator mediator;
-        [NotNull] private readonly ApplicationDbContext context;
-        [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly IMimeMapping mimeMapping;
         [NotNull] private readonly IAvatarStore avatarStore;
-        [NotNull] private readonly ICurrentUser currentUser;
 
         public UserProfileController(
             [NotNull] IMediator mediator,
-            [NotNull] ApplicationDbContext context,
-            [NotNull] IDiverService diverService,
             [NotNull] IMimeMapping mimeMapping,
-            [NotNull] IAvatarStore avatarStore,
-            [NotNull] ICurrentUser currentUser)
+            [NotNull] IAvatarStore avatarStore)
         {
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.mimeMapping = mimeMapping ?? throw new ArgumentNullException(nameof(mimeMapping));
             this.avatarStore = avatarStore ?? throw new ArgumentNullException(nameof(avatarStore));
-            this.currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
         }
 
         // GET: /profil/<id>
@@ -67,7 +55,7 @@ namespace Tauchbolde.Web.Controllers
                     ? NotFound()
                     : StatusCode(500);
             }
-            
+
             return View(presenter.GetViewModel());
         }
 
@@ -80,14 +68,14 @@ namespace Tauchbolde.Web.Controllers
             var useCaseResult = await mediator.Send(new GetEditUserProfile(id, presenter));
             if (!useCaseResult.IsSuccessful)
             {
-                return useCaseResult.ResultCategory == ResultCategory.NotFound 
+                return useCaseResult.ResultCategory == ResultCategory.NotFound
                     ? NotFound()
                     : StatusCode(500);
             }
 
             return base.View(presenter.GetViewModel());
         }
-        
+
         // GET: /avatar/marc_3.jpg
         [Route("avatar/{avatarId}")]
         [HttpGet]
@@ -113,7 +101,7 @@ namespace Tauchbolde.Web.Controllers
             {
                 return View(model);
             }
-            
+
             var useCaseResult = await mediator.Send(new EditUserProfile(
                 model.UserId,
                 model.Fullname,
@@ -140,10 +128,9 @@ namespace Tauchbolde.Web.Controllers
                 ShowErrorMessage(errorMsg[useCaseResult.ResultCategory]);
                 return View(model);
             }
-                
-            ShowSuccessMessage("Profil wurde gespeichert.");
-            return RedirectToAction("Index", new { id = model.UserId });
 
+            ShowSuccessMessage("Profil wurde gespeichert.");
+            return RedirectToAction("Index", new {id = model.UserId});
         }
 
         [Route("editavatar/{id}")]
@@ -156,16 +143,15 @@ namespace Tauchbolde.Web.Controllers
             {
                 return View(presenter.GetViewModel());
             }
-            
+
             var map = new Dictionary<ResultCategory, Func<IActionResult>>
             {
-                { ResultCategory.NotFound, NotFound },
-                { ResultCategory.AccessDenied, Forbid },
-                { ResultCategory.GeneralFailure, () => StatusCode(500) },
+                {ResultCategory.NotFound, NotFound},
+                {ResultCategory.AccessDenied, Forbid},
+                {ResultCategory.GeneralFailure, () => StatusCode(500)},
             };
 
             return map[useCaseResult.ResultCategory]();
-
         }
 
         [Route("editavatar/{id}")]
@@ -174,67 +160,25 @@ namespace Tauchbolde.Web.Controllers
         {
             try
             {
-                if (id == Guid.Empty) { throw new ArgumentException("Guid.Empty now allowed!", nameof(id)); }
-
-                if (Request.Form.Files.Any())
+                var file = Request.Form.Files.First(f => f.Length > 0);
+                var avatar = new EditAvatar.AvatarFile(file.FileName, file.ContentType, file.OpenReadStream());
+                var useCaseResult = await mediator.Send(new EditAvatar(id, avatar));
+                var resultMessageMap = new Dictionary<ResultCategory, Action>
                 {
-                    var memberContext = await GetMemberContextAsync(id);
-                    if (memberContext.CurrentDiver == null && memberContext.Member == null)
-                    {
-                        return StatusCode(400);
-                    }
-
-                    if (!memberContext.HasWriteAccess)
-                    {
-                        return Forbid();
-                    }
-
-                    var file = Request.Form.Files.First(f => f.Length > 0);
-                    var fileExt = mimeMapping.GetFileExtensionMapping(file.ContentType);
-                    var fileExt1 = fileExt ?? Path.GetExtension(file.FileName);
-                    
-                    var newAvatarId = await avatarStore.StoreAvatarAsync(
-                        memberContext.Member.Firstname,
-                        memberContext.Member.AvatarId,
-                        fileExt1,
-                        file.OpenReadStream());
-
-                    memberContext.Member.AvatarId = newAvatarId;
-                    await context.SaveChangesAsync();
-
-                    ShowSuccessMessage("Profilbild erfolgreich aktualisiert.");
-                }
+                    {ResultCategory.AccessDenied, () => ShowErrorMessage("Du hast keine Berechtigungen!")},
+                    {ResultCategory.NotFound, () => ShowErrorMessage("Taucher nicht gefunden!")},
+                    {ResultCategory.GeneralFailure, () => ShowErrorMessage("Ein Fehler ist aufgetreten!")},
+                    {ResultCategory.Success, () => ShowSuccessMessage("Profilbild erfolgreich aktualisiert.")},
+                };
+                
+                resultMessageMap[useCaseResult.ResultCategory]();
             }
             catch (Exception ex)
             {
                 ShowErrorMessage($"Fehler beim Aktualisieren des Profilbildes: {ex.Message}");
             }
-            
-            return RedirectToAction("Index", new { id });
-        }
 
-        private class MemberContext
-        {
-            public MemberContext(Diver currentDiver, bool currentDiverIsAdmin, Diver member)
-            {
-                CurrentDiver = currentDiver;
-                CurrentDiverIsAdmin = currentDiverIsAdmin;
-                Member = member;
-            }
-
-            public Diver CurrentDiver { get; }
-            public bool CurrentDiverIsAdmin { get; }
-            public Diver Member { get; }
-            public bool HasWriteAccess =>  Member.Id == CurrentDiver.Id || CurrentDiverIsAdmin;
-        }
-
-        private async Task<MemberContext> GetMemberContextAsync(Guid diverId)
-        {
-            var currentDiver = await currentUser.GetCurrentDiverAsync();
-            var isAdmin = await currentUser.GetIsAdminAsync();
-            var member = await diverService.GetMemberAsync(diverId);
-
-            return new MemberContext(currentDiver, isAdmin, member);
+            return RedirectToAction("Index", new {id});
         }
     }
 }
