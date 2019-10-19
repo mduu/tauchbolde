@@ -1,6 +1,4 @@
-using System;
 using FluentAssertions;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Events.Diver;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;
@@ -35,6 +33,20 @@ namespace Tauchbolde.Tests.Domain.Entities
                 e.GetType() == typeof(UserProfileEditedEvent) &&
                 ((UserProfileEditedEvent) e).EditedDiverId == DiverFactory.JohnDoeDiverId &&
                 ((UserProfileEditedEvent) e).EditedByDiverId == DiverFactory.JaneDoeDiverId);
+        }
+
+        [Fact]
+        public void ChangeAvatar()
+        {
+            // Arrange
+            var diver = DiverFactory.CreateJaneDoe();
+            
+            // Act
+            diver.ChangeAvatar("the_new_avatar_id");
+            
+            // Assert
+            diver.AvatarId.Should().Be("the_new_avatar_id");
+            diver.UncommittedDomainEvents.Should().ContainSingle(e => e.GetType() == typeof(AvatarChangedEvent));
         }
     }
 }

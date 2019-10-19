@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Tauchbolde.Domain.Entities;
 
@@ -10,5 +11,6 @@ namespace Tauchbolde.Application.Services.Core
         Task<bool> GetIsTauchboldAsync();
         Task<Diver> GetCurrentDiverAsync();
         Task<bool> GetIsTauchboldOrAdminAsync();
+        Task<bool> GetIsDiverOrAdmin(Guid diverId);
     }
 }

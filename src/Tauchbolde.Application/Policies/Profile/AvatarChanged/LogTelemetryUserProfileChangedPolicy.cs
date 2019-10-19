@@ -6,14 +6,14 @@ using MediatR;
 using Tauchbolde.Application.Services.Telemetry;
 using Tauchbolde.Domain.Events.Diver;
 
-namespace Tauchbolde.Application.Policies.Profile.UserProfileEdited
+namespace Tauchbolde.Application.Policies.Profile.AvatarChanged
 {
     [UsedImplicitly]
-    internal class LogTelemetryUserProfileChangedPolicy : INotificationHandler<UserProfileEditedEvent>
+    internal class LogTelemetryAvatarChangedPolicy : INotificationHandler<UserProfileEditedEvent>
     {
         [NotNull] private readonly ITelemetryService telemetryService;
 
-        public LogTelemetryUserProfileChangedPolicy([NotNull] ITelemetryService telemetryService)
+        public LogTelemetryAvatarChangedPolicy([NotNull] ITelemetryService telemetryService)
         {
             this.telemetryService = telemetryService ?? throw new ArgumentNullException(nameof(telemetryService));
         }
@@ -23,7 +23,7 @@ namespace Tauchbolde.Application.Policies.Profile.UserProfileEdited
         {
             if (notification == null) throw new ArgumentNullException(nameof(notification));
             
-            telemetryService.TrackEvent(TelemetryEventNames.UserProfileEdited, notification);
+            telemetryService.TrackEvent(TelemetryEventNames.AvatarChanged, notification);
         }
 #pragma warning restore 1998
     }

@@ -14,6 +14,7 @@ namespace Tauchbolde.Tests.TestingTools.TestDataFactories
         internal const string JohnDoeFirstName = "John";
         internal const string JohnDoeLastName = "Doe";
         internal const string JohnDoeAvatarId = "john.doe-1.jpg";
+        
         internal static Guid JaneDoeDiverId => new Guid("C2E0E0C7-BE27-494C-B647-5E5AA2E635AB");
         internal const string JaneDoeUserName = "jane.doe";
         internal const string JaneDoeEmail = "jane.doe@company.com";
@@ -49,7 +50,9 @@ namespace Tauchbolde.Tests.TestingTools.TestDataFactories
             new Diver
             {
                 Id = JaneDoeDiverId,
-                Fullname = "Jane Doe",
+                Fullname = JaneDoeFullname,
+                Firstname = JaneDoeFirstName,
+                Lastname = JaneDoeLastName,
                 User = new IdentityUser(JaneDoeUserName)
                 {
                     Email = JaneDoeEmail
