@@ -50,6 +50,7 @@ namespace Tauchbolde.Application.Services.Core
         }
         
         public async Task<bool> GetIsTauchboldOrAdminAsync() => await GetIsTauchboldAsync() || await GetIsAdminAsync();
-
+        
+        public async Task<bool> GetIsDiverOrAdmin(Guid diverId) => await GetIsAdminAsync() || (await GetCurrentDiverAsync()).Id == diverId;
     }
 }

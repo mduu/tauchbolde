@@ -46,6 +46,7 @@ namespace Tauchbolde.Tests.Domain.Entities
             
             // Assert
             diver.AvatarId.Should().Be("the_new_avatar_id");
+            diver.UncommittedDomainEvents.Should().ContainSingle(e => e.GetType() == typeof(AvatarChangedEvent));
         }
     }
 }

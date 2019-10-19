@@ -122,7 +122,10 @@ namespace Tauchbolde.Domain.Entities
 
         public void ChangeAvatar(string newAvatarId)
         {
+            if (AvatarId == newAvatarId) return;
+            
             AvatarId = newAvatarId;
+            RaiseDomainEvent(new AvatarChangedEvent(Id));
         }
     }
 }
