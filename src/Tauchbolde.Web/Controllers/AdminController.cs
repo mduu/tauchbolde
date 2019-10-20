@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using MediatR;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.OldDomainServices.Users;
+using Tauchbolde.Application.UseCases.Administration.AddMemberUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
-using Tauchbolde.SharedKernel.Extensions;
+using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Models.AdminViewModels;
 using Tauchbolde.Web.Core;
 
@@ -27,19 +29,22 @@ namespace Tauchbolde.Web.Controllers
         [NotNull] private readonly UserManager<IdentityUser> userManager;
         [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly IDiverRepository diverRepository;
+        [NotNull] private readonly IMediator mediator;
 
         public AdminController(
             [NotNull] ApplicationDbContext context,
             [NotNull] RoleManager<IdentityRole> roleManager,
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] IDiverService diverService,
-            [NotNull] IDiverRepository diverRepository)
+            [NotNull] IDiverRepository diverRepository, 
+            [NotNull] IMediator mediator)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [HttpGet]
@@ -73,27 +78,22 @@ namespace Tauchbolde.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddMembers(string userName, string firstname, string lastname)
         {
-            if (string.IsNullOrWhiteSpace(userName) ||
-                string.IsNullOrWhiteSpace(firstname) ||
-                string.IsNullOrWhiteSpace(lastname))
+            var useCaseResult = await mediator.Send(new AddMember(userName, firstname, lastname));
+
+            var msgMap = new Dictionary<ResultCategory, Action>
             {
-                ShowErrorMessage("Kein Benutzername, Vor- oder Nachname!");
-            }
-            else
+                { ResultCategory.Success, () => ShowSuccessMessage("Mitglied erfolgreich hinzugefügt!") },
+                { ResultCategory.NotFound, () => ShowErrorMessage("Kein registrierter Benutzer mit Benutzername '{username}' gefunden!") },
+                { ResultCategory.AccessDenied, () => ShowErrorMessage("Sie haben keine Berechtigung um neue Mitglieder hinzu zu fügen!")},
+            };
+            msgMap[useCaseResult.ResultCategory]();
+
+            if (!string.IsNullOrWhiteSpace(useCaseResult.Payload))
             {
-                try
-                {
-                    await diverService.AddMembersAsync(userName, firstname, lastname);
-                    await context.SaveChangesAsync();
-                    ShowSuccessMessage("Mitglied erfolgreich hinzugefügt!");
-                }
-                catch (Exception ex)
-                {                
-                    ShowErrorMessage($"Fehler beim Hinzufügen des Mitgliedes {userName}: {ex.UnwindMessage()}");
-                }
+                ShowWarningMessage(useCaseResult.Payload);
             }
 
-            return RedirectToAction("MemberManagement");
+            return RedirectToAction(nameof(MemberManagement));
         }
 
         [HttpGet]
