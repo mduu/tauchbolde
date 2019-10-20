@@ -18,6 +18,7 @@ using Tauchbolde.Web.Core;
 
 namespace Tauchbolde.Web.Controllers
 {
+    // TODO Change the implementation of the actions to use use-cases instead of direct access
     [Authorize(Policy = PolicyNames.RequireAdministrator)]
     public class AdminController : AppControllerBase
     {
