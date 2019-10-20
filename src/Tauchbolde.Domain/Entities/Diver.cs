@@ -67,30 +67,6 @@ namespace Tauchbolde.Domain.Entities
         public virtual ICollection<LogbookEntry> OriginalAuthorOfLogbookEntries { get; set; }
         public virtual ICollection<LogbookEntry> EditorAuthorOfLogbookEntries { get; set; }
 
-        [Obsolete]
-        public string GetTwitterUrl()
-        {
-            if (string.IsNullOrWhiteSpace(TwitterHandle))
-            {
-                return "";
-            }
-
-            var twitterUrl = TwitterHandle;
-
-            if (TwitterHandle.StartsWith("@", StringComparison.CurrentCulture))
-            {
-                twitterUrl = TwitterHandle.Substring(1);
-            }
-
-            return $"https://twitter.com/{twitterUrl}";
-        }
-
-        [Obsolete]
-        public string GetFacebookeUrl() =>
-            !string.IsNullOrWhiteSpace(FacebookId)
-                ? new Uri($"https://facebook.com/{FacebookId}").AbsoluteUri
-                : "";
-
         public void Edit(
             Guid currentUserId,
             string fullname,
