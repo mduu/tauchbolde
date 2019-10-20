@@ -1,5 +1,4 @@
-﻿@using Tauchbolde.SharedKernel.Extensions
-@model Tauchbolde.Web.Models.AboutViewModels.AboutViewModel
+﻿@model Tauchbolde.InterfaceAdapters.Profile.MemberList.MvcMemberListViewModel
 @foreach (var member in Model.Members)
 {
     <div class="col-md-12">
@@ -11,24 +10,24 @@
                 
                         <div class="col-md-6 col-sm-12">
                             <!--suppress XmlUnboundNsPrefix -->
-                            <vc:avatar diver-email="@member.User.Email" avatar-id="@member.AvatarId" avatar-size="Medium" />
+                            <vc:avatar diver-email="@member.Email" avatar-id="@member.AvatarId" avatar-size="Medium" />
                         </div>
                         
                         <div class="col-md-6 col-sm-12">
                             <h3>
-                                @member.Firstname
+                                @member.Name
                             </h3>
                             
                             <h3>
                                 @if (!string.IsNullOrWhiteSpace(member.TwitterHandle))
                                 {
-                                    <a href="@member.GetTwitterUrl()" target="_blank" title="Link zum Twitter-Profil von @member.Realname">
+                                    <a href="@member.TwitterUrl" target="_blank" title="Link zum Twitter-Profil von @member.Name">
                                         <i class="fab fa-twitter-square"></i>
                                     </a>
                                 }
                                 @if (!string.IsNullOrWhiteSpace(member.FacebookId))
                                 {
-                                    <a href="@member.GetFacebookeUrl()" target="_blank" title="Link zum Facebook-Profil von @member.Realname">
+                                    <a href="@member.FacebookUrl" target="_blank" title="Link zum Facebook-Profil von @member.Name">
                                         <i class="fab fa-facebook-square"></i>
                                     </a>
                                 }
@@ -47,7 +46,7 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-4">Tauchbold seit:</div>
-                            <div class="col-xs-8"><strong>@member.MemberSince.ToStringSwissDate()</strong></div>
+                            <div class="col-xs-8"><strong>@member.MemberSince</strong></div>
                         </div>
                         <div class="row">
                             <div class="col-xs-4">Motto:</div>
@@ -59,9 +58,9 @@
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
-                                @if (Model.IsTauchbold)
+                                @if (Model.AllowSeeDetails)
                                 {
-                                    <a class="btn btn-primary btn-small" asp-action="Index" asp-controller="UserProfile" asp-route-id="@member.Id" data-toggle="tooltip" data-placement="top" title="Nur für Tauchbolde einsehbar.">Profil</a>
+                                    <a class="btn btn-primary btn-small" asp-action="Index" asp-controller="UserProfile" asp-route-id="@member.DiverId" data-toggle="tooltip" data-placement="top" title="Nur für Tauchbolde einsehbar.">Profil</a>
                                 }
                             </div>
                         </div>
