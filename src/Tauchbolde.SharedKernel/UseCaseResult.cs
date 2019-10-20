@@ -84,6 +84,8 @@ namespace Tauchbolde.SharedKernel
                 },
                 resultCategory: ResultCategory.NotFound);
 
+        public new static UseCaseResult<TPayload> AccessDenied() => new UseCaseResult<TPayload>(resultCategory: ResultCategory.AccessDenied);
+
         [NotNull]
         public new static UseCaseResult<TPayload> ValidationFailed(IEnumerable<ValidationFailure> errors = null)
             => new UseCaseResult<TPayload>(errors, resultCategory: ResultCategory.ValidationFailed);
