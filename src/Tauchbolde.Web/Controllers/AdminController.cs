@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using MediatR;
 using Tauchbolde.Application.DataGateways;
-using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.UseCases.Administration.AddMemberUseCase;
+using Tauchbolde.Application.UseCases.Administration.EditRolesUseCase;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
@@ -27,7 +27,6 @@ namespace Tauchbolde.Web.Controllers
         [NotNull] private readonly ApplicationDbContext context;
         [NotNull] private readonly RoleManager<IdentityRole> roleManager;
         [NotNull] private readonly UserManager<IdentityUser> userManager;
-        [NotNull] private readonly IDiverService diverService;
         [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly IMediator mediator;
 
@@ -35,14 +34,12 @@ namespace Tauchbolde.Web.Controllers
             [NotNull] ApplicationDbContext context,
             [NotNull] RoleManager<IdentityRole> roleManager,
             [NotNull] UserManager<IdentityUser> userManager,
-            [NotNull] IDiverService diverService,
-            [NotNull] IDiverRepository diverRepository, 
+            [NotNull] IDiverRepository diverRepository,
             [NotNull] IMediator mediator)
         {
             this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            this.diverService = diverService ?? throw new ArgumentNullException(nameof(diverService));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
@@ -82,9 +79,9 @@ namespace Tauchbolde.Web.Controllers
 
             var msgMap = new Dictionary<ResultCategory, Action>
             {
-                { ResultCategory.Success, () => ShowSuccessMessage("Mitglied erfolgreich hinzugefügt!") },
-                { ResultCategory.NotFound, () => ShowErrorMessage("Kein registrierter Benutzer mit Benutzername '{username}' gefunden!") },
-                { ResultCategory.AccessDenied, () => ShowErrorMessage("Sie haben keine Berechtigung um neue Mitglieder hinzu zu fügen!")},
+                {ResultCategory.Success, () => ShowSuccessMessage("Mitglied erfolgreich hinzugefügt!")},
+                {ResultCategory.NotFound, () => ShowErrorMessage("Kein registrierter Benutzer mit Benutzername '{username}' gefunden!")},
+                {ResultCategory.AccessDenied, () => ShowErrorMessage("Sie haben keine Berechtigung um neue Mitglieder hinzu zu fügen!")},
             };
             msgMap[useCaseResult.ResultCategory]();
 
@@ -109,7 +106,7 @@ namespace Tauchbolde.Web.Controllers
 
             return View(new EditRolesViewModel
             {
-                Roles = new[] { Rolenames.Tauchbold, Rolenames.Administrator },
+                Roles = new[] {Rolenames.Tauchbold, Rolenames.Administrator},
                 AssignedRoles = assignedRoles,
                 Profile = member,
             });
@@ -118,23 +115,21 @@ namespace Tauchbolde.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditRoles(string userName, string[] roles)
         {
-            var member = await diverRepository.FindByUserNameAsync(userName);
-            if (member == null)
+            var useCaseResult = await mediator.Send(new EditRoles(userName, roles));
+            
+            var msgMap = new Dictionary<ResultCategory, Action>
             {
-                return BadRequest();
-            }
+                {ResultCategory.Success, () => ShowSuccessMessage($"Rollenzuweisung an {userName} erfolgreich: {string.Join(",", roles)}")},
+                {ResultCategory.NotFound, () => ShowErrorMessage($"Fehler beim Ändern der Rollen für Benutzer [{userName}]")},
+            };
+            msgMap[useCaseResult.ResultCategory]();
 
-            await diverService.UpdateRolesAsync(member, roles);
-            await context.SaveChangesAsync();
-
-            ShowSuccessMessage($"Rollenzuweisung an {member.Realname} erfolgreich: {string.Join(",", roles)}");
             return RedirectToAction("MemberManagement");
         }
 
         [HttpGet]
         public async Task<IActionResult> ConfigureRoles()
         {
-
             await roleManager.CreateAsync(new IdentityRole(Rolenames.Tauchbold));
             await roleManager.CreateAsync(new IdentityRole(Rolenames.Administrator));
 
@@ -143,12 +138,11 @@ namespace Tauchbolde.Web.Controllers
 
         public async Task<IActionResult> ConfigureUserMarc()
         {
-
             try
             {
                 var userMarc = await context.Users
-                                       .Where(u => u.UserName.Equals("marc@marcduerst.com", StringComparison.InvariantCultureIgnoreCase))
-                                       .FirstOrDefaultAsync();
+                    .Where(u => u.UserName.Equals("marc@marcduerst.com", StringComparison.InvariantCultureIgnoreCase))
+                    .FirstOrDefaultAsync();
                 if (userMarc != null)
                 {
                     await userManager.AddToRoleAsync(userMarc, Rolenames.Tauchbold);

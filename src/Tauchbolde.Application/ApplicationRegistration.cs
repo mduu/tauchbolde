@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Tauchbolde.Application.OldDomainServices.Users;
 using Tauchbolde.Application.Services;
 using Tauchbolde.Application.Services.Avatars;
 using Tauchbolde.Application.Services.Core;
@@ -38,8 +37,6 @@ namespace Tauchbolde.Application
             services.AddTransient<IRecipientsBuilder, RecipientsBuilder>();
 
             services.AddTransient<IPhotoService, PhotoService>();
-
-            RegisterOldDomainServices(services);
         }
 
         public static void RegisterDevelopment(IServiceCollection services)
@@ -47,13 +44,6 @@ namespace Tauchbolde.Application
             if (services == null) { throw new ArgumentNullException(nameof(services)); }
 
             services.AddTransient<INotificationSubmitter, ConsoleNotificationSubmitter>();
-        }
-        
-        private static void RegisterOldDomainServices(IServiceCollection services)
-        {
-            // TODO The goal is to remove all these old "domain services"
-            
-            services.AddTransient<IDiverService, DiversService>();
         }
     }
 }
