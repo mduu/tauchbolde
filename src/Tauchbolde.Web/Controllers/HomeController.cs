@@ -28,7 +28,6 @@ namespace Tauchbolde.Web.Controllers
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        [EnableCors("AllowTwitter")]
         public IActionResult Index() => View();
 
         [Authorize]
