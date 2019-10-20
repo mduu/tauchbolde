@@ -148,13 +148,6 @@ namespace Tauchbolde.Web
                 ));
             });
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowTwitter", builder => builder
-                    .WithOrigins("https://platform.twitter.com")
-                    .WithOrigins("https://twitter.com"));
-            });
-
             services.AddMvc(options =>
                 {
                     options.Filters.Add(typeof(BuildNumberFilter));

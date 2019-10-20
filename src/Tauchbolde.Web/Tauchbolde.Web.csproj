@@ -39,7 +39,6 @@
     <ProjectReference Include="..\Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\AboutViewModels\" />
     <Folder Include="Views\UserProfile\" />
     <Folder Include="Core\" />
     <Folder Include="Data\" />

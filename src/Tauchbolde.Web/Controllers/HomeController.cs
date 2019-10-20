@@ -2,37 +2,32 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models;
-using Tauchbolde.Web.Models.AboutViewModels;
 using Tauchbolde.Web.Models.HomeViewModels;
-using Tauchbolde.Application.DataGateways;
-using Tauchbolde.Domain.Types;
+using Tauchbolde.Application.UseCases.Profile.MemberListUseCase;
 using Tauchbolde.Driver.SmtpEmail;
+using Tauchbolde.InterfaceAdapters.Profile.MemberList;
 
 namespace Tauchbolde.Web.Controllers
 {
     public class HomeController : AppControllerBase
     {
-        [NotNull] private readonly IDiverRepository diverRepository;
-        [NotNull] private readonly UserManager<IdentityUser> userManager;
         [NotNull] private readonly IAppEmailSender emailSender;
-        
+        [NotNull] private readonly IMediator mediator;
+
         public HomeController(
-            [NotNull] IDiverRepository diverRepository,
-            [NotNull] UserManager<IdentityUser> userManager,
+            [NotNull] IMediator mediator,
             [NotNull] IAppEmailSender emailSender)
         {
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
-            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
+            this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        [EnableCors("AllowTwitter")]
         public IActionResult Index() => View();
 
         [Authorize]
@@ -45,24 +40,14 @@ namespace Tauchbolde.Web.Controllers
 
         public async Task<IActionResult> About()
         {
-            var isTauchbold = false;
-
-            if (User?.Identity != null && !string.IsNullOrWhiteSpace(User.Identity.Name))
+            var presenter = new MvcMemberListPresenter();
+            var useCaseResult = await mediator.Send(new MemberList(presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                var currentDiver = await diverRepository.FindByUserNameAsync(User.Identity.Name);
-                if (currentDiver != null)
-                {
-                    isTauchbold = await userManager.IsInRoleAsync(currentDiver.User, Rolenames.Tauchbold);
-                }
+                ShowErrorMessage("Fehler beim laden der Mitgliederliste!");
             }
-        
-            var model = new AboutViewModel
-            {
-                Members = await diverRepository.GetAllTauchboldeUsersAsync(),
-                IsTauchbold = isTauchbold,
-            };
 
-           return View(model);
+            return View(presenter.GetViewModel());
         }
 
         public IActionResult Contact()
