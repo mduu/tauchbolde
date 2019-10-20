@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace Tauchbolde.Application.UseCases.Administration.AddMemberUseCase
 {
     [UsedImplicitly]
-    public class AddMemberValidator : AbstractValidator<AddMember>
+    internal class AddMemberValidator : AbstractValidator<AddMember>
     {
         public AddMemberValidator()
         {
