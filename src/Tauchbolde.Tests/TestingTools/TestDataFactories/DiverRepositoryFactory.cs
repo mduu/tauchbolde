@@ -27,6 +27,14 @@ namespace Tauchbolde.Tests.TestingTools.TestDataFactories
                         DiverFactory.CreateJohnDoe(),
                     }));
 
+            A.CallTo(() => result.GetAllDiversAsync())
+                .ReturnsLazily(() => Task.FromResult<ICollection<Diver>>(
+                    new List<Diver>
+                    {
+                        DiverFactory.CreateJohnDoe(),
+                        DiverFactory.CreateJaneDoe(),
+                    }));
+
             return result;
         }
     }
