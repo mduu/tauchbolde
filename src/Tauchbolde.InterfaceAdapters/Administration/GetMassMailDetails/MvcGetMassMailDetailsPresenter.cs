@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using JetBrains.Annotations;
 using Tauchbolde.Application.UseCases.Administration;
-using Tauchbolde.Application.UseCases.Administration.GetMessMailUseCase;
+using Tauchbolde.Application.UseCases.Administration.GetMassMailUseCase;
 
 namespace Tauchbolde.InterfaceAdapters.Administration.GetMassMailDetails
 {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
 using Tauchbolde.Application.UseCases.Administration;
-using Tauchbolde.Application.UseCases.Administration.GetMessMailUseCase;
+using Tauchbolde.Application.UseCases.Administration.GetMassMailUseCase;
 using Tauchbolde.InterfaceAdapters.Administration.GetMassMailDetails;
 
 namespace Tauchbolde.Web.Controllers
