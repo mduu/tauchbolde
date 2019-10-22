@@ -11,9 +11,10 @@ using MediatR;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.UseCases.Administration.AddMemberUseCase;
 using Tauchbolde.Application.UseCases.Administration.EditRolesUseCase;
+using Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseCase;
 using Tauchbolde.Driver.DataAccessSql;
-using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Types;
+using Tauchbolde.InterfaceAdapters.Administration.MemberManagement;
 using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Models.AdminViewModels;
 using Tauchbolde.Web.Core;
@@ -50,26 +51,21 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> MemberManagement()
         {
-            var profiles = (await diverRepository.GetAllDiversAsync()).ToArray();
-
-            var members = new List<MemberViewModel>();
-            foreach (var member in profiles)
+            var presenter = new MvcMemberManagementPresenter();
+            var useCaseResult = await mediator.Send(new GetMemberManagement(presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                members.Add(await CreateMemberViewModel(member));
+                var msgMap = new Dictionary<ResultCategory, string>
+                {
+                    {ResultCategory.AccessDenied, "Zugriff verweigert!"},
+                    {ResultCategory.GeneralFailure, "Allgemeiner Fehler aufgetreten!"}
+                };
+
+                ShowErrorMessage(msgMap[useCaseResult.ResultCategory]);
+                return RedirectToAction(nameof(Index));
             }
 
-            var allMembers = await diverRepository.GetAllTauchboldeUsersAsync();
-            var allUsers = userManager.Users
-                .ToArray()
-                .Where(u => allMembers.All(d => d.UserId != u.Id));
-
-            var viewModel = new MemberManagementViewModel
-            {
-                Members = members,
-                AddableUsers = allUsers.ToArray(),
-            };
-
-            return View(viewModel);
+            return View(presenter.GetViewModel());
         }
 
         [HttpPost]
@@ -116,7 +112,7 @@ namespace Tauchbolde.Web.Controllers
         public async Task<IActionResult> EditRoles(string userName, string[] roles)
         {
             var useCaseResult = await mediator.Send(new EditRoles(userName, roles));
-            
+
             var msgMap = new Dictionary<ResultCategory, Action>
             {
                 {ResultCategory.Success, () => ShowSuccessMessage($"Rollenzuweisung an {userName} erfolgreich: {string.Join(",", roles)}")},
@@ -156,17 +152,6 @@ namespace Tauchbolde.Web.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        private async Task<MemberViewModel> CreateMemberViewModel(Diver diver)
-        {
-            var roles = await userManager.GetRolesAsync(diver.User);
-
-            return new MemberViewModel
-            {
-                Roles = roles,
-                Profile = diver,
-            };
         }
     }
 }
