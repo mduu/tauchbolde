@@ -1,7 +1,5 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +10,6 @@ using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.UseCases.Administration.AddMemberUseCase;
 using Tauchbolde.Application.UseCases.Administration.EditRolesUseCase;
 using Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseCase;
-using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.InterfaceAdapters.Administration.MemberManagement;
 using Tauchbolde.SharedKernel;
@@ -25,20 +22,17 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireAdministrator)]
     public class AdminController : AppControllerBase
     {
-        [NotNull] private readonly ApplicationDbContext context;
         [NotNull] private readonly RoleManager<IdentityRole> roleManager;
         [NotNull] private readonly UserManager<IdentityUser> userManager;
         [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly IMediator mediator;
 
         public AdminController(
-            [NotNull] ApplicationDbContext context,
             [NotNull] RoleManager<IdentityRole> roleManager,
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] IDiverRepository diverRepository,
             [NotNull] IMediator mediator)
         {
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
             this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
@@ -130,28 +124,6 @@ namespace Tauchbolde.Web.Controllers
             await roleManager.CreateAsync(new IdentityRole(Rolenames.Administrator));
 
             return Ok();
-        }
-
-        public async Task<IActionResult> ConfigureUserMarc()
-        {
-            try
-            {
-                var userMarc = await context.Users
-                    .Where(u => u.UserName.Equals("marc@marcduerst.com", StringComparison.InvariantCultureIgnoreCase))
-                    .FirstOrDefaultAsync();
-                if (userMarc != null)
-                {
-                    await userManager.AddToRoleAsync(userMarc, Rolenames.Tauchbold);
-                    await userManager.AddToRoleAsync(userMarc, Rolenames.Administrator);
-                    return Ok();
-                }
-
-                return BadRequest("General error!");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
         }
     }
 }
