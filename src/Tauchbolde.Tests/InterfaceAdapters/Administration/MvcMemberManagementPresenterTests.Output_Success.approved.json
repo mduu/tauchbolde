@@ -1,0 +1,20 @@
+﻿{
+    "Members": [
+        {
+            "DiverId": "7023bedd-179f-4d8c-ae4b-9038b6c6bf3e",
+            "Fullname": "John Doe",
+            "UserName": "john.doe",
+            "Email": "john.doe@company.com",
+            "EmailConfirmed": true,
+            "LockoutEnabled": false,
+            "Roles": [
+                "admin",
+                "tauchbold"
+            ]
+        }
+    ],
+    "AddableUsers": [
+        "user33",
+        "user44"
+    ]
+}
