@@ -4,12 +4,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
+using System.Net;
 using JetBrains.Annotations;
 using MediatR;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.UseCases.Administration.AddMemberUseCase;
 using Tauchbolde.Application.UseCases.Administration.EditRolesUseCase;
 using Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseCase;
+using Tauchbolde.Application.UseCases.Administration.SetUpRolesUseCase;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.InterfaceAdapters.Administration.MemberManagement;
 using Tauchbolde.SharedKernel;
@@ -22,18 +24,15 @@ namespace Tauchbolde.Web.Controllers
     [Authorize(Policy = PolicyNames.RequireAdministrator)]
     public class AdminController : AppControllerBase
     {
-        [NotNull] private readonly RoleManager<IdentityRole> roleManager;
         [NotNull] private readonly UserManager<IdentityUser> userManager;
         [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly IMediator mediator;
 
         public AdminController(
-            [NotNull] RoleManager<IdentityRole> roleManager,
             [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] IDiverRepository diverRepository,
             [NotNull] IMediator mediator)
         {
-            this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
             this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -120,10 +119,11 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfigureRoles()
         {
-            await roleManager.CreateAsync(new IdentityRole(Rolenames.Tauchbold));
-            await roleManager.CreateAsync(new IdentityRole(Rolenames.Administrator));
+            var useCaseResult = await mediator.Send(new SetUpRoles());
 
-            return Ok();
+            return useCaseResult.IsSuccessful
+                ? Ok()
+                : StatusCode((int)HttpStatusCode.InternalServerError);
         }
     }
 }
