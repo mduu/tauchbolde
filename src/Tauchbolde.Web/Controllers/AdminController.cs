@@ -1,40 +1,30 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Net;
 using JetBrains.Annotations;
 using MediatR;
-using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.UseCases.Administration.AddMemberUseCase;
 using Tauchbolde.Application.UseCases.Administration.EditRolesUseCase;
+using Tauchbolde.Application.UseCases.Administration.GetEditRolesUseCase;
 using Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseCase;
 using Tauchbolde.Application.UseCases.Administration.SetUpRolesUseCase;
-using Tauchbolde.Domain.Types;
+using Tauchbolde.InterfaceAdapters.Administration.EditRoles;
 using Tauchbolde.InterfaceAdapters.Administration.MemberManagement;
 using Tauchbolde.SharedKernel;
-using Tauchbolde.Web.Models.AdminViewModels;
 using Tauchbolde.Web.Core;
 
 namespace Tauchbolde.Web.Controllers
 {
-    // TODO Change the implementation of the actions to use use-cases instead of direct access
     [Authorize(Policy = PolicyNames.RequireAdministrator)]
     public class AdminController : AppControllerBase
     {
-        [NotNull] private readonly UserManager<IdentityUser> userManager;
-        [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly IMediator mediator;
 
-        public AdminController(
-            [NotNull] UserManager<IdentityUser> userManager,
-            [NotNull] IDiverRepository diverRepository,
-            [NotNull] IMediator mediator)
+        public AdminController([NotNull] IMediator mediator)
         {
-            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
@@ -85,23 +75,19 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> EditRoles(string userName)
         {
-            var member = await diverRepository.FindByUserNameAsync(userName);
-            if (member == null)
+            var presenter = new MvcEditRolesPresenter();
+            var useCaseResult = await mediator.Send(new GetEditRoles(userName, presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                return BadRequest();
+                ShowErrorMessage($"Benutzer mit username {userName} nicht gefunden!");
+                return RedirectToAction("MemberManagement");
             }
-
-            var assignedRoles = await userManager.GetRolesAsync(member.User);
-
-            return View(new EditRolesViewModel
-            {
-                Roles = new[] {Rolenames.Tauchbold, Rolenames.Administrator},
-                AssignedRoles = assignedRoles,
-                Profile = member,
-            });
+            
+            return View(presenter.GetViewModel());
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditRoles(string userName, string[] roles)
         {
             var useCaseResult = await mediator.Send(new EditRoles(userName, roles));
@@ -123,7 +109,7 @@ namespace Tauchbolde.Web.Controllers
 
             return useCaseResult.IsSuccessful
                 ? Ok()
-                : StatusCode((int)HttpStatusCode.InternalServerError);
+                : StatusCode((int) HttpStatusCode.InternalServerError);
         }
     }
 }

@@ -43,7 +43,6 @@
     <Folder Include="Core\" />
     <Folder Include="Data\" />
     <Folder Include="Views\Admin\" />
-    <Folder Include="Models\AdminViewModels\" />
     <Folder Include="Views\MassMail\" />
     <Folder Include="Models\HomeViewModels\" />
     <Folder Include="Views\Shared\Components\Avatar\" />
