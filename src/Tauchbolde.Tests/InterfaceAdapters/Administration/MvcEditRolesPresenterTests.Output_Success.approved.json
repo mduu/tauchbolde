@@ -1,0 +1,11 @@
+﻿{
+    "UserName": "john.doe",
+    "FullName": "John Doe",
+    "AllRoles": [
+        "role1",
+        "role2,"
+    ],
+    "AssignedRoles": [
+        "role1"
+    ]
+}

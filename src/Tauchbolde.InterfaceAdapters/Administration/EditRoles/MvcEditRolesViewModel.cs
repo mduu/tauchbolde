@@ -1,22 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
 
-namespace Tauchbolde.Application.UseCases.Administration.GetEditRolesUseCase
+namespace Tauchbolde.InterfaceAdapters.Administration.EditRoles
 {
-    public class GetEditRolesOutput
+    public class MvcEditRolesViewModel
     {
-        public GetEditRolesOutput(
+        public MvcEditRolesViewModel(
             [NotNull] string userName,
             [NotNull] string fullName,
-            IEnumerable<string> allRoles,
-            IEnumerable<string> assignedRoles)
+            [NotNull] IEnumerable<string> allRoles,
+            [NotNull] IEnumerable<string> assignedRoles)
         {
             UserName = userName ?? throw new ArgumentNullException(nameof(userName));
             FullName = fullName ?? throw new ArgumentNullException(nameof(fullName));
-            AllRoles = allRoles ?? Enumerable.Empty<string>();
-            AssignedRoles = assignedRoles ?? Enumerable.Empty<string>();
+            AllRoles = allRoles ?? throw new ArgumentNullException(nameof(allRoles));
+            AssignedRoles = assignedRoles ?? throw new ArgumentNullException(nameof(assignedRoles));
         }
 
         [NotNull] public string UserName { get; }
