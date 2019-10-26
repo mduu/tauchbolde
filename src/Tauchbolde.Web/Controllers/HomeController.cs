@@ -4,14 +4,13 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Models;
 using Tauchbolde.Web.Models.HomeViewModels;
 using Tauchbolde.Application.UseCases.Profile.MemberListUseCase;
 using Tauchbolde.Driver.SmtpEmail;
-using Tauchbolde.InterfaceAdapters.Profile.MemberList;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Profile.MemberList;
 
 namespace Tauchbolde.Web.Controllers
 {

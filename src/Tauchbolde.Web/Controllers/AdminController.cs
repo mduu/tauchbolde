@@ -11,8 +11,8 @@ using Tauchbolde.Application.UseCases.Administration.EditRolesUseCase;
 using Tauchbolde.Application.UseCases.Administration.GetEditRolesUseCase;
 using Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseCase;
 using Tauchbolde.Application.UseCases.Administration.SetUpRolesUseCase;
-using Tauchbolde.InterfaceAdapters.Administration.EditRoles;
-using Tauchbolde.InterfaceAdapters.Administration.MemberManagement;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Administration.EditRoles;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Administration.MemberManagement;
 using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core;
 

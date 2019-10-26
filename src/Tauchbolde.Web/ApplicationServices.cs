@@ -14,7 +14,7 @@ using Tauchbolde.Driver.ImageSharp;
 using Tauchbolde.Driver.PhotoStorage;
 using Tauchbolde.Driver.SmtpEmail;
 using Tauchbolde.InterfaceAdapters;
-using Tauchbolde.InterfaceAdapters.Logbook.Details;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.Details;
 using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core;
 using Tauchbolde.Web.Core.TextFormatting;

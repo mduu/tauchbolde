@@ -3,7 +3,7 @@ using System.Linq;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
-using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.ListAll;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
 using Xunit;
 
@@ -12,14 +12,14 @@ namespace Tauchbolde.Tests.InterfaceAdapters.Logbook
     public class MvcListLogbookPresenterTests
     {
         private readonly ITextFormatter textFormatter = A.Fake<ITextFormatter>();
-        private readonly MvcListLogbookOutputPort outputPort;
+        private readonly MvcListLogbookPresenter presenter;
 
         public MvcListLogbookPresenterTests()
         {
             A.CallTo(() => textFormatter.GetHtmlText(A<string>._))
                 .ReturnsLazily(call => $"{(string)call.Arguments[0]}_formatted");
 
-            outputPort = new MvcListLogbookOutputPort(textFormatter);
+            presenter = new MvcListLogbookPresenter(textFormatter);
         }
 
         [Theory]
@@ -33,7 +33,7 @@ namespace Tauchbolde.Tests.InterfaceAdapters.Logbook
         public void Present_Success(string teaserText, string text, string expectedTeaser)
         {
             // Act
-            outputPort.Output(new ListAllLogbookEntriesOutputPort(
+            presenter.Output(new ListAllLogbookEntriesOutputPort(
                 new[]
                 {
                     new ListAllLogbookEntriesOutputPort.LogbookItem(
@@ -47,7 +47,7 @@ namespace Tauchbolde.Tests.InterfaceAdapters.Logbook
                 true));
 
             // Assert
-            var model = outputPort.GetViewModel();
+            var model = presenter.GetViewModel();
             model.LogbookItems.Single().TeaserText.Should().Be(expectedTeaser);
         }
 
@@ -56,7 +56,7 @@ namespace Tauchbolde.Tests.InterfaceAdapters.Logbook
         {
             // Act
             // ReSharper disable once AssignNullToNotNullAttribute
-            Action act = () => outputPort.Output(null);
+            Action act = () => presenter.Output(null);
 
             // Assert
             act.Should().Throw<ArgumentNullException>();

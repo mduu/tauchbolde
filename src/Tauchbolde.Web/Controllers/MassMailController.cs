@@ -5,9 +5,8 @@ using Tauchbolde.Web.Core;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
-using Tauchbolde.Application.UseCases.Administration;
 using Tauchbolde.Application.UseCases.Administration.GetMassMailUseCase;
-using Tauchbolde.InterfaceAdapters.Administration.GetMassMailDetails;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Administration.GetMassMailDetails;
 
 namespace Tauchbolde.Web.Controllers
 {

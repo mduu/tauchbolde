@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using ApprovalTests.Core.Exceptions;
 using ApprovalTests.Reporters;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Administration.GetEditRolesUseCase;
-using Tauchbolde.InterfaceAdapters.Administration.EditRoles;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Administration.EditRoles;
 using Tauchbolde.Tests.TestingTools;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;

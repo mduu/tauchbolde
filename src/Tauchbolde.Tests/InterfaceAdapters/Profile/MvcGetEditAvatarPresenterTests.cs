@@ -1,7 +1,7 @@
 using ApprovalTests.Reporters;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Profile.GetEditAvatarUseCase;
-using Tauchbolde.InterfaceAdapters.Profile.GetEditAvatar;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Profile.GetEditAvatar;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;
 using static Tauchbolde.Tests.TestingTools.ApprovalsExtensions;

@@ -16,9 +16,9 @@ using Tauchbolde.Application.UseCases.Profile.EditUserProfileUseCase;
 using Tauchbolde.Application.UseCases.Profile.GetEditAvatarUseCase;
 using Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase;
 using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
-using Tauchbolde.InterfaceAdapters.Profile.GetEditAvatar;
-using Tauchbolde.InterfaceAdapters.Profile.GetEditUserProfile;
-using Tauchbolde.InterfaceAdapters.Profile.GetUserProfile;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Profile.GetEditAvatar;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Profile.GetEditUserProfile;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Profile.GetUserProfile;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Web.Controllers

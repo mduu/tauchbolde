@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ApprovalTests.Reporters;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseCase;
-using Tauchbolde.InterfaceAdapters.Administration.MemberManagement;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Administration.MemberManagement;
 using Tauchbolde.Tests.TestingTools;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;
