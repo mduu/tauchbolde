@@ -3,7 +3,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
 
-namespace Tauchbolde.InterfaceAdapters.Event.Details
+namespace Tauchbolde.InterfaceAdapters.WebApi.Presenters.Event.Details
 {
     public class WebApiEventDetailPresenter : IEventDetailsOutputPort
     {

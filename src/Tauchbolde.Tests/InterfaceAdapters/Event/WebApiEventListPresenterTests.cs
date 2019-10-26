@@ -6,7 +6,7 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
-using Tauchbolde.InterfaceAdapters.Event.List;
+using Tauchbolde.InterfaceAdapters.WebApi.Presenters.Event.List;
 using Xunit;
 
 namespace Tauchbolde.Tests.InterfaceAdapters.Event

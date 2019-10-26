@@ -14,8 +14,6 @@ using Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
 using Tauchbolde.Application.UseCases.Event.NewCommentUseCase;
 using Tauchbolde.InterfaceAdapters.Event;
-using Tauchbolde.InterfaceAdapters.Event.Details;
-using Tauchbolde.InterfaceAdapters.Event.List;
 using Tauchbolde.InterfaceAdapters.MVC.Presenters.Events.Details;
 using Tauchbolde.InterfaceAdapters.MVC.Presenters.Events.EditDetails;
 using Tauchbolde.InterfaceAdapters.MVC.Presenters.Events.List;

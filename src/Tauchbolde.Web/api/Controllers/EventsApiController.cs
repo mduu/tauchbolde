@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
 using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
-using Tauchbolde.InterfaceAdapters.Event.Details;
-using Tauchbolde.InterfaceAdapters.Event.List;
+using Tauchbolde.InterfaceAdapters.WebApi.Presenters.Event.Details;
+using Tauchbolde.InterfaceAdapters.WebApi.Presenters.Event.List;
 using Tauchbolde.SharedKernel;
 using Tauchbolde.Web.Core;
 
