@@ -22,8 +22,8 @@ namespace Tauchbolde.InterfaceAdapters.Administration.MemberManagement
                         m.Email,
                         m.EmailConfirmed,
                         m.LockoutEnabled,
-                        m.Roles.Select(r => r))),
-                interactorOutput.AddableUsers.Select(a => a));
+                        m.Roles.ToList())),
+                interactorOutput.AddableUsers.ToList());
         }
 
         public MvcMemberManagementViewModel GetViewModel() => viewModel;

@@ -16,8 +16,8 @@ namespace Tauchbolde.InterfaceAdapters.Administration.EditRoles
             viewModel = new MvcEditRolesViewModel(
                 interactorOutput.UserName,
                 interactorOutput.FullName,
-                interactorOutput.AllRoles.Select(r => r),
-                interactorOutput.AssignedRoles.Select(r => r));
+                interactorOutput.AllRoles.ToList(),
+                interactorOutput.AssignedRoles.ToList());
         }
 
         public MvcEditRolesViewModel GetViewModel() => viewModel;

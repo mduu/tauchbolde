@@ -24,7 +24,7 @@ namespace Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseC
 
         public GetMemberManagementInteractor(
             [NotNull] IDiverRepository diverRepository,
-            [NotNull] UserManager<IdentityUser> userManager, 
+            [NotNull] UserManager<IdentityUser> userManager,
             [NotNull] ICurrentUser currentUser,
             [NotNull] ILogger<GetMemberManagementInteractor> logger)
         {
@@ -43,22 +43,20 @@ namespace Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseC
                 logger.LogError("Use [{currentUserName}] has no access for getting member-management information!", currentUser.Username);
                 return UseCaseResult.AccessDenied();
             }
-            
-            var profiles = (await diverRepository.GetAllDiversAsync()).ToArray();
+
+            var profiles = (await diverRepository.GetAllDiversAsync()).ToList();
             var allMembers = await diverRepository.GetAllTauchboldeUsersAsync();
             var allUsers = userManager.Users
-                .AsEnumerable()
-                .Where(u => allMembers.All(d => d.UserId != u.Id));
+                .Where(u => allMembers.All(d => d.UserId != u.Id))
+                .Select(u => u.UserName);
 
             request.OutputPort?.Output(
-                new MemberManagementOutput(
-                    await MapMembersAsync(profiles),
-                    allUsers.Select(u => u.UserName)));
-            
+                new MemberManagementOutput(await MapMembersAsync(profiles), allUsers));
+
             return UseCaseResult.Success();
         }
 
-        private async Task<IEnumerable<MemberManagementOutput.Member>> MapMembersAsync(Diver[] profiles)
+        private async Task<IEnumerable<MemberManagementOutput.Member>> MapMembersAsync(IEnumerable<Diver> profiles)
         {
             var result = new List<MemberManagementOutput.Member>();
             foreach (var profile in profiles)
@@ -69,10 +67,10 @@ namespace Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseC
                     profile.User.UserName,
                     profile.User.Email,
                     profile.User.EmailConfirmed,
-                    profile.User.LockoutEnabled, 
+                    profile.User.LockoutEnabled,
                     await userManager.GetRolesAsync(profile.User)));
             }
-            
+
             return result;
         }
     }

@@ -6,17 +6,18 @@
         <label for="addMember">User:</label>
         <select class="form-control"
                 name="userName"
-                asp-items="@(new SelectList(Model.AddableUsers,"UserName","UserName"))"></select>
+                asp-items="@(new SelectList(Model.AddableUsers))">
+        </select>
     </div>
-    
+
     <div class="form-group">
         <label for="firstname">Vorname:</label>
-        <input name="firstname" type="text" required class="form-control" />
+        <input name="firstname" type="text" required class="form-control"/>
     </div>
-    
+
     <div class="form-group">
         <label for="lastname">Nachname:</label>
-        <input name="lastname" type="text" required class="form-control" />
+        <input name="lastname" type="text" required class="form-control"/>
     </div>
 
     <button type="submit" class="btn btn-primary">Hinzufügen</button>
