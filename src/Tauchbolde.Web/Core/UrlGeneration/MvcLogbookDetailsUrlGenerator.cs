@@ -2,7 +2,7 @@ using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Tauchbolde.InterfaceAdapters.Logbook.Details;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.Details;
 
 namespace Tauchbolde.Web.Core.UrlGeneration
 {

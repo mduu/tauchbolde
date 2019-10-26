@@ -35,6 +35,7 @@
     <ProjectReference Include="..\Tauchbolde.Application\Tauchbolde.Application.csproj" />
     <ProjectReference Include="..\Tauchbolde.Domain\Tauchbolde.Domain.csproj" />
     <ProjectReference Include="..\Tauchbolde.Driver.DataAccessSql\Tauchbolde.Driver.DataAccessSql.csproj" />
+    <ProjectReference Include="..\Tauchbolde.InterfaceAdapters.MVC\Tauchbolde.InterfaceAdapters.MVC.csproj" />
     <ProjectReference Include="..\Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj" />
     <ProjectReference Include="..\Tauchbolde.SharedKernel\Tauchbolde.SharedKernel.csproj" />
     <ProjectReference Include="..\Tauchbolde.Web\Tauchbolde.Web.csproj" />
@@ -45,6 +46,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="InterfaceAdapters\MVC" />
+    <Folder Include="InterfaceAdapters\WebApi" />
     <Folder Include="Web\" />
   </ItemGroup>
 

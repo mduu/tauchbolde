@@ -2,7 +2,7 @@ using System;
 
 namespace Tauchbolde.InterfaceAdapters.UrlBuilders
 {
-    internal static class TwitterUrlBuilder
+    public static class TwitterUrlBuilder
     {
         public static string GetUrl(string twitterHandle)
         {

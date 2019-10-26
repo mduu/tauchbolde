@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.UseCases.Event.GetRecentAndUpcomingEventsUseCase;
-using Tauchbolde.InterfaceAdapters.Event.RecentAndUpcomingEvents;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Events.RecentAndUpcomingEvents;
 
 namespace Tauchbolde.Web.ViewComponents
 {

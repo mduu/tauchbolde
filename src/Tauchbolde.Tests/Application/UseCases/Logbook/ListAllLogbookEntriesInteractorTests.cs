@@ -8,7 +8,7 @@ using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Core;
 using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
 using Tauchbolde.Domain.Entities;
-using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.ListAll;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
 using Xunit;
 
@@ -17,7 +17,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
     public class ListAllLogbookEntriesInteractorTests
     {
         private readonly ILogbookEntryRepository repository = A.Fake<ILogbookEntryRepository>();
-        private readonly MvcListLogbookOutputPort outputPort = new MvcListLogbookOutputPort(new MarkdownDigFormatter());
+        private readonly MvcListLogbookPresenter presenter = new MvcListLogbookPresenter(new MarkdownDigFormatter());
         private readonly ListAllLogbookEntriesInteractor interactor;
         private readonly ICurrentUser currentUser = A.Fake<ICurrentUser>();
 
@@ -42,26 +42,26 @@ namespace Tauchbolde.Tests.Application.UseCases.Logbook
         [Fact]
         public async Task Handle_DontIncludeUnpublished()
         {
-            var request = new ListAllLogbookEntries(outputPort);
+            var request = new ListAllLogbookEntries(presenter);
             
             var result = await interactor.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
-            var viewModel = outputPort.GetViewModel();
+            var viewModel = presenter.GetViewModel();
             viewModel.LogbookItems.Should().HaveCount(1);
         }
 
         [Fact]
         public async Task Handle_IncludeUnpublished()
         {
-            var request = new ListAllLogbookEntries(outputPort);
+            var request = new ListAllLogbookEntries(presenter);
             A.CallTo(() => currentUser.GetIsTauchboldOrAdminAsync())
                 .ReturnsLazily(() => Task.FromResult(true));
             
             var result = await interactor.Handle(request, CancellationToken.None);
 
             result.IsSuccessful.Should().BeTrue();
-            var viewModel = outputPort.GetViewModel();
+            var viewModel = presenter.GetViewModel();
             viewModel.LogbookItems.Should().HaveCount(2);
         }
     }

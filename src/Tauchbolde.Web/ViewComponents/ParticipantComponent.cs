@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tauchbolde.InterfaceAdapters.Event.Details;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Events.Details;
 
 namespace Tauchbolde.Web.ViewComponents
 {

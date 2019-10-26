@@ -36,6 +36,8 @@
     <ProjectReference Include="..\Tauchbolde.Driver.ImageSharp\Tauchbolde.Driver.ImageSharp.csproj" />
     <ProjectReference Include="..\Tauchbolde.Driver.PhotoStorage\Tauchbolde.Driver.PhotoStorage.csproj" />
     <ProjectReference Include="..\Tauchbolde.Driver.SmtpEmail\Tauchbolde.Driver.SmtpEmail.csproj" />
+    <ProjectReference Include="..\Tauchbolde.InterfaceAdapters.MVC\Tauchbolde.InterfaceAdapters.MVC.csproj" />
+    <ProjectReference Include="..\Tauchbolde.InterfaceAdapters.WebApi\Tauchbolde.InterfaceAdapters.WebApi.csproj" />
     <ProjectReference Include="..\Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj" />
   </ItemGroup>
   <ItemGroup>

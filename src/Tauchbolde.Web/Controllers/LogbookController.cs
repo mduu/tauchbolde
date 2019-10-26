@@ -16,9 +16,9 @@ using Tauchbolde.Application.UseCases.Logbook.PublishUseCase;
 using Tauchbolde.Application.UseCases.Logbook.UnpublishUseCase;
 using Tauchbolde.Domain.ValueObjects;
 using Tauchbolde.InterfaceAdapters;
-using Tauchbolde.InterfaceAdapters.Logbook.Details;
-using Tauchbolde.InterfaceAdapters.Logbook.Edit;
-using Tauchbolde.InterfaceAdapters.Logbook.ListAll;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.Details;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.Edit;
+using Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.ListAll;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
 using Tauchbolde.Web.Core;
 
@@ -49,7 +49,7 @@ namespace Tauchbolde.Web.Controllers
         // GET /
         public async Task<IActionResult> Index()
         {
-            var presenter = new MvcListLogbookOutputPort(textFormatter);
+            var presenter = new MvcListLogbookPresenter(textFormatter);
             var interactorResult = await mediator.Send(new ListAllLogbookEntries(presenter));
             if (!interactorResult.IsSuccessful)
             {
@@ -62,7 +62,7 @@ namespace Tauchbolde.Web.Controllers
         // GET /detail/x
         public async Task<IActionResult> Detail(Guid id)
         {
-            var presenter = new MvcLogbookDetailsOutputPort(relativeUrlGenerator, logbookDetailsUrlGenerator);
+            var presenter = new MvcLogbookDetailsPresenter(relativeUrlGenerator, logbookDetailsUrlGenerator);
             var interactorResult = await mediator.Send(new GetLogbookEntryDetails(id, presenter));
             if (!interactorResult.IsSuccessful)
             {
@@ -87,7 +87,7 @@ namespace Tauchbolde.Web.Controllers
         [Authorize(Policy = PolicyNames.RequireTauchboldeOrAdmin)]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var presenter = new MvcLogbookEditDetailsOutputPort();
+            var presenter = new MvcLogbookEditDetailsPresenter();
             var interactorResult = await mediator.Send(new GetLogbookEntryDetails(id, presenter));
             if (!interactorResult.IsSuccessful)
             {
