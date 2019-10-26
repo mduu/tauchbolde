@@ -8,6 +8,8 @@ Next generation website fro http://tauchbolde.ch
 
 This is the code for the http://tauchbolde.ch Website. The  website was a complete rewrite in C# / ASP.Net Core or in other words: a custom development. The previous website was a Drupal site with way to many security patches needed for the Drupal Core as well as for the plugins. Advanved functionallity was tricky to implement und migrate when software updates where needed. So this new site is "back to basics" and as I know how to code I do it myself instead of re-using systems like Drupal.
 
+For architecture I have choosen "Clean Architecture" and mixed it with a some Domain Driven Design. I wrote I blog serie on this topic which starts with [this post](https://marcduerst.com/2019/09/22/chapter-1-my-journey-in-clean-architecture-and-domain-driven-design/).
+
 ## Primary goals
 
 * Back to basics regarding features
@@ -15,6 +17,7 @@ This is the code for the http://tauchbolde.ch Website. The  website was a comple
 * Easy maintainance
 * No permanent security updates (unlike the current Drupal based website)
 * Playing with new tech like .Net Core, ASP.Net Core, Azure and later on Mobile Apps
+* Use the project to experiment with new concepts
 
 ## Current state
 
