@@ -46,6 +46,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="InterfaceAdapters\MVC" />
+    <Folder Include="InterfaceAdapters\WebApi" />
     <Folder Include="Web\" />
   </ItemGroup>
 

@@ -8,7 +8,7 @@ using Tauchbolde.InterfaceAdapters.MVC.Presenters.Profile.GetUserProfile;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;
 
-namespace Tauchbolde.Tests.InterfaceAdapters.Profile
+namespace Tauchbolde.Tests.InterfaceAdapters.MVC.Profile
 {
     [UseReporter(typeof(DiffReporter))]
     public class MvcGetUserProfilePresenterTests

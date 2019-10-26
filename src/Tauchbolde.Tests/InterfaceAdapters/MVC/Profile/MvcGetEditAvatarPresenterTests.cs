@@ -6,7 +6,7 @@ using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;
 using static Tauchbolde.Tests.TestingTools.ApprovalsExtensions;
 
-namespace Tauchbolde.Tests.InterfaceAdapters.Profile
+namespace Tauchbolde.Tests.InterfaceAdapters.MVC.Profile
 {
     [UseReporter(typeof(DiffReporter))]
     public class MvcGetEditAvatarPresenterTests

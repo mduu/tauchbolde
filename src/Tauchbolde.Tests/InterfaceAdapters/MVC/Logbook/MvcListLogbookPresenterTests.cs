@@ -7,7 +7,7 @@ using Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.ListAll;
 using Tauchbolde.InterfaceAdapters.TextFormatting;
 using Xunit;
 
-namespace Tauchbolde.Tests.InterfaceAdapters.Logbook
+namespace Tauchbolde.Tests.InterfaceAdapters.MVC.Logbook
 {
     public class MvcListLogbookPresenterTests
     {

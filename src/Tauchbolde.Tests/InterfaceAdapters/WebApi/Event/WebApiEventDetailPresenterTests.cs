@@ -9,7 +9,7 @@ using Tauchbolde.Domain.Types;
 using Tauchbolde.InterfaceAdapters.WebApi.Presenters.Event.Details;
 using Xunit;
 
-namespace Tauchbolde.Tests.InterfaceAdapters.Event
+namespace Tauchbolde.Tests.InterfaceAdapters.WebApi.Event
 {
     [UseReporter(typeof(DiffReporter))]
     public class WebApiEventDetailPresenterTests

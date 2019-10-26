@@ -8,7 +8,7 @@ using Tauchbolde.Tests.TestingTools;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
 using Xunit;
 
-namespace Tauchbolde.Tests.InterfaceAdapters.Administration
+namespace Tauchbolde.Tests.InterfaceAdapters.MVC.Administration
 {
     [UseReporter(typeof(DiffReporter))]
     public class MvcMemberManagementPresenterTests

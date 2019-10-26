@@ -9,7 +9,7 @@ using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
 using Tauchbolde.InterfaceAdapters.WebApi.Presenters.Event.List;
 using Xunit;
 
-namespace Tauchbolde.Tests.InterfaceAdapters.Event
+namespace Tauchbolde.Tests.InterfaceAdapters.WebApi.Event
 {
     [UseReporter(typeof(DiffReporter))]
     public class WebApiEventListPresenterTests
