@@ -1,4 +1,4 @@
-﻿@model Tauchbolde.Web.Models.AdminViewModels.MemberManagementViewModel
+﻿@model Tauchbolde.InterfaceAdapters.Administration.MemberManagement.MvcMemberManagementViewModel
 @{
     ViewData["Title"] = "Mitgliederverwaltung";
 }
@@ -10,7 +10,6 @@
 
         <table class="table">
             <tr>
-                <th>Realnae</th>
                 <th>Fullname</th>
                 <th>UserName</th>
                 <th>Email</th>
@@ -22,12 +21,11 @@
             @foreach (var member in Model.Members)
             {
                 <tr>
-                    <td>@member.Profile.Realname</td>
-                    <td>@member.Profile.Fullname</td>
-                    <td>@member.Profile.User.UserName</td>
-                    <td>@member.Profile.User.Email</td>
-                    <td>@member.Profile.User.EmailConfirmed</td>
-                    <td>@member.Profile.User.LockoutEnabled</td>
+                    <td>@member.Fullname</td>
+                    <td>@member.UserName</td>
+                    <td>@member.Email</td>
+                    <td>@member.EmailConfirmed</td>
+                    <td>@member.LockoutEnabled</td>
                     <td>
                         @foreach (var role in member.Roles)
                         {
@@ -35,8 +33,8 @@
                         }
                     </td>
                     <td>
-                        <a class="btn btn-primary" asp-action="EditRoles" asp-route-username="@member.Profile.User.UserName">Rollen</a>
-                        <a class="btn btn-primary" asp-action="Index" asp-controller="UserProfile" asp-route-id="@member.Profile.Id">Profil</a>
+                        <a class="btn btn-primary" asp-action="EditRoles" asp-route-username="@member.UserName">Rollen</a>
+                        <a class="btn btn-primary" asp-action="Index" asp-controller="UserProfile" asp-route-id="@member.DiverId">Profil</a>
                     </td>
                 </tr>
             }

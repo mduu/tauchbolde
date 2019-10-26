@@ -1,46 +1,30 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
+using System.Net;
 using JetBrains.Annotations;
 using MediatR;
-using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.UseCases.Administration.AddMemberUseCase;
 using Tauchbolde.Application.UseCases.Administration.EditRolesUseCase;
-using Tauchbolde.Driver.DataAccessSql;
-using Tauchbolde.Domain.Entities;
-using Tauchbolde.Domain.Types;
+using Tauchbolde.Application.UseCases.Administration.GetEditRolesUseCase;
+using Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseCase;
+using Tauchbolde.Application.UseCases.Administration.SetUpRolesUseCase;
+using Tauchbolde.InterfaceAdapters.Administration.EditRoles;
+using Tauchbolde.InterfaceAdapters.Administration.MemberManagement;
 using Tauchbolde.SharedKernel;
-using Tauchbolde.Web.Models.AdminViewModels;
 using Tauchbolde.Web.Core;
 
 namespace Tauchbolde.Web.Controllers
 {
-    // TODO Change the implementation of the actions to use use-cases instead of direct access
     [Authorize(Policy = PolicyNames.RequireAdministrator)]
     public class AdminController : AppControllerBase
     {
-        [NotNull] private readonly ApplicationDbContext context;
-        [NotNull] private readonly RoleManager<IdentityRole> roleManager;
-        [NotNull] private readonly UserManager<IdentityUser> userManager;
-        [NotNull] private readonly IDiverRepository diverRepository;
         [NotNull] private readonly IMediator mediator;
 
-        public AdminController(
-            [NotNull] ApplicationDbContext context,
-            [NotNull] RoleManager<IdentityRole> roleManager,
-            [NotNull] UserManager<IdentityUser> userManager,
-            [NotNull] IDiverRepository diverRepository,
-            [NotNull] IMediator mediator)
+        public AdminController([NotNull] IMediator mediator)
         {
-            this.context = context ?? throw new ArgumentNullException(nameof(context));
-            this.roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
-            this.userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            this.diverRepository = diverRepository ?? throw new ArgumentNullException(nameof(diverRepository));
             this.mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
@@ -50,26 +34,21 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> MemberManagement()
         {
-            var profiles = (await diverRepository.GetAllDiversAsync()).ToArray();
-
-            var members = new List<MemberViewModel>();
-            foreach (var member in profiles)
+            var presenter = new MvcMemberManagementPresenter();
+            var useCaseResult = await mediator.Send(new GetMemberManagement(presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                members.Add(await CreateMemberViewModel(member));
+                var msgMap = new Dictionary<ResultCategory, string>
+                {
+                    {ResultCategory.AccessDenied, "Zugriff verweigert!"},
+                    {ResultCategory.GeneralFailure, "Allgemeiner Fehler aufgetreten!"}
+                };
+
+                ShowErrorMessage(msgMap[useCaseResult.ResultCategory]);
+                return RedirectToAction(nameof(Index));
             }
 
-            var allMembers = await diverRepository.GetAllTauchboldeUsersAsync();
-            var allUsers = userManager.Users
-                .ToArray()
-                .Where(u => allMembers.All(d => d.UserId != u.Id));
-
-            var viewModel = new MemberManagementViewModel
-            {
-                Members = members,
-                AddableUsers = allUsers.ToArray(),
-            };
-
-            return View(viewModel);
+            return View(presenter.GetViewModel());
         }
 
         [HttpPost]
@@ -96,27 +75,23 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> EditRoles(string userName)
         {
-            var member = await diverRepository.FindByUserNameAsync(userName);
-            if (member == null)
+            var presenter = new MvcEditRolesPresenter();
+            var useCaseResult = await mediator.Send(new GetEditRoles(userName, presenter));
+            if (!useCaseResult.IsSuccessful)
             {
-                return BadRequest();
+                ShowErrorMessage($"Benutzer mit username {userName} nicht gefunden!");
+                return RedirectToAction("MemberManagement");
             }
-
-            var assignedRoles = await userManager.GetRolesAsync(member.User);
-
-            return View(new EditRolesViewModel
-            {
-                Roles = new[] {Rolenames.Tauchbold, Rolenames.Administrator},
-                AssignedRoles = assignedRoles,
-                Profile = member,
-            });
+            
+            return View(presenter.GetViewModel());
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditRoles(string userName, string[] roles)
         {
             var useCaseResult = await mediator.Send(new EditRoles(userName, roles));
-            
+
             var msgMap = new Dictionary<ResultCategory, Action>
             {
                 {ResultCategory.Success, () => ShowSuccessMessage($"Rollenzuweisung an {userName} erfolgreich: {string.Join(",", roles)}")},
@@ -130,43 +105,11 @@ namespace Tauchbolde.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> ConfigureRoles()
         {
-            await roleManager.CreateAsync(new IdentityRole(Rolenames.Tauchbold));
-            await roleManager.CreateAsync(new IdentityRole(Rolenames.Administrator));
+            var useCaseResult = await mediator.Send(new SetUpRoles());
 
-            return Ok();
-        }
-
-        public async Task<IActionResult> ConfigureUserMarc()
-        {
-            try
-            {
-                var userMarc = await context.Users
-                    .Where(u => u.UserName.Equals("marc@marcduerst.com", StringComparison.InvariantCultureIgnoreCase))
-                    .FirstOrDefaultAsync();
-                if (userMarc != null)
-                {
-                    await userManager.AddToRoleAsync(userMarc, Rolenames.Tauchbold);
-                    await userManager.AddToRoleAsync(userMarc, Rolenames.Administrator);
-                    return Ok();
-                }
-
-                return BadRequest("General error!");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        private async Task<MemberViewModel> CreateMemberViewModel(Diver diver)
-        {
-            var roles = await userManager.GetRolesAsync(diver.User);
-
-            return new MemberViewModel
-            {
-                Roles = roles,
-                Profile = diver,
-            };
+            return useCaseResult.IsSuccessful
+                ? Ok()
+                : StatusCode((int) HttpStatusCode.InternalServerError);
         }
     }
 }

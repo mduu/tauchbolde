@@ -1,4 +1,4 @@
-﻿@model Tauchbolde.Web.Models.AdminViewModels.EditRolesViewModel
+﻿@model Tauchbolde.InterfaceAdapters.Administration.EditRoles.MvcEditRolesViewModel
 @{
     ViewData["Title"] = "Rollenzuweisungen bearbeiten";
 }
@@ -6,13 +6,13 @@
 
 <form method="post" asp-antiforgery="true">
 
-    <input type="hidden" asp-for="@Model.Profile.User.UserName" />
+    <input type="hidden" asp-for="@Model.UserName" />
 
     <div class="col-xs-12">
 
-        <h5>@Model.Profile.Fullname</h5>
+        <h5>@Model.FullName</h5>
       
-        @foreach (var role in Model.Roles)
+        @foreach (var role in Model.AllRoles)
         {
             <div class="checkbox">
                 <label>

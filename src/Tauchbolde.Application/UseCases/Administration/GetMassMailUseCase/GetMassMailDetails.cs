@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 using MediatR;
 using Tauchbolde.SharedKernel;
 
-namespace Tauchbolde.Application.UseCases.Administration.GetMessMailUseCase
+namespace Tauchbolde.Application.UseCases.Administration.GetMassMailUseCase
 {
     public class GetMassMailDetails : IRequest<UseCaseResult>
     {
