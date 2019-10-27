@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.SharedKernel.Services;
 
 namespace Tauchbolde.Application.Services.Notifications
 {
@@ -42,7 +43,7 @@ namespace Tauchbolde.Application.Services.Notifications
                     var recipient = pendingNotificationsForRecipient.Key;
                     if (!recipient.LastNotificationCheckAt.HasValue ||
                         recipient.LastNotificationCheckAt.Value.AddHours(
-                            recipient.NotificationIntervalInHours) < DateTime.Now)
+                            recipient.NotificationIntervalInHours) < SystemClock.Now)
                     {
                         using (logger.BeginScope($"Send notification to {pendingNotificationsForRecipient.Key}"))
                         {
