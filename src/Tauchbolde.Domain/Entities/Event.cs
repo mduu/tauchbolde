@@ -8,13 +8,8 @@ using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Domain.Entities
 {
-    // TODO Change setters and ctor() to internal
     public class Event : EntityBase
     {
-        public Event() // TODO Make internal
-        {
-        }
-        
         public Event(
             [NotNull] string name,
             [NotNull] string description,
@@ -36,46 +31,23 @@ namespace Tauchbolde.Domain.Entities
             RaiseDomainEvent(new EventCreatedEvent(Id));
         }
 
-        [Display(Name = "Name")]
-        [Required]
-        public string Name { get; [UsedImplicitly] set; }
+        internal Event()
+        {
+        }
+        
+        [Required] public string Name { get; [UsedImplicitly] internal set; }
+        [Required] public Guid OrganisatorId { get; [UsedImplicitly] internal set; }
+        [Required] public Diver Organisator { get; [UsedImplicitly] internal set; }
+        public string Location { get; [UsedImplicitly] internal set; }
+        public string MeetingPoint { get; [UsedImplicitly] internal set; }
+        public string Description { get; [UsedImplicitly] internal set; }
+        [Required] public DateTime StartTime { get; [UsedImplicitly] internal set; }
+        public DateTime? EndTime { get; [UsedImplicitly] internal set; }
+        [Required] public bool Canceled { get; [UsedImplicitly] internal set; }
+        [Required] public bool Deleted { get; [UsedImplicitly] internal set; }
 
-        [Display(Name = "Organisator Id")]
-        [Required]
-        public Guid OrganisatorId { get; [UsedImplicitly] set; }
-
-        [Display(Name = "Organisator")]
-        [Required]
-        public Diver Organisator { get; [UsedImplicitly] set; }
-
-        [Display(Name = "Ort / TP")]
-        public string Location { get; [UsedImplicitly] set; }
-
-        [Display(Name = "Treffpunkt")]
-        public string MeetingPoint { get; [UsedImplicitly] set; }
-
-        [Display(Name = "Beschreibung")]
-        public string Description { get; [UsedImplicitly] set; }
-
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Startzeit")]
-        [Required]
-        public DateTime StartTime { get; [UsedImplicitly] set; }
-
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
-        [Display(Name = "Endzeit")]
-        public DateTime? EndTime { get; [UsedImplicitly] set; }
-
-        [Display(Name = "Abgesagt")]
-        [Required]
-        public bool Canceled { get; [UsedImplicitly] set; }
-
-        [Display(Name = "Gelöscht")]
-        [Required]
-        public bool Deleted { get; [UsedImplicitly] set; }
-
-        public virtual ICollection<Participant> Participants { get; [UsedImplicitly] set; }
-        public virtual ICollection<Comment> Comments { get; [UsedImplicitly] set; } = new List<Comment>();
+        public virtual ICollection<Participant> Participants { get; [UsedImplicitly] internal set; }
+        public virtual ICollection<Comment> Comments { get; [UsedImplicitly] internal set; } = new List<Comment>();
 
         public Comment AddNewComment(Guid authorId, [NotNull] string text)
         {
