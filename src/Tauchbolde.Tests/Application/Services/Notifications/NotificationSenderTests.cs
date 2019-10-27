@@ -29,7 +29,7 @@ namespace Tauchbolde.Tests.Application.Services.Notifications
         }
 
         [Fact]
-        public async Task No_Check_Without_Pending_Notifications()
+        public async Task SendAsync_NoPendingNotification_MustNotSend()
         {
             // Act
             await sender.SendAsync(formatter, submitter, () => Task.CompletedTask);
@@ -44,11 +44,13 @@ namespace Tauchbolde.Tests.Application.Services.Notifications
         }
 
         [Fact]
-        public async Task No_Check_Interval_Not_Reached()
+        public async Task SendAsync_RecentLastCheck_MustNotSend()
         {
             // Arrange
-            var lastNotificationCheckAt = DateTime.UtcNow.AddMinutes(-1);
-            SystemClock.SetTime(lastNotificationCheckAt);
+            var now = DateTime.UtcNow;
+            var lastNotificationCheckAt = now.AddMinutes(-1);
+            SystemClock.SetTime(now);
+            
             var userHansMeier = CreateTestUser(lastNotificationCheckAt, 1);
             var notifications = CreateTestNotifications(userHansMeier);
 
@@ -64,10 +66,13 @@ namespace Tauchbolde.Tests.Application.Services.Notifications
         }
 
         [Fact]
-        public async Task No_Check_When_Interval_Reached()
+        public async Task SendAsync_LastCheckBeforeLimit_MustSend()
         {
             // Arrange
-            var lastNotificationCheckAt = DateTime.UtcNow.AddHours(-1).AddMinutes(-1);
+            var now = DateTime.UtcNow;
+            SystemClock.SetTime(now);
+            var lastNotificationCheckAt = now.AddHours(-1).AddMinutes(-1);
+            
             var userHansMeier = CreateTestUser(lastNotificationCheckAt, 1);
             var notifications = CreateTestNotifications(userHansMeier);
             
@@ -83,34 +88,6 @@ namespace Tauchbolde.Tests.Application.Services.Notifications
             A.CallTo(() => submitter.SubmitAsync(A<Diver>._, A<string>._))
                 .MustHaveHappenedOnceExactly();
             notifications.First().CountOfTries.Should().Be(1);
-            userHansMeier.LastNotificationCheckAt.Should().BeAfter(lastNotificationCheckAt);
-        }
-
-        [Fact]
-        public async Task No_Multiple_Notifications_For_One_User_When_Interval_Reached()
-        {
-            // Arrange
-            var lastNotificationCheckAt = DateTime.UtcNow.AddHours(-1).AddMinutes(-1);
-            var userHansMeier = CreateTestUser(lastNotificationCheckAt, 1);
-            var notifications = CreateTestNotifications(userHansMeier, 3);
-
-            A.CallTo(() => repository.GetPendingNotificationByUserAsync())
-                .Returns(Task.FromResult(notifications.GroupBy(n => n.Recipient)));
-            A.CallTo(() => formatter.FormatAsync(A<Diver>._, A<IGrouping<Diver, Notification>>._))
-                .Returns("Some content!");
-
-            // Act
-            await sender.SendAsync(formatter, submitter, () => Task.CompletedTask);
-
-            // Assert
-            A.CallTo(() => submitter.SubmitAsync(A<Diver>._, A<string>._))
-                .MustHaveHappenedOnceExactly();
-            
-            foreach (var notification in notifications)
-            {
-                notification.CountOfTries.Should().Be(1);
-            }
-            
             userHansMeier.LastNotificationCheckAt.Should().BeAfter(lastNotificationCheckAt);
         }
 
