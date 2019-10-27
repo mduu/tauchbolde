@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tauchbolde.Application\Tauchbolde.Application.csproj" />
-    <ProjectReference Include="..\Tauchbolde.Domain\Tauchbolde.Domain.csproj" />
     <ProjectReference Include="..\Tauchbolde.Driver.ApplicationInsights\Tauchbolde.Driver.ApplicationInsights.csproj" />
     <ProjectReference Include="..\Tauchbolde.Driver.DataAccessSql\Tauchbolde.Driver.DataAccessSql.csproj" />
     <ProjectReference Include="..\Tauchbolde.Driver.ImageSharp\Tauchbolde.Driver.ImageSharp.csproj" />

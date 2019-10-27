@@ -104,7 +104,7 @@ namespace Tauchbolde.Application.Services.Notifications
             {
                 logger.LogTrace($"Updating database records for {pendingNotificationsForRecipient.Key} ...");
 
-                recipient.LastNotificationCheckAt = DateTime.Now;
+                recipient.MarkNotificationChecked();
                 await saver();
 
                 logger.LogTrace($"Database updated for {pendingNotificationsForRecipient.Key}");
