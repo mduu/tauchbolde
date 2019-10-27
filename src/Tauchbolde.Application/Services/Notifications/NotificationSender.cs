@@ -66,7 +66,7 @@ namespace Tauchbolde.Application.Services.Notifications
 
         private async Task SubmitToRecipient(
             INotificationSubmitter notificationSubmitter,
-            System.Linq.IGrouping<Diver, Notification> pendingNotificationsForRecipient,
+            IGrouping<Diver, Notification> pendingNotificationsForRecipient,
             Diver recipient,
             string content)
         {
@@ -77,7 +77,7 @@ namespace Tauchbolde.Application.Services.Notifications
                 await notificationSubmitter.SubmitAsync(recipient, content);
                 foreach (var notification in pendingNotificationsForRecipient)
                 {
-                    notification.AlreadySent = true;
+                    notification.Sent();
                 }
             }
             catch (Exception ex)
@@ -88,7 +88,7 @@ namespace Tauchbolde.Application.Services.Notifications
             {
                 foreach (var notification in pendingNotificationsForRecipient)
                 {
-                    notification.CountOfTries++;
+                    notification.TriedSending();
                 }
             }
         }
