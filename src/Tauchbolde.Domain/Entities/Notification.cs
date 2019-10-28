@@ -1,45 +1,54 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using JetBrains.Annotations;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.SharedKernel;
+using Tauchbolde.SharedKernel.Services;
 
 namespace Tauchbolde.Domain.Entities
 {
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class Notification : EntityBase
     {
-        [Display(Name = "Empfänger")]
-        [Required]
-        public Diver Recipient { get; set; }
-
-        [Display(Name = "Ereigniszeit")]
-        [Required]
-        public DateTime OccuredAt { get; set; }
-
-        [Display(Name = "Bereits gesendet")]
-        [Required]
-        public bool AlreadySent { get; set; }
-
-        [Display(Name = "Anzahl Sendeversuche")]
-        [Required]
-        public int CountOfTries { get; set; }
-
-        [Display(Name = "Nachricht")]
-        [Required]
-        public string Message { get; set; }
-
-        [Display(Name = "Nachrichtentyp")]
-        [Required]
-        public NotificationType Type { get; set; }
-
-        [Display(Name = "Anlass ID")]
-        public Guid? EventId { get; set; }
-        [Display(Name = "Anlass")]
-        public virtual Event Event { get; set; }
+        public Notification(
+            Diver recipient,
+            NotificationType notificationType,
+            string message,
+            [CanBeNull] Event relatedEvent,
+            [CanBeNull] LogbookEntry logbookEntry)
+        {
+            Id = Guid.NewGuid();
+            OccuredAt = SystemClock.Now;
+            Recipient = recipient;
+            Type = notificationType;
+            Message = message;
+            Event = relatedEvent;
+            LogbookEntry = logbookEntry;
+        }
         
-        [Display(Name = "Logbucheintrag ID")]
-        public Guid? LogbookEntryId { get; set; }
+        internal Notification()
+        {
+        }
         
-        [Display(Name = "Logbucheintrag")]
-        public virtual LogbookEntry LogbookEntry { get; set; }
+        [Required] public Diver Recipient { get; internal set; }
+        [Required] public DateTime OccuredAt { get; internal set; }
+        [Required] public bool AlreadySent { get; internal set; }
+        [Required] public int CountOfTries { get; internal set; }
+        [Required] public string Message { get; internal set; }
+        [Required] public NotificationType Type { get; internal set; }
+        public Guid? EventId { get; [UsedImplicitly] internal set; }
+        public virtual Event Event { get; [UsedImplicitly] internal set; }
+        public Guid? LogbookEntryId { get; [UsedImplicitly] internal set; }
+        public virtual LogbookEntry LogbookEntry { get; [UsedImplicitly] internal set; }
+
+        public void TriedSending()
+        {
+            CountOfTries++;
+        }
+        
+        public void Sent()
+        {
+            AlreadySent = true;
+        }
     }
 }

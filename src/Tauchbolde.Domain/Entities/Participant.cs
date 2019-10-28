@@ -1,19 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using JetBrains.Annotations;
 using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Domain.Entities
 {
-    // TODO Make the prop setters "internal"
     public class Participant : EntityBase
     {
-        // TODO Make this constructor "internal"
-        public Participant()
-        {
-        }
-
         public Participant(
             Guid eventId,
             Guid diverId,
@@ -33,33 +28,18 @@ namespace Tauchbolde.Domain.Entities
             RaiseDomainEvent(new ParticipationChangedEvent(Id, EventId, ParticipatingDiverId, Status));
         }
         
-        [Display(Name = "Anlass ID")]
-        [Required]
-        public Guid EventId { get; set; }
+        internal Participant()
+        {
+        }
         
-        [Display(Name = "Anlass")]
-        [Required]
-        public Event Event { get; set; }
-
-        public Guid ParticipatingDiverId { get; set; }
-
-        [Display(Name = "Teilnehmer")]
-        [Required]
-        public Diver ParticipatingDiver { get; set; }
-
-        [Display(Name = "Anzahl Personen")]
-        [Required]
-        public int CountPeople { get; set; }
-
-        [Display(Name ="Notiz")]
-        public string Note { get; set; }
-
-        [Display(Name ="Status")]
-        [Required]
-        public ParticipantStatus Status { get; set; }
-
-        [Display(Name="Buddy Team")]
-        public string BuddyTeamName { get; set; }
+        [Required] public Guid EventId { get; [UsedImplicitly] internal set; }
+        [Required] public Event Event { get; [UsedImplicitly] internal set; }
+        public Guid ParticipatingDiverId { get; [UsedImplicitly] internal set; }
+        [Required] public Diver ParticipatingDiver { get; [UsedImplicitly] internal set; }
+        [Required] public int CountPeople { get; [UsedImplicitly] internal set; }
+        public string Note { get; [UsedImplicitly] internal set; }
+        [Required] public ParticipantStatus Status { get; [UsedImplicitly] internal set; }
+        public string BuddyTeamName { get; [UsedImplicitly] internal set; }
 
         public void Edit(ParticipantStatus status, string buddyTeamName, int numberOfPeople, string note)
         {

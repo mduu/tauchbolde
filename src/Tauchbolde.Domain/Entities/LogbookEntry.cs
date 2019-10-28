@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using Tauchbolde.Domain.Events.LogbookEntry;
@@ -11,10 +10,6 @@ namespace Tauchbolde.Domain.Entities
     [UsedImplicitly]
     public class LogbookEntry : EntityBase
     {
-        internal LogbookEntry()
-        {
-        }
-
         public LogbookEntry(
             [NotNull] string title,
             [NotNull] string teaser,
@@ -48,48 +43,25 @@ namespace Tauchbolde.Domain.Entities
             RaiseDomainEvent(new LogbookEntryCreatedEvent(Id, title));
         }
         
-        [DisplayName("Titel")]
-        [Required] 
-        public string Title { get; internal set; } = "";
+        internal LogbookEntry()
+        {
+        }
 
-        [DisplayName("Text/Beschreibung")]
-        [Required]
-        public string Text { get; internal set; } = "";
-
-        [DisplayName("Optionaler Teaser/Intro")]
-        [Required]
-        public string TeaserText { get; internal set; } = "";
-
-        [DisplayName("Favorisierter Eintrag")]
+        [Required] public string Title { get; internal set; } = "";
+        [Required] public string Text { get; internal set; } = "";
+        [Required] public string TeaserText { get; internal set; } = "";
         public bool IsFavorite { get; internal set; }
-
         public string TeaserImage { get; internal set; }
-
         public string TeaserImageThumb { get; internal set; }
-
-        [DisplayName("Optionale Url externer Fotoalbum")]
         public string ExternalPhotoAlbumUrl { get; internal set; }
-
-        [DisplayName("Erstellt am")]
-        [Required]
-        public DateTime CreatedAt { get; internal set; }
-
-        [DisplayName("Geändert am")]
+        [Required] public DateTime CreatedAt { get; internal set; }
         public DateTime? ModifiedAt { get; internal set; }
-
-        [DisplayName("Publiziert")]
         public bool IsPublished { get; internal set; }
-
         public Guid? EditorAuthorId { [UsedImplicitly] get; internal set; }
-
         public Diver EditorAuthor { get; [UsedImplicitly] internal set; }
-
         [Required] public Guid OriginalAuthorId { get; [UsedImplicitly] private set; }
-
         public Diver OriginalAuthor { get; internal set; }
-        
         public Guid? EventId { get; private set; }
-
         public Event Event { get; [UsedImplicitly] internal set; }
 
         public void Publish()

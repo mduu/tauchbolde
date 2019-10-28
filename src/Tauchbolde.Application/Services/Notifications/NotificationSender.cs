@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Domain.Entities;
+using Tauchbolde.SharedKernel.Services;
 
 namespace Tauchbolde.Application.Services.Notifications
 {
@@ -42,7 +43,7 @@ namespace Tauchbolde.Application.Services.Notifications
                     var recipient = pendingNotificationsForRecipient.Key;
                     if (!recipient.LastNotificationCheckAt.HasValue ||
                         recipient.LastNotificationCheckAt.Value.AddHours(
-                            recipient.NotificationIntervalInHours) < DateTime.Now)
+                            recipient.NotificationIntervalInHours) < SystemClock.Now)
                     {
                         using (logger.BeginScope($"Send notification to {pendingNotificationsForRecipient.Key}"))
                         {
@@ -65,7 +66,7 @@ namespace Tauchbolde.Application.Services.Notifications
 
         private async Task SubmitToRecipient(
             INotificationSubmitter notificationSubmitter,
-            System.Linq.IGrouping<Diver, Notification> pendingNotificationsForRecipient,
+            IGrouping<Diver, Notification> pendingNotificationsForRecipient,
             Diver recipient,
             string content)
         {
@@ -76,7 +77,7 @@ namespace Tauchbolde.Application.Services.Notifications
                 await notificationSubmitter.SubmitAsync(recipient, content);
                 foreach (var notification in pendingNotificationsForRecipient)
                 {
-                    notification.AlreadySent = true;
+                    notification.Sent();
                 }
             }
             catch (Exception ex)
@@ -87,7 +88,7 @@ namespace Tauchbolde.Application.Services.Notifications
             {
                 foreach (var notification in pendingNotificationsForRecipient)
                 {
-                    notification.CountOfTries++;
+                    notification.TriedSending();
                 }
             }
         }
@@ -104,7 +105,7 @@ namespace Tauchbolde.Application.Services.Notifications
             {
                 logger.LogTrace($"Updating database records for {pendingNotificationsForRecipient.Key} ...");
 
-                recipient.LastNotificationCheckAt = DateTime.Now;
+                recipient.MarkNotificationChecked();
                 await saver();
 
                 logger.LogTrace($"Database updated for {pendingNotificationsForRecipient.Key}");

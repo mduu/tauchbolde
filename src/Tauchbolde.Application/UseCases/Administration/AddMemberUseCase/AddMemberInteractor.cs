@@ -51,19 +51,11 @@ namespace Tauchbolde.Application.UseCases.Administration.AddMemberUseCase
                 logger.LogError("Identity user [{username}] not found!", request.UserName);
                 return UseCaseResult<string>.NotFound();
             }
-            
-            var diver = new Diver
-            {
-                Id = Guid.NewGuid(),
-                UserId = user.Id,
-                Firstname = request.FirstName,
-                Lastname = request.LastName,
-                Fullname = $"{request.FirstName} {request.LastName}",
-                MobilePhone = user.PhoneNumber,
-            };
 
+            var diver = new Diver(user, request.FirstName, request.LastName);
             await AutoConfirmEmailAddress(user);
             await userManager.AddToRoleAsync(user, Rolenames.Tauchbold);
+
             await diverRepository.InsertAsync(diver);
 
             var warningMessage = "";
@@ -79,6 +71,7 @@ namespace Tauchbolde.Application.UseCases.Administration.AddMemberUseCase
             }
             
             logger.LogInformation("User [{username}] added as a member.", request.UserName);
+            
             return UseCaseResult<string>.Success(warningMessage.Trim());
         }
 

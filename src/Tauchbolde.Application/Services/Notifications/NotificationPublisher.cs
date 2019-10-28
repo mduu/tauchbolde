@@ -34,30 +34,28 @@ namespace Tauchbolde.Application.Services.Notifications
             Guid? relatedEventId = null,
             Guid? relatedLogbookEntryId = null)
         {
-            if (recipients == null) { return; }
-            
+            if (recipients == null)
+            {
+                return;
+            }
+
             var relatedEvent = relatedEventId != null
                 ? await eventRepository.FindByIdAsync(relatedEventId.Value)
                 : null;
-            
+
             var relatedLogbookEntry = relatedLogbookEntryId != null
                 ? await logbookEntryRepository.FindByIdAsync(relatedLogbookEntryId.Value)
                 : null;
 
             foreach (var recipient in GetRelevantRecipients(recipients, currentDiver))
             {
-                var newNotification = new Notification
-                {
-                    Id = Guid.NewGuid(),
-                    Event = relatedEvent,
-                    OccuredAt = DateTime.Now,
-                    Recipient = recipient,
-                    Type = notificationType,
-                    Message = message,
-                    LogbookEntry = relatedLogbookEntry,
-                };
-                
-                await notificationRepository.InsertAsync(newNotification);
+                await notificationRepository.InsertAsync(
+                    new Notification(
+                        recipient,
+                        notificationType,
+                        message,
+                        relatedEvent,
+                        relatedLogbookEntry));
             }
         }
 
