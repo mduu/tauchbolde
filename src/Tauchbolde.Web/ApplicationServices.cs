@@ -29,7 +29,7 @@ namespace Tauchbolde.Web
         public static void Register(
             [NotNull] IServiceCollection services,
             [NotNull] IConfiguration configuration,
-            [NotNull] IHostingEnvironment hostingEnvironment)
+            [NotNull] IWebHostEnvironment hostingEnvironment)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             if (configuration == null) throw new ArgumentNullException(nameof(configuration));
@@ -81,7 +81,7 @@ namespace Tauchbolde.Web
                 : tokenSecurityKey;
         }
 
-        private static string GetPhotoStoreRoot(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        private static string GetPhotoStoreRoot(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             var photoStoreRoot = configuration["PhotoStoreRoot"];
             if (string.IsNullOrWhiteSpace(photoStoreRoot))

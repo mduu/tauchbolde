@@ -20,6 +20,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Hosting;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Driver.PhotoStorage.AzureBlobStorage;
@@ -31,11 +32,11 @@ namespace Tauchbolde.Web
 {
     public class Startup
     {
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
         public Startup(
             [NotNull] IConfiguration configuration,
-            [NotNull] IHostingEnvironment hostingEnvironment)
+            [NotNull] IWebHostEnvironment hostingEnvironment)
         {
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             this.hostingEnvironment = hostingEnvironment ?? throw new ArgumentNullException(nameof(hostingEnvironment));
@@ -152,12 +153,9 @@ namespace Tauchbolde.Web
                 {
                     options.Filters.Add(typeof(BuildNumberFilter));
                     options.Filters.Add(typeof(CurrentUserInformationFilter));
+                    options.EnableEndpointRouting = false;
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-                .AddJsonOptions(
-                    options => options.SerializerSettings.ReferenceLoopHandling =
-                        Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                );
+                .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             services.AddApplicationInsightsTelemetry();
             services.AddTransient<IEmailSender, IdentityMessageSender>();
@@ -184,7 +182,7 @@ namespace Tauchbolde.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

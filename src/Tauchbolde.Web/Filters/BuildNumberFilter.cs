@@ -10,12 +10,12 @@ namespace Tauchbolde.Web.Filters
 {
     public class BuildNumberFilter : IResultFilter
     {
-        private ILogger logger;
-        private readonly IHostingEnvironment env;
+        private readonly ILogger logger;
+        private readonly IWebHostEnvironment env;
 
         public BuildNumberFilter(
             ILoggerFactory loggerFactory,
-            IHostingEnvironment env)
+            IWebHostEnvironment env)
         {
             if (loggerFactory == null)
             {
