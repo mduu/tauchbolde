@@ -13,7 +13,7 @@ namespace Tauchbolde.Tests.Web
     public class ApplicationServicesTests
     {
         private readonly IServiceCollection services = A.Fake<IServiceCollection>();
-        private readonly IHostingEnvironment hostingEnvironment = A.Fake<IHostingEnvironment>();
+        private readonly IWebHostEnvironment hostingEnvironment = A.Fake<IWebHostEnvironment>();
 
         [Fact]
         public void TestRegisterWithoutPhotoStoreType()

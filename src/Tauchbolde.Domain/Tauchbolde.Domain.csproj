@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <RootNamespace>Tauchbolde.Domain</RootNamespace>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="8.5.0" />
+        <PackageReference Include="FluentValidation" Version="8.6.2" />
         <PackageReference Include="FluentValidator" Version="2.0.4" />
-        <PackageReference Include="MediatR" Version="7.0.0" />
+        <PackageReference Include="MediatR" Version="8.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="2.2.0" />
-        <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+        <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
     </ItemGroup>
 
     <ItemGroup>

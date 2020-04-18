@@ -12,13 +12,13 @@ namespace Tauchbolde.Web.Core
     /// <seealso cref="IAvatarStore"/>
     public class AvatarPathProvider : AvatarPathProviderBase
     {
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Tauchbolde.Web.Core.AvatarPathProvider"/> class.
         /// </summary>
         /// <param name="environment">Environment.</param>
-        public AvatarPathProvider(IHostingEnvironment environment)
+        public AvatarPathProvider(IWebHostEnvironment environment)
         {
             hostingEnvironment = environment;
         }
