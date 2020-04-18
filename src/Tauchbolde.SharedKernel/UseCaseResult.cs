@@ -36,10 +36,6 @@ namespace Tauchbolde.SharedKernel
         [NotNull]
         public static UseCaseResult AccessDenied() => new UseCaseResult(resultCategory: ResultCategory.AccessDenied);
 
-        [NotNull]
-        public static UseCaseResult ValidationFailed(IEnumerable<ValidationFailure> errors = null)
-            => new UseCaseResult(errors, ResultCategory.ValidationFailed);
-
         public bool IsSuccessful => ResultCategory == ResultCategory.Success;
 
         public ResultCategory ResultCategory { get; }
@@ -85,9 +81,5 @@ namespace Tauchbolde.SharedKernel
                 resultCategory: ResultCategory.NotFound);
 
         public new static UseCaseResult<TPayload> AccessDenied() => new UseCaseResult<TPayload>(resultCategory: ResultCategory.AccessDenied);
-
-        [NotNull]
-        public new static UseCaseResult<TPayload> ValidationFailed(IEnumerable<ValidationFailure> errors = null)
-            => new UseCaseResult<TPayload>(errors, resultCategory: ResultCategory.ValidationFailed);
     }
 }
