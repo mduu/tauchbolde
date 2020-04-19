@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Core;
@@ -44,11 +45,13 @@ namespace Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseC
                 return UseCaseResult.AccessDenied();
             }
 
-            var profiles = (await diverRepository.GetAllDiversAsync()).ToList();
+            var profiles = await diverRepository.GetAllDiversAsync();
             var allMembers = await diverRepository.GetAllTauchboldeUsersAsync();
-            var allUsers = userManager.Users
+            var allUsers = 
+                (await userManager.Users.ToListAsync(cancellationToken: cancellationToken))
                 .Where(u => allMembers.All(d => d.UserId != u.Id))
-                .Select(u => u.UserName);
+                .Select(u => u.UserName)
+                .ToList();
 
             request.OutputPort?.Output(
                 new MemberManagementOutput(await MapMembersAsync(profiles), allUsers));
