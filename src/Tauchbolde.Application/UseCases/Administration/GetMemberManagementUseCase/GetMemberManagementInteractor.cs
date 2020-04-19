@@ -48,7 +48,7 @@ namespace Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseC
             var profiles = await diverRepository.GetAllDiversAsync();
             var allMembers = await diverRepository.GetAllTauchboldeUsersAsync();
             var allUsers = 
-                (await userManager.Users.ToListAsync(cancellationToken: cancellationToken))
+                userManager.Users.ToList()
                 .Where(u => allMembers.All(d => d.UserId != u.Id))
                 .Select(u => u.UserName)
                 .ToList();
