@@ -21,7 +21,7 @@ namespace Tauchbolde.InterfaceAdapters.MVC.Presenters.Profile.MemberList
             public MvcMemberViewModel(
                 Guid diverId,
                 [NotNull] string email,
-                [NotNull] string avatarId,
+                [CanBeNull] string avatarId,
                 [NotNull] string name,
                 [NotNull] string memberSince,
                 string education,
@@ -35,7 +35,7 @@ namespace Tauchbolde.InterfaceAdapters.MVC.Presenters.Profile.MemberList
             {
                 DiverId = diverId;
                 Email = email ?? throw new ArgumentNullException(nameof(email));
-                AvatarId = avatarId ?? throw new ArgumentNullException(nameof(avatarId));
+                AvatarId = avatarId;
                 Name = name ?? throw new ArgumentNullException(nameof(name));
                 MemberSince = memberSince ?? throw new ArgumentNullException(nameof(memberSince));
                 Education = education;
