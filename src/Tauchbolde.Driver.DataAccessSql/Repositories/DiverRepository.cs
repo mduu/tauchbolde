@@ -22,21 +22,32 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
         /// <inheritdoc />
         public async Task<Diver> FindByUserNameAsync(string username)
         {
-            if (string.IsNullOrWhiteSpace(username)) { throw new ArgumentNullException(nameof(username)); }
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new ArgumentNullException(nameof(username));
+            }
 
-            return await Context.Diver
-                                .Include(d => d.User)
-                                .FirstOrDefaultAsync(u => u.User.UserName.Equals(username, StringComparison.CurrentCultureIgnoreCase));
+            var allDivers = await Context.Diver
+                .Include(diver => diver.User)
+                .ToListAsync();
+
+            return allDivers
+                .FirstOrDefault(diver =>
+                    diver.User?.UserName != null &&
+                    diver.User.UserName.Equals(username, StringComparison.CurrentCultureIgnoreCase));
         }
-        
+
         /// <inheritdoc />
         public override async Task<Diver> FindByIdAsync(Guid id)
         {
-            if (id == Guid.Empty) { throw new ArgumentException("Guid.Empty not allowed!", nameof(id)); }
-            
+            if (id == Guid.Empty)
+            {
+                throw new ArgumentException("Guid.Empty not allowed!", nameof(id));
+            }
+
             return await Context.Diver
-                                .Include(d => d.User)
-                                .FirstOrDefaultAsync(u => u.Id == id);
+                .Include(d => d.User)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         /// <inheritdoc />
@@ -77,6 +88,5 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
                 .OrderBy(d => d.Firstname)
                 .ThenBy(d => d.Lastname)
                 .ToListAsync();
-
     }
 }

@@ -41,3 +41,7 @@ body {
         display: none;
     }
 }
+
+.nav.nav-pills .nav-item {
+    width: 100%;
+}

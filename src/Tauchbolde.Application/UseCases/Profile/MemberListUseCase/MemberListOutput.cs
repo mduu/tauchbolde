@@ -23,7 +23,7 @@ namespace Tauchbolde.Application.UseCases.Profile.MemberListUseCase
             public Member(
                 Guid diverId,
                 [NotNull] string email,
-                [NotNull] string avatarId,
+                [CanBeNull] string avatarId,
                 [NotNull] string name,
                 DateTime memberSince,
                 string education,
@@ -35,7 +35,7 @@ namespace Tauchbolde.Application.UseCases.Profile.MemberListUseCase
             {
                 DiverId = diverId;
                 Email = email ?? throw new ArgumentNullException(nameof(email));
-                AvatarId = avatarId ?? throw new ArgumentNullException(nameof(avatarId));
+                AvatarId = avatarId;
                 Name = name ?? throw new ArgumentNullException(nameof(name));
                 Education = education;
                 Experience = experience;
@@ -48,7 +48,7 @@ namespace Tauchbolde.Application.UseCases.Profile.MemberListUseCase
 
             public Guid DiverId { get; }
             [NotNull] public string Email { get; }
-            [NotNull] public string AvatarId { get; }
+            [CanBeNull] public string AvatarId { get; }
             [NotNull] public string Name { get; }
             public DateTime MemberSince { get; }
             public string Education { get; }
