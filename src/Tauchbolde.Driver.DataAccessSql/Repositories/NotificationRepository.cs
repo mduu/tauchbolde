@@ -20,13 +20,13 @@ namespace Tauchbolde.Driver.DataAccessSql.Repositories
 
         public async Task<IEnumerable<IGrouping<Diver, Notification>>> GetPendingNotificationByUserAsync()
         {
-            return await Context.Notifications
+            return (await Context.Notifications
                 .Include(n => n.Event)
                 .Include(n => n.Recipient)
                     .ThenInclude(r => r.User)
                 .Where(n => !n.AlreadySent)
-                .GroupBy(n => n.Recipient)
-                .ToListAsync();
+                .ToListAsync())
+                .GroupBy(n => n.Recipient);
         }
     }
 }
