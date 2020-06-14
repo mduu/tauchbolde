@@ -46,7 +46,7 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
         {
             htmlBuilder.AppendLine("<tr>");
 
-            htmlBuilder.AppendLine("<td class=\"cell-icon\">");
+            htmlBuilder.AppendLine("<td class=\"cell-icon\" width=\"55\">");
             
             var iconData = notificationTypeInfos.GetIconBase64(notification.Type);
             if (!string.IsNullOrWhiteSpace(iconData))
@@ -57,7 +57,7 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
 
             htmlBuilder.AppendLine("</td>");
 
-            htmlBuilder.AppendLine("<td class=\"cell-message\">");
+            htmlBuilder.AppendLine("<td class=\"cell-message\" width=\"100%\">");
             
             htmlBuilder.AppendLine($"<div class=\"notification-item {notification.Type.ToString()}\">");
 
@@ -65,7 +65,7 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
             htmlBuilder.Append(notification.OccuredAt.ToLocalTime().ToStringSwissDateTime());
             htmlBuilder.Append("</span>");
             htmlBuilder.Append("<span class='message-type'>");
-            htmlBuilder.Append(notificationTypeInfos.GetCaption(notification.Type));
+            htmlBuilder.Append($"{notificationTypeInfos.GetCaption(notification.Type)}&nbsp;");
             htmlBuilder.Append("</span>");
 
             htmlBuilder.AppendLine("<p class='message'>");
