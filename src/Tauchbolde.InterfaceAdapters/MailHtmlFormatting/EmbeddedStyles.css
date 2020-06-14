@@ -31,10 +31,10 @@ td, th {
 
 .timestamp {
     font-size: small;
-    float: right;
+    text-align: right;
 }
 
-.notification-list .notification-item {
+.notification-item {
     background-color: #0d87e9;
     margin-bottom: 10px;
     padding: 10px;
@@ -42,11 +42,11 @@ td, th {
     border-radius: 5px;
 }
 
-.notification-list .notification-item.Declined {
+.notification-item.Declined {
     background-color: #e51c23;
 }
 
-.notification-list .notification-item.Accepted {
+.notification-item.Accepted {
     background-color: #4caf50;
 }
 
