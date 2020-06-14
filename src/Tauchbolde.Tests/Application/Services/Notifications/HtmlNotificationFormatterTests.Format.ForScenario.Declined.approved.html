@@ -6,9 +6,12 @@ body {
     color: #030303;
 }
 
-.list {
-    list-style: none;
+.notification-list {
     padding: 0;
+}
+
+.icon {
+    float: left;
 }
 
 .timestamp {
@@ -16,26 +19,27 @@ body {
     float: right;
 }
 
-.list li {
+.notification-list .notification-item {
     background-color: #0d87e9;
+    margin-left: 55px;
     margin-bottom: 10px;
     padding: 10px;
     color: #fff;
     border-radius: 5px;
 }
 
-.list li.Declined {
+.notification-list .notification-item.Declined {
     background-color: #e51c23;
 }
 
-.list li.Accepted {
+.notification-list .notification-item.Accepted {
     background-color: #4caf50;
 }
 
-.list li a,
-.list li a:visited,
-.list li a:hover,
-.list li a:active {
+.notification-list .notification-item a,
+.notification-list .notification-item a:visited,
+.notification-list .notification-item a:hover,
+.notification-list .notification-item a:active {
     color: #fff;
 }
 
@@ -48,16 +52,66 @@ body {
 <p>
 Auf der Tauchbolde-Webseite gibt es 1 News.
 </p>
-<ul class='list'>
-<li class='Declined'>
+<div class='notification-list'>
+<div>
+<img class='icon' src="data:image/png;base64, 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" />
+<div class='notification-item Declined'>
 <div>
 <span class='timestamp'>01.10.2018 14:00</span><span class='message-type'>Absage</span></div>
 <div class='message'>
 <p>Notification 1</p>
 <p><a href='http://test/event/1'>Mehr...</a></p></div>
-</li>
+</div>
 
-</ul>
+</div>
+</div>
 <p>
 Guet Gas!
 </p>

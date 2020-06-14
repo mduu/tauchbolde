@@ -8,5 +8,6 @@ namespace Tauchbolde.Application.Services.Notifications
     public interface INotificationTypeInfos
     {
         string GetCaption(NotificationType notificationType);
+        string GetIconBase64(NotificationType notificationType);
     }
 }
