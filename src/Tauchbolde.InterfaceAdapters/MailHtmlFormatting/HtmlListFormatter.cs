@@ -33,18 +33,27 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
 
         public void Format(IEnumerable<Notification> notifications, StringBuilder htmlBuilder)
         {
-            htmlBuilder.AppendLine("<ul class='list'>");
+            htmlBuilder.AppendLine("<div class='notification-list'>");
             foreach (var notification in notifications.OrderBy(n => n.OccuredAt))
             {
                 FormatNotification(htmlBuilder, notification);
             }
-            htmlBuilder.AppendLine("</ul>");
+
+            htmlBuilder.AppendLine("</div>");
         }
 
         private void FormatNotification(StringBuilder htmlBuilder, Notification notification)
         {
-            htmlBuilder.AppendLine($"<li class='{notification.Type.ToString()}'>");
-            
+            htmlBuilder.AppendLine("<div>");
+            var iconData = notificationTypeInfos.GetIconBase64(notification.Type);
+            if (!string.IsNullOrWhiteSpace(iconData))
+            {
+                var htmlImageSource = $"data:image/png;base64, {iconData}";
+                htmlBuilder.AppendLine($"<img class='icon' src=\"{htmlImageSource}\" />");
+            }
+
+            htmlBuilder.AppendLine($"<div class='notification-item {notification.Type.ToString()}'>");
+
             htmlBuilder.AppendLine("<div>");
             htmlBuilder.Append("<span class='timestamp'>");
             htmlBuilder.Append(notification.OccuredAt.ToLocalTime().ToStringSwissDateTime());
@@ -58,9 +67,11 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
             htmlBuilder.Append(textFormatter.GetHtmlText(notification.Message));
             AddContextUrl(htmlBuilder, notification);
             htmlBuilder.AppendLine("</div>");
-            
-            htmlBuilder.AppendLine("</li>");
+
+            htmlBuilder.AppendLine("</div>");
             htmlBuilder.AppendLine();
+
+            htmlBuilder.AppendLine("</div>");
         }
 
         private void AddContextUrl(StringBuilder htmlBuilder, Notification notification)

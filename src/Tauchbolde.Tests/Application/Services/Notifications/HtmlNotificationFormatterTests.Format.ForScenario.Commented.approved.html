@@ -6,9 +6,12 @@ body {
     color: #030303;
 }
 
-.list {
-    list-style: none;
+.notification-list {
     padding: 0;
+}
+
+.icon {
+    float: left;
 }
 
 .timestamp {
@@ -16,26 +19,27 @@ body {
     float: right;
 }
 
-.list li {
+.notification-list .notification-item {
     background-color: #0d87e9;
+    margin-left: 55px;
     margin-bottom: 10px;
     padding: 10px;
     color: #fff;
     border-radius: 5px;
 }
 
-.list li.Declined {
+.notification-list .notification-item.Declined {
     background-color: #e51c23;
 }
 
-.list li.Accepted {
+.notification-list .notification-item.Accepted {
     background-color: #4caf50;
 }
 
-.list li a,
-.list li a:visited,
-.list li a:hover,
-.list li a:active {
+.notification-list .notification-item a,
+.notification-list .notification-item a:visited,
+.notification-list .notification-item a:hover,
+.notification-list .notification-item a:active {
     color: #fff;
 }
 
@@ -48,16 +52,54 @@ body {
 <p>
 Auf der Tauchbolde-Webseite gibt es 1 News.
 </p>
-<ul class='list'>
-<li class='Commented'>
+<div class='notification-list'>
+<div>
+<img class='icon' src="data:image/png;base64, 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" />
+<div class='notification-item Commented'>
 <div>
 <span class='timestamp'>01.10.2018 14:00</span><span class='message-type'>Neuer Kommentar</span></div>
 <div class='message'>
 <p>Notification 1</p>
 <p><a href='http://test/event/1'>Mehr...</a></p></div>
-</li>
+</div>
 
-</ul>
+</div>
+</div>
 <p>
 Guet Gas!
 </p>

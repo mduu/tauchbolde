@@ -6,9 +6,12 @@ body {
     color: #030303;
 }
 
-.list {
-    list-style: none;
+.notification-list {
     padding: 0;
+}
+
+.icon {
+    float: left;
 }
 
 .timestamp {
@@ -16,26 +19,27 @@ body {
     float: right;
 }
 
-.list li {
+.notification-list .notification-item {
     background-color: #0d87e9;
+    margin-left: 55px;
     margin-bottom: 10px;
     padding: 10px;
     color: #fff;
     border-radius: 5px;
 }
 
-.list li.Declined {
+.notification-list .notification-item.Declined {
     background-color: #e51c23;
 }
 
-.list li.Accepted {
+.notification-list .notification-item.Accepted {
     background-color: #4caf50;
 }
 
-.list li a,
-.list li a:visited,
-.list li a:hover,
-.list li a:active {
+.notification-list .notification-item a,
+.notification-list .notification-item a:visited,
+.notification-list .notification-item a:hover,
+.notification-list .notification-item a:active {
     color: #fff;
 }
 
@@ -48,16 +52,47 @@ body {
 <p>
 Auf der Tauchbolde-Webseite gibt es 1 News.
 </p>
-<ul class='list'>
-<li class='Neutral'>
+<div class='notification-list'>
+<div>
+<img class='icon' src="data:image/png;base64, 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" />
+<div class='notification-item Neutral'>
 <div>
 <span class='timestamp'>01.10.2018 14:00</span><span class='message-type'>Unklar</span></div>
 <div class='message'>
 <p>Notification 1</p>
 <p><a href='http://test/event/1'>Mehr...</a></p></div>
-</li>
+</div>
 
-</ul>
+</div>
+</div>
 <p>
 Guet Gas!
 </p>

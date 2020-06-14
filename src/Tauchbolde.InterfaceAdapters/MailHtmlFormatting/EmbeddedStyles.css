@@ -3,9 +3,12 @@ body {
     color: #030303;
 }
 
-.list {
-    list-style: none;
+.notification-list {
     padding: 0;
+}
+
+.icon {
+    float: left;
 }
 
 .timestamp {
@@ -13,26 +16,27 @@ body {
     float: right;
 }
 
-.list li {
+.notification-list .notification-item {
     background-color: #0d87e9;
+    margin-left: 55px;
     margin-bottom: 10px;
     padding: 10px;
     color: #fff;
     border-radius: 5px;
 }
 
-.list li.Declined {
+.notification-list .notification-item.Declined {
     background-color: #e51c23;
 }
 
-.list li.Accepted {
+.notification-list .notification-item.Accepted {
     background-color: #4caf50;
 }
 
-.list li a,
-.list li a:visited,
-.list li a:hover,
-.list li a:active {
+.notification-list .notification-item a,
+.notification-list .notification-item a:visited,
+.notification-list .notification-item a:hover,
+.notification-list .notification-item a:active {
     color: #fff;
 }
 

@@ -41,24 +41,36 @@ namespace Tauchbolde.Application.Services.Notifications
                 foreach (var pendingNotificationsForRecipient in pendingNotifications)
                 {
                     var recipient = pendingNotificationsForRecipient.Key;
-                    if (!recipient.LastNotificationCheckAt.HasValue ||
-                        recipient.LastNotificationCheckAt.Value.AddHours(
-                            recipient.NotificationIntervalInHours) < SystemClock.Now)
+                    if (recipient.LastNotificationCheckAt.HasValue && recipient.LastNotificationCheckAt.Value.AddHours(
+                        recipient.NotificationIntervalInHours) >= SystemClock.Now)
                     {
-                        using (logger.BeginScope($"Send notification to {pendingNotificationsForRecipient.Key}"))
-                        {
-                            var content = await notificationFormatter.FormatAsync(recipient, pendingNotificationsForRecipient);
-                            if (!string.IsNullOrWhiteSpace(content))
-                            {
-                                await SubmitToRecipient(
-                                    notificationSubmitter,
-                                    pendingNotificationsForRecipient,
-                                    recipient,
-                                    content);
-                            }
+                        continue;
+                    }
 
-                            await UpdateDatabaseForRecipient(pendingNotificationsForRecipient, recipient, saver);
+                    using (logger.BeginScope($"Send notification to {pendingNotificationsForRecipient.Key}"))
+                    {
+                        logger.LogInformation("Format email for recipient {Recipient}", pendingNotificationsForRecipient.Key);
+                        
+                        var content = await notificationFormatter.FormatAsync(recipient, pendingNotificationsForRecipient);
+                        if (!string.IsNullOrWhiteSpace(content))
+                        {
+                            logger.LogInformation("Sending to recipient {Recipient}", pendingNotificationsForRecipient.Key);
+                            
+                            await SubmitToRecipient(
+                                notificationSubmitter,
+                                pendingNotificationsForRecipient,
+                                recipient,
+                                content);
+                            
+                            logger.LogInformation("Sent to recipient {Recipient}", pendingNotificationsForRecipient.Key);
                         }
+                        else
+                        {
+                            logger.LogInformation("Nothing to send for recipient {Recipient}", pendingNotificationsForRecipient.Key);
+                        }
+
+                        await UpdateDatabaseForRecipient(pendingNotificationsForRecipient, recipient, saver);
+                        logger.LogInformation("Database updated for recipient {Recipient}", pendingNotificationsForRecipient.Key);
                     }
                 }
             }
@@ -70,7 +82,10 @@ namespace Tauchbolde.Application.Services.Notifications
             Diver recipient,
             string content)
         {
-            if (notificationSubmitter == null) { throw new ArgumentNullException(nameof(notificationSubmitter)); }
+            if (notificationSubmitter == null)
+            {
+                throw new ArgumentNullException(nameof(notificationSubmitter));
+            }
 
             try
             {
@@ -95,11 +110,18 @@ namespace Tauchbolde.Application.Services.Notifications
 
         private async Task UpdateDatabaseForRecipient(
             IGrouping<Diver, Notification> pendingNotificationsForRecipient,
-            Diver recipient, 
+            Diver recipient,
             Func<Task> saver)
         {
-            if (pendingNotificationsForRecipient == null) { throw new ArgumentNullException(nameof(pendingNotificationsForRecipient)); }
-            if (recipient == null) { throw new ArgumentNullException(nameof(recipient)); }
+            if (pendingNotificationsForRecipient == null)
+            {
+                throw new ArgumentNullException(nameof(pendingNotificationsForRecipient));
+            }
+
+            if (recipient == null)
+            {
+                throw new ArgumentNullException(nameof(recipient));
+            }
 
             try
             {
