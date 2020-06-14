@@ -34,10 +34,10 @@ td, th {
 
 .timestamp {
     font-size: small;
-    float: right;
+    text-align: right;
 }
 
-.notification-list .notification-item {
+.notification-item {
     background-color: #0d87e9;
     margin-bottom: 10px;
     padding: 10px;
@@ -45,11 +45,11 @@ td, th {
     border-radius: 5px;
 }
 
-.notification-list .notification-item.Declined {
+.notification-item.Declined {
     background-color: #e51c23;
 }
 
-.notification-list .notification-item.Accepted {
+.notification-item.Accepted {
     background-color: #4caf50;
 }
 
@@ -125,7 +125,13 @@ r32265jm7b3lf730z7Uv3bN8ZYD/j53HvwF8eWysohpDXwAAAABJRU5ErkJggg==" />
 </td>
 <td class="cell-message" width="100%">
 <div class="notification-item Declined">
-<span class="timestamp">01.10.2018 14:00</span><span class='message-type'>Absage&nbsp;</span><p class='message'>
+<table CELLPADDING="0" CELLSPACING="0" style="Color: #FFF">
+<td class='message-type'>
+Absage&nbsp;</td>
+<td class="timestamp">
+01.10.2018 14:00</td>
+</table>
+<p class='message'>
 <p>Notification 1</p>
 <p><a href='http://test/event/1'>Mehr...</a></p></p>
 </div>

@@ -61,13 +61,18 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
             
             htmlBuilder.AppendLine($"<div class=\"notification-item {notification.Type.ToString()}\">");
 
-            htmlBuilder.Append("<span class=\"timestamp\">");
-            htmlBuilder.Append(notification.OccuredAt.ToLocalTime().ToStringSwissDateTime());
-            htmlBuilder.Append("</span>");
-            htmlBuilder.Append("<span class='message-type'>");
+            htmlBuilder.AppendLine("<table CELLPADDING=\"0\" CELLSPACING=\"0\" style=\"Color: #FFF\">");
+            
+            htmlBuilder.AppendLine("<td class='message-type'>");
             htmlBuilder.Append($"{notificationTypeInfos.GetCaption(notification.Type)}&nbsp;");
-            htmlBuilder.Append("</span>");
-
+            htmlBuilder.AppendLine("</td>");
+            
+            htmlBuilder.AppendLine("<td class=\"timestamp\">");
+            htmlBuilder.Append(notification.OccuredAt.ToLocalTime().ToStringSwissDateTime());
+            htmlBuilder.AppendLine("</td>");
+            
+            htmlBuilder.AppendLine("</table>");
+            
             htmlBuilder.AppendLine("<p class='message'>");
             htmlBuilder.Append(textFormatter.GetHtmlText(notification.Message));
             AddContextUrl(htmlBuilder, notification);
