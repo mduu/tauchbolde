@@ -33,45 +33,51 @@ namespace Tauchbolde.InterfaceAdapters.MailHtmlFormatting
 
         public void Format(IEnumerable<Notification> notifications, StringBuilder htmlBuilder)
         {
-            htmlBuilder.AppendLine("<div class='notification-list'>");
+            htmlBuilder.AppendLine("<table class='notification-list' CELLPADDING=\"0\" CELLSPACING=\"0\">");
             foreach (var notification in notifications.OrderBy(n => n.OccuredAt))
             {
                 FormatNotification(htmlBuilder, notification);
             }
 
-            htmlBuilder.AppendLine("</div>");
+            htmlBuilder.AppendLine("</table>");
         }
 
         private void FormatNotification(StringBuilder htmlBuilder, Notification notification)
         {
-            htmlBuilder.AppendLine("<div>");
+            htmlBuilder.AppendLine("<tr>");
+
+            htmlBuilder.AppendLine("<td class=\"cell-icon\">");
+            
             var iconData = notificationTypeInfos.GetIconBase64(notification.Type);
             if (!string.IsNullOrWhiteSpace(iconData))
             {
                 var htmlImageSource = $"data:image/png;base64, {iconData}";
-                htmlBuilder.AppendLine($"<img class='icon' src=\"{htmlImageSource}\" />");
+                htmlBuilder.AppendLine($"<img class=\"icon\" src=\"{htmlImageSource}\" />");
             }
 
-            htmlBuilder.AppendLine($"<div class='notification-item {notification.Type.ToString()}'>");
+            htmlBuilder.AppendLine("</td>");
 
-            htmlBuilder.AppendLine("<div>");
-            htmlBuilder.Append("<span class='timestamp'>");
+            htmlBuilder.AppendLine("<td class=\"cell-message\">");
+            
+            htmlBuilder.AppendLine($"<div class=\"notification-item {notification.Type.ToString()}\">");
+
+            htmlBuilder.Append("<span class=\"timestamp\">");
             htmlBuilder.Append(notification.OccuredAt.ToLocalTime().ToStringSwissDateTime());
             htmlBuilder.Append("</span>");
             htmlBuilder.Append("<span class='message-type'>");
             htmlBuilder.Append(notificationTypeInfos.GetCaption(notification.Type));
             htmlBuilder.Append("</span>");
-            htmlBuilder.AppendLine("</div>");
 
-            htmlBuilder.AppendLine("<div class='message'>");
+            htmlBuilder.AppendLine("<p class='message'>");
             htmlBuilder.Append(textFormatter.GetHtmlText(notification.Message));
             AddContextUrl(htmlBuilder, notification);
-            htmlBuilder.AppendLine("</div>");
+            htmlBuilder.AppendLine("</p>");
 
             htmlBuilder.AppendLine("</div>");
-            htmlBuilder.AppendLine();
-
-            htmlBuilder.AppendLine("</div>");
+            
+            htmlBuilder.AppendLine("</td>");
+            
+            htmlBuilder.AppendLine("</tr>");
         }
 
         private void AddContextUrl(StringBuilder htmlBuilder, Notification notification)
