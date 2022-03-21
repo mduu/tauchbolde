@@ -22,8 +22,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
                 .ReturnsLazily(() => Task.FromResult<ICollection<Tauchbolde.Domain.Entities.Event>>(
                     new List<Tauchbolde.Domain.Entities.Event>
                     {
-                        new Tauchbolde.Domain.Entities.Event {Id = new Guid("59D6EA6F-1863-4372-9A47-35D5B7533826")},
-                        new Tauchbolde.Domain.Entities.Event {Id = new Guid("1B930343-C474-4B27-A1E0-E8DE192B33FF")}
+                        new() {Id = new Guid("59D6EA6F-1863-4372-9A47-35D5B7533826")},
+                        new() {Id = new Guid("1B930343-C474-4B27-A1E0-E8DE192B33FF")}
                     }));
 
             interactor = new GetRecentAndUpcomingEventsInteractor(repository);
@@ -52,7 +52,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
             
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
     }
 }

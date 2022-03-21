@@ -1,15 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>Tauchbolde.Driver.ImageSharp</RootNamespace>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\..\..\..\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
     <ItemGroup>
@@ -17,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
+      <PackageReference Include="SixLabors.ImageSharp" Version="2.1.0" />
     </ItemGroup>
 
 </Project>

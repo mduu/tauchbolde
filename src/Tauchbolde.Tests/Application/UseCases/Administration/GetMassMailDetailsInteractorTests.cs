@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.DataGateways;
-using Tauchbolde.Application.UseCases.Administration;
 using Tauchbolde.Application.UseCases.Administration.GetMassMailUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Tests.TestingTools.TestDataFactories;
@@ -54,7 +53,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Administration
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
             
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
     }
 }

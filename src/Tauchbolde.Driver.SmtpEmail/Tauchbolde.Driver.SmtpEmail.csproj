@@ -1,19 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>Tauchbolde.Driver.SmtpEmail</RootNamespace>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="2020.1.0" />
-        <PackageReference Include="MailKit" Version="2.6.0" />
+        <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
+        <PackageReference Include="MailKit" Version="3.1.1" />
     </ItemGroup>
 
     <ItemGroup>

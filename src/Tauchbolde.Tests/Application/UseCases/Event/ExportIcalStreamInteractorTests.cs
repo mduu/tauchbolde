@@ -13,7 +13,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 {
     public class ExportIcalStreamInteractorTests
     {
-        private readonly Guid validEventId = new Guid("66F6BCD0-FB87-417A-9CD3-A26263C00B87");
+        private readonly Guid validEventId = new("66F6BCD0-FB87-417A-9CD3-A26263C00B87");
         private readonly ExportIcalStreamInteractor interactor;
         private readonly IEventRepository repository = A.Fake<IEventRepository>();
         private readonly IExportIcalStreamOutputPort outputPort = A.Fake<IExportIcalStreamOutputPort>();
@@ -61,7 +61,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
         
         [Fact]

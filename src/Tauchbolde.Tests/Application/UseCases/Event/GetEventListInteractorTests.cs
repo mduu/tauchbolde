@@ -22,11 +22,11 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
                 .ReturnsLazily(() => Task.FromResult(
                     new List<Tauchbolde.Domain.Entities.Event>
                     {
-                        new Tauchbolde.Domain.Entities.Event
+                        new()
                         {
                             Id = new Guid("86B7C4ED-AB8E-4783-B93C-BD3B2AF3E071")
                         },
-                        new Tauchbolde.Domain.Entities.Event
+                        new()
                         {
                             Id = new Guid("2E0117A1-F567-40C8-AABF-E971D4948CA7")
                         },

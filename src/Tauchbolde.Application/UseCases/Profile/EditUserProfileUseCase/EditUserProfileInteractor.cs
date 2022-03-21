@@ -31,12 +31,12 @@ namespace Tauchbolde.Application.UseCases.Profile.EditUserProfileUseCase
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             
-            logger.LogInformation("Edit user [{diverId}]", request.UserId, request);
+            logger.LogInformation("Edit user [{DiverId}], [{@Request}]", request.UserId, request);
 
             var diver = await diverRepository.FindByIdAsync(request.UserId);
             if (diver == null)
             {
-                logger.LogWarning("Diver for editing not found. Id [{diverId}]", request.UserId);
+                logger.LogWarning("Diver for editing not found. Id [{DiverId}]", request.UserId);
                 return UseCaseResult.NotFound();
             }
 
@@ -45,7 +45,7 @@ namespace Tauchbolde.Application.UseCases.Profile.EditUserProfileUseCase
             
             if (diver.Id != user.Id && !isAdmin)
             {
-                logger.LogError("Access denied: User [{editorId}] is not allowed to edit user [{userId}]!", user.Id, request.UserId);
+                logger.LogError("Access denied: User [{EditorId}] is not allowed to edit user [{UserId}]!", user.Id, request.UserId);
                 return UseCaseResult.AccessDenied();
             }
 
@@ -65,7 +65,7 @@ namespace Tauchbolde.Application.UseCases.Profile.EditUserProfileUseCase
 
             await diverRepository.UpdateAsync(diver);
             
-            logger.LogError("User [{editorId}] successfully edited by user [{userId}]!", user.Id, request.UserId, request);
+            logger.LogError("User [{EditorId}] successfully edited by user [{UserId}]! {@Request}", user.Id, request.UserId, request);
 
             return UseCaseResult.Success();
         }

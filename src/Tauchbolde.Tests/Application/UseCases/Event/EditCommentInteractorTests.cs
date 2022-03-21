@@ -12,7 +12,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 {
     public class EditCommentInteractorTests
     {
-        private readonly Guid validCommentId = new Guid("A07F490E-148D-4DCF-B1BC-75B790BB16E3");
+        private readonly Guid validCommentId = new("A07F490E-148D-4DCF-B1BC-75B790BB16E3");
         private readonly ICommentRepository commentRepository = A.Fake<ICommentRepository>();
         private readonly EditCommentInteractor interactor;
 
@@ -96,7 +96,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
             
             // Assert
-            act.Should().Throw<ArgumentNullException>();
+            act.Should().ThrowAsync<ArgumentNullException>();
         }
     }
 }

@@ -42,10 +42,10 @@ namespace Tauchbolde.Tests.Application.Policies.Profile
         {
             // Act
             // ReSharper disable once AssignNullToNotNullAttribute
-            Func<Task> act = () => policy.Handle(null, CancellationToken.None);
+            var act = () => policy.Handle(null, CancellationToken.None);
             
             // Arrange
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("notification");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("notification");
         }
     }
 }

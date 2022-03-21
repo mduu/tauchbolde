@@ -7,7 +7,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 {
     public class EditCommentValidatorTests
     {
-        private readonly EditCommentValidator validator = new EditCommentValidator();
+        private readonly EditCommentValidator validator = new();
 
         [Fact]
         public void Validate_Success()

@@ -15,8 +15,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 {
     public class ChangeParticipationInteractorTests
     {
-        private readonly Guid validEventId = new Guid("03A09D19-4DCB-41D7-B997-9C84E9B386FE");
-        private readonly Guid validParticipantId = new Guid("D9A6A368-1129-404C-9A2D-8285B7A44D6D");
+        private readonly Guid validEventId = new("03A09D19-4DCB-41D7-B997-9C84E9B386FE");
+        private readonly Guid validParticipantId = new("D9A6A368-1129-404C-9A2D-8285B7A44D6D");
         private readonly IParticipantRepository participantRepository = A.Fake<IParticipantRepository>();
         private readonly ChangeParticipationInteractor interactor;
         private readonly ICurrentUser currentUser = A.Fake<ICurrentUser>();
@@ -72,7 +72,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>();
+            act.Should().ThrowAsync<ArgumentNullException>();
         }
 
         private Participant CreateValidParticipant()
@@ -88,7 +88,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         }
 
         private ChangeParticipation CreateValidChangeParticipationRequest() =>
-            new ChangeParticipation(validEventId,
+            new(validEventId,
                 ParticipantStatus.Accepted,
                 1,
                 null,

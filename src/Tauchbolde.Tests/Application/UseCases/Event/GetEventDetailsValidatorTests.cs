@@ -8,7 +8,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 {
     public class GetEventDetailsValidatorTests
     {
-        private readonly GetEventDetailsValidator validator = new GetEventDetailsValidator();
+        private readonly GetEventDetailsValidator validator = new();
 
         [Fact]
         public void Validate_Success()

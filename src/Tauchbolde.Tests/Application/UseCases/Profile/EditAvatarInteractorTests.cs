@@ -23,7 +23,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Profile
         [NotNull] private readonly IDiverRepository diverRepository = DiverRepositoryFactory.CreateRepository();
         [NotNull] private readonly IAvatarStore avatarStore = A.Fake<IAvatarStore>();
         [NotNull] private readonly ICurrentUser currentUser = CurrentUserFactory.CreateCurrentUser();
-        [NotNull] private readonly EditAvatar.AvatarFile validAvatarFile = new EditAvatar.AvatarFile(
+        [NotNull] private readonly EditAvatar.AvatarFile validAvatarFile = new(
             "john1.jpg",
             "image/jpeg",
             new MemoryStream());
@@ -126,7 +126,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Profile
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
     }
 }

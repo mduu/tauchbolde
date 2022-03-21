@@ -30,8 +30,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Administration
             A.CallTo(() => roleManager.Roles)
                 .Returns(new List<IdentityRole>
                 {
-                    new IdentityRole(Rolenames.Administrator),
-                    new IdentityRole(Rolenames.Tauchbold)
+                    new(Rolenames.Administrator),
+                    new(Rolenames.Tauchbold)
                 }.AsQueryable());
             
             interactor = new GetEditRolesInteractor(diverRepository, userManager, roleManager, currentUser);
@@ -76,7 +76,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Administration
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
             
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
     }
 }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Core;
@@ -41,7 +40,7 @@ namespace Tauchbolde.Application.UseCases.Administration.GetMemberManagementUseC
 
             if (!await currentUser.GetIsAdminAsync())
             {
-                logger.LogError("Use [{currentUserName}] has no access for getting member-management information!", currentUser.Username);
+                logger.LogError("Use [{CurrentUserName}] has no access for getting member-management information!", currentUser.Username);
                 return UseCaseResult.AccessDenied();
             }
 

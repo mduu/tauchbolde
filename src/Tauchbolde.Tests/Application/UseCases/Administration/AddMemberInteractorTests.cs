@@ -84,10 +84,10 @@ namespace Tauchbolde.Tests.Application.UseCases.Administration
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
 
         private static AddMember CreateAddMemberRequest() => 
-            new AddMember(DiverFactory.JohnDoeUserName, DiverFactory.JohnDoeFirstName, DiverFactory.JohnDoeLastName);
+            new(DiverFactory.JohnDoeUserName, DiverFactory.JohnDoeFirstName, DiverFactory.JohnDoeLastName);
     }
 }

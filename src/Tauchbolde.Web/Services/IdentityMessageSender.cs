@@ -34,7 +34,7 @@ namespace Tauchbolde.Web.Services
             telemetryService.TrackEvent(
                 TelemetryEventNames.IdentityMailSent,
                 new { address = email, subject});
-            logger.LogWarning("Sending auth. email: Address={email};Subject={s};Message={message}");
+            logger.LogWarning("Sending auth. email: Address={Email};Subject={Subject};Message={Message}", email, subject, message);
             
             await emailSender.SendAsync(email, email, s, message);
         }

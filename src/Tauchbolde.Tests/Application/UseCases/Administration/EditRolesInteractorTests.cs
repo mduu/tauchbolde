@@ -35,9 +35,9 @@ namespace Tauchbolde.Tests.Application.UseCases.Administration
             A.CallTo(() => roleManager.Roles).Returns(
                 new EnumerableQuery<IdentityRole>(new List<IdentityRole>
                 {
-                    new IdentityRole("role1"),
-                    new IdentityRole("role2"),
-                    new IdentityRole("role3"),
+                    new("role1"),
+                    new("role2"),
+                    new("role3"),
                 }));
 
             A.CallTo(() => userManager.IsInRoleAsync(A<IdentityUser>._, "role1"))
@@ -87,7 +87,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Administration
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
 
             // Arrange
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
     }
 }
