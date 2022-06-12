@@ -138,7 +138,7 @@ namespace Tauchbolde.Web
                 options.SupportedCultures = new List<CultureInfo> { new CultureInfo("de-CH") };
                 options.RequestCultureProviders = new List<IRequestCultureProvider>();
                 options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(
-                    async context => await Task.FromResult(new ProviderCultureResult("de"))
+                    async _ => await Task.FromResult(new ProviderCultureResult("de"))
                 ));
             });
 
@@ -203,12 +203,14 @@ namespace Tauchbolde.Web
             app.UseAuthentication();
             app.UseRequestLocalization();
             app.UseCors();
+#pragma warning disable MVC1005
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+#pragma warning restore MVC1005
         }
     }
 }
