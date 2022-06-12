@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ApprovalTests;
+﻿using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using FakeItEasy;

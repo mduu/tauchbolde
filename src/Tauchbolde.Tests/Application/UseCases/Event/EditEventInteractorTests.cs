@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -19,8 +16,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
         private readonly ICurrentUser currentUser = A.Fake<ICurrentUser>();
         private readonly ILogger<EditEventInteractor> logger = A.Fake<ILogger<EditEventInteractor>>();
         private readonly EditEventInteractor interactor;
-        private readonly Guid validEventId = new Guid("74FC068A-2A97-48C1-AD40-07DAB50F56E8");
-        private readonly Guid validOrganizatorId = new Guid("C2E349C7-E2FF-4E39-97A4-21486AF0F067");
+        private readonly Guid validEventId = new("74FC068A-2A97-48C1-AD40-07DAB50F56E8");
+        private readonly Guid validOrganizatorId = new("C2E349C7-E2FF-4E39-97A4-21486AF0F067");
 
         public EditEventInteractorTests()
         {
@@ -116,7 +113,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
 
         private EditEvent CreateEditEvent(Guid? eventId = null,
@@ -126,7 +123,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             string location = "New Location",
             string meetingPoint = "New MeetingPoint",
             string description = "New Description") =>
-            new EditEvent(
+            new(
                 eventId ?? validEventId,
                 startTime ?? DateTime.Today,
                 endTime,

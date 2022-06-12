@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Event.EditEventUseCase;
 using Xunit;
@@ -7,7 +6,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 {
     public class EditEventValidatorTests
     {
-        private readonly EditEventValidator validator = new EditEventValidator();
+        private readonly EditEventValidator validator = new();
 
         [Fact]
         public void Validate_Success()
@@ -98,7 +97,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             string title = "Test Event",
             DateTime? endTime = null,
             Guid? eventId = null) =>
-            new EditEvent(
+            new(
                 eventId ?? new Guid("E68A9C75-A4D8-43D8-8052-CFD400DB52E5"),
                 startTime ?? DateTime.Today,
                 endTime,

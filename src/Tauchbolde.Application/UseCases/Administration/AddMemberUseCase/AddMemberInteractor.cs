@@ -37,18 +37,18 @@ namespace Tauchbolde.Application.UseCases.Administration.AddMemberUseCase
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             
-            logger.LogInformation("Adding member [{userName}]", request.UserName, request);
+            logger.LogInformation("Adding member [{UserName}]", request.UserName);
 
             if (!await currentUser.GetIsAdminAsync())
             {
-                logger.LogError("Access denied for user [{currentUser}]!", currentUser.Username);
+                logger.LogError("Access denied for user [{CurrentUser}]!", currentUser.Username);
                 return UseCaseResult<string>.AccessDenied();
             }
             
             var user = await userManager.FindByNameAsync(request.UserName);
             if (user == null)
             {
-                logger.LogError("Identity user [{username}] not found!", request.UserName);
+                logger.LogError("Identity user [{Username}] not found!", request.UserName);
                 return UseCaseResult<string>.NotFound();
             }
 
@@ -61,16 +61,16 @@ namespace Tauchbolde.Application.UseCases.Administration.AddMemberUseCase
             var warningMessage = "";
             if (user.LockoutEnabled)
             {
-                logger.LogWarning("User [{username}] is locked out!", request.UserName);
+                logger.LogWarning("User [{Username}] is locked out!", request.UserName);
                 warningMessage += "Mitglied ist noch gesperrt (LockoutEnabled). ";
             }
             if (!user.EmailConfirmed)
             {
-                logger.LogWarning("User [{username}] has not confirmed email address yet!", request.UserName);
+                logger.LogWarning("User [{Username}] has not confirmed email address yet!", request.UserName);
                 warningMessage += "Mitglied hat seine Emailadresse noch nicht bestätigt!";
             }
             
-            logger.LogInformation("User [{username}] added as a member.", request.UserName);
+            logger.LogInformation("User [{Username}] added as a member", request.UserName);
             
             return UseCaseResult<string>.Success(warningMessage.Trim());
         }

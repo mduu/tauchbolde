@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -24,9 +19,9 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         private readonly IParticipantRepository participantRepository = A.Fake<IParticipantRepository>();
         private readonly INotificationPublisher notificationPublisher = A.Fake<INotificationPublisher>();
         private readonly IRecipientsBuilder recipientsBuilder = A.Fake<IRecipientsBuilder>();
-        private readonly Guid validParticipantId = new Guid("88C90CF1-FCDB-4742-A964-3D03440CF6D8");
-        private readonly Guid validEventId = new Guid("FCD856A3-D672-45E8-90C7-0D43DE79A61C");
-        private readonly Guid validDiverId = new Guid("6D1E557F-5C43-40FC-8BBD-74F02736305C");
+        private readonly Guid validParticipantId = new("88C90CF1-FCDB-4742-A964-3D03440CF6D8");
+        private readonly Guid validEventId = new("FCD856A3-D672-45E8-90C7-0D43DE79A61C");
+        private readonly Guid validDiverId = new("6D1E557F-5C43-40FC-8BBD-74F02736305C");
         private readonly PublishParticipationChangedPolicy policy;
 
         private Participant foundParticipant;
@@ -72,8 +67,8 @@ namespace Tauchbolde.Tests.Application.Policies.Events
                 .ReturnsLazily(() => Task.FromResult(
                     new List<Diver>
                     {
-                        new Diver {Id = new Guid("A00D5B04-B86D-4DAF-828F-00D286F4093B"), Fullname = "Jane Doe"},
-                        new Diver {Id = new Guid("0DE86468-0F8C-4C02-A3CB-80460D45B0FF"), Fullname = "Jim Doe"},
+                        new() {Id = new Guid("A00D5B04-B86D-4DAF-828F-00D286F4093B"), Fullname = "Jane Doe"},
+                        new() {Id = new Guid("0DE86468-0F8C-4C02-A3CB-80460D45B0FF"), Fullname = "Jim Doe"},
                     }
                 ));
 
@@ -146,20 +141,20 @@ namespace Tauchbolde.Tests.Application.Policies.Events
                 ParticipantStatus.Accepted);
 
             // Act
-            Func<Task> act = () => policy.Handle(notification, CancellationToken.None);
+            var act = () => policy.Handle(notification, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<InvalidOperationException>().WithMessage("Participant not found!");
+            act.Should().ThrowAsync<InvalidOperationException>().Result.WithMessage("Participant not found!");
         }
 
         [Fact]
         public void Handle_NullNotificationMustFail()
         {
             // Act
-            Func<Task> act = () => policy.Handle(null, CancellationToken.None);
+            var act = () => policy.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("notification");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("notification");
         }
 
         [Fact]
@@ -180,10 +175,10 @@ namespace Tauchbolde.Tests.Application.Policies.Events
             };
 
             // Act
-            Func<Task> act = () => policy.Handle(notification, CancellationToken.None);
+            var act = () => policy.Handle(notification, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<InvalidOperationException>().WithMessage("Diver not found!");
+            act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Diver not found!");
         }
 
         [Fact]
@@ -204,10 +199,10 @@ namespace Tauchbolde.Tests.Application.Policies.Events
             };
 
             // Act
-            Func<Task> act = () => policy.Handle(notification, CancellationToken.None);
+            var act = () => policy.Handle(notification, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<InvalidOperationException>().WithMessage("Event not found!");
+            act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Event not found!");
         }
     }
 }

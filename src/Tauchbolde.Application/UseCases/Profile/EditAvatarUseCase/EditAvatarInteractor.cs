@@ -40,7 +40,7 @@ namespace Tauchbolde.Application.UseCases.Profile.EditAvatarUseCase
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             
-            logger.LogInformation("Changing avatar for user [{id}]", request.UserId, request.Avatar.Filename, request.Avatar.ContentType);
+            logger.LogInformation("Changing avatar for user [{Id}], {Filename}, {ContentType}", request.UserId, request.Avatar.Filename, request.Avatar.ContentType);
 
             var diver = await diverRepository.FindByIdAsync(request.UserId);
             if (diver == null)
@@ -51,7 +51,7 @@ namespace Tauchbolde.Application.UseCases.Profile.EditAvatarUseCase
 
             if (!await currentUser.GetIsDiverOrAdmin(request.UserId))
             {
-                logger.LogError("Current user [{currentUser}] not allowed to change avatar of user [{user}]", currentUser.Username, diver.Realname);
+                logger.LogError("Current user [{CurrentUser}] not allowed to change avatar of user [{User}]", currentUser.Username, diver.Realname);
                 return UseCaseResult.AccessDenied();
             }
 
@@ -65,7 +65,7 @@ namespace Tauchbolde.Application.UseCases.Profile.EditAvatarUseCase
             
             await diverRepository.UpdateAsync(diver);
             
-            logger.LogInformation("Avatar of user [{userId}] change by user [{currentUser}]", diver.Realname, currentUser.Username);
+            logger.LogInformation("Avatar of user [{UserId}] change by user [{CurrentUser}]", diver.Realname, currentUser.Username);
             return UseCaseResult.Success();
         }
 

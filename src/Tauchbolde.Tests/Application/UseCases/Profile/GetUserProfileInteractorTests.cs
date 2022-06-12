@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -8,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Application.Services.Core;
-using Tauchbolde.Application.UseCases.Profile;
 using Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;
@@ -128,7 +124,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Profile
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentException>().Result.Which.ParamName.Should().Be("request");
         }
     }
 }

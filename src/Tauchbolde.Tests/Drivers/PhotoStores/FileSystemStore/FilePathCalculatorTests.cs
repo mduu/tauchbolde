@@ -1,4 +1,3 @@
-using System.IO;
 using FluentAssertions;
 using Tauchbolde.Application.Services;
 using Tauchbolde.Domain.Types;

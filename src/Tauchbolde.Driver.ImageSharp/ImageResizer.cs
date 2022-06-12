@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
@@ -28,7 +27,7 @@ namespace Tauchbolde.Driver.ImageSharp
 
             var imageDecoder = GetImageDecoder(contentType);
 
-            
+            imageData.Position = 0;
             var image = imageDecoder != null
                 ? Image.Load(imageData, imageDecoder)
                 : Image.Load(imageData);
@@ -60,24 +59,16 @@ namespace Tauchbolde.Driver.ImageSharp
             return outStream;
         }
 
-        private static IImageDecoder GetImageDecoder(string contentType)
-        {
-            if (string.IsNullOrWhiteSpace(contentType))
-            {
-                return null;
-            }
-
-            ;
-
-            var mapping = new Dictionary<string, Func<IImageDecoder>>
-            {
-                {"image/png", () => new PngDecoder()},
-                {"image/gif", () => new GifDecoder()},
-                {"image/jpg", () => new JpegDecoder()},
-                {"image/jpeg", () => new JpegDecoder()},
-            };
-
-            return mapping[contentType]();
-        }
+        private static IImageDecoder GetImageDecoder(string contentType) =>
+            string.IsNullOrWhiteSpace(contentType)
+                ? null
+                : contentType switch
+                {
+                    "image/png" => new PngDecoder(),
+                    "image/gif" => new GifDecoder(),
+                    "image/jpg" => new JpegDecoder(),
+                    "image/jpeg" => new JpegDecoder(),
+                    _ => throw new ArgumentOutOfRangeException(nameof(contentType), contentType, null)
+                };
     }
 }

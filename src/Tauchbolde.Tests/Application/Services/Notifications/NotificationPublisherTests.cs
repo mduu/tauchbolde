@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using FakeItEasy;
 using Microsoft.AspNetCore.Identity;
 using Tauchbolde.Application.DataGateways;

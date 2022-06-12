@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
@@ -34,8 +29,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Administration
                 .ReturnsLazily(() =>
                     new List<IdentityUser>
                     {
-                        new IdentityUser(DiverFactory.JohnDoeUserName),
-                        new IdentityUser(DiverFactory.JaneDoeUserName)
+                        new(DiverFactory.JohnDoeUserName),
+                        new(DiverFactory.JaneDoeUserName)
                     }.AsQueryable());
 
             interactor = new GetMemberManagementInteractor(diverRepository, userManager, currentUser, logger);
@@ -82,7 +77,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Administration
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
     }
 }

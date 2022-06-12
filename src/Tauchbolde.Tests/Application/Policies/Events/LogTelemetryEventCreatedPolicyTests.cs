@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.Policies.Event.EventCreated;
@@ -40,10 +37,10 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         {
             // Act
             // ReSharper disable once AssignNullToNotNullAttribute
-            Func<Task> act = () => policy.Handle(null, CancellationToken.None);
+            var act = () => policy.Handle(null, CancellationToken.None);
             
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("notification");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("notification");
         }
     }
 }

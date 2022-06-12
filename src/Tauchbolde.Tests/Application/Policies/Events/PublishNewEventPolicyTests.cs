@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -63,7 +59,7 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         public async Task Handle_Success()
         {
             // Arrange
-            EventCreatedEvent notification = CreateNotification();
+            var notification = CreateNotification();
            
             // Act
             await policy.Handle(notification, CancellationToken.None);
@@ -104,10 +100,10 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         {
             // Act
             // ReSharper disable once AssignNullToNotNullAttribute
-            Func<Task> act = () => policy.Handle(null, CancellationToken.None);
+            var act = () => policy.Handle(null, CancellationToken.None);
             
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("notification");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("notification");
         }
 
         private EventCreatedEvent CreateNotification(Guid? eventId = null) => new EventCreatedEvent(eventId ?? validEventId);

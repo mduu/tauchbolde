@@ -1,5 +1,3 @@
-using System;
-using ApprovalUtilities.Utilities;
 using FluentAssertions;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Events.Event;

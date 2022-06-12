@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Logbook.EditUseCase;
 using Xunit;

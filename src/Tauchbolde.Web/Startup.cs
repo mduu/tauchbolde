@@ -1,26 +1,16 @@
-using System;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Localization;
-using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Tauchbolde.Web.Core;
-using System.Threading.Tasks;
 using Tauchbolde.Web.Filters;
-using System.Data.SqlClient;
 using System.Text;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Hosting;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Driver.PhotoStorage.AzureBlobStorage;
@@ -66,9 +56,11 @@ namespace Tauchbolde.Web
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = _ => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            services.AddDatabaseDeveloperPageExceptionFilter();
 
             ConfigureDatabase(services);
 
@@ -118,11 +110,12 @@ namespace Tauchbolde.Web
                     options.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
                 })
                 .AddJwtBearer("JwtBearer", jwtBearerOptions =>
-                {                        
+                {
                     jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
-                    {                            
+                    {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration[nameof(TokenConfiguration.TokenSecurityKey)])),
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(Configuration[nameof(TokenConfiguration.TokenSecurityKey)])),
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateLifetime = true, //validate the expiration and not before values in the token
@@ -138,24 +131,23 @@ namespace Tauchbolde.Web
                 options.AddPolicy(PolicyNames.RequireTauchboldeOrAdmin, policy =>
                     policy.RequireRole(Rolenames.Administrator, Rolenames.Tauchbold));
             });
-            
+
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("de-CH");
-                options.SupportedCultures = new List<CultureInfo> {new CultureInfo("de-CH")};
+                options.SupportedCultures = new List<CultureInfo> { new CultureInfo("de-CH") };
                 options.RequestCultureProviders = new List<IRequestCultureProvider>();
                 options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(
-                    async context => await Task.FromResult(new ProviderCultureResult("de"))
+                    async _ => await Task.FromResult(new ProviderCultureResult("de"))
                 ));
             });
 
             services.AddMvc(options =>
-                {
-                    options.Filters.Add(typeof(BuildNumberFilter));
-                    options.Filters.Add(typeof(CurrentUserInformationFilter));
-                    options.EnableEndpointRouting = false;
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Latest);
+            {
+                options.Filters.Add(typeof(BuildNumberFilter));
+                options.Filters.Add(typeof(CurrentUserInformationFilter));
+                options.EnableEndpointRouting = false;
+            });
 
             services.AddApplicationInsightsTelemetry();
             services.AddTransient<IEmailSender, IdentityMessageSender>();
@@ -187,7 +179,8 @@ namespace Tauchbolde.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseDeveloperExceptionPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {
@@ -203,20 +196,21 @@ namespace Tauchbolde.Web
                 .AddRedirect("node/*", "/", 301)
                 .AddRedirect("sites/*", "/", 301);
 
-            app
-                .UseRewriter(rewriteOptions)
-                .UseHttpsRedirection()
-                .UseStaticFiles()
-                .UseCookiePolicy()
-                .UseAuthentication()
-                .UseRequestLocalization()
-                .UseCors()
-                .UseMvc(routes =>
-                {
-                    routes.MapRoute(
-                        name: "default",
-                        template: "{controller=Home}/{action=Index}/{id?}");
-                });
+            app.UseRewriter(rewriteOptions);
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
+            app.UseAuthentication();
+            app.UseRequestLocalization();
+            app.UseCors();
+#pragma warning disable MVC1005
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
+#pragma warning restore MVC1005
         }
     }
 }

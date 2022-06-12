@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.DataGateways;
@@ -14,8 +11,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 {
     public class NewCommentInteractorTests
     {
-        private readonly Guid validEventId = new Guid("6BE85F8D-3898-488C-92A9-D979648B742B");
-        private readonly Guid validAuthorId = new Guid("E072BCB8-36E6-4E36-A241-31E4DDB14435");
+        private readonly Guid validEventId = new("6BE85F8D-3898-488C-92A9-D979648B742B");
+        private readonly Guid validAuthorId = new("E072BCB8-36E6-4E36-A241-31E4DDB14435");
         private readonly IEventRepository eventRepository = A.Fake<IEventRepository>();
         private readonly ICommentRepository commentRepository = A.Fake<ICommentRepository>();
         private readonly NewCommentInteractor interactor;
