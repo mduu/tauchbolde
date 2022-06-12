@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Events.Event;

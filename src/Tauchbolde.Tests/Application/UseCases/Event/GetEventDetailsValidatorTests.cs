@@ -1,4 +1,3 @@
-using System;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;

@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Event.EditCommentUseCase;
 using Xunit;

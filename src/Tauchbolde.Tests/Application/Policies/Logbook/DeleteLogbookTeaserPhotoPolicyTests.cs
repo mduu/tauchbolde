@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using Tauchbolde.Application.Policies.Logbook.LogbookEntryDeleted;
 using Tauchbolde.Application.Services.PhotoStores;

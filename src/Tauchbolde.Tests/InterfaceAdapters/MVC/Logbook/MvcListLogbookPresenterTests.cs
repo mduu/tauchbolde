@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;

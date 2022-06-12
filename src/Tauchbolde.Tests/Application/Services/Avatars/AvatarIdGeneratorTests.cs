@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 using FluentAssertions;
 using Tauchbolde.Application.Services.Avatars;
 using Xunit;
