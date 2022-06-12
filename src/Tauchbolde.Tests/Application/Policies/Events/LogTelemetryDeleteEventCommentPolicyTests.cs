@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.Policies.Event.CommentDeleted;
@@ -40,10 +37,10 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         public async Task Handle_NullNotification_MustFail()
         {
             // Act
-            Func<Task> act = async () => await policy.Handle(null, CancellationToken.None);
+            var act = async () => await policy.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>();
+            await act.Should().ThrowAsync<ArgumentNullException>();
         }
 #pragma warning restore 1998
 

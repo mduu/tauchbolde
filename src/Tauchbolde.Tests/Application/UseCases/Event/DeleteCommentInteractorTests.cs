@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.DataGateways;
@@ -13,8 +10,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 {
     public class DeleteCommentInteractorTests
     {
-        private readonly Guid validCommentId = new Guid("F5F4A476-B7D1-49DC-AA68-73FBB93C882B");
-        private readonly Guid validUserId = new Guid("F2E454B0-F8AA-476E-898E-865AE6CD5ED5");
+        private readonly Guid validCommentId = new("F5F4A476-B7D1-49DC-AA68-73FBB93C882B");
+        private readonly Guid validUserId = new("F2E454B0-F8AA-476E-898E-865AE6CD5ED5");
         private readonly ICommentRepository repository = A.Fake<ICommentRepository>();
         private readonly DeleteCommentInteractor interactor;
 

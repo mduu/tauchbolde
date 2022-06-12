@@ -31,12 +31,12 @@ namespace Tauchbolde.Application.UseCases.Administration.EditRolesUseCase
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
             
-            logger.LogInformation("Edit roles for user [{username}]", request.UserName, request);
+            logger.LogInformation("Edit roles for user [{Username}]", request.UserName);
 
             var user = await userManager.FindByNameAsync(request.UserName);
             if (user == null)
             {
-                logger.LogError("User with username [{username}] not found for editing!", request.UserName);
+                logger.LogError("User with username [{Username}] not found for editing!", request.UserName);
                 return UseCaseResult.NotFound();
             }
             
@@ -60,7 +60,7 @@ namespace Tauchbolde.Application.UseCases.Administration.EditRolesUseCase
                 }
             }
 
-            logger.LogInformation("User with username [{username}] updated with roles [{roles}]!", request.UserName, request.Roles);
+            logger.LogInformation("User with username [{Username}] updated with roles [{Roles}]!", request.UserName, request.Roles);
             return UseCaseResult.Success();
         }
     }

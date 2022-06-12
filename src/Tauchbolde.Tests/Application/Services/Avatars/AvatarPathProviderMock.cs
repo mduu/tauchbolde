@@ -1,5 +1,4 @@
-﻿using System;
-using Tauchbolde.Application.Services.Avatars;
+﻿using Tauchbolde.Application.Services.Avatars;
 
 namespace Tauchbolde.Tests.Application.Services.Avatars
 {

@@ -1,7 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -55,9 +51,9 @@ namespace Tauchbolde.Tests.Application.UseCases.Profile
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
 
-        private MemberList CreateMemberListRequest() => new MemberList(outputPort);
+        private MemberList CreateMemberListRequest() => new(outputPort);
     }
 }

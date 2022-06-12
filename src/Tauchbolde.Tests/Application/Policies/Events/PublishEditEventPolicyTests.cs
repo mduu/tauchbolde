@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -63,7 +59,7 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         public async Task Handle_Success()
         {
             // Arrange
-            EventEditedEvent notification = CreateNotification();
+            var notification = CreateNotification();
            
             // Act
             await policy.Handle(notification, CancellationToken.None);
@@ -83,7 +79,7 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         public async Task Handle_InvalidEventId_MustFail()
         {
             // Arrange
-            EventEditedEvent notification = CreateNotification(eventId: new Guid("56C45285-782B-4C23-9E10-4877240232E0"));
+            var notification = CreateNotification(eventId: new Guid("56C45285-782B-4C23-9E10-4877240232E0"));
            
             // Act
             await policy.Handle(notification, CancellationToken.None);
@@ -104,10 +100,10 @@ namespace Tauchbolde.Tests.Application.Policies.Events
         {
             // Act
             // ReSharper disable once AssignNullToNotNullAttribute
-            Func<Task> act = () => policy.Handle(null, CancellationToken.None);
+            var act = () => policy.Handle(null, CancellationToken.None);
             
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("notification");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("notification");
         }
 
         private EventEditedEvent CreateNotification(Guid? eventId = null) => 

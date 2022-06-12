@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using Tauchbolde.Web.Core.TokenHandling;
@@ -14,17 +13,17 @@ namespace Tauchbolde.Tests.TestingTools
 
         public IConfigurationSection GetSection(string key)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IEnumerable<IConfigurationSection> GetChildren()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IChangeToken GetReloadToken()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public string this[string key]

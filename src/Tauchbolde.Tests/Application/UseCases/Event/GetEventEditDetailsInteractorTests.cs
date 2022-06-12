@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
@@ -17,8 +14,8 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
     public class GetEventEditDetailsInteractorTests
     {
         private readonly string validUserName = "john.doe";
-        private readonly Guid validDiverId = new Guid("591FC123-5F37-42BC-B7A9-0A1E86C22C7C");
-        private readonly Guid validEventId = new Guid("125EB70A-69D7-4B9E-8ADB-D0A8FAA10BAA");
+        private readonly Guid validDiverId = new("591FC123-5F37-42BC-B7A9-0A1E86C22C7C");
+        private readonly Guid validEventId = new("125EB70A-69D7-4B9E-8ADB-D0A8FAA10BAA");
         private readonly GetEventEditDetailsInteractor interactor;
         private readonly ILogger<GetEventEditDetailsInteractor> logger = A.Fake<ILogger<GetEventEditDetailsInteractor>>();
         private readonly IEventRepository eventRepository = A.Fake<IEventRepository>();
@@ -146,11 +143,11 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
             Func<Task> act = () => interactor.Handle(null, CancellationToken.None);
 
             // Assert
-            act.Should().Throw<ArgumentNullException>().Which.ParamName.Should().Be("request");
+            act.Should().ThrowAsync<ArgumentNullException>().Result.Which.ParamName.Should().Be("request");
         }
 
         private Diver CreateDiverJohnDoe() =>
-            new Diver
+            new()
             {
                 Id = validDiverId,
                 Fullname = "John Doe",

@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using System.Reflection;
 using FluentAssertions;
 using Tauchbolde.Application.Services.Avatars;
 using Xunit;
@@ -21,7 +19,7 @@ namespace Tauchbolde.Tests.Application.Services.Avatars
         public void TestGenerate(string firstName, string fileExt, string expectedAvatarId)
         {
             // Arrange
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location);
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
             var rootPath = Path.GetDirectoryName(codeBasePath);
             var avatarPath = Path.Combine(rootPath, "avatar");

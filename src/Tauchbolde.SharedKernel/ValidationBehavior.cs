@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using JetBrains.Annotations;
 using MediatR;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace Tauchbolde.SharedKernel
 {
@@ -22,7 +24,7 @@ namespace Tauchbolde.SharedKernel
         [UsedImplicitly]
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next)
         {
-            var context = new ValidationContext(request);
+            var context = new ValidationContext<TRequest>(request);
             var failures = validators
                 .Select(v => v.Validate(context))
                 .SelectMany(result => result.Errors)
@@ -45,7 +47,7 @@ namespace Tauchbolde.SharedKernel
         [UsedImplicitly]
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
-            var context = new ValidationContext(request);
+            var context = new ValidationContext<TRequest>(request);
             var failures = validators
                 .Select(async v => (await v.ValidateAsync(context, cancellationToken)))
                 .SelectMany(result => result.Result.Errors)

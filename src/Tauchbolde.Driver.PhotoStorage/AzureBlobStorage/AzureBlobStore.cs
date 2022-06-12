@@ -45,8 +45,7 @@ namespace Tauchbolde.Driver.PhotoStorage.AzureBlobStorage
                 out var account))
             {
                 logger.LogError(
-                    $"{nameof(AzureBlobStore)}.ctor: Error parsing Azure Storage Account!",
-                    configuration.Value.BlobStorageConnectionString);
+                    $"{nameof(AzureBlobStore)}.ctor: Error parsing Azure Storage Account!");
 
                 throw new ArgumentException(
                     $"Error parsing Azure Storage account: [{configuration.Value.BlobStorageConnectionString}]");

@@ -1,4 +1,3 @@
-using System;
 using FakeItEasy;
 using FluentAssertions;
 using Tauchbolde.Application.UseCases.Event.GetEventDetailsUseCase;
@@ -8,7 +7,7 @@ namespace Tauchbolde.Tests.Application.UseCases.Event
 {
     public class GetEventDetailsValidatorTests
     {
-        private readonly GetEventDetailsValidator validator = new GetEventDetailsValidator();
+        private readonly GetEventDetailsValidator validator = new();
 
         [Fact]
         public void Validate_Success()
