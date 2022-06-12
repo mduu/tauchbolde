@@ -1,18 +1,9 @@
-using System;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Localization;
-using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Tauchbolde.Web.Core;
-using System.Threading.Tasks;
 using Tauchbolde.Web.Filters;
 using System.Text;
 using JetBrains.Annotations;
@@ -20,7 +11,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Hosting;
 using Tauchbolde.Driver.DataAccessSql;
 using Tauchbolde.Domain.Types;
 using Tauchbolde.Driver.PhotoStorage.AzureBlobStorage;
@@ -213,12 +203,12 @@ namespace Tauchbolde.Web
             app.UseAuthentication();
             app.UseRequestLocalization();
             app.UseCors();
-            // app.UseMvc(routes =>
-            // {
-            //     routes.MapRoute(
-            //         name: "default",
-            //         template: "{controller=Home}/{action=Index}/{id?}");
-            // });
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
