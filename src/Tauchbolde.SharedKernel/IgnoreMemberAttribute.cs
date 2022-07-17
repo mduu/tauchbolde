@@ -1,5 +1,3 @@
-using System;
-
 namespace Tauchbolde.SharedKernel
 {
     // source: https://github.com/jhewlett/ValueObject

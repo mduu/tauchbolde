@@ -1,4 +1,3 @@
-using System;
 using JetBrains.Annotations;
 using Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase;
 using Tauchbolde.SharedKernel.Extensions;

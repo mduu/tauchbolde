@@ -1,4 +1,3 @@
-using System;
 using JetBrains.Annotations;
 using Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase;
 using Tauchbolde.SharedKernel.Extensions;

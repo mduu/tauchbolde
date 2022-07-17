@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.SharedKernel;

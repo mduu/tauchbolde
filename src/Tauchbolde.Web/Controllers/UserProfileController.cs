@@ -1,12 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Tauchbolde.Web.Core;
-using System.Linq;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 using JetBrains.Annotations;
 using MediatR;
 using Tauchbolde.Application.Services;

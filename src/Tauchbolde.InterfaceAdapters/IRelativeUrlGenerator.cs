@@ -1,5 +1,3 @@
-using System;
-
 namespace Tauchbolde.InterfaceAdapters
 {
     public interface IRelativeUrlGenerator

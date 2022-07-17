@@ -1,5 +1,3 @@
-using System;
-
 namespace Tauchbolde.SharedKernel.Extensions
 {
     public static class DateTimeExtensions

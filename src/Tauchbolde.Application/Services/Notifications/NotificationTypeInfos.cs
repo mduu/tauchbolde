@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.Application.Services.Notifications

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace Tauchbolde.Application.DataGateways
 {
     public interface IRepository<TEntity>

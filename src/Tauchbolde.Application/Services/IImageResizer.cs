@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace Tauchbolde.Application.Services
+﻿namespace Tauchbolde.Application.Services
 {
     /// <summary>
     /// Interface for resizing images.

@@ -1,5 +1,3 @@
-using System;
-
 namespace Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase
 {
     public class GetLogbookEntryDetailOutput

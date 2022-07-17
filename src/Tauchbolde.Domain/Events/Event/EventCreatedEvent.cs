@@ -1,4 +1,3 @@
-using System;
 using Tauchbolde.SharedKernel;
 
 namespace Tauchbolde.Domain.Events.Event

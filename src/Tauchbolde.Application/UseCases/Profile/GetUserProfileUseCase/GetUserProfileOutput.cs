@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Tauchbolde.Application.UseCases.Profile.GetUserProfileUseCase
 {
     public class GetUserProfileOutput

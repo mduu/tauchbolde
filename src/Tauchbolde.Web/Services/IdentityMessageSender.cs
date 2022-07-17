@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
-using Microsoft.Extensions.Logging;
+﻿using JetBrains.Annotations;
 using Tauchbolde.Application.Services.Telemetry;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Tauchbolde.Driver.SmtpEmail;

@@ -1,5 +1,3 @@
-using System;
-
 namespace Tauchbolde.InterfaceAdapters.UrlBuilders
 {
     public static class TwitterUrlBuilder

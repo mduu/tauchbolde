@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Application.Services.Notifications

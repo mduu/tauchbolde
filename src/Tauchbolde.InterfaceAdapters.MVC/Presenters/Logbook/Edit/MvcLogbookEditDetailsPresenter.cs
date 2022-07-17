@@ -1,4 +1,3 @@
-using System;
 using Tauchbolde.Application.UseCases.Logbook.GetDetailsUseCase;
 
 namespace Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.Edit

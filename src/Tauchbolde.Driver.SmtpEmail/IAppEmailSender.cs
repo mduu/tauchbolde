@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Tauchbolde.Driver.SmtpEmail
+﻿namespace Tauchbolde.Driver.SmtpEmail
 {
     public interface IAppEmailSender
     {
