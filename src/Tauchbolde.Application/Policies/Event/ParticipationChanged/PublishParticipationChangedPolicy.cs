@@ -6,6 +6,7 @@ using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.Domain.Types;
+using INotificationPublisher = Tauchbolde.Application.Services.Notifications.INotificationPublisher;
 
 namespace Tauchbolde.Application.Policies.Event.ParticipationChanged
 {

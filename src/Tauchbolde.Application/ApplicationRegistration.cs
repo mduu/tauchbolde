@@ -30,7 +30,7 @@ namespace Tauchbolde.Application
             services.AddSingleton<IAvatarIdGenerator, AvatarIdGenerator>();
             services.AddSingleton<IAvatarStore, AvatarStore>();
 
-            services.AddScoped<INotificationPublisher, NotificationPublisher>();
+            services.AddScoped<Services.Notifications.INotificationPublisher, NotificationPublisher>();
             services.AddTransient<INotificationSender, NotificationSender>();
             services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
             services.AddTransient<IRecipientsBuilder, RecipientsBuilder>();

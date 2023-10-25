@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using MediatR;
+using MediatR.Extensions.FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 
 [assembly: InternalsVisibleTo("Tauchbolde.Tests")]
