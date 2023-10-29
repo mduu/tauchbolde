@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using JetBrains.Annotations;
 using MailKit.Net.Smtp;
 using MailKit.Security;

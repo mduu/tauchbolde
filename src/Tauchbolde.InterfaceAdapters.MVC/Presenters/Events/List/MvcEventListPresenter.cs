@@ -1,4 +1,3 @@
-using System.Linq;
 using Tauchbolde.Application.UseCases.Event.GetEventListUseCase;
 using Tauchbolde.SharedKernel.Extensions;
 

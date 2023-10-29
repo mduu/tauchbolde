@@ -163,7 +163,7 @@ namespace Tauchbolde.Web
             {
                 builder.UserID = Configuration["DbUser"];
             }
-
+            
             if (!string.IsNullOrWhiteSpace(Configuration["DbPassword"]))
             {
                 builder.Password = Configuration["DbPassword"];
@@ -178,7 +178,6 @@ namespace Tauchbolde.Web
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
             }

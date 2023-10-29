@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Tauchbolde.Domain.Types;
 
 namespace Tauchbolde.Web.Models.EventViewModels

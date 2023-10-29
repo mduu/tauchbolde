@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Tauchbolde.Domain.Events.Event;

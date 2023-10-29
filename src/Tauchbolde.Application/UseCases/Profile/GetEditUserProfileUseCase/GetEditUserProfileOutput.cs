@@ -1,5 +1,3 @@
-using System;
-
 namespace Tauchbolde.Application.UseCases.Profile.GetEditUserProfileUseCase
 {
     public class GetEditUserProfileOutput

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Tauchbolde.InterfaceAdapters.MVC.Presenters.Administration.MemberManagement

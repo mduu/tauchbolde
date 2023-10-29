@@ -1,5 +1,3 @@
-using System;
-
 namespace Tauchbolde.Web.Models
 {
     public class ErrorViewModel

@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 
 namespace Tauchbolde.Web
 {
@@ -18,6 +16,7 @@ namespace Tauchbolde.Web
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     config.AddEnvironmentVariables();
+                    config.AddJsonFile("appsettings.local.json");
                 })
                 .CaptureStartupErrors(true)
                 .UseSetting("detailedErrors", "true")

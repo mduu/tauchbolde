@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-
-namespace Tauchbolde.Application.Services.Avatars
+﻿namespace Tauchbolde.Application.Services.Avatars
 {
     /// <summary>
     /// Provides the main functionallity for working with avatars.

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Tauchbolde.Domain.Entities;
+﻿using Tauchbolde.Domain.Entities;
 
 namespace Tauchbolde.Application.DataGateways
 {

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Tauchbolde.Application.UseCases.Event.GetRecentAndUpcomingEventsUseCase;
 using Tauchbolde.InterfaceAdapters.MVC.Presenters.Events.RecentAndUpcomingEvents;
 

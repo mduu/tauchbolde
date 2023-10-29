@@ -1,5 +1,4 @@
-﻿using System;
-namespace Tauchbolde.Web.Core
+﻿namespace Tauchbolde.Web.Core
 {
     public static class GlobalConstants
     {

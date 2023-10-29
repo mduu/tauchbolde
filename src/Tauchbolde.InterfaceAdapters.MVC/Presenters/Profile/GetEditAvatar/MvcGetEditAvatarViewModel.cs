@@ -1,5 +1,3 @@
-using System;
-
 namespace Tauchbolde.InterfaceAdapters.MVC.Presenters.Profile.GetEditAvatar
 {
     public class MvcGetEditAvatarViewModel

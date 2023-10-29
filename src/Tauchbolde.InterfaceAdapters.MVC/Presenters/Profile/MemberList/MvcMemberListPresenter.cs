@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using JetBrains.Annotations;
 using Tauchbolde.Application.UseCases.Profile.MemberListUseCase;
 using Tauchbolde.InterfaceAdapters.UrlBuilders;

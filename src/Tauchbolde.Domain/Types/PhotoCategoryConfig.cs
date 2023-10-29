@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Tauchbolde.Domain.Types
 {
     public class PhotoCategoryConfig

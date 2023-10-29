@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 
 namespace Tauchbolde.SharedKernel.Extensions

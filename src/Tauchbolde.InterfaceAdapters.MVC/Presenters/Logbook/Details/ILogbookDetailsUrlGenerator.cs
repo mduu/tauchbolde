@@ -1,5 +1,3 @@
-using System;
-
 namespace Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.Details
 {
     public interface ILogbookDetailsUrlGenerator

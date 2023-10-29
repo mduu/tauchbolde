@@ -1,10 +1,5 @@
-﻿using System;
-using System.IO;
-using JetBrains.Annotations;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+﻿using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.Configuration;
 using Tauchbolde.Application;
 using Tauchbolde.Application.Services.Avatars;
 using Tauchbolde.Application.Services.PhotoStores;

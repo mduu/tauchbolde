@@ -1,4 +1,3 @@
-using System;
 using JetBrains.Annotations;
 
 namespace Tauchbolde.InterfaceAdapters.MVC.Presenters.Logbook.Details

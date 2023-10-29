@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Tauchbolde.SharedKernel.Extensions;
 

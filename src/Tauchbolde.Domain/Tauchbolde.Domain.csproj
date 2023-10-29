@@ -1,21 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>Tauchbolde.Domain</RootNamespace>
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="10.4.0" />
-        <PackageReference Include="MediatR" Version="10.0.1" />
-        <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
-        <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="6.0.3" />
+        <PackageReference Include="FluentValidation"/>
+        <PackageReference Include="MediatR"/>
+        <PackageReference Include="JetBrains.Annotations"/>
+        <PackageReference Include="Microsoft.Extensions.Identity.Stores"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Tauchbolde.SharedKernel\Tauchbolde.SharedKernel.csproj" />
+        <ProjectReference Include="..\Tauchbolde.SharedKernel\Tauchbolde.SharedKernel.csproj"/>
     </ItemGroup>
 
 </Project>

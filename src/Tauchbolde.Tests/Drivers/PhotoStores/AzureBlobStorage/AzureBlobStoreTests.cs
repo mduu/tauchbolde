@@ -13,17 +13,10 @@ namespace Tauchbolde.Tests.Drivers.PhotoStores.AzureBlobStorage
 {
     public class AzureBlobStoreTests
     {
-        private readonly ILogger<AzureBlobStore> logger;
-        private readonly string azureBlobConnectionString;
+        private readonly ILogger<AzureBlobStore> logger = A.Fake<ILogger<AzureBlobStore>>();
+        private readonly string azureBlobConnectionString = Environment.GetEnvironmentVariable("tb_storage_connectionstring");
 
-        public AzureBlobStoreTests()
-        {
-            azureBlobConnectionString = Environment.GetEnvironmentVariable("tb_storage_connectionstring");
-
-            logger = A.Fake<ILogger<AzureBlobStore>>();
-        }
-
-        [Fact]
+        [Fact(Skip = "Not relevant for local testing")]
         public async Task Test_AddPhoto()
         {
             var store = CreateStore();
@@ -36,7 +29,7 @@ namespace Tauchbolde.Tests.Drivers.PhotoStores.AzureBlobStorage
                 .MustNotHaveHappened();
         }
 
-        [Fact]
+        [Fact(Skip = "Not relevant for local testing")]
         public async Task Test_GetPhoto()
         {
             var store = CreateStore();

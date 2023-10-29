@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using MediatR;
@@ -21,7 +20,9 @@ namespace Tauchbolde.Application
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             
-            services.AddMediatR(typeof(PublishLogbookEntryInteractor));
+            services.AddMediatR(
+                cfg => cfg.RegisterServicesFromAssembly(
+                    typeof(PublishLogbookEntryInteractor).Assembly));
 
             services.AddScoped<IClock, Clock>();
             services.AddScoped<ICurrentUserInformation, CurrentUserInformation>();
@@ -31,7 +32,7 @@ namespace Tauchbolde.Application
             services.AddSingleton<IAvatarIdGenerator, AvatarIdGenerator>();
             services.AddSingleton<IAvatarStore, AvatarStore>();
 
-            services.AddScoped<INotificationPublisher, NotificationPublisher>();
+            services.AddScoped<Services.Notifications.INotificationPublisher, NotificationPublisher>();
             services.AddTransient<INotificationSender, NotificationSender>();
             services.AddTransient<INotificationTypeInfos, NotificationTypeInfos>();
             services.AddTransient<IRecipientsBuilder, RecipientsBuilder>();

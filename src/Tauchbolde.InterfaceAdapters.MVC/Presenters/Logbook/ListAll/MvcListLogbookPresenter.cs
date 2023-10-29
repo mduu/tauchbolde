@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using JetBrains.Annotations;
 using Tauchbolde.Application.UseCases.Logbook.ListAllUseCase;
 using Tauchbolde.InterfaceAdapters.TextFormatting;

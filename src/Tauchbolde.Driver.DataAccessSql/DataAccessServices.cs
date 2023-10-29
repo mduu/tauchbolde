@@ -1,6 +1,4 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Tauchbolde.Application.DataGateways;
 using Tauchbolde.Driver.DataAccessSql.Repositories;
 

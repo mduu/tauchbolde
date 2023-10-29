@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using MediatR;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.SharedKernel;

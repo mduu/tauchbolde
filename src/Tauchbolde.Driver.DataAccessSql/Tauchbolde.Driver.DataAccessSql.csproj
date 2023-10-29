@@ -1,25 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <RootNamespace>Tauchbolde.Driver.DataAccessSql</RootNamespace>
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
-        <PackageReference Include="MediatR" Version="10.0.1" />
-        <PackageReference Include="Microsoft.ApplicationInsights" Version="2.13.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
+        <PackageReference Include="JetBrains.Annotations"/>
+        <PackageReference Include="MediatR"/>
+        <PackageReference Include="Microsoft.ApplicationInsights"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity"/>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Tauchbolde.Application\Tauchbolde.Application.csproj" />
+        <ProjectReference Include="..\Tauchbolde.Application\Tauchbolde.Application.csproj"/>
     </ItemGroup>
 
 </Project>

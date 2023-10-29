@@ -1,12 +1,9 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
 using Tauchbolde.Application.DataGateways;
-using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Events.LogbookEntry;
 using Tauchbolde.Domain.Types;
+using INotificationPublisher = Tauchbolde.Application.Services.Notifications.INotificationPublisher;
 
 namespace Tauchbolde.Application.Policies.Logbook.LogbookEntryPublished
 {

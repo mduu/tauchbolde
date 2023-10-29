@@ -1,8 +1,5 @@
-using System;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Tauchbolde.Web.Core.TokenHandling;
 
 namespace Tauchbolde.Web.Api.Controllers

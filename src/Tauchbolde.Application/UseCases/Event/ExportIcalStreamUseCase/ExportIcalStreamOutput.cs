@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using JetBrains.Annotations;
 
 namespace Tauchbolde.Application.UseCases.Event.ExportIcalStreamUseCase

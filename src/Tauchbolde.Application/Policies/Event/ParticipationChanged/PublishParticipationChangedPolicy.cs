@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -10,6 +6,7 @@ using Tauchbolde.Application.Services.Notifications;
 using Tauchbolde.Domain.Entities;
 using Tauchbolde.Domain.Events.Event;
 using Tauchbolde.Domain.Types;
+using INotificationPublisher = Tauchbolde.Application.Services.Notifications.INotificationPublisher;
 
 namespace Tauchbolde.Application.Policies.Event.ParticipationChanged
 {

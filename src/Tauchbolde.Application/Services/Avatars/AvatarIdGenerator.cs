@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-
-namespace Tauchbolde.Application.Services.Avatars
+﻿namespace Tauchbolde.Application.Services.Avatars
 {
     /// <summary>
     /// Standard implementation of <see cref="IAvatarIdGenerator"/>.

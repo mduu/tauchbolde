@@ -1,4 +1,3 @@
-using System;
 using JetBrains.Annotations;
 
 namespace Tauchbolde.Application.UseCases.Event.GetEventEditDetailsUseCase

@@ -1,4 +1,3 @@
-using System;
 using Markdig;
 
 namespace Tauchbolde.InterfaceAdapters.TextFormatting
