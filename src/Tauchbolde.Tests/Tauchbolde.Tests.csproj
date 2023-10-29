@@ -7,9 +7,7 @@
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <ApplicationIcon/>
         <OutputTypeEx>library</OutputTypeEx>
-        <StartupObject/>
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
@@ -30,7 +28,7 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1"/>
+        <DotNetCliToolReference Include="dotnet-xunit"/>
         <PackageReference Include="ApprovalTests"/>
         <PackageReference Include="ApprovalUtilities"/>
     </ItemGroup>
@@ -43,16 +41,6 @@
         <ProjectReference Include="..\Tauchbolde.InterfaceAdapters\Tauchbolde.InterfaceAdapters.csproj"/>
         <ProjectReference Include="..\Tauchbolde.SharedKernel\Tauchbolde.SharedKernel.csproj"/>
         <ProjectReference Include="..\Tauchbolde.Web\Tauchbolde.Web.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="InterfaceAdapters\MVC"/>
-        <Folder Include="InterfaceAdapters\WebApi"/>
-        <Folder Include="Web\"/>
     </ItemGroup>
 
     <ItemGroup>
