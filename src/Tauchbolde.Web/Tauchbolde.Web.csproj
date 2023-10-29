@@ -9,7 +9,6 @@
 
     <ItemGroup>
         <PackageReference Include="MediatR"/>
-        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection"/>
         <PackageReference Include="Microsoft.ApplicationInsights"/>
         <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"/>
@@ -19,7 +18,6 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" PrivateAssets="All"/>
-        <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc.Core"/>
         <PackageReference Include="Microsoft.AspNetCore.AzureAppServicesIntegration"/>
         <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup"/>
         <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices"/>

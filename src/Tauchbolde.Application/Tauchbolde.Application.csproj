@@ -10,7 +10,6 @@
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations"/>
         <PackageReference Include="MediatR"/>
-        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
