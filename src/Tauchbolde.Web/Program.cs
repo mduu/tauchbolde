@@ -16,7 +16,7 @@ namespace Tauchbolde.Web
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     config.AddEnvironmentVariables();
-                    config.AddJsonFile("appsettings.local.json");
+                    config.AddJsonFile("appsettings.local.json", true);
                 })
                 .CaptureStartupErrors(true)
                 .UseSetting("detailedErrors", "true")
