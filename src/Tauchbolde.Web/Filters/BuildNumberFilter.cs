@@ -28,7 +28,7 @@ namespace Tauchbolde.Web.Filters
                 try
                 {
                     var buildNumber = "0";
-                    var buildNumberFilePath = Path.Combine(env.WebRootPath, "BuildNumber.txt");
+                    var buildNumberFilePath = Path.Combine(env.WebRootPath, "Tb_BuildNumber.txt");
                     if (File.Exists(buildNumberFilePath))
                     {
                         buildNumber = File.ReadAllText(buildNumberFilePath);
