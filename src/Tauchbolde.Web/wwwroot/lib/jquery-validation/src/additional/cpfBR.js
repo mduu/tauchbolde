@@ -2,7 +2,12 @@
  * Brazillian CPF number (Cadastrado de Pessoas Físicas) is the equivalent of a Brazilian tax registration number.
  * CPF numbers have 11 digits in total: 9 numbers followed by 2 check numbers that are being used for validation.
  */
-$.validator.addMethod( "cpfBR", function( value ) {
+$.validator.addMethod( "cpfBR", function( value, element ) {
+	"use strict";
+
+	if ( this.optional( element ) ) {
+		return true;
+	}
 
 	// Removing special characters from value
 	value = value.replace( /([~!@#$%^&*()_+=`{}\[\]\-|\\:;'<>,.\/? ])+/g, "" );
@@ -57,4 +62,4 @@ $.validator.addMethod( "cpfBR", function( value ) {
 	}
 	return false;
 
-}, "Please specify a valid CPF number" );
+}, "Please specify a valid CPF number." );
