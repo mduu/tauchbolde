@@ -20,7 +20,9 @@ namespace Tauchbolde.Application
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             
-            services.AddMediatR(typeof(PublishLogbookEntryInteractor));
+            services.AddMediatR(
+                cfg => cfg.RegisterServicesFromAssembly(
+                    typeof(PublishLogbookEntryInteractor).Assembly));
 
             services.AddScoped<IClock, Clock>();
             services.AddScoped<ICurrentUserInformation, CurrentUserInformation>();
