@@ -13,15 +13,8 @@ namespace Tauchbolde.Tests.Drivers.PhotoStores.AzureBlobStorage
 {
     public class AzureBlobStoreTests
     {
-        private readonly ILogger<AzureBlobStore> logger;
-        private readonly string azureBlobConnectionString;
-
-        public AzureBlobStoreTests()
-        {
-            azureBlobConnectionString = Environment.GetEnvironmentVariable("tb_storage_connectionstring");
-
-            logger = A.Fake<ILogger<AzureBlobStore>>();
-        }
+        private readonly ILogger<AzureBlobStore> logger = A.Fake<ILogger<AzureBlobStore>>();
+        private readonly string azureBlobConnectionString = Environment.GetEnvironmentVariable("tb_storage_connectionstring");
 
         [Fact]
         public async Task Test_AddPhoto()
